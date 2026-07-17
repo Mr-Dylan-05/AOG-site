@@ -1,0 +1,25 @@
+.aog-image-caption { display: flex; flex-direction: row; }
+
+.aog-image-caption .image-wrapper { width: 75%; }
+    .aog-image-caption .image-wrapper img { width: 100%; object-fit: cover; height: 100vh; }
+
+.aog-image-caption .caption-column { width: 25%; align-self: center; }
+
+.aog-image-caption .caption { background-color: #fff; width: 300px; display: block; padding: 30px 40px; margin: 0 0 0 -150px; }
+
+.aog-image-caption.right { flex-direction: row-reverse; }
+.aog-image-caption.right .caption { margin: 0 0 0 150px; }
+
+@media (min-width: 1440px) {
+    .aog-image-caption .image-wrapper img { height: 60vh; }
+}
+
+@media (max-width: 480px) {
+    .aog-image-caption,
+    .aog-image-caption.right { flex-direction: column-reverse; }
+        .aog-image-caption .image-wrapper { width: 100%; }
+            .aog-image-caption .image-wrapper img { height: 40vh; }
+        .aog-image-caption .caption-column { width: 100%; }
+        .aog-image-caption .caption,
+        .aog-image-caption.right .caption { width: 100%; margin: 0; }
+}

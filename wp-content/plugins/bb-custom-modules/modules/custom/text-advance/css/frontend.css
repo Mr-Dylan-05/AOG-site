@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Droid+Serif:400i|Roboto:300,300i,400|Open+Sans');
+
+.fl-module-text-advance .fl-module-heading .text-advance {
+	padding: 0 !important;
+	margin: 0 !important;
+    position: relative;
+}
+
+.fl-module-text-advance .text-advance {
+    margin: 0 !important;
+}
+    .fl-module-text-advance .text-advance span {
+        position: relative;
+        display: block;
+    }
+    .fl-module-text-advance .text-advance span i,
+    .fl-module-text-advance .text-advance span b {
+        color: #12566B;
+        font-style: normal;
+    }
+    .fl-module-text-advance .text-advance .borderline {
+        border-bottom: 1px solid #12566B;
+        padding: 20px;
+        margin: auto;
+        position: absolute;
+        bottom: -1px;
+        left: 5px;
+        right: 5px;
+        width: 20%;
+    }
+    
+.fl-module-text-advance .section-subheading {
+    margin-top: 30px;
+}
+.fl-module-text-advance .section-subheading span {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 18px;
+    color: #34343c;
+}
+
+.text-advance .text-advance-text span,
+.text-advance .text-advance-text b,
+.text-advance .text-advance-text i {
+    font-weight: inherit;
+}
+
+@media only screen and ( max-width: 768px ) {
+    .fl-module-text-advance .text-advance span {
+/*        padding: 5px 40px;*/
+    }
+}

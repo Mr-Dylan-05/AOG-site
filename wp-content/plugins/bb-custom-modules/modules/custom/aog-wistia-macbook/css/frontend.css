@@ -1,0 +1,88 @@
+.device {
+    position: relative;
+    display: block;
+}
+
+.device.macbook {
+    width: 100%;
+    margin: auto;
+}
+
+.device.macbook .screen {
+    width: calc(100% - 31%);
+    height: 79%;
+    display: block;
+    position: absolute;
+    top: 7.3%;
+    left: 15.48%;
+    background-color: #000;
+    z-index: 99;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.aog-wistia-macbook .device.desktop .screen {
+    transition: all 2s ease-in-out;
+}
+.aog-wistia-macbook .device.phone .screen {
+    transition: all 2s ease-in-out;
+}
+
+.aog-wistia-macbook .device.desktop:hover .screen {
+    background-position: bottom center !important;
+    cursor: pointer;
+    transition: all 8s ease-in-out;
+}
+.aog-wistia-macbook .device.phone:hover .screen {
+    background-position: bottom center !important;
+    cursor: pointer;
+    transition: all 10s ease-in-out;
+}
+
+.devices-label {
+    display: block;
+    margin-bottom: 20px;
+}
+
+@media ( max-width: 360px ) {
+    .device.desktop {
+        width: 100%;
+        margin: auto;
+    }
+	.device.phone {
+        width: 30%;
+        margin: -56% -20% 0% 78%;
+        z-index: 999;
+    }
+}
+
+.fl-embed-video iframe {
+    max-width: 100%;
+}
+
+.fl-wp-video {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    padding: 0 0 56.25%;
+}
+
+.fl-wp-video .wp-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.fl-wp-video .wp-video .mejs-container,
+.fl-wp-video .wp-video .mejs-inner,
+.fl-wp-video .wp-video .mejs-layers,
+.fl-wp-video .wp-video .mejs-layer,
+.fl-wp-video .wp-video-shortcode,
+.fl-wp-video .me-plugin,
+.fl-wp-video .me-plugin * {
+    width: 100% !important;
+    height: 100% !important;
+}

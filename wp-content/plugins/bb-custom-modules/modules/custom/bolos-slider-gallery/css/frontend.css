@@ -1,0 +1,58 @@
+
+.gallery-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    object-fit: cover;
+}
+.gallery-image-nav {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    object-fit: cover;
+}
+
+.carousel {
+    background: #FAFAFA;
+    margin-bottom: 0;
+}
+
+.carousel-cell {
+    width: 100%;
+    margin-right: 0;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    counter-increment: carousel-cell;
+}
+.carousel-cell:not(.navigation-cell){
+    border-radius: 5px;
+}
+
+.carousel-text-content {
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+}
+
+.carousel-main .carousel-cell {
+    height: 70vh;
+}
+
+.carousel-nav .carousel-cell {
+    height: 30vh;
+    width: 33.33%;
+}
+
+.carousel-nav .carousel-cell.is-nav-selected {
+    background: #ED2;
+}
+
+button.flickity-button {
+    z-index: 9999;
+    top: 50% !important;
+    position: absolute !important;
+}
+

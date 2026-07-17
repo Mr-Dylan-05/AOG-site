@@ -1,0 +1,28 @@
+/* File Fields */
+.fl-svg-field {
+    background-color: #eee;
+}
+.fl-svg-field .fl-svg-select,
+.fl-svg-field.fl-svg-empty .fl-svg-preview {
+	display: none;
+}
+.fl-svg-field.fl-svg-empty .fl-svg-select {
+	display: block;
+}
+.fl-svg-field .fl-svg-preview-img {
+	float: left;
+	line-height: 0;
+	margin: 5px 0;
+}
+.fl-svg-field .fl-svg-preview-img img {
+	max-width: 60px;
+}
+.fl-svg-field .fl-svg-preview-filename {
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 7px 0 0 58px;
+}
+.fl-svg-field .fl-svg-replace {
+	margin: 0 0 0 11px;
+}

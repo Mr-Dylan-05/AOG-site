@@ -1,0 +1,66 @@
+# ===== AOG-site .gitignore =====
+# Protects secrets, keeps DB dumps / backups / media / caches out of git.
+
+# --- Secrets & credentials ---
+wp-config.php
+.user.ini
+.env
+*.pem
+*.key
+
+# --- Standalone DB admin tool & dumps ---
+adminer.php
+adminer*.php
+*.sql
+*.sql.gz
+
+# --- Backups (WP All-in-One Migration, UpdraftPlus, upgrade temp) ---
+wp-content/ai1wm-backups/
+wp-content/updraft/
+wp-content/upgrade/
+wp-content/upgrade-temp-backup/
+*.wpress
+
+# --- Archives (backup zips, theme dist-old bundles, etc.) ---
+*.zip
+*.tar
+*.tar.gz
+*.gz
+*.rar
+
+# --- Media library (large binary uploads) ---
+wp-content/uploads/
+
+# --- Caches ---
+wp-content/cache/
+wp-content/wp-rocket-config/
+wp-content/advanced-cache.php
+wp-content/mc_data/
+wp-content/maintenance/
+wp-content/maintenance.php
+
+# --- Logs ---
+error_log
+*.log
+wp-content/error_log
+debug.log
+
+# --- WAF / security drop-ins ---
+malcare-waf.php
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+._*
+*.swp
+*~
+.idea/
+.vscode/
+
+# --- Node (if any build tooling in themes) ---
+node_modules/
+
+# --- adon-ai front-end (built app lives in its own repo: dylan-website) ---
+wp-content/themes/bb-theme-child/adon-ai/dist/
+# stale build snapshots
+wp-content/themes/bb-theme-child/adon-ai/dist-old*/

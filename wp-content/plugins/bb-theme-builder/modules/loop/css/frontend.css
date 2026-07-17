@@ -1,0 +1,36 @@
+.fl-module-loop > ul {
+	display: grid;
+	list-style: none;
+	justify-content: center;
+	padding: 0;
+}
+.fl-module-loop > ul > li:has(.fl-module-box) {
+	display: contents;
+}
+
+/* Zero margins for child modules */
+.fl-module-loop :where( .fl-module ),
+.fl-module-loop :where( .fl-module-content ) {
+	margin: 0;
+}
+.fl-module-loop:before,
+.fl-module-loop:after {
+	display: none !important;
+	content: '';
+}
+
+/* Loader */
+.fl-module-loop #infscr-loading {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 15px 0;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+}
+
+/* Photo Placeholder */
+.fl-module-loop .fl-photo-img[src*='/img/pixel.png'] {
+	background: #e6e6e6;
+}

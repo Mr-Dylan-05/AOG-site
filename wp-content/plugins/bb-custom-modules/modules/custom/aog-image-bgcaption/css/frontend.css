@@ -1,0 +1,28 @@
+.aog-image-bgcaption { display: flex; flex-direction: row; position: relative; }
+
+.aog-image-bgcaption .image-wrapper { width: 100%; }
+    .aog-image-bgcaption .image-wrapper img { width: 100%; object-fit: cover; height: 100vh; }
+
+.aog-image-bgcaption .caption-column { position: absolute; bottom: 0; left: 0; width: 40%; align-self: center; }
+
+.aog-image-bgcaption .caption { background-color: #fff; width: 100%; display: block; padding: 30px 40px; margin: 0; }
+
+.aog-image-bgcaption.right .caption-column { right: 0; left: auto; }
+.aog-image-bgcaption.right .caption { margin: 0; }
+
+.aog-image-bgcaption .btn.btn-outline { padding: 10px 22px; border-style: solid; border-width: 2px; border-color: #000; border-radius: 100px; }
+    .aog-image-bgcaption .btn.btn-outline * { display: inline-block; vertical-align: middle; }
+    .aog-image-bgcaption .btn .btn-label { color: #000; }
+
+.aog-image-bgcaption .aog-icon { color: #000; font-size: 18px; padding: 0px; margin: auto 10px auto auto; }
+.aog-image-bgcaption .img-icon { width: 18px; height: 18px; object-fit: contain; margin: auto 10px auto auto; }
+
+@media (max-width: 480px) {
+    .aog-image-bgcaption,
+    .aog-image-bgcaption.right { flex-direction: column-reverse; }
+        .aog-image-bgcaption .image-wrapper { width: 100%; }
+            .aog-image-bgcaption .image-wrapper img { height: 40vh; }
+        .aog-image-bgcaption .caption-column { width: 100% !important; }
+        .aog-image-bgcaption .caption,
+        .aog-image-bgcaption.right .caption { width: 100%; margin: 0; }
+}

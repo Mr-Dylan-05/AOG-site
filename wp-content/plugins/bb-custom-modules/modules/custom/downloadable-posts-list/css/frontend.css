@@ -1,0 +1,71 @@
+.dl-title {
+    margin: auto;
+    margin-bottom: 20px;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    
+    -webkit-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    -moz-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+.dl-title:hover {
+    background: #fecf74;
+    padding: 25px;
+    
+    -webkit-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    -moz-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.dl-title a,
+.dl-title .no-download {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+    background: #e8f2ff;
+    padding: 8px 20px;
+}
+.dl-title a i,
+.dl-title .no-download i {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 20px;
+    background: #152335;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 100%;
+    
+    -webkit-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    -moz-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+.dl-title a:hover i {
+    background: #fecf74;
+    color: #212121;
+    
+    -webkit-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    -moz-transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: all 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+.dl-title a .dl-title-content,
+.dl-title .no-download span {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px 20px;
+}
+
+.dl-file-name,
+.dl-date {
+    display: block;
+}
+.dl-file-name {
+    font-size: 18px;
+}
+.dl-date {
+    color: #777;
+}
+
+.filetype {
+    color: #777;
+}

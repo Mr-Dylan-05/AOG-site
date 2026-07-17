@@ -1,0 +1,78 @@
+.device {
+    position: relative;
+    display: block;
+}
+
+.device.desktop {
+    width: 80%;
+    margin: auto;
+}
+
+.device.phone {
+    width: 25%;
+    margin: -46% -20% 0% 76%;
+    z-index: 99;
+}
+
+.device.desktop .screen {
+    width: calc(100% - 8%);
+    height: 56%;
+    display: block;
+    position: absolute;
+    top: 4.4%;
+    left: 4.33%;
+    background-color: #a22929;
+    z-index: 99;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.device.phone .screen {
+    width: calc(100% - 31.9%);
+    height: 68.9%;
+    display: block;
+    position: absolute;
+    top: 10.9%;
+    left: 14.8%;
+    background-color: #a22929;
+    z-index: 99;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.devices-showcase .device.desktop .screen {
+    transition: all 2s ease-in-out;
+}
+.devices-showcase .device.phone .screen {
+    transition: all 2s ease-in-out;
+}
+
+.devices-showcase .device.desktop:hover .screen {
+    background-position: bottom center !important;
+    cursor: pointer;
+    transition: all 8s ease-in-out;
+}
+.devices-showcase .device.phone:hover .screen {
+    background-position: bottom center !important;
+    cursor: pointer;
+    transition: all 10s ease-in-out;
+}
+
+.devices-label {
+    display: block;
+    margin-bottom: 20px;
+}
+
+@media ( max-width: 360px ) {
+    .device.desktop {
+        width: 100%;
+        margin: auto;
+    }
+	.device.phone {
+        width: 30%;
+        margin: -56% -20% 0% 78%;
+        z-index: 999;
+    }
+}
