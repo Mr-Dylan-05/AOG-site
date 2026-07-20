@@ -1,0 +1,45 @@
+{#
+  Shared site header + navigation. Edit this ONCE and every page updates.
+  Menu data lives in src/_data/nav.json.
+  Styling is intentionally minimal — your colleague's design can restyle it,
+  or replace this partial's markup while keeping nav.json as the source of links.
+#}
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="{{ site.name }} home">
+      <img src="{{ site.logo }}" alt="{{ site.name }}" class="site-header__logo" width="150" height="86">
+    </a>
+
+    <button class="site-header__toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="primary-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        {% for item in nav.primary %}
+        <li class="site-nav__item{% if item.children %} has-children{% endif %}">
+          <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.label }}</a>
+          {% if item.children %}
+          <ul class="site-nav__submenu">
+            {% for child in item.children %}
+            <li><a href="{{ child.url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.label }}</a></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>
+<script>
+/* Minimal, dependency-free mobile menu toggle */
+(function () {
+  var t = document.querySelector('.site-header__toggle');
+  var n = document.getElementById('primary-nav');
+  if (t && n) t.addEventListener('click', function () {
+    var open = n.classList.toggle('is-open');
+    t.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+</script>

@@ -1,0 +1,79 @@
+/* =====================================================================
+   Ad On Group — shared shell styles (header, nav, footer).
+   Deliberately minimal so per-page designs (from Claude Design) sit on top
+   without fighting. Restyle freely; class names are the only contract.
+   ===================================================================== */
+:root {
+  --aog-ink: #1a1a2e;
+  --aog-accent: #e8491d;
+  --aog-bg: #ffffff;
+  --aog-muted: #f5f6f8;
+  --aog-border: #e3e6ea;
+  --aog-maxw: 1200px;
+}
+*{ box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--aog-ink); background: var(--aog-bg); }
+img { max-width: 100%; height: auto; }
+a { color: inherit; }
+
+/* ---------- Header ---------- */
+.site-header { position: sticky; top: 0; z-index: 1000; background: var(--aog-bg); border-bottom: 1px solid var(--aog-border); }
+.site-header__inner { max-width: var(--aog-maxw); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .5rem 1rem; }
+.site-header__logo { display: block; width: auto; height: 48px; }
+.site-header__toggle { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 8px; }
+.site-header__toggle span { width: 26px; height: 2px; background: var(--aog-ink); display: block; }
+
+.site-nav__list { list-style: none; display: flex; gap: .25rem; margin: 0; padding: 0; }
+.site-nav__item { position: relative; }
+.site-nav__item > a { display: block; padding: .75rem .9rem; text-decoration: none; font-weight: 600; font-size: .95rem; white-space: nowrap; }
+.site-nav__item > a[aria-current="page"] { color: var(--aog-accent); }
+.site-nav__submenu { list-style: none; margin: 0; padding: .4rem 0; position: absolute; top: 100%; left: 0; min-width: 220px; background: var(--aog-bg); border: 1px solid var(--aog-border); border-radius: 8px; box-shadow: 0 12px 30px rgba(0,0,0,.08); opacity: 0; visibility: hidden; transform: translateY(6px); transition: .15s ease; }
+.site-nav__item.has-children:hover > .site-nav__submenu,
+.site-nav__item.has-children:focus-within > .site-nav__submenu { opacity: 1; visibility: visible; transform: translateY(0); }
+.site-nav__submenu a { display: block; padding: .5rem 1rem; text-decoration: none; font-size: .9rem; }
+.site-nav__submenu a:hover { background: var(--aog-muted); }
+
+@media (max-width: 900px) {
+  .site-header__toggle { display: flex; }
+  .site-nav { position: absolute; top: 100%; left: 0; right: 0; background: var(--aog-bg); border-bottom: 1px solid var(--aog-border); display: none; max-height: 80vh; overflow-y: auto; }
+  .site-nav.is-open { display: block; }
+  .site-nav__list { flex-direction: column; padding: .5rem; }
+  .site-nav__submenu { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border: 0; padding-left: 1rem; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--aog-ink); color: #fff; margin-top: 4rem; }
+.site-footer__inner { max-width: var(--aog-maxw); margin: 0 auto; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; padding: 2.5rem 1rem; }
+.site-footer__brand { max-width: 360px; }
+.site-footer__brand img { filter: brightness(0) invert(1); opacity: .95; }
+.site-footer__brand p { color: #c9cdd6; font-size: .9rem; }
+.site-footer__nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.site-footer__nav a { color: #dfe3ea; text-decoration: none; font-size: .92rem; }
+.site-footer__nav a:hover { color: #fff; text-decoration: underline; }
+.site-footer__legal { border-top: 1px solid rgba(255,255,255,.12); }
+.site-footer__legal p { max-width: var(--aog-maxw); margin: 0 auto; padding: 1rem; font-size: .82rem; color: #aeb4c0; }
+
+/* =====================================================================
+   REFERENCE MODE (body.reference)
+   The auto-ported pages carry the OLD site's Beaver Builder markup, which
+   only renders correctly with Beaver Builder's own CSS/JS (animations start
+   hidden, "light" rows use white text on background images that no longer
+   load). These rules neutralise that so the CONTENT is plainly readable as
+   reference material for the redesign. Not meant to be pretty.
+   ===================================================================== */
+body.reference main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; line-height: 1.65; }
+body.reference .fl-animation { opacity: 1 !important; transform: none !important; }
+/* force legible dark-on-white regardless of the old row/overlay classes */
+body.reference [class*="fl-row"],
+body.reference [class*="fl-col"],
+body.reference [class*="fl-module"] { color: #1a1a2e !important; background: none !important; }
+body.reference .fl-row-content-wrap::before,
+body.reference .fl-row-content-wrap::after { display: none !important; }
+body.reference h1, body.reference h2, body.reference h3 { line-height: 1.25; margin: 1.5rem 0 .5rem; }
+body.reference p { margin: 0 0 1rem; }
+body.reference img { height: auto; margin: 1rem 0; }
+/* stacked sliders: show every slide as plain blocks */
+body.reference .owl-carousel, body.reference .slider { display: block !important; }
+body.reference .slide-item { display: block !important; float: none !important; width: auto !important; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--aog-border); }
+body.reference .slider-image img { max-height: 90px; width: auto; }
+body.reference main a { color: var(--aog-accent); }

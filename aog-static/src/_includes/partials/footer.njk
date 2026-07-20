@@ -1,0 +1,21 @@
+{#
+  Shared site footer. Edit once, updates everywhere. Links from src/_data/nav.json.
+#}
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="{{ site.logo }}" alt="{{ site.name }}" width="130" height="75">
+      <p>{{ site.description }}</p>
+    </div>
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul>
+        {% for item in nav.footer %}
+        <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+  <div class="site-footer__legal">
+    <p>&copy; {% year %} {{ site.name }}. All rights reserved.</p>
+  </div>
+</footer>

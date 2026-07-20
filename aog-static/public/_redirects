@@ -1,0 +1,9 @@
+# Host-level redirects (Netlify / Cloudflare Pages format).
+# The static site keeps the same URLs as the old WordPress site, so most
+# links carry over 1:1 with no redirect needed. Add old->new mappings here
+# only when a URL actually changes during the content overhaul.
+#
+# Format:  /old-path   /new-path   301
+#
+# Example:
+# /christmas-offer-2019/   /   301

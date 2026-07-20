@@ -1,0 +1,53 @@
+{
+  "reviews": [
+    {
+      "name": "A and D Discount Roofing Supplies",
+      "initials": "AD",
+      "av": "#1BABE5",
+      "date": "Nov 2025",
+      "text": "I highly recommend Ad On Group to create your website and manage your digital marketing. Their creative team is highly skilled in designing and writing informative blogs and digital brochures, and adept in SEO strategies that have consistently driven traffic and sales. Their cutting-edge approach lets us focus on our business goals."
+    },
+    {
+      "name": "Gayle Slater",
+      "initials": "GS",
+      "av": "#14A08C",
+      "date": "Oct 2025",
+      "text": "Thank you Charlotte, I am extremely happy with the adjustments and your work. It looks fantastic."
+    },
+    {
+      "name": "Thérèse Hallett",
+      "initials": "TH",
+      "av": "#6C5CD6",
+      "date": "Jul 2025",
+      "text": "What can I say about my experience with Ad On Hold. The lovely young lady who looks after our account, Alaskah, was simply amazing — super patient and understanding. I feel we are treated as a person firstly and a business owner second, certainly not just a number. She is a gem!"
+    },
+    {
+      "name": "Ashar Rees",
+      "initials": "AR",
+      "av": "#E0842F",
+      "date": "Jul 2025",
+      "text": "Great team, very professional, great results. Highly recommended."
+    },
+    {
+      "name": "John Milios",
+      "initials": "JM",
+      "av": "#1BABE5",
+      "date": "Apr 2025",
+      "text": "Great team to work with — professional, easy, friendly, can’t do enough for us. Recommend Ad On Group for all your business needs. A++"
+    },
+    {
+      "name": "John Martin",
+      "initials": "JM",
+      "av": "#14A08C",
+      "date": "Jan 2025",
+      "text": "Happy to sing praises for Ad On Group! We’ve been a customer for quite a few years and recently had our website revamped by their team — a painless process with terrific results. Alaskah was a treasure to deal with."
+    },
+    {
+      "name": "Ashmore City Medical Centre",
+      "initials": "AC",
+      "av": "#6C5CD6",
+      "date": "Sep 2024",
+      "text": "The flow of the changes to the script is simple and easy. They keep up to date with the changes required and remind me to update. Excellent service — would highly recommend."
+    }
+  ]
+}

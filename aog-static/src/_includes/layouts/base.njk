@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}</title>
+  {% if description %}<meta name="description" content="{{ description }}">{% endif %}
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
+  <!-- Open Graph / social -->
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:title" content="{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}">
+  {% if description %}<meta property="og:description" content="{{ description }}">{% endif %}
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  {% if ogImage %}<meta property="og:image" content="{{ ogImage }}">{% endif %}
+
+  <link rel="stylesheet" href="/assets/css/site.css">
+
+  {# --- FUSE POINT: per-page <style>/head from the designed page goes here --- #}
+  {% if extraHead %}{{ extraHead | safe }}{% endif %}
+</head>
+<body class="{{ bodyClass or '' }}">
+
+  {% include "partials/header.njk" %}
+
+  <main id="main">
+    {# --- FUSE POINT: the designed page body is injected here --- #}
+    {{ content | safe }}
+  </main>
+
+  {% include "partials/footer.njk" %}
+
+  {# --- Global 3rd-party scripts (wired up in the FINAL step, toggled in _data/site.json) --- #}
+  {% if site.thirdParty.googleAnalytics %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.thirdParty.googleAnalytics }}"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','{{ site.thirdParty.googleAnalytics }}');</script>
+  {% endif %}
+  {% if site.thirdParty.tawkChat and site.thirdParty.tawkSrc %}
+  <script async src="{{ site.thirdParty.tawkSrc }}" crossorigin="*"></script>
+  {% endif %}
+
+  {# --- FUSE POINT: per-page scripts from the designed page go here --- #}
+  {% if extraScripts %}{{ extraScripts | safe }}{% endif %}
+</body>
+</html>
