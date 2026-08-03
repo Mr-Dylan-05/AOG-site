@@ -11,5 +11,6 @@
     "tawkSrc": "",
     "googleAnalytics": "",
     "formEndpoint": ""
-  }
+  },
+  "defaultOgImage": "/assets/design/group-team.jpg"
 }

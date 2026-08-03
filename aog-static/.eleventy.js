@@ -20,6 +20,29 @@ module.exports = function (eleventyConfig) {
   // copied in the ~370 images actually referenced (~41 MB) and rewrote every
   // path; old /wp-content/... URLs stay alive via public/_redirects.
 
+  // Head metadata for the passthrough-copied design pages.
+  // Runs before the schema step so JSON-LD can read the og:image it adds.
+  eleventyConfig.on("eleventy.after", () => {
+    try {
+      require("./scripts/complete-head-meta.js");
+    } catch (e) {
+      console.warn("[head] completion failed:", e.message);
+    }
+  });
+
+  // Schema.org JSON-LD.
+  //
+  // Injected after the build rather than from a template, because half the site
+  // (the flattened design pages in public/) is passthrough-copied and never goes
+  // through base.njk. Doing it here covers both page sources from one place.
+  eleventyConfig.on("eleventy.after", () => {
+    try {
+      require("./scripts/inject-schema.js");
+    } catch (e) {
+      console.warn("[schema] injection failed:", e.message);
+    }
+  });
+
   // Contact form endpoint.
   //
   // The contact page is a flattened design page copied straight through, so it

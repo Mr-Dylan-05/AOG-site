@@ -100,7 +100,7 @@ for (const file of htmlFiles) {
     // A link to a directory-style URL is fine if the directory produced a page.
     if (!u.includes(".") && exists.has(u.endsWith("/") ? u : u + "/")) continue;
 
-    const isAsset = /\.(jpg|jpeg|png|gif|webp|svg|ico|mp4|webm|css|js|woff2?|ttf|pdf|txt|xml|json)$/i.test(u);
+    const isAsset = /\.(jpg|jpeg|png|gif|webp|svg|ico|mp4|webm|css|js|woff2?|ttf|pdf|txt|xml|json|webmanifest)$/i.test(u);
     if (isAsset || ctx === "srcset" || ctx.startsWith("url(")) add(missing, u, where);
     else add(brokenLinks, u.endsWith("/") ? u : u + "/", where);
   }
