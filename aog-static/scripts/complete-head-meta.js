@@ -37,7 +37,7 @@ function walk(dir, out = []) {
 const attr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const has = (html, re) => re.test(html);
 
-let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, touched = 0;
+let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, touched = 0;
 
 for (const file of walk(SITE)) {
   const html = fs.readFileSync(file, "utf8");
@@ -96,9 +96,36 @@ for (const file of walk(SITE)) {
     tw++;
   }
 
-  if (!add.length) continue;
+  // --- third-party tags -------------------------------------------------
+  // base.njk emits these, but only for Eleventy-built pages. The design pages
+  // are passthrough-copied and never see the template — which silently left
+  // analytics off the homepage and every division page. Injecting here covers
+  // both sources; the guard stops it doubling up on pages that already have it.
+  const tp = site.thirdParty || {};
+  let body = null;
+
+  if (tp.googleAnalytics && !html.includes(tp.googleAnalytics)) {
+    body = (body || "") +
+      `<script async src="https://www.googletagmanager.com/gtag/js?id=${tp.googleAnalytics}"></script>\n` +
+      `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}` +
+      `gtag('js',new Date());gtag('config','${tp.googleAnalytics}');</script>`;
+    ga++;
+  }
+  if (tp.tawkChat && tp.tawkSrc && !html.includes(tp.tawkSrc)) {
+    body = (body || "") + `\n<script async src="${tp.tawkSrc}" crossorigin="*"></script>`;
+    tawk++;
+  }
+
+  if (!add.length && !body) continue;
   touched++;
-  if (!DRY) fs.writeFileSync(file, html.replace(/<\/head>/i, `${add.join("\n")}\n</head>`));
+  let out = html;
+  if (add.length) out = out.replace(/<\/head>/i, `${add.join("\n")}\n</head>`);
+  if (body) {
+    out = /<\/body>/i.test(out)
+      ? out.replace(/<\/body>/i, `${body}\n</body>`)
+      : out.replace(/<\/html>/i, `${body}\n</html>`);
+  }
+  if (!DRY) fs.writeFileSync(file, out);
 }
 
 console.log(`${DRY ? "[dry run] " : ""}[head] ${touched} pages completed`);
@@ -107,3 +134,5 @@ console.log(`  open graph added  : ${og}`);
 console.log(`  twitter card added: ${tw}`);
 console.log(`  og:image defaulted: ${ogImage}`);
 console.log(`  mobile.css linked : ${mobileCss}`);
+console.log(`  analytics injected: ${ga}`);
+console.log(`  chat injected     : ${tawk}`);

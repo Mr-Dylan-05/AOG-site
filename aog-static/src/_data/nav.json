@@ -1,67 +1,144 @@
 {
   "primary": [
-    { "label": "Home", "url": "/" },
+    {
+      "label": "Home",
+      "url": "/"
+    },
     {
       "label": "About",
       "url": "/about/",
       "children": [
-        { "label": "History", "url": "/history/" },
-        { "label": "Purpose", "url": "/purpose/" },
-        { "label": "People", "url": "/people/" },
-        { "label": "Culture", "url": "/culture/" },
-        { "label": "Offices", "url": "/offices/" }
+        {
+          "label": "History",
+          "url": "/history/"
+        },
+        {
+          "label": "Purpose",
+          "url": "/purpose/"
+        },
+        {
+          "label": "People",
+          "url": "/people/"
+        },
+        {
+          "label": "Culture",
+          "url": "/culture/"
+        },
+        {
+          "label": "Offices",
+          "url": "/offices/"
+        }
       ]
     },
     {
       "label": "Ad On Workforce",
       "url": "/ad-on-workforce/",
       "children": [
-        { "label": "About", "url": "/ad-on-workforce/" },
-        { "label": "Customer Service", "url": "/package/customer-service/" },
-        { "label": "Finance Admin Staff", "url": "/package/finance-admin-staff/" },
-        { "label": "General Admin Staff", "url": "/package/general-admin-staff/" },
-        { "label": "Executive / Personal Assistant", "url": "/package/executive-personal-assistant/" },
-        { "label": "Data Entry / Collation Position", "url": "/package/data-entry-collation-position/" },
-        { "label": "Bespoke Repeatable Task Role", "url": "/package/bespoke-repeatable-task-role/" },
-        { "label": "Marketing Assistant", "url": "/package/marketing-assistant/" }
+        {
+          "label": "Customer Service",
+          "url": "/customer-service/"
+        },
+        {
+          "label": "Finance Admin Staff",
+          "url": "/finance-admin-staff/"
+        },
+        {
+          "label": "General Admin Staff",
+          "url": "/general-admin-staff/"
+        },
+        {
+          "label": "Executive / Personal Assistant",
+          "url": "/executive-personal-assistant/"
+        },
+        {
+          "label": "Data Entry / Collation Position",
+          "url": "/data-entry-collation/"
+        },
+        {
+          "label": "Bespoke Repeatable Task Role",
+          "url": "/bespoke-repeatable-task-role/"
+        },
+        {
+          "label": "Marketing Assistant",
+          "url": "/marketing-assistant/"
+        }
       ]
     },
     {
       "label": "Ad On Digital",
       "url": "/digital/",
       "children": [
-        { "label": "About", "url": "/digital/" },
-        { "label": "Websites", "url": "/websites/" },
-        { "label": "SEO", "url": "/finder-seo-package/" },
-        { "label": "Google Ads", "url": "/google-ads-management/" },
-        { "label": "Brochure Campaign", "url": "/brochure-campaign/" },
-        { "label": "Facebook Packages", "url": "/facebook-packages/" },
-        { "label": "Blogs", "url": "/blogs/" }
+        {
+          "label": "Websites",
+          "url": "/websites/"
+        },
+        {
+          "label": "SEO",
+          "url": "/finder-seo-package/"
+        },
+        {
+          "label": "Google Ads",
+          "url": "/google-ads-management/"
+        },
+        {
+          "label": "Brochure Campaign",
+          "url": "/brochure-campaign/"
+        },
+        {
+          "label": "Facebook Packages",
+          "url": "/facebook-packages/"
+        },
+        {
+          "label": "Blogs",
+          "url": "/blogs/"
+        }
       ]
     },
     {
       "label": "Ad On Hold",
       "url": "/ad-on-hold-about/",
       "children": [
-        { "label": "About", "url": "/ad-on-hold-about/" },
-        { "label": "Products", "url": "/ad-on-hold-about/products/" }
+        {
+          "label": "Products",
+          "url": "/ad-on-hold-about/products/"
+        }
       ]
     },
     {
       "label": "FAQs",
       "url": "/faqs/",
       "children": [
-        { "label": "Ad On Workforce", "url": "/faqs/aow-faqs/" },
-        { "label": "Ad On Digital", "url": "/faqs/" }
+        {
+          "label": "Ad On Workforce",
+          "url": "/faqs/aow-faqs/"
+        }
       ]
     },
-    { "label": "Contact", "url": "/contact/" }
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    }
   ],
   "footer": [
-    { "label": "About", "url": "/about/" },
-    { "label": "Contact", "url": "/contact/" },
-    { "label": "Careers", "url": "/careers/" },
-    { "label": "Privacy Policy", "url": "/privacy-policy/" },
-    { "label": "Terms & Conditions", "url": "/terms-and-conditions/" }
+    {
+      "label": "About",
+      "url": "/about/"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    },
+    {
+      "label": "Careers",
+      "url": "/contact-us/"
+    },
+    {
+      "label": "Privacy Policy",
+      "url": "/privacy-policy/"
+    },
+    {
+      "label": "Terms & Conditions",
+      "url": "/terms-and-conditions/"
+    }
   ]
 }

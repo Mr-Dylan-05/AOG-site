@@ -33,3 +33,45 @@
 # Do NOT add these to robots.txt — blocking the crawl would stop Google ever
 # seeing the 410, and the URLs would linger in the index indefinitely.
 /products/*             /404.html   410
+
+# --- Consolidated pages (scripts/consolidate-pages.js) ---
+# Empty shells and duplicate pages removed; 301 so existing links still land.
+/careers/                                     /contact-us/                      301
+/edm/                                         /ad-on-digital/                   301
+/google-ads/                                  /google-ads-management/           301
+/ad-on-workforce/about/                       /ad-on-workforce/                 301
+/ad-on-workforce/services/                    /ad-on-workforce/                 301
+/faqs/aod-faqs/                               /faqs/                            301
+/faqs/aoh-faqs/                               /faqs/                            301
+/animated-video-maker-help-build-your-brand/  /animated-video-maker/            301
+/package/customer-service/                    /customer-service/                301
+/package/general-admin-staff/                 /general-admin-staff/             301
+/package/finance-admin-staff/                 /finance-admin-staff/             301
+/package/data-entry-collation-position/       /data-entry-collation/            301
+/package/bespoke-repeatable-task-role/        /bespoke-repeatable-task-role/    301
+/package/marketing-assistant/                 /marketing-assistant/             301
+/package/executive-personal-assistant/        /executive-personal-assistant/    301
+/bpo-ai-program/                              /bpo-program/                     301
+/ad-on-group/                                 /                                 301
+# --- end consolidated pages ---
+
+# --- Consolidated pages (scripts/consolidate-pages.js) ---
+# Empty shells and duplicate pages removed; 301 so existing links still land.
+/careers/                                     /contact-us/                      301
+/edm/                                         /ad-on-digital/                   301
+/google-ads/                                  /google-ads-management/           301
+/ad-on-workforce/about/                       /ad-on-workforce/                 301
+/ad-on-workforce/services/                    /ad-on-workforce/                 301
+/faqs/aod-faqs/                               /faqs/                            301
+/faqs/aoh-faqs/                               /faqs/                            301
+/animated-video-maker-help-build-your-brand/  /animated-video-maker/            301
+/package/customer-service/                    /customer-service/                301
+/package/general-admin-staff/                 /general-admin-staff/             301
+/package/finance-admin-staff/                 /finance-admin-staff/             301
+/package/data-entry-collation-position/       /data-entry-collation/            301
+/package/bespoke-repeatable-task-role/        /bespoke-repeatable-task-role/    301
+/package/marketing-assistant/                 /marketing-assistant/             301
+/package/executive-personal-assistant/        /executive-personal-assistant/    301
+/bpo-ai-program/                              /bpo-program/                     301
+/ad-on-group/                                 /                                 301
+# --- end consolidated pages ---

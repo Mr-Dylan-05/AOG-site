@@ -64,6 +64,25 @@ const WORKFORCE_ROLES = [
   ["AI Enablement Specialist", "/ai-enablement-specialist/"],
 ];
 
+/**
+ * Team members, taken from the /about/ page where the site itself publishes
+ * name, role and LinkedIn profile together. Sourced from Ad On Group's own
+ * pages rather than looked up externally, so every value is one the company
+ * has already chosen to publish.
+ *
+ * Lindsey (CFO) and James (Business Development) appear on /people/ by first
+ * name only, with no profile link — no way to identify them without guessing,
+ * so they are omitted rather than invented.
+ */
+const TEAM = [
+  ["Dylan Bailey", "Facilitator", "https://www.linkedin.com/in/dylan-bailey-544986378"],
+  ["Beau Robards", "Facilitator", "https://www.linkedin.com/in/beau-robards-6b4b09357"],
+  ["Taryn Boxer", "Operations Manager", "https://www.linkedin.com/in/taryn-boxer-84b482285"],
+  ["Ben Ragless", "Business Development", "https://www.linkedin.com/in/ben-ragless-46299386"],
+  ["Leah Barnes", "Training Coordinator", "https://www.linkedin.com/in/leah-barnes-91305a2a3"],
+  ["Tracy Malone", "Training Coordinator", "https://www.linkedin.com/in/tracy-malone-606907258"],
+];
+
 const ORGANIZATION = {
   // Multi-typed: it's an organisation, and it's a service business with a
   // street address — which is what local results key off.
@@ -114,6 +133,16 @@ const ORGANIZATION = {
   },
   areaServed: { "@type": "Country", name: "Australia" },
   identifier: { "@type": "PropertyValue", propertyID: "ABN", value: "54 808 983 598" },
+  // Verified company profiles. These are how a search engine confirms that the
+  // entity on this site and the entity on those platforms are the same company.
+  sameAs: site.social || [],
+  employee: TEAM.map(([name, jobTitle, url]) => ({
+    "@type": "Person",
+    name,
+    jobTitle,
+    sameAs: [url],
+    worksFor: { "@id": ORG_ID },
+  })),
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+61755861400",
@@ -177,6 +206,7 @@ const SERVICES = {
 // Author accounts that are CMS logins rather than people. Attributing a post to
 // "fligno_dev" would be worse than attributing it to the company.
 const NON_PERSON_AUTHORS = new Set(["fligno_dev", "adon_dev", "admin", "adon"]);
+
 
 /** More specific WebPage subtypes, so each page says what KIND of page it is. */
 const PAGE_TYPES = {
