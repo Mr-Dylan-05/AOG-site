@@ -103,11 +103,22 @@ def main():
             src = src_m.group(1) if src_m else ""
 
             # --- dimensions ---
-            if not re.search(r"\bwidth=", tag, re.I) and not re.search(r"\bheight=", tag, re.I):
-                dim = dimensions(src)
+            dim = dimensions(src)
+            has_w = re.search(r'\bwidth="(\d+)"', tag, re.I)
+            has_h = re.search(r'\bheight="(\d+)"', tag, re.I)
+            if not has_w and not has_h:
                 if dim:
                     tag = tag[:-1].rstrip() + f' width="{dim[0]}" height="{dim[1]}">'
                     stats[0] += 1
+            elif dim and has_w and has_h and (
+                int(has_w.group(1)) != dim[0] or int(has_h.group(1)) != dim[1]
+            ):
+                # The file was resized after these were written (see
+                # optimise-image-files.py). The aspect ratio is unchanged so
+                # layout is unaffected, but stale intrinsic dimensions are wrong.
+                tag = re.sub(r'\bwidth="\d+"', f'width="{dim[0]}"', tag, flags=re.I)
+                tag = re.sub(r'\bheight="\d+"', f'height="{dim[1]}"', tag, flags=re.I)
+                stats[0] += 1
 
             # --- loading ---
             if not re.search(r"\bloading=", tag, re.I):
