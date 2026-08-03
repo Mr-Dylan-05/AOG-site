@@ -20,3 +20,16 @@
 /wp-login.php           /   301
 /wp-admin/*             /   301
 /xmlrpc.php             /   301
+
+# --- Injected spam URLs ------------------------------------------------------
+# The compromised WordPress site served spam product pages on any unrecognised
+# URL, and Google has INDEXED them (confirmed in Search Console, last crawled
+# 25 Jul 2026): /products/<anything>?srsltid=...
+#
+# 410 Gone, not 404 and definitely not a redirect home. 410 states the page is
+# permanently gone, which Google acts on faster than a 404; redirecting them to
+# the homepage would instead read as a soft-404 and associate the spam with it.
+#
+# Do NOT add these to robots.txt — blocking the crawl would stop Google ever
+# seeing the 410, and the URLs would linger in the index indefinitely.
+/products/*             /404.html   410

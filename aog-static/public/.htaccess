@@ -18,6 +18,12 @@
   RewriteRule ^wp-login\.php$ / [R=301,L]
   RewriteRule ^xmlrpc\.php$ / [R=301,L]
 
+  # Injected spam URLs from the WordPress compromise, which Google has indexed.
+  # 410 Gone (the [G] flag) rather than 404: it asserts permanent removal and is
+  # actioned faster. Never redirect these home — that reads as a soft 404 and
+  # ties the spam to the homepage.
+  RewriteRule ^products(/.*)?$ - [G,L]
+
   # Serve /path/ from /path/index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME}/index.html -f

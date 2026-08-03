@@ -68,11 +68,22 @@ image search traffic, not breaking the site.
 ## After switching over
 
 - Submit `https://adongroup.com.au/sitemap.xml` in Google Search Console.
-- **The old WordPress install should be taken offline, not left running.** As of
-  August 2026 the live site was serving 150 injected spam product pages
-  (`/products/4-inch-diameter-hose-clamp...`) in its sitemap — a compromise.
-  Leaving it reachable leaves that exposure in place; this static site removes
-  the attack surface entirely, but only once the old one is actually gone.
+- **The old WordPress install must be taken offline, not left running.** As of
+  August 2026 the live site was compromised: it served injected spam product
+  pages (`/products/…?srsltid=…`) on any unrecognised URL, and **Google has
+  indexed them** — confirmed in Search Console, last crawled 25 Jul 2026. This
+  static site removes the injection surface entirely, but only once the old one
+  is actually gone.
+- **Spam URLs are configured to return 410 Gone**, not 404 and not a redirect,
+  so Google drops them as fast as possible. See the `/products/*` rules in
+  `public/_redirects` and `public/.htaccess`.
+  - Vercel cannot return 410 from static config; there those URLs will 404,
+    which still gets them removed, just a little slower.
+  - **Do not add `/products/` to robots.txt.** Blocking the crawl would stop
+    Google ever seeing the 410, leaving the URLs in the index indefinitely.
+- In Search Console, after cutover: check **Security & Manual Actions**, review
+  **Users and permissions** for accounts you don't recognise, and use
+  **Removals** for temporary suppression while the 410s are picked up.
 
 ---
 
