@@ -45,6 +45,23 @@ const BASE = site.url.replace(/\/$/, "");
 const REWRITE_HOSTS = ["adonworkforce.com.au"];
 const shouldRewrite = (href) => REWRITE_HOSTS.some((h) => href.includes(h));
 
+/**
+ * Pages whose canonical points at a different page on THIS domain.
+ *
+ * These five were flattened out of a single design page and kept its canonical,
+ * so each was telling Google "index the homepage instead of me" while also
+ * appearing in sitemap.xml — contradictory, and it meant none of them could
+ * rank. Their og:url was remapped correctly during the flatten; only the
+ * canonical was missed, which is the tell.
+ *
+ * NOT included: /ad-on-workforce-division/, whose canonical points at
+ * /ad-on-workforce/. Those two really are near-duplicate pages, so consolidating
+ * them is deliberate and correct.
+ */
+const SELF_CANONICAL = new Set([
+  "offices", "people", "history", "purpose", "culture",
+]);
+
 function pages(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
@@ -54,7 +71,7 @@ function pages(dir, out = []) {
   return out;
 }
 
-let canonical = 0, ogurl = 0, relative = 0, files = 0;
+let canonical = 0, ogurl = 0, relative = 0, misdirected = 0, files = 0;
 const changed = [];
 
 for (const file of pages(PUBLIC)) {
@@ -94,6 +111,18 @@ for (const file of pages(PUBLIC)) {
     }
   );
 
+  // Same-domain but pointing at the wrong page — see SELF_CANONICAL above.
+  if (SELF_CANONICAL.has(rel)) {
+    html = html.replace(
+      /(<link\b[^>]*\brel=["']canonical["'][^>]*\bhref=)(["'])([^"']+)\2/gi,
+      (whole, pre, q, href) => {
+        if (href === url) return whole;
+        misdirected++; hits.push("misdirected canonical");
+        return `${pre}${q}${url}${q}`;
+      }
+    );
+  }
+
   if (html !== before) {
     files++;
     changed.push(`${rel === "" ? "/" : `/${rel}/`}  (${[...new Set(hits)].join(" + ")})`);
@@ -105,6 +134,7 @@ console.log(`${DRY ? "[dry run] " : ""}cross-domain canonical fix`);
 console.log(`  canonical rewritten : ${canonical}`);
 console.log(`  og:url rewritten    : ${ogurl}`);
 console.log(`  relative -> absolute: ${relative}`);
+console.log(`  misdirected fixed   : ${misdirected}`);
 console.log(`  files changed       : ${files}`);
 if (changed.length) {
   console.log("\n  pages:");
