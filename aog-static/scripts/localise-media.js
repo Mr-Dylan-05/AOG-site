@@ -28,13 +28,18 @@ const WP = path.join(ROOT, "..");                       // the old WordPress ins
 const MEDIA_OUT = path.join(ROOT, "public", "assets", "media");
 const DRY = process.argv.includes("--dry");
 
-// Old CDN mirrors of the same wp-content tree.
-const CDN_HOSTS = [
-  "https://adongroup-1712c.kxcdn.com",
-  "https://adonworkforce-1712c.kxcdn.com",
-  "http://adongroup-1712c.kxcdn.com",
-  "http://adonworkforce-1712c.kxcdn.com",
+// Hosts that served the same wp-content tree: the old KeyCDN mirrors, plus the
+// WordPress sites themselves (some page content — especially anything recovered
+// from the database dump — uses fully-qualified URLs rather than paths).
+const HOSTS = [
+  "adongroup-1712c.kxcdn.com",
+  "adonworkforce-1712c.kxcdn.com",
+  "adongroup.com.au",
+  "www.adongroup.com.au",
+  "adongroup.adondevelopment.com",
+  "adonworkforce.com.au",
 ];
+const CDN_HOSTS = HOSTS.flatMap((h) => [`https://${h}`, `http://${h}`]);
 
 /** Every source file that can carry a media reference. */
 function sourceFiles() {
@@ -101,6 +106,16 @@ for (const file of sourceFiles()) {
   }
   after = after.split("/wp-content/uploads/").join("/assets/media/");
   after = after.split("/wp-content/plugins/").join("/assets/media/_plugins/");
+
+  // Repair pass: an earlier version of this script only knew about the kxcdn
+  // hosts, so a fully-qualified WordPress URL had its *path* rewritten while the
+  // *host* was left behind — producing things like
+  //   https://adongroup.adondevelopment.com/assets/media/2020/12/ic-check.svg
+  // which 404s, even though the file sits right there in public/assets/media/.
+  // Harmless to re-run once everything is already root-relative.
+  for (const host of CDN_HOSTS) {
+    after = after.split(`${host}/assets/media/`).join("/assets/media/");
+  }
   if (after === before) continue;
   refsRewritten += (before.match(REF_RE) || []).length;
   filesChanged++;

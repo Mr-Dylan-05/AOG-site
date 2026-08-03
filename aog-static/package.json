@@ -2,12 +2,14 @@
   "name": "aog-static",
   "version": "0.1.0",
   "private": true,
-  "description": "Ad On Group — static site (post-WordPress). Lightweight Eleventy build.",
+  "description": "Ad On Group \u2014 static site (post-WordPress). Lightweight Eleventy build.",
   "scripts": {
     "build": "eleventy",
     "serve": "eleventy --serve",
     "clean": "rm -rf _site",
-    "intake": "node scripts/intake.js"
+    "intake": "node scripts/intake.js",
+    "check": "node scripts/check-assets.js",
+    "verify": "npm run build && npm run check"
   },
   "devDependencies": {
     "@11ty/eleventy": "2.0.1",
