@@ -77,3 +77,21 @@ body.reference .owl-carousel, body.reference .slider { display: block !important
 body.reference .slide-item { display: block !important; float: none !important; width: auto !important; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--aog-border); }
 body.reference .slider-image img { max-height: 90px; width: auto; }
 body.reference main a { color: var(--aog-accent); }
+
+/* Interim CTA where a Ninja Forms embed used to be (scripts/replace-dead-forms.js).
+   Those forms died with WordPress; these link through to the working contact form. */
+/* Specificity has to beat the ported Beaver Builder link colour, whose
+   stylesheet loads after this one via extraHead. */
+.aog-form-cta a[href],
+.fl-html .aog-form-cta a[href] {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 8px;
+  background: #1BABE5;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1.2;
+}
+.aog-form-cta a[href]:hover,
+.aog-form-cta a[href]:focus { background: #1793c4; color: #fff; }
