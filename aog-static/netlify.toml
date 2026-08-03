@@ -1,0 +1,16 @@
+# Netlify build config. Set "Base directory" to `aog-static` in the site settings —
+# Netlify then reads this file from that folder, and the paths below are relative
+# to it. Redirect rules live in public/_redirects (Netlify's native format), which
+# Cloudflare Pages also understands.
+
+[build]
+  command = "npm run build"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/assets/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
