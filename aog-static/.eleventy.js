@@ -1,6 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
 module.exports = function (eleventyConfig) {
   // {% year %} -> current year (for footer copyright, etc.)
   eleventyConfig.addShortcode("year", () => String(new Date().getFullYear()));
@@ -10,22 +7,15 @@ module.exports = function (eleventyConfig) {
   // Root-level files: robots.txt, favicon, _redirects, etc.
   eleventyConfig.addPassthroughCopy({ "public": "/" });
 
-  // Media reuse: the WordPress media library (../wp-content/uploads, ~2.2GB)
-  // is NOT copied on every build. Instead we symlink it into the output so
-  // image URLs like /wp-content/uploads/... keep working, with zero duplication.
-  eleventyConfig.on("eleventy.after", () => {
-    const out = path.join(__dirname, "_site", "wp-content");
-    const target = path.join(__dirname, "..", "wp-content", "uploads");
-    try {
-      if (fs.existsSync(target)) {
-        fs.mkdirSync(out, { recursive: true });
-        const link = path.join(out, "uploads");
-        if (!fs.existsSync(link)) fs.symlinkSync(target, link, "dir");
-      }
-    } catch (e) {
-      console.warn("[media] could not link uploads:", e.message);
-    }
-  });
+  // Media is fully self-contained: images live in public/assets/media/ and are
+  // copied out by the passthrough above.
+  //
+  // This used to symlink the WordPress media library (../wp-content/uploads,
+  // ~2.2 GB) into the output. That worked on a laptop but could never work on a
+  // git-based host — the target sits outside the repo and is git-ignored, so a
+  // deploy would have shipped a site of broken images. scripts/localise-media.js
+  // copied in the ~370 images actually referenced (~41 MB) and rewrote every
+  // path; old /wp-content/... URLs stay alive via public/_redirects.
 
   return {
     dir: {

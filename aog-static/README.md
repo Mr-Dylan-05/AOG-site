@@ -73,10 +73,33 @@ npm run build     # writes the final static site to _site/
 | `_site/` | **Build output — this is what you upload to hosting.** (git-ignored) |
 
 ### Images / media
-The WordPress media library (`../wp-content/uploads`, ~2.2 GB) is **reused** —
-the build symlinks it into `_site/wp-content/uploads` so existing image URLs keep
-working with zero duplication. When you deploy, upload the `wp-content/uploads`
-folder alongside the site (once), or point the host at it.
+All images live in **`public/assets/media/`** and are part of the repo — the site
+is self-contained and has no tie to WordPress.
+
+Originally the build symlinked the WordPress media library (`../wp-content/uploads`,
+~2.2 GB) into the output. That worked locally but could never survive a deploy:
+the folder sits outside the repo and is git-ignored, so a git-based host would
+have published a site of broken images. `scripts/localise-media.js` copied in the
+~370 images actually referenced (~41 MB of the 2.2 GB) and rewrote every path,
+including the old `*.kxcdn.com` CDN URLs:
+
+```
+/wp-content/uploads/2024/11/foo.png  ->  /assets/media/2024/11/foo.png
+```
+
+Old image URLs are kept alive by a catch-all rule in `public/_redirects`, so
+inbound links and Google Image results don't break.
+
+**Check for broken media at any time:**
+
+```bash
+python3 scripts/make-standins.py     # lists (and fills) any unresolved image path
+```
+
+39 images referenced by the pages no longer exist anywhere — not in the media
+library, not on the live or staging site, not in the design export. They currently
+use generated **labelled placeholders** (obvious on sight, correctly sized so
+layouts don't shift). Replace them by dropping the real file at the same path.
 
 ---
 
@@ -147,9 +170,19 @@ The `_site/` folder is a complete static site. Any of these work:
   output dir `_site`. Free, fast, handles `_redirects` automatically.
 - **Plain hosting (cPanel / S3 / nginx)** — upload the contents of `_site/`.
 
-Point the domain's DNS at the host, upload `wp-content/uploads` once, done. All
-the WordPress files (`wp-admin`, `wp-login.php`, `xmlrpc.php`, the database) are
-gone.
+Point the domain's DNS at the host — that's it. Nothing needs uploading
+separately any more, and none of the WordPress files (`wp-admin`,
+`wp-login.php`, `xmlrpc.php`, the database) come along.
+
+**Verify WordPress-independence at any time** — hide the old install and build:
+
+```bash
+cd .. && mv wp-content .wp-hidden && cd aog-static && npm run build; \
+  cd .. && mv .wp-hidden wp-content
+```
+
+The build should succeed and `_site/` should contain no symlinks and no
+`wp-content` references.
 
 ---
 
