@@ -37,7 +37,7 @@ function walk(dir, out = []) {
 const attr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const has = (html, re) => re.test(html);
 
-let canonical = 0, og = 0, tw = 0, ogImage = 0, touched = 0;
+let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, touched = 0;
 
 for (const file of walk(SITE)) {
   const html = fs.readFileSync(file, "utf8");
@@ -59,6 +59,14 @@ for (const file of walk(SITE)) {
   if (image && image.startsWith("/")) image = BASE + image;
 
   const add = [];
+
+  // Responsive rescue layer. Injected here rather than in base.njk because the
+  // design pages are passthrough-copied and never see a template — and they are
+  // precisely the ones that need it (zero @media rules between them).
+  if (!html.includes("/assets/css/mobile.css")) {
+    add.push(`<link rel="stylesheet" href="/assets/css/mobile.css">`);
+    mobileCss++;
+  }
 
   if (image && !has(html, /<meta[^>]+property=["']og:image["']/i)) {
     add.push(`<meta property="og:image" content="${attr(image)}">`);
@@ -98,3 +106,4 @@ console.log(`  canonical added   : ${canonical}`);
 console.log(`  open graph added  : ${og}`);
 console.log(`  twitter card added: ${tw}`);
 console.log(`  og:image defaulted: ${ogImage}`);
+console.log(`  mobile.css linked : ${mobileCss}`);
