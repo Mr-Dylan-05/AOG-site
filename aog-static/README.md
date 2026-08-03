@@ -186,14 +186,35 @@ The build should succeed and `_site/` should contain no symlinks and no
 
 ---
 
-## Still to do (final step, on purpose)
+## Still to do — three values in one file
 
-**Forms and 3rd-party tools** are deliberately left until last (they need
-accounts/keys you set up):
+Everything third-party is **already wired and waiting**. Each one is inert until
+its value is filled in, so switching them on means editing
+`src/_data/site.json` and rebuilding. No code changes:
 
-- **Forms** (contact / careers / lead) — WordPress handled these; static sites
-  can't. Point each form at a form service (Formspree / Netlify Forms / Basin)
-  and set `formEndpoint` in `src/_data/site.json`.
-- **Live chat (Tawk.to)** — set `tawkChat: true` + `tawkSrc` in `site.json`.
-- **Analytics** — set `googleAnalytics` (GA4 ID) in `site.json`.
+```jsonc
+"thirdParty": {
+  "googleAnalytics": "",   // GA4 ID, e.g. "G-XXXXXXXXXX"
+  "formEndpoint":    "",   // e.g. "https://formspree.io/f/xxxxxxxx"
+  "tawkChat":        false,
+  "tawkSrc":         ""    // the Tawk.to embed src
+}
+```
+
+- **Analytics** — set `googleAnalytics`. The gtag snippet is already in
+  `base.njk` behind that check.
+- **Contact form** — set `formEndpoint`. The form on `/contact-us/` has named
+  fields, validation and a honeypot; the build stamps your endpoint into it and
+  prints `[form] contact form wired to …`. Until then it stays deliberately
+  inert rather than pretending to submit.
+- **Live chat** — set `tawkChat: true` and `tawkSrc`.
+
+### Not yet wired (needs a decision, not just a key)
+
+- **7 pages have a dead form area** — `/refer-a-friend/`, `/domains/`,
+  `/websites/`, `/facebook-packages/`, `/brochure-campaign/`,
+  `/google-ads-management/`, `/easy-rate-app/try-now/`. These were Ninja Forms
+  embeds; the plugin is gone, so the space is simply empty. Each needs either a
+  rebuilt form (what fields?) or a link through to `/contact-us/`. The original
+  field definitions are still in the WordPress database dump if you want them.
 - **adon-ai app** — already a static build; drop it in and link to it.

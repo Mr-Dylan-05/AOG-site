@@ -27,6 +27,12 @@ module.exports = function () {
         if (entry.name === "assets") continue;
         walk(full);
       } else if (entry.name === "index.html") {
+        // Skip pages that carry their own noindex — /program-pricing/ arrives
+        // that way from the Ad On AI import. Listing a page in the sitemap
+        // while telling search engines not to index it is a contradiction.
+        const html = fs.readFileSync(full, "utf8");
+        if (/<meta[^>]+name=["']robots["'][^>]*noindex/i.test(html)) continue;
+
         const rel = path.relative(PUBLIC, path.dirname(full));
         urls.push(rel === "" ? "/" : `/${rel.split(path.sep).join("/")}/`);
       }

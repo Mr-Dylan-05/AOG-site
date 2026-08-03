@@ -16,7 +16,9 @@ eleventyExcludeFromCollections: true
   {%- if url not in seen -%}{% set _ = seen.push(url) %}{%- endif -%}
 {%- endfor -%}
 {%- for page in collections.all -%}
-  {%- if page.url and '/404.html' not in page.url and page.url not in seen -%}
+  {#- pages marked `noindex: true` are left out on purpose: asking search
+      engines not to index a page while listing it here is contradictory -#}
+  {%- if page.url and '/404.html' not in page.url and page.url not in seen and not page.data.noindex -%}
     {% set _ = seen.push(page.url) %}
   {%- endif -%}
 {%- endfor -%}

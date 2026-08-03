@@ -57,8 +57,13 @@ image search traffic, not breaking the site.
 3. **Note that some images are placeholders.** 39 images no longer exist anywhere
    and currently show a labelled grey "PLACEHOLDER" box. That's known and
    deliberate, not a broken deploy.
-4. **Forms, analytics and live chat are not wired up yet** — they need accounts
-   and keys. See "Still to do" in `README.md`.
+4. **Forms, analytics and live chat are wired but switched off** — each is inert
+   until its value is set in `src/_data/site.json` (GA4 ID, form endpoint,
+   Tawk.to src). No code change needed, just those values and a rebuild. See
+   "Still to do" in `README.md`.
+5. **Eight pages are deliberately `noindex`** — they are empty shells carried
+   over from WordPress and are excluded from `sitemap.xml` on purpose. That's
+   why the sitemap lists 108 URLs for 116 pages.
 
 ## After switching over
 

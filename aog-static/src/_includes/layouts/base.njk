@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}</title>
   {% if description %}<meta name="description" content="{{ description }}">{% endif %}
+  {# Empty/placeholder pages set `noindex: true` so thin content stays out of
+     search. Such pages are also excluded from sitemap.xml — listing a page you
+     have asked search engines not to index is a contradictory signal. #}
+  {% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
 
   <!-- Open Graph / social -->
