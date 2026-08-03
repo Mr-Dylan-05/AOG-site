@@ -42,10 +42,58 @@ const ORG_ID = `${BASE}/#organization`;
 const SITE_ID = `${BASE}/#website`;
 
 // ---------------------------------------------------------------- constants
+/** The five divisions, as first-class entities the graph can point at. Models
+ *  the brand architecture explicitly instead of leaving it implied by nav. */
+const DIVISIONS = [
+  ["Ad On Workforce", "/ad-on-workforce/", "Offshore staffing from the Philippines"],
+  ["Ad On AI", "/ad-on-ai-division/", "AI training and enablement for Australian teams"],
+  ["Ad On Digital", "/ad-on-digital/", "Fully managed digital marketing"],
+  ["Ad On Hold", "/ad-on-hold/", "On-hold messaging and caller experience"],
+  ["Ad On SA", "/ad-on-sa/", "Remote talent from South Africa"],
+];
+
+/** Roles Ad On Workforce staffs. Each has its own page on the site. */
+const WORKFORCE_ROLES = [
+  ["Executive / Personal Assistant", "/executive-personal-assistant/"],
+  ["General Admin Staff", "/general-admin-staff/"],
+  ["Finance Admin Staff", "/finance-admin-staff/"],
+  ["Customer Service", "/customer-service/"],
+  ["Data Entry / Collation", "/data-entry-collation/"],
+  ["Marketing Assistant", "/marketing-assistant/"],
+  ["Bespoke Repeatable Task Role", "/bespoke-repeatable-task-role/"],
+  ["AI Enablement Specialist", "/ai-enablement-specialist/"],
+];
+
 const ORGANIZATION = {
-  "@type": "Organization",
+  // Multi-typed: it's an organisation, and it's a service business with a
+  // street address — which is what local results key off.
+  "@type": ["Organization", "ProfessionalService"],
   "@id": ORG_ID,
   name: "Ad On Group",
+  slogan: "Innovative Solutions From an Innovative Company",
+  knowsAbout: [
+    "Offshore staffing",
+    "Business process outsourcing",
+    "AI training and enablement",
+    "Digital marketing",
+    "On-hold messaging",
+  ],
+  subOrganization: DIVISIONS.map(([name, url, description]) => ({
+    "@type": "Organization",
+    "@id": `${BASE}${url}#division`,
+    name,
+    url: `${BASE}${url}`,
+    description,
+    parentOrganization: { "@id": ORG_ID },
+  })),
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Ad On Group services",
+    itemListElement: DIVISIONS.map(([name, url, description]) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name, description, url: `${BASE}${url}` },
+    })),
+  },
   url: `${BASE}/`,
   logo: {
     "@type": "ImageObject",
@@ -76,6 +124,33 @@ const ORGANIZATION = {
   },
 };
 
+/**
+ * Compact Organization for inner pages.
+ *
+ * Google processes each page independently, so every page needs enough to
+ * identify the publisher — but repeating the five divisions and the full offer
+ * catalogue on all 107 pages cost ~5 KB each for no extra meaning. The full
+ * entity is emitted on the pages that actually describe the company (below);
+ * everywhere else carries identity only, under the same @id, so the graph still
+ * resolves to one entity.
+ */
+const ORGANIZATION_COMPACT = {
+  "@type": ["Organization", "ProfessionalService"],
+  "@id": ORG_ID,
+  name: ORGANIZATION.name,
+  url: ORGANIZATION.url,
+  logo: ORGANIZATION.logo,
+  email: ORGANIZATION.email,
+  telephone: ORGANIZATION.telephone,
+  address: ORGANIZATION.address,
+};
+
+/** Pages where the company itself is the subject — these get the full entity. */
+const FULL_ORG_PAGES = new Set([
+  "/", "/about-us/", "/about/", "/our-company/", "/contact-us/", "/contact/",
+  "/history/", "/purpose/", "/people/", "/our-people/", "/offices/", "/our-offices/",
+]);
+
 const WEBSITE = {
   "@type": "WebSite",
   "@id": SITE_ID,
@@ -102,6 +177,38 @@ const SERVICES = {
 // Author accounts that are CMS logins rather than people. Attributing a post to
 // "fligno_dev" would be worse than attributing it to the company.
 const NON_PERSON_AUTHORS = new Set(["fligno_dev", "adon_dev", "admin", "adon"]);
+
+/** More specific WebPage subtypes, so each page says what KIND of page it is. */
+const PAGE_TYPES = {
+  "/contact-us/": "ContactPage",
+  "/contact/": "ContactPage",
+  "/about-us/": "AboutPage",
+  "/about/": "AboutPage",
+  "/our-company/": "AboutPage",
+  "/history/": "AboutPage",
+  "/purpose/": "AboutPage",
+  "/culture/": "AboutPage",
+  "/people/": "AboutPage",
+  "/our-people/": "AboutPage",
+  "/blog/": "CollectionPage",
+  "/blogs/": "CollectionPage",
+  "/privacy-policy/": "WebPage",
+};
+
+/** The AI programs are genuinely courses — every fact here is stated on the
+ *  programs page ("Three months, 24 modules", self-paced, ~two hours a week). */
+const COURSES = {
+  "/programs/": {
+    name: "AI Training & Enablement Program",
+    description:
+      "A three-month, self-paced AI enablement program taking non-technical staff from their first prompts to deployed AI agents. 24 modules, around two hours per week.",
+  },
+  "/bpo-program/": {
+    name: "BPO AI Program",
+    description:
+      "Structured AI enablement for BPO and outsourced teams, run on a monthly cycle across three months.",
+  },
+};
 
 // ---------------------------------------------------------------- helpers
 const decode = (s) =>
@@ -206,10 +313,10 @@ for (const p of pages) {
   if (!/<\/head>/i.test(p.html)) continue;
 
   const pageUrl = `${BASE}${p.url}`;
-  const graph = [ORGANIZATION, WEBSITE];
+  const graph = [FULL_ORG_PAGES.has(p.url) ? ORGANIZATION : ORGANIZATION_COMPACT, WEBSITE];
 
   const webpage = {
-    "@type": "WebPage",
+    "@type": PAGE_TYPES[p.url] || "WebPage",
     "@id": `${pageUrl}#webpage`,
     url: pageUrl,
     name: p.title || "Ad On Group",
@@ -274,16 +381,76 @@ for (const p of pages) {
 
   // --- Service -----------------------------------------------------------
   if (SERVICES[p.url]) {
-    graph.push({
+    const service = {
       "@type": "Service",
       "@id": `${pageUrl}#service`,
       name: SERVICES[p.url],
+      serviceType: SERVICES[p.url],
       provider: { "@id": ORG_ID },
       areaServed: { "@type": "Country", name: "Australia" },
       ...(p.description ? { description: p.description } : {}),
       mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
-    });
+    };
+    // The staffing pages each describe a concrete role, so the Workforce
+    // service can enumerate exactly what it offers rather than just naming
+    // itself — the difference between "we do staffing" and a list an answer
+    // engine can actually quote.
+    if (p.url === "/ad-on-workforce/" || p.url === "/ad-on-workforce-division/") {
+      service.hasOfferCatalog = {
+        "@type": "OfferCatalog",
+        name: "Outsourced roles",
+        itemListElement: WORKFORCE_ROLES.map(([name, url]) => ({
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name, url: `${BASE}${url}` },
+        })),
+      };
+    }
+    graph.push(service);
     counts.Service++;
+  }
+
+  // --- Course ------------------------------------------------------------
+  if (COURSES[p.url]) {
+    const c = COURSES[p.url];
+    graph.push({
+      "@type": "Course",
+      "@id": `${pageUrl}#course`,
+      name: c.name,
+      description: c.description,
+      url: pageUrl,
+      provider: { "@id": ORG_ID },
+      inLanguage: "en-AU",
+      mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        courseWorkload: "PT2H",     // per week, stated on the programs page
+        location: { "@type": "VirtualLocation", url: pageUrl },
+      },
+    });
+    counts.Course = (counts.Course || 0) + 1;
+  }
+
+  // --- Blog index --------------------------------------------------------
+  // A listing page should say what it lists; otherwise it looks like a thin
+  // page of links to a crawler.
+  if (webpage["@type"] === "CollectionPage") {
+    const posts = [...new Set(
+      [...p.html.matchAll(/<a\b[^>]*href="(\/[a-z0-9-]{12,}\/)"/gi)].map((m) => m[1])
+    )].filter((u) => u !== p.url).slice(0, 30);
+    if (posts.length >= 3) {
+      graph.push({
+        "@type": "ItemList",
+        "@id": `${pageUrl}#list`,
+        itemListElement: posts.map((u, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: `${BASE}${u}`,
+          ...(titles.get(u) ? { name: titles.get(u).split("|")[0].trim() } : {}),
+        })),
+      });
+      counts.ItemList = (counts.ItemList || 0) + 1;
+    }
   }
 
   const json = JSON.stringify({ "@context": "https://schema.org", "@graph": graph }, null, 0)
