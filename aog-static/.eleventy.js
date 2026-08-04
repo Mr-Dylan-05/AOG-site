@@ -57,19 +57,41 @@ module.exports = function (eleventyConfig) {
     const site = JSON.parse(
       fs.readFileSync(path.join(__dirname, "src", "_data", "site.json"), "utf8")
     );
-    const endpoint = site.thirdParty && site.thirdParty.formEndpoint;
+    const tp = site.thirdParty || {};
+    const endpoint = tp.formEndpoint;
+    const provider = (tp.formProvider || "").toLowerCase();
     const file = path.join(__dirname, "_site", "contact-us", "index.html");
     if (!fs.existsSync(file)) return;
+
+    let html = fs.readFileSync(file, "utf8");
+
+    // Netlify handles forms at the host level: it detects the attributes in the
+    // deployed HTML and provisions the endpoint itself, so there is nothing to
+    // paste in. The hidden form-name field is how it identifies submissions.
+    if (provider === "netlify") {
+      html = html.replace(
+        /<form([^>]*?)onsubmit="return false"/,
+        `<form$1name="contact" method="POST" data-netlify="true" netlify-honeypot="_gotcha" action="/thank-you/"`
+      );
+      if (!html.includes('name="form-name"')) {
+        html = html.replace(
+          /(<form[^>]*>)/,
+          `$1\n        <input type="hidden" name="form-name" value="contact">`
+        );
+      }
+      fs.writeFileSync(file, html);
+      console.log("[form] contact form wired to Netlify Forms");
+      return;
+    }
 
     if (!endpoint) {
       console.log("[form] thirdParty.formEndpoint not set — contact form left inert");
       return;
     }
 
-    let html = fs.readFileSync(file, "utf8");
     html = html.replace(
-      /<form onsubmit="return false"/,
-      `<form action="${endpoint}" method="POST"`
+      /<form([^>]*?)onsubmit="return false"/,
+      `<form$1action="${endpoint}" method="POST"`
     );
     fs.writeFileSync(file, html);
     console.log(`[form] contact form wired to ${endpoint}`);

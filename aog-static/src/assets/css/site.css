@@ -168,3 +168,15 @@ body.resource .resource-note {
   font-size: .95rem; color: #5A6472; background: #F7F9FB;
   border-left: 3px solid #D6DCE4; padding: .75rem 1rem; margin: 1.5rem 0;
 }
+
+/* Contact form validation and status (assets/js/contact-form.js) */
+.form-error {
+  display: block; margin-top: .35rem; font-size: .85rem; color: #C0392B; font-weight: 600;
+}
+input[aria-invalid="true"], textarea[aria-invalid="true"] {
+  border-color: #C0392B !important; outline-color: #C0392B;
+}
+.form-status { margin: .5rem 0 0; font-size: .95rem; min-height: 1.2em; }
+.form-status--ok { color: #1E7B4D; font-weight: 600; }
+.form-status--error { color: #C0392B; font-weight: 600; }
+.contact-pref-group legend { padding: 0; }
