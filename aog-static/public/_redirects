@@ -67,3 +67,14 @@
 /bpo-ai-program/                              /bpo-program/                     301
 /ad-on-group/                                 /                                 301
 # --- end consolidated pages ---
+
+# --- Post-launch sweep (Aug 2026) ---
+# Published WordPress pages that never made it into the static build. The two
+# promo pages carried 2022 "limited time" pricing, so they are redirected to
+# their product family rather than restored verbatim; /home-2025-copy/ was a
+# builder draft of the homepage; /website-examples/ was a shell of 14 links to
+# the dead adondevelopment.com demo domain.
+/review-me/               /ad-on-digital/   301
+/online-accelerator/      /ad-on-digital/   301
+/home-2025-copy/          /                 301
+/website-examples/        /ad-on-digital/   301

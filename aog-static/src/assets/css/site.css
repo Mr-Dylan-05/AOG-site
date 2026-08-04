@@ -71,7 +71,11 @@ body.reference .fl-row-content-wrap::before,
 body.reference .fl-row-content-wrap::after { display: none !important; }
 body.reference h1, body.reference h2, body.reference h3 { line-height: 1.25; margin: 1.5rem 0 .5rem; }
 body.reference p { margin: 0 0 1rem; }
-body.reference img { height: auto; margin: 1rem 0; }
+/* Content images only. This must NOT reach the header: `body.reference img`
+   outranks `.site-header__logo` on specificity, which un-capped the logo's
+   height:48px and rendered it at natural size (285px) on all 87 reference
+   pages — the "giant logo" header. */
+body.reference main img { height: auto; margin: 1rem 0; }
 /* stacked sliders: show every slide as plain blocks */
 body.reference .owl-carousel, body.reference .slider { display: block !important; }
 body.reference .slide-item { display: block !important; float: none !important; width: auto !important; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--aog-border); }
