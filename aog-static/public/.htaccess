@@ -33,35 +33,15 @@
   # ties the spam to the homepage.
   RewriteRule ^products(/.*)?$ - [G,L]
 
-  # --- Consolidated pages (scripts/consolidate-pages.js) ---
-  RewriteRule ^careers/?$ /contact-us/ [R=301,L]
-  RewriteRule ^edm/?$ /ad-on-digital/ [R=301,L]
-  RewriteRule ^google-ads/?$ /google-ads-management/ [R=301,L]
-  RewriteRule ^ad-on-workforce/about/?$ /ad-on-workforce/ [R=301,L]
-  RewriteRule ^ad-on-workforce/services/?$ /ad-on-workforce/ [R=301,L]
-  RewriteRule ^faqs/aod-faqs/?$ /faqs/ [R=301,L]
-  RewriteRule ^faqs/aoh-faqs/?$ /faqs/ [R=301,L]
-  RewriteRule ^animated-video-maker-help-build-your-brand/?$ /animated-video-maker/ [R=301,L]
-  RewriteRule ^package/customer-service/?$ /customer-service/ [R=301,L]
-  RewriteRule ^package/general-admin-staff/?$ /general-admin-staff/ [R=301,L]
-  RewriteRule ^package/finance-admin-staff/?$ /finance-admin-staff/ [R=301,L]
-  RewriteRule ^package/data-entry-collation-position/?$ /data-entry-collation/ [R=301,L]
-  RewriteRule ^package/bespoke-repeatable-task-role/?$ /bespoke-repeatable-task-role/ [R=301,L]
-  RewriteRule ^package/marketing-assistant/?$ /marketing-assistant/ [R=301,L]
-  RewriteRule ^package/executive-personal-assistant/?$ /executive-personal-assistant/ [R=301,L]
-  RewriteRule ^bpo-ai-program/?$ /bpo-program/ [R=301,L]
-  RewriteRule ^ad-on-group/?$ / [R=301,L]
-  # --- end consolidated pages ---
+
 
   # --- Consolidated pages (scripts/consolidate-pages.js) ---
-  RewriteRule ^careers/?$ /contact-us/ [R=301,L]
   RewriteRule ^edm/?$ /ad-on-digital/ [R=301,L]
   RewriteRule ^google-ads/?$ /google-ads-management/ [R=301,L]
   RewriteRule ^ad-on-workforce/about/?$ /ad-on-workforce/ [R=301,L]
   RewriteRule ^ad-on-workforce/services/?$ /ad-on-workforce/ [R=301,L]
   RewriteRule ^faqs/aod-faqs/?$ /faqs/ [R=301,L]
   RewriteRule ^faqs/aoh-faqs/?$ /faqs/ [R=301,L]
-  RewriteRule ^animated-video-maker-help-build-your-brand/?$ /animated-video-maker/ [R=301,L]
   RewriteRule ^package/customer-service/?$ /customer-service/ [R=301,L]
   RewriteRule ^package/general-admin-staff/?$ /general-admin-staff/ [R=301,L]
   RewriteRule ^package/finance-admin-staff/?$ /finance-admin-staff/ [R=301,L]
