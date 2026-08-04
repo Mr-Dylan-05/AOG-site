@@ -1,0 +1,140 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Working with AI"
+kind: "Guide"
+title: "How to Build an AI Knowledge Base | Ad On Group"
+h1: "How to build an AI knowledge base"
+cardTitle: "How to build an AI knowledge base"
+cardBlurb: "Getting AI to answer from your own documents."
+description: "Getting AI to answer from your own documents depends far more on curation than technology. Feeding it everything you have is the most common way to fail."
+updated: "4 August 2026"
+readingTime: 6
+permalink: "/resources/how-to-build-an-ai-knowledge-base/index.html"
+shortAnswer: "The work is curation, not technology. Feed AI a curated set of current, authoritative documents and it answers reliably; feed it everything on the shared drive and it confidently quotes superseded policies. Start with one topic, remove outdated versions, make sure answers cite their source, and keep a named owner for each document."
+faq:
+  - q: "Can't we just point it at our shared drive?"
+    a: "You can, and it's the most common way these projects disappoint. Shared drives contain drafts, superseded versions and one person's notes from 2019 — all of which the AI treats as equally authoritative, because nothing marks them otherwise."
+  - q: "How many documents do we need?"
+    a: "Fewer than you'd think. Twenty current, well-written documents covering your most-asked questions will outperform two thousand uncurated files. Coverage of real questions matters far more than volume."
+  - q: "What format should they be in?"
+    a: "Clear text with real headings works best. Scanned PDFs need OCR and often produce poor results. Complex spreadsheets and slide decks lose meaning when flattened to text — convert the important content to prose where you can."
+  - q: "How do we stop it using out-of-date material?"
+    a: "Remove superseded versions from the source set rather than relying on labels — the AI doesn't reliably prioritise 'v3 FINAL' over 'v2'. One current version in, old versions archived elsewhere."
+  - q: "How do we know if it's working?"
+    a: "Write twenty real questions with known correct answers before you build, then test against them. Without that, 'it seems good' is all you'll ever have, and it isn't enough to trust it with staff."
+keepReading:
+  - url: "/resources/what-are-embeddings/"
+    kind: "Explainer"
+    label: "What are embeddings?"
+    blurb: "How AI searches by meaning instead of keywords."
+  - url: "/resources/what-is-a-system-prompt/"
+    kind: "Explainer"
+    label: "What is a system prompt?"
+    blurb: "Standing instructions that apply to every conversation."
+---
+
+<p>
+  "Can we get AI to answer questions from our own documents?" is one of the most
+  common requests, and one of the most commonly disappointing projects. The
+  technology is the easy part. The reason it underdelivers is almost always the
+  documents.
+</p>
+
+<h2>Why pointing it at everything fails</h2>
+
+<p>
+  A typical shared drive contains the current procedure, two earlier versions,
+  a draft nobody finished, a client-specific variation, and someone's notes from
+  a meeting in 2019 — all as plain files with no indication of which is
+  authoritative.
+</p>
+
+<p>
+  A person navigates this using context: they know Sharon left, that project
+  finished, that folder is dead. The AI has none of that. Every document is
+  equally true, and it will answer from whichever is textually closest to the
+  question.
+</p>
+
+<p>
+  The result is an assistant that confidently states a policy you replaced two
+  years ago — and does it in the same tone as everything else it says.
+</p>
+
+<h2>Start with questions, not documents</h2>
+
+<p>
+  Before gathering anything, write down the twenty questions people actually
+  ask. Not what you think they should ask — what lands in inboxes and gets asked
+  across the desk.
+</p>
+
+<p>This list does three things:</p>
+
+<ul>
+  <li>Tells you which documents you actually need</li>
+  <li>Reveals answers that don't exist in writing anywhere — often the most valuable finding</li>
+  <li>Becomes your test set, so you can tell whether it works</li>
+</ul>
+
+<h2>Curate hard</h2>
+
+<ul>
+  <li><strong>One current version of each thing.</strong> Archive the rest somewhere the system can't see.</li>
+  <li><strong>Give each document an owner and a review date.</strong> Unowned documents go stale silently.</li>
+  <li><strong>Write the missing answers down.</strong> If three of your twenty questions have no document, that's the highest-value writing you'll do.</li>
+  <li><strong>Prefer clear prose.</strong> Headings, short sections, plain language. Material written for humans in a hurry works well for retrieval too.</li>
+  <li><strong>Watch the exceptions.</strong> If a rule has carve-outs, keep them in the same section. Split apart, retrieval may surface one without the other.</li>
+</ul>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Brisbane logistics company connects an assistant to their entire operations
+  folder — around 1,200 files. Early testing looks impressive.
+</p>
+
+<p>
+  Then a dispatcher asks about dangerous goods procedure and gets an answer from
+  a 2021 document superseded after a regulatory change. It's confident, detailed,
+  and wrong in a way that matters.
+</p>
+
+<p>
+  They rebuild with 34 documents: current procedures only, each with a named
+  owner, plus six newly written to cover gaps the question list exposed. Answers
+  now cite the document they came from.
+</p>
+
+<p>
+  It covers less ground and is trusted far more — which is the trade worth
+  making, because an assistant people don't trust gets abandoned regardless of
+  coverage.
+</p>
+
+<h2>Make it show its working</h2>
+
+<p>
+  Whatever tool you use, answers should cite which document they came from, and
+  ideally link to it. This matters more than it sounds:
+</p>
+
+<ul>
+  <li>Staff can verify without asking anyone</li>
+  <li>Wrong answers become traceable to a specific stale document you can then fix</li>
+  <li>It sets the right expectation — this is a finding aid, not an oracle</li>
+</ul>
+
+<h2>Keeping it alive</h2>
+
+<p>
+  A knowledge base is a living thing. Set a quarterly review: check the owner
+  list, remove anything superseded, and re-run your twenty test questions.
+</p>
+
+<p>
+  That last step is the one that gets skipped, and it's the one that catches
+  slow decay. A knowledge base that was accurate at launch and unmaintained for
+  a year is worse than none, because people have learned to trust it.
+</p>

@@ -1,0 +1,124 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Are Embeddings? Search by Meaning, Explained | Ad On Group"
+h1: "What are embeddings?"
+cardTitle: "What are embeddings?"
+cardBlurb: "How AI searches by meaning instead of keywords."
+description: "Embeddings turn text into numbers that capture meaning, so a system can find related material even when it shares no words with the search."
+updated: "4 August 2026"
+readingTime: 5
+permalink: "/resources/what-are-embeddings/index.html"
+shortAnswer: "An embedding turns a piece of text into a list of numbers that represents its meaning. Text about similar things produces similar numbers, so a system can find related material even when the wording is completely different. It's what lets an AI search your documents for 'staff leave' and return a policy that only ever says 'annual holiday entitlement'."
+faq:
+  - q: "Do I need to understand embeddings to use AI?"
+    a: "No. It's under-the-bonnet machinery. It's worth knowing the concept because it explains why AI document search finds things keyword search misses — and why it occasionally returns something that feels related but isn't what you wanted."
+  - q: "How is this different from a normal search?"
+    a: "Keyword search matches characters — 'invoice' finds documents containing 'invoice'. Embedding search matches meaning, so it also finds 'bill', 'statement' and 'amount payable'. It's more useful most of the time, and less literal when you wanted literal."
+  - q: "Is this the same as RAG?"
+    a: "Embeddings are a component of RAG rather than the whole thing. RAG is the pattern of retrieving relevant material and giving it to the model; embeddings are usually how the relevant material gets found."
+  - q: "Where are the embeddings stored?"
+    a: "In a vector database, which is built to compare these number lists quickly. For most businesses this is entirely hidden inside whichever product you're using — you never touch it directly."
+  - q: "Does making embeddings send our documents somewhere?"
+    a: "Usually yes — the text is sent to a provider to be converted. So the same data questions apply as any other AI processing: which tier, which provider, and whether the material should be leaving your systems at all."
+keepReading:
+  - url: "/resources/what-is-a-context-window/"
+    kind: "Explainer"
+    label: "What is a context window?"
+    blurb: "Why AI forgets things mid-conversation."
+  - url: "/resources/how-to-build-an-ai-knowledge-base/"
+    kind: "Guide"
+    label: "How to build an AI knowledge base"
+    blurb: "Getting AI to answer from your own documents."
+---
+
+<p>
+  Embeddings are the reason AI document search feels different from the search
+  boxes you're used to. You ask about something in your own words, and it finds
+  the right document even though that document uses entirely different
+  terminology.
+</p>
+
+<h2>Meaning as coordinates</h2>
+
+<p>
+  An embedding model reads a piece of text and outputs a long list of numbers —
+  often several hundred. Those numbers are a position: a point placed in a space
+  where distance corresponds to similarity of meaning.
+</p>
+
+<p>
+  "The invoice is overdue" and "payment hasn't come through" share almost no
+  words, but land close together. "The invoice is overdue" and "the weather is
+  fine" land far apart.
+</p>
+
+<p>
+  Nobody designed those coordinates by hand. They emerge from training on
+  enormous amounts of text, where the model learns which expressions get used in
+  similar ways.
+</p>
+
+<h2>What this makes possible</h2>
+
+<ul>
+  <li><strong>Search that understands paraphrase.</strong> Ask about "time off" and find the leave policy.</li>
+  <li><strong>Grouping related material.</strong> Cluster support tickets by what they're actually about rather than by keyword.</li>
+  <li><strong>Recommending the relevant next thing.</strong> Related articles, similar past jobs, comparable matters.</li>
+  <li><strong>Feeding the right pages to a model.</strong> When a document library is too large for a context window, embeddings pick the sections worth including.</li>
+</ul>
+
+<p>
+  That last one is the important one commercially. It's how you get an AI
+  assistant that answers from your 400-page operations manual without sending
+  all 400 pages.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Perth manufacturer has fifteen years of job files. A new estimator wants to
+  know whether they've quoted anything like a current enquiry before.
+</p>
+
+<p>
+  Keyword search fails — the old jobs use different product names, different
+  abbreviations, and terminology that changed twice. Nothing matches what she
+  types.
+</p>
+
+<p>
+  With the files embedded, a description of the current job surfaces four
+  genuinely comparable past jobs, none of which share her wording. The knowledge
+  was always there; it just wasn't reachable by anyone who didn't already know
+  what it was called.
+</p>
+
+<h2>Where it goes wrong</h2>
+
+<ul>
+  <li><strong>Related isn't the same as right.</strong> Embedding search returns what's <em>similar</em>. A superseded policy sits very close in meaning to the current one — which is why versioning matters more, not less.</li>
+  <li><strong>Chunking affects everything.</strong> Documents get split before embedding. Split badly and you get fragments missing the context that made them meaningful.</li>
+  <li><strong>It doesn't understand exceptions.</strong> A clause saying "this does not apply to contractors" is textually close to the rule it's excluding. Retrieval may surface one without the other.</li>
+</ul>
+
+<p>
+  All of which is a reason to keep a person reading the retrieved source rather
+  than trusting a confident summary of it.
+</p>
+
+<h2>Why it's worth knowing the word</h2>
+
+<p>
+  You'll never configure embeddings directly. But when someone proposes an AI
+  system that "searches all our documents", knowing what's underneath tells you
+  which questions to ask: how are documents split, how do you handle superseded
+  versions, and does the answer show its sources?
+</p>
+
+<p>
+  Those three questions separate a document assistant that's genuinely useful
+  from one that confidently quotes a policy you retired in 2021.
+</p>

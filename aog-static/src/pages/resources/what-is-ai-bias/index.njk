@@ -1,0 +1,117 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Risk & governance"
+kind: "Explainer"
+title: "What Is AI Bias? Where It Shows Up in Business | Ad On Group"
+h1: "What is AI bias?"
+cardTitle: "What is AI bias?"
+cardBlurb: "Where it comes from and where it shows up in business."
+description: "AI bias is systematic skew in output that reflects patterns in training data. In business it shows up most in screening, ranking and anything that sorts people."
+updated: "4 August 2026"
+readingTime: 6
+permalink: "/resources/what-is-ai-bias/index.html"
+shortAnswer: "AI bias is systematic skew in what a model produces, inherited from patterns in the data it learned from. It matters most wherever AI sorts, screens or ranks people — recruitment, credit, tenancy, performance — because there the skew has direct consequences. For drafting and summarising, it mostly shows up as bland, culturally generic output rather than harm."
+faq:
+  - q: "Where does bias actually come from?"
+    a: "Mostly the training data, which reflects the world as it has been written down — including its imbalances. It also comes from what a model is optimised to produce, and from how a question is framed. It isn't a deliberate setting anyone chose."
+  - q: "Does it affect ordinary business writing?"
+    a: "Mildly. The common form is defaulting to American norms, generic corporate register, or assumptions about who the reader is. Annoying and off-brand rather than harmful — a system prompt fixes most of it."
+  - q: "Where should we be genuinely careful?"
+    a: "Anything that sorts people. Screening applicants, ranking candidates, assessing suitability, drafting performance assessments. In Australia these sit alongside anti-discrimination obligations that apply regardless of what tool produced the decision."
+  - q: "Can we test for it?"
+    a: "Roughly, yes, and it's worth doing. Run comparable inputs varying only one attribute — a name, a suburb, a school — and see whether the output changes. If it does, you've found something worth acting on before it acts on someone."
+  - q: "Is a human reviewer enough?"
+    a: "Only if they're genuinely reviewing rather than rubber-stamping. Automation bias is well documented: people tend to defer to a system's output, especially under time pressure. A reviewer with no time and no criteria isn't a control."
+keepReading:
+  - url: "/resources/how-to-review-ai-output/"
+    kind: "Guide"
+    label: "How to review AI output"
+    blurb: "A checking habit that catches the things AI gets wrong."
+  - url: "/resources/ai-and-copyright-in-australia/"
+    kind: "Risk"
+    label: "AI and copyright in Australia"
+    blurb: "Who owns what AI produces."
+---
+
+<p>
+  AI bias tends to get discussed either as a moral abstraction or as a reason to
+  avoid AI entirely. Neither helps a business decide what to do. The useful
+  framing is narrower: bias is a predictable property of these systems, it
+  matters enormously in a few specific uses, and barely at all in most others.
+</p>
+
+<h2>Where it comes from</h2>
+
+<p>
+  A model learns patterns from an enormous amount of human-written text. That
+  text reflects the world as it has been recorded — including its historical
+  imbalances, its overrepresentation of some voices, and its assumptions about
+  who is normal.
+</p>
+
+<p>
+  The model has no view about any of this. It reproduces patterns. If certain
+  roles have historically been described with certain kinds of people, that
+  association is in the pattern, and it will surface unless something prevents it.
+</p>
+
+<p>
+  Providers work hard to reduce this, with real effect. But reduction isn't
+  removal, and no provider claims otherwise.
+</p>
+
+<h2>The two very different risk levels</h2>
+
+<p><strong>Low stakes — drafting and summarising.</strong> Bias here shows up as tone and assumption: American spelling and idiom, generic corporate register, an implied reader who may not be yours. This is a quality problem, and a system prompt handles most of it.</p>
+
+<p><strong>High stakes — anything that sorts people.</strong> Screening applications, ranking candidates, assessing suitability, drafting performance reviews, scoring risk. Here skew produces consequences for individuals, and in Australia it intersects with anti-discrimination law that applies to the outcome regardless of which tool produced it.</p>
+
+<p>
+  The line is worth being blunt about: if the output influences how a person is
+  treated, the analysis is completely different from drafting an email.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A growing Sydney firm uses AI to shortlist from 200 applications, asking it to
+  rank by suitability against the job description.
+</p>
+
+<p>
+  The shortlist looks reasonable. But the model has weighted continuous
+  employment heavily, and applicants with career gaps rank lower — which
+  correlates with carers, disproportionately women. It has also favoured
+  familiar-sounding institutions, disadvantaging overseas qualifications.
+</p>
+
+<p>
+  Nobody instructed any of this, and it's invisible in the output: the ranking
+  just looks like a ranking. The firm has no record of why anyone was excluded,
+  which is a problem quite apart from the fairness question.
+</p>
+
+<h2>What to do about it</h2>
+
+<ul>
+  <li><strong>Keep AI out of decisions about people, or keep it advisory.</strong> Summarising applications against stated criteria is defensible. Producing a ranking that determines who gets called is not, without substantial safeguards.</li>
+  <li><strong>Test with matched inputs.</strong> Vary one attribute — name, suburb, school, employment gap — and see whether the output moves. This takes an hour and tells you more than any policy.</li>
+  <li><strong>Make criteria explicit.</strong> Vague instructions leave the model to fill in what "suitable" means from its own patterns. Stating the criteria removes much of that room.</li>
+  <li><strong>Give reviewers time and criteria.</strong> A reviewer who is rushed will defer to the machine, which is worse than no reviewer because it manufactures the appearance of oversight.</li>
+  <li><strong>Keep a record.</strong> If you can't explain why someone was excluded, that's a problem irrespective of whether bias occurred.</li>
+</ul>
+
+<h2>Keeping it proportionate</h2>
+
+<p>
+  For the overwhelming majority of business AI use — drafting, summarising,
+  explaining, formatting — bias is a tone issue you resolve with clearer
+  instructions.
+</p>
+
+<p>
+  It becomes serious at one identifiable boundary: when output starts affecting
+  people's opportunities. That boundary is easy to spot in advance, and most
+  businesses can simply choose not to cross it.
+</p>
