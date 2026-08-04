@@ -39,19 +39,34 @@
      object-fit:cover frames where height:100% is doing real work. */
   img, svg, video, iframe, canvas, picture { max-width: 100% !important; }
 
-  /* --- 5. decorative elements pushed off-canvas ------------------------- */
-  /* Hero compositions hang circles off the sides with negative offsets
-     (left:-102px, right:-98px). On a phone they land on top of the text.
-     Dropdown menus use a small negative offset too, so those are excluded. */
-  [style*="position:absolute"][style*="left:-"]:not(.nav-menu),
-  [style*="position:absolute"][style*="right:-"]:not(.nav-menu) {
-    display: none !important;
-  }
+  /* --- 5. desktop geometry that doesn't survive a phone ---------------- */
+  /* These three classes are applied by scripts/mobile-fixups.js, which can look
+     at the actual numbers in the inline styles — something CSS can't do. The
+     earlier version of this file used blanket rules and HID content that ran
+     off-canvas, which is why images went missing on mobile. */
 
-  /* A centred hero circle can stay, but must fit the viewport. */
-  [style*="position:absolute"][style*="border-radius:50%"] {
-    max-width: 78vw !important;
-    max-height: 78vw !important;
+  /* Containers locked to a desktop height reserve a screenful of empty space. */
+  .aog-m-autoh { height: auto !important; min-height: 0 !important; }
+
+  /* Absolutely-positioned wrappers that hold an image: put them back in the
+     flow so they stack and stay visible, instead of overlapping or vanishing. */
+  .aog-m-stack {
+    position: static !important;
+    left: auto !important; right: auto !important;
+    top: auto !important; bottom: auto !important;
+    transform: none !important;
+    width: auto !important; max-width: 100% !important;
+    margin: 0 auto 14px !important;
+  }
+  .aog-m-stack img { width: 100% !important; height: auto !important; }
+
+  /* A 999px radius on a box that has wrapped to several rows becomes a giant
+     oval whose curve clips its own contents — this is what broke the header. */
+  .aog-m-pill {
+    border-radius: 18px !important;
+    row-gap: 12px !important;
+    padding: 14px 16px !important;
+    justify-content: flex-start !important;
   }
 
   /* --- 6. fixed pixel widths ------------------------------------------- */
