@@ -1,52 +1,66 @@
 # ===== AOG-site .gitignore =====
-# Protects secrets, keeps DB dumps / backups / media / caches out of git.
+#
+# This repository now contains ONLY the live site, which lives in aog-static/.
+#
+# The old WordPress installation was removed from the repo in August 2026, once
+# the static site was verified to have no dependency on it — it builds and
+# serves correctly with wp-content moved out of the tree entirely.
+#
+# Those files are still present on the local machine as an archive, but they are
+# not part of the site and must never be deployed. Two of them matter:
+#
+#   adminer.sql         the full database export — the only copy of the old
+#                       content and of historical form submissions
+#   wp-content/uploads  original-resolution images. The site's own copies in
+#                       aog-static/public/assets/media were resized for the web,
+#                       so this is the only place the originals still exist.
+#
+# Keep both until the migration is signed off.
+
+# --- The old WordPress installation (not part of the site) ---
+# Anchored with a leading slash so these only match at the repository root.
+# Without it, ".htaccess" and "robots.txt" would also match the site's own
+# copies in aog-static/public/, which are live deploy config and must stay.
+/wp-admin/
+/wp-includes/
+/wp-content/
+/wp-*.php
+/xmlrpc.php
+/index.php
+/readme.html
+/license.txt
+/wp-cli.phar
+/robots.txt
+/.htaccess
+/.user.ini
+/.well-known/
+/.tmb/
+/error_log
+/malcare-waf.php
 
 # --- Secrets & credentials ---
-wp-config.php
-.user.ini
+/wp-config.php
 .env
 *.pem
 *.key
 
-# --- Standalone DB admin tool & dumps ---
-adminer.php
-adminer*.php
+# --- Database dumps & the standalone admin tool ---
+/adminer*.php
 *.sql
 *.sql.gz
 
-# --- Backups (WP All-in-One Migration, UpdraftPlus, upgrade temp) ---
-wp-content/ai1wm-backups/
-wp-content/updraft/
-wp-content/upgrade/
-wp-content/upgrade-temp-backup/
+# --- Backups & archives ---
 *.wpress
-
-# --- Archives (backup zips, theme dist-old bundles, etc.) ---
 *.zip
 *.tar
 *.tar.gz
 *.gz
 *.rar
 
-# --- Media library (large binary uploads) ---
-wp-content/uploads/
-
-# --- Caches ---
-wp-content/cache/
-wp-content/wp-rocket-config/
-wp-content/advanced-cache.php
-wp-content/mc_data/
-wp-content/maintenance/
-wp-content/maintenance.php
-
 # --- Logs ---
-error_log
 *.log
-wp-content/error_log
 debug.log
 
-# --- WAF / security drop-ins ---
-malcare-waf.php
 
 # --- OS / editor cruft ---
 .DS_Store
@@ -57,10 +71,5 @@ Thumbs.db
 .idea/
 .vscode/
 
-# --- Node (if any build tooling in themes) ---
+# --- Node ---
 node_modules/
-
-# --- adon-ai front-end (built app lives in its own repo: dylan-website) ---
-wp-content/themes/bb-theme-child/adon-ai/dist/
-# stale build snapshots
-wp-content/themes/bb-theme-child/adon-ai/dist-old*/

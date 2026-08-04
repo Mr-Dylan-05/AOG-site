@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://adongroup.com.au/sitemap.xml
-Crawl-delay: 5
