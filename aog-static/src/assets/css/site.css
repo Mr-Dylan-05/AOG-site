@@ -95,3 +95,72 @@ body.reference main a { color: var(--aog-accent); }
 }
 .aog-form-cta a[href]:hover,
 .aog-form-cta a[href]:focus { background: #1793c4; color: #fff; }
+
+/* =====================================================================
+   AI resource articles (src/_includes/layouts/resource.njk)
+   Readable long-form column. Deliberately restrained — the value is the
+   writing, and a measured line length is most of what makes it readable.
+   ===================================================================== */
+body.resource main { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+body.resource .resource-crumbs { font-size: .85rem; color: #6b7280; margin-bottom: 1rem; }
+body.resource .resource-crumbs a { color: var(--aog-accent); text-decoration: none; }
+body.resource h1 { font-size: clamp(1.9rem, 4.5vw, 2.6rem); line-height: 1.15; letter-spacing: -.02em; margin: 0 0 .75rem; }
+body.resource .resource-byline { font-size: .9rem; color: #6b7280; margin: 0 0 2rem; }
+body.resource .resource-byline a { color: inherit; }
+
+/* The direct answer, first thing after the title. */
+body.resource .resource-answer {
+  background: #F2FAFE; border: 1px solid rgba(27,171,229,.28);
+  border-radius: 14px; padding: 1.15rem 1.35rem; margin: 0 0 2.25rem;
+}
+body.resource .resource-answer h2 {
+  font-size: .78rem; text-transform: uppercase; letter-spacing: .08em;
+  color: #1BABE5; margin: 0 0 .5rem;
+}
+body.resource .resource-answer p { margin: 0; font-size: 1.08rem; line-height: 1.6; }
+
+body.resource h2 { font-size: 1.45rem; line-height: 1.25; margin: 2.5rem 0 .75rem; letter-spacing: -.01em; }
+body.resource h3 { font-size: 1.12rem; margin: 1.75rem 0 .5rem; }
+body.resource p, body.resource li { font-size: 1.03rem; line-height: 1.7; color: #2C3440; }
+body.resource ul, body.resource ol { padding-left: 1.25rem; margin: 0 0 1.25rem; }
+body.resource li { margin-bottom: .4rem; }
+body.resource table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: .97rem; }
+body.resource th, body.resource td { border: 1px solid #E4E8EE; padding: .6rem .75rem; text-align: left; vertical-align: top; }
+body.resource th { background: #F7F9FB; font-weight: 700; }
+
+body.resource .resource-faq details {
+  border: 1px solid #E4E8EE; border-radius: 12px; padding: .85rem 1.1rem; margin-bottom: .6rem;
+}
+body.resource .resource-faq summary { cursor: pointer; font-weight: 700; }
+body.resource .resource-faq details > div { padding-top: .6rem; }
+
+body.resource .resource-cta {
+  border-top: 1px solid #E4E8EE; margin-top: 3rem; padding-top: 1.75rem;
+}
+body.resource .resource-more-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+body.resource .resource-card {
+  display: flex; flex-direction: column; gap: .3rem;
+  border: 1px solid #E4E8EE; border-radius: 12px; padding: 1rem 1.1rem;
+  text-decoration: none; color: inherit;
+}
+body.resource .resource-card:hover { border-color: rgba(27,171,229,.5); }
+body.resource .resource-card-kind { font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; color: #1BABE5; font-weight: 700; }
+body.resource .resource-card-title { font-weight: 700; }
+body.resource .resource-card-blurb { font-size: .9rem; color: #6b7280; }
+
+@media (max-width: 640px) {
+  body.resource .resource-more-grid { grid-template-columns: 1fr; }
+}
+
+/* Resources hub (/resources/) */
+body.resource-index main { max-width: 900px; }
+body.resource .resource-hub-intro { font-size: 1.1rem; color: #4A5462; margin-bottom: 2.5rem; max-width: 62ch; }
+body.resource .resource-hub-group { margin-bottom: 2.5rem; }
+body.resource .resource-hub-group h2 { margin-bottom: 1rem; }
+body.resource .resource-hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+body.resource .resource-hub-cta {
+  border-top: 1px solid #E4E8EE; margin-top: 1rem; padding-top: 1.75rem;
+}
+@media (max-width: 640px) {
+  body.resource .resource-hub-grid { grid-template-columns: 1fr; }
+}

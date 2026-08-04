@@ -1,0 +1,125 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Is a Context Window? Why AI Forgets Things | Ad On Group"
+h1: "What is a context window? (and why AI forgets)"
+cardTitle: "What is a context window?"
+cardBlurb: "Why AI forgets things mid-conversation, and how to work with the limit."
+description: "A context window is how much an AI model can hold in mind at once — the conversation, your documents, its own replies. Once it's full, the earliest material drops out."
+updated: "4 August 2026"
+readingTime: 5
+permalink: "/resources/what-is-a-context-window/index.html"
+shortAnswer: "A context window is the total amount of text an AI model can consider at one time — your instructions, the conversation so far, any documents you've attached, and its own previous answers. When the window fills up, the oldest material falls out of view. That's why a long conversation can start contradicting itself or 'forgetting' something you said earlier."
+faq:
+  - q: "How big is a context window?"
+    a: "It varies by model and changes often — the leading models handle the equivalent of several hundred pages in one go. The number matters less than the behaviour: every model has a limit, and quality degrades as you approach it."
+  - q: "Why did the AI forget what I told it ten minutes ago?"
+    a: "Either the conversation outgrew the window and the earliest part dropped out, or the detail was buried among so much other material that it carried little weight. Both are fixed the same way — restate the important constraint rather than assuming it's still held."
+  - q: "Does a bigger context window always mean better answers?"
+    a: "No. Filling a large window with loosely relevant material often produces <em>worse</em> answers than a small, well-chosen set of information. Relevance beats volume. A large window is useful headroom, not a target to fill."
+  - q: "Does the AI remember between conversations?"
+    a: "By default, no — a new conversation starts empty. Some products add a memory feature that carries selected facts across sessions, but that's a feature built on top, not the context window itself."
+  - q: "What's the practical fix for long projects?"
+    a: "Work in focused sessions rather than one endless thread, and start each with a short brief of the decisions already made. You're re-supplying the context that matters instead of hoping it survived."
+keepReading:
+  - url: "/resources/what-is-mcp/"
+    kind: "Explainer"
+    label: "What is MCP?"
+    blurb: "How AI connects to your real tools and data."
+  - url: "/resources/what-is-prompt-injection/"
+    kind: "Risk"
+    label: "What is prompt injection?"
+    blurb: "When the content an AI reads tries to give it orders."
+---
+
+<p>
+  If you've used AI for anything longer than a quick question, you've probably
+  hit this: halfway through a long back-and-forth it starts contradicting
+  something you established at the beginning, or asks for a detail you already
+  gave it. It looks like carelessness. It's actually a hard limit doing exactly
+  what it does.
+</p>
+
+<h2>Think of it as a desk, not a filing cabinet</h2>
+
+<p>
+  A model doesn't have memory in the way a person does. It has a working surface
+  — a desk — and everything it can consider has to be on that desk at once. Your
+  instructions, the whole conversation, the document you attached, and every
+  reply it has already given.
+</p>
+
+<p>
+  The desk is large but finite. When you add something new and there's no room,
+  the material at the far edge slides off. It isn't filed away for later. It's
+  simply gone from view.
+</p>
+
+<p>
+  This is why "remember that our financial year ends in June" works reliably in
+  a short exchange and unreliably in a two-hour one.
+</p>
+
+<h2>What counts toward the limit</h2>
+
+<p>Everything in the exchange, not just what you type:</p>
+
+<ul>
+  <li>Your prompts</li>
+  <li>The model's own replies — often the biggest consumer, since they're usually longer than your questions</li>
+  <li>Attached files and pasted material, in full</li>
+  <li>Any standing instructions the product adds behind the scenes</li>
+</ul>
+
+<p>
+  A single 40-page PDF can occupy a serious share of the window on its own. Two
+  of them, plus an hour of discussion, and you are closer to the edge than you'd
+  guess.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Brisbane bookkeeper starts a session by explaining the client's chart of
+  accounts, their GST treatment, and three unusual rules that apply to this
+  client only. The first twenty categorisations are perfect.
+</p>
+
+<p>
+  By the sixtieth, the model starts applying the standard treatment instead of
+  the client-specific rule. Nothing broke — the explanation from the start of
+  the session is no longer on the desk, crowded out by sixty transactions and
+  sixty replies.
+</p>
+
+<p>
+  The fix isn't a better prompt. It's a shorter session: handle twenty
+  transactions, start fresh, restate the three rules. Same work, a fraction of
+  the errors.
+</p>
+
+<h2>Working with the limit instead of against it</h2>
+
+<ul>
+  <li><strong>Put the important constraints last.</strong> Material at the very start and the very end of a window carries the most weight; the middle is where things get lost. If something must not be missed, say it close to the request.</li>
+  <li><strong>Start new sessions at natural breaks.</strong> A fresh window with a three-line brief beats a long thread carrying an hour of noise.</li>
+  <li><strong>Attach the relevant pages, not the whole document.</strong> Ten pages that matter will beat two hundred that mostly don't — for accuracy, not just speed.</li>
+  <li><strong>Re-state rather than assume.</strong> If a rule is critical and you're deep in a conversation, repeat it. It costs one sentence.</li>
+  <li><strong>Ask it to summarise before you switch topics.</strong> Then carry that summary into the next session. You're compressing the context deliberately instead of letting it fall off the edge.</li>
+</ul>
+
+<h2>Why this matters more than it sounds</h2>
+
+<p>
+  Most complaints that an AI tool is "unreliable" turn out to be context
+  problems rather than capability problems. The model didn't get worse — it
+  stopped being able to see the thing that made the answer right.
+</p>
+
+<p>
+  Once a team understands the desk metaphor, their results improve without any
+  change in tool, subscription or skill. They just stop asking a model to
+  remember something it was never holding.
+</p>

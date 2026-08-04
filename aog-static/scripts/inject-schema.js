@@ -384,6 +384,39 @@ for (const p of pages) {
     counts.FAQPage++;
   }
 
+  // --- Resource article --------------------------------------------------
+  // The AI resource library carries its own byline ("By Dylan Bailey, Certified
+  // Claude Expert · Updated 4 August 2026"). Named authorship with a stated
+  // credential is exactly the signal Google and answer engines look for on
+  // informational content, so it belongs in the graph, not only in visible text.
+  if (p.url.startsWith("/resources/") && p.url !== "/resources/") {
+    const upd = p.html.match(/Updated\s+(\d{1,2})\s+([A-Z][a-z]+)\s+(\d{4})/);
+    const iso = upd && MONTHS[upd[2].toLowerCase()]
+      ? `${upd[3]}-${MONTHS[upd[2].toLowerCase()]}-${String(upd[1]).padStart(2, "0")}`
+      : null;
+    const article = {
+      "@type": "Article",
+      "@id": `${pageUrl}#article`,
+      headline: (p.title || "").split("|")[0].trim(),
+      mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
+      author: {
+        "@type": "Person",
+        name: "Dylan Bailey",
+        jobTitle: "Certified Claude Expert",
+        url: `${BASE}/dylan-bailey/`,
+        worksFor: { "@id": ORG_ID },
+      },
+      publisher: { "@id": ORG_ID },
+      inLanguage: "en-AU",
+      isAccessibleForFree: true,
+    };
+    if (p.description) article.description = p.description;
+    if (iso) { article.datePublished = iso; article.dateModified = iso; }
+    if (p.ogImage) article.image = p.ogImage.startsWith("http") ? p.ogImage : `${BASE}${p.ogImage}`;
+    graph.push(article);
+    counts.Article = (counts.Article || 0) + 1;
+  }
+
   // --- Blog posting ------------------------------------------------------
   const text = strip(p.html.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, " "));
   const byline = text.match(/([A-Z][a-z]+ \d{1,2}, \d{4})\s*\/\s*([A-Za-z0-9_\- ]+?)\s*\/\s*No Comments/);

@@ -1,0 +1,81 @@
+---
+layout: layouts/base.njk
+bodyClass: "resource"
+---
+{#
+  Layout for the AI resource articles.
+
+  Follows the structure the Ad On AI resource library established, because it
+  works: a question as the H1, a byline for authorship signals, and a direct
+  answer in the first 60 words — which is what gets pulled into featured
+  snippets and quoted by AI answer engines. Everything after that is depth for
+  the reader who wants it.
+
+  Front matter each article supplies:
+    title, description, h1, shortAnswer, updated, readingTime,
+    faq: [{q, a}], keepReading: [{url, label, kind, blurb}], topic
+#}
+<article class="resource-article">
+
+  <nav class="resource-crumbs" aria-label="Breadcrumb">
+    <a href="/resources/">Resources</a> <span aria-hidden="true">/</span>
+    <span>{{ topic or "AI" }}</span>
+  </nav>
+
+  <h1>{{ h1 or title }}</h1>
+
+  <p class="resource-byline">
+    By <a href="/dylan-bailey/">Dylan Bailey</a>, Certified Claude Expert
+    {%- if updated %} &middot; Updated {{ updated }}{% endif %}
+    {%- if readingTime %} &middot; {{ readingTime }} min read{% endif %}
+  </p>
+
+  {% if shortAnswer %}
+  <aside class="resource-answer">
+    <h2>The short answer</h2>
+    <p>{{ shortAnswer | safe }}</p>
+  </aside>
+  {% endif %}
+
+  {{ content | safe }}
+
+  {% if faq and faq.length %}
+  <section class="resource-faq">
+    <h2>Frequently asked questions</h2>
+    {% for item in faq %}
+    <details>
+      <summary>{{ item.q }}</summary>
+      <div>{{ item.a | safe }}</div>
+    </details>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <section class="resource-cta">
+    <h2>Put this to work</h2>
+    <p>
+      Ad On Group runs AI training and enablement for Australian teams through
+      <a href="/ad-on-ai-division/">Ad On AI</a> &mdash; a three-month, self-paced
+      program that takes non-technical staff from their first prompts to working
+      AI agents.
+    </p>
+    <p class="aog-form-cta"><a href="/contact-us/">Talk to us &rarr;</a></p>
+  </section>
+
+  {% if keepReading and keepReading.length %}
+  <section class="resource-more">
+    <h2>Keep reading</h2>
+    <div class="resource-more-grid">
+      {% for item in keepReading %}
+      <a class="resource-card" href="{{ item.url }}">
+        <span class="resource-card-kind">{{ item.kind or "Explainer" }}</span>
+        <span class="resource-card-title">{{ item.label }}</span>
+        {% if item.blurb %}<span class="resource-card-blurb">{{ item.blurb }}</span>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    <p><a href="/resources/">&larr; All resources</a></p>
+  </section>
+  {% endif %}
+
+</article>

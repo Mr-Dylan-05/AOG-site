@@ -1,0 +1,136 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Is MCP (Model Context Protocol)? A Plain-English Guide | Ad On Group"
+h1: "What is MCP (Model Context Protocol)?"
+cardTitle: "What is MCP?"
+cardBlurb: "The standard that lets AI tools plug into your actual systems."
+description: "MCP is a standard that lets AI assistants connect to your real tools and data — your files, calendar, CRM — instead of only knowing what you paste into the chat."
+updated: "4 August 2026"
+readingTime: 6
+permalink: "/resources/what-is-mcp/index.html"
+shortAnswer: "MCP (Model Context Protocol) is an open standard that lets an AI assistant connect to real tools and data — your files, your calendar, your CRM — rather than only knowing what you paste into a chat box. It plays the same role for AI that USB-C plays for devices: one connector, so any tool works with any assistant instead of each pair needing custom wiring."
+faq:
+  - q: "Do I need to understand MCP to use AI at work?"
+    a: "No. MCP is plumbing. What matters to you is the result — an assistant that can see your calendar or your document library instead of asking you to paste things in. It's worth knowing the word because it explains <em>why</em> some AI tools can reach your systems and others can't."
+  - q: "Is MCP a Claude thing or an industry thing?"
+    a: "Anthropic created MCP and released it as an open standard in late 2024. It has since been adopted well beyond Claude — the point of a standard is that it isn't owned by one product. You'll see it referred to across the AI tooling landscape."
+  - q: "Is it safe to connect AI to our systems this way?"
+    a: "It can be, and the control is in your hands: connections are granted per tool, and you decide what each one may reach. The risk isn't the protocol, it's granting broad access without thinking about it. Treat an MCP connection like giving a contractor a key — scope it to what they actually need."
+  - q: "What's the difference between MCP and an API?"
+    a: "An API is how two specific systems talk. MCP is a shared convention for how AI assistants talk to <em>any</em> tool, so the tool only has to be built once rather than separately for every assistant. In practice MCP servers often sit on top of existing APIs."
+  - q: "Does this replace automations we already have?"
+    a: "Not usually. Fixed automations are still the right answer for fixed, repetitive steps. MCP matters when you want an assistant to decide what to do and then actually do it — reading the real data rather than working from a description of it."
+keepReading:
+  - url: "/resources/what-is-a-context-window/"
+    kind: "Explainer"
+    label: "What is a context window?"
+    blurb: "Why AI forgets things, and what that limit actually is."
+  - url: "/resources/is-it-safe-to-put-company-data-into-ai/"
+    kind: "Risk"
+    label: "Is it safe to put company data into AI?"
+    blurb: "What actually happens to what you type."
+---
+
+<p>
+  Most people meet AI as a chat box. You type something, it types back, and
+  everything it knows about your business is whatever you remembered to paste
+  in. That works, but it puts you in the loop for every piece of context — you
+  become the copy-paste layer between your systems and the assistant.
+</p>
+
+<p>
+  MCP is the standard that removes that step. It is not something you use
+  directly, and it is not a product you buy. It is an agreement about how AI
+  assistants and business tools talk to each other, and it is quietly the reason
+  some AI tools can do useful work with your real information while others
+  cannot.
+</p>
+
+<h2>The problem MCP solves</h2>
+
+<p>
+  Before a shared standard existed, every combination needed its own custom
+  build. If you wanted your AI assistant to read your project management tool,
+  someone had to build that specific integration. Want a different assistant?
+  Build it again. Want a different tool? Build it again. Ten assistants and ten
+  tools meant a hundred separate integrations, most of which never got built.
+</p>
+
+<p>
+  This is exactly the problem USB solved for hardware. Before it, every
+  peripheral had its own connector. After it, one port worked with everything —
+  not because the devices got smarter, but because everyone agreed on the shape
+  of the plug.
+</p>
+
+<p>
+  MCP is that agreed shape for AI. A tool implements the standard once, and any
+  AI assistant that speaks MCP can work with it.
+</p>
+
+<h2>What it actually lets an assistant do</h2>
+
+<p>An MCP connection gives an assistant three kinds of access:</p>
+
+<ul>
+  <li><strong>Reading things</strong> — files, records, documents, calendar entries. The assistant can look at the real thing rather than a summary you typed.</li>
+  <li><strong>Doing things</strong> — creating a record, sending a draft, updating a row. Actions, not just answers.</li>
+  <li><strong>Reusable instructions</strong> — saved ways of handling a particular task, so the assistant does it your way rather than its default way.</li>
+</ul>
+
+<p>
+  The practical difference is the gap between "write me an invoice reminder" and
+  "look at which invoices are overdue and draft the reminders". The first needs
+  you to supply the facts. The second needs access.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Gold Coast trades business runs quoting through a spreadsheet and jobs
+  through a scheduling tool. Without MCP, getting AI help with a quote means
+  opening the spreadsheet, copying the relevant rows, pasting them into a chat,
+  describing the job, and pasting the result back.
+</p>
+
+<p>
+  With the spreadsheet and scheduler connected, the request becomes: "draft
+  quotes for the three jobs booked next week, using our standard rates". The
+  assistant reads the bookings, reads the rate card, and produces drafts. The
+  owner reviews and sends.
+</p>
+
+<p>
+  Nothing about the AI got cleverer. It just stopped being blindfolded.
+</p>
+
+<h2>Where to be careful</h2>
+
+<p>
+  Access is the whole point of MCP, which means access is also the whole risk.
+  Three things worth holding onto:
+</p>
+
+<ul>
+  <li><strong>Scope each connection deliberately.</strong> An assistant that only needs to read the job calendar should not also be able to delete records. Grant the narrowest access that does the job.</li>
+  <li><strong>Know what leaves your systems.</strong> Connecting a tool means its data can be sent to the AI provider as part of a request. That may be entirely fine — but it should be a decision, not a surprise.</li>
+  <li><strong>Keep a human on anything irreversible.</strong> Reading is low-risk. Sending, paying, publishing and deleting are not. Review before those happen.</li>
+</ul>
+
+<h2>What this means for you</h2>
+
+<p>
+  You don't need to implement MCP, and you probably shouldn't think about it
+  much. What's worth taking away is the question it lets you ask when comparing
+  AI tools: <em>can this thing see our actual work, or does it only see what we
+  paste into it?</em>
+</p>
+
+<p>
+  That single question separates AI that produces impressive demos from AI that
+  removes real hours from someone's week. The tools that can reach your systems
+  are the ones that end up being used after the novelty wears off.
+</p>

@@ -1,0 +1,51 @@
+---
+layout: layouts/base.njk
+title: "AI Resources for Australian Businesses | Ad On Group"
+description: "Plain-English guides to AI for Australian businesses — what the terms mean, how the tools differ, and what actually matters when you put AI to work."
+bodyClass: "resource resource-index"
+permalink: "/resources/index.html"
+eleventyExcludeFromCollections: true
+---
+<div class="resource-hub">
+
+  <h1>AI resources</h1>
+
+  <p class="resource-hub-intro">
+    Plain-English guides to artificial intelligence for Australian businesses.
+    No jargon, no hype, and no assumption that you write code — just what each
+    thing actually is, when it matters, and what to do about it.
+  </p>
+
+  {% set topics = ["Foundations", "Tools & comparisons", "Working with AI", "Risk & governance"] %}
+  {% for topic in topics %}
+    {% set items = [] %}
+    {% for post in collections.resource %}
+      {% if post.data.topic == topic %}{% set items = (items.push(post), items) %}{% endif %}
+    {% endfor %}
+    {% if items.length %}
+    <section class="resource-hub-group">
+      <h2>{{ topic }}</h2>
+      <div class="resource-hub-grid">
+        {% for post in items %}
+        <a class="resource-card" href="{{ post.url }}">
+          <span class="resource-card-kind">{{ post.data.kind or "Explainer" }}</span>
+          <span class="resource-card-title">{{ post.data.cardTitle or post.data.h1 or post.data.title }}</span>
+          {% if post.data.cardBlurb %}<span class="resource-card-blurb">{{ post.data.cardBlurb }}</span>{% endif %}
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  {% endfor %}
+
+  <section class="resource-hub-cta">
+    <h2>Want your team using this, not just reading about it?</h2>
+    <p>
+      <a href="/ad-on-ai-division/">Ad On AI</a> runs a three-month, self-paced
+      AI enablement program for Australian businesses — non-technical staff go
+      from first prompts to working AI agents, on their own real work.
+    </p>
+    <p class="aog-form-cta"><a href="/contact-us/">Talk to us &rarr;</a></p>
+  </section>
+
+</div>
