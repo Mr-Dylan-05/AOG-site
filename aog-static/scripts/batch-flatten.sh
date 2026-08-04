@@ -40,3 +40,6 @@ if [ -f "$ADONAI_SRC" ]; then
 else
   echo "  ⚠  dylan-website not found at $ADONAI_SRC — skipped deployed AI pages"
 fi
+
+# Use the Ad On Group footer sitewide (and fix links to the retired /ad-on-ai/)
+node scripts/apply-group-footer.js

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "_site",
+  "framework": null,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/wp-content/uploads/:path*", "destination": "/assets/media/:path*", "permanent": true },
+    { "source": "/wp-content/plugins/:path*", "destination": "/assets/media/_plugins/:path*", "permanent": true },
+    { "source": "/wp-admin/:path*", "destination": "/", "permanent": true },
+    { "source": "/wp-login.php", "destination": "/", "permanent": true },
+    { "source": "/xmlrpc.php", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/assets/media/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

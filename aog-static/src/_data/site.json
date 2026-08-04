@@ -3,13 +3,19 @@
   "shortName": "AOG",
   "url": "https://adongroup.com.au",
   "description": "Ad On Group — marketing, workforce, digital and on-hold services.",
-  "logo": "/wp-content/uploads/2025/07/AdonGroup-logo-WF-Icon_on-white-300x172.jpg",
-  "email": "adonai@adongroup.com.au",
+  "logo": "/assets/media/2025/07/AdonGroup-logo-WF-Icon_on-white-300x172.jpg",
+  "email": "info@adongroup.com.au",
   "thirdParty": {
     "//": "Toggle 3rd-party embeds on/off from one place. Wired up in the FINAL step.",
     "tawkChat": false,
     "tawkSrc": "",
-    "googleAnalytics": "",
+    "googleAnalytics": "G-3XBD8BYWWP",
     "formEndpoint": ""
-  }
+  },
+  "defaultOgImage": "/assets/design/group-team.jpg",
+  "social": [
+    "https://www.facebook.com/adongroup1/",
+    "https://www.linkedin.com/company/adongroup/",
+    "https://www.instagram.com/adongroup/"
+  ]
 }

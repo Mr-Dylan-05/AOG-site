@@ -5,14 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}</title>
   {% if description %}<meta name="description" content="{{ description }}">{% endif %}
+  {# Empty/placeholder pages set `noindex: true` so thin content stays out of
+     search. Such pages are also excluded from sitemap.xml — listing a page you
+     have asked search engines not to index is a contradictory signal. #}
+  {% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
 
   <!-- Open Graph / social -->
+  {# og:image and twitter:image must be absolute — relative paths are ignored by
+     every scraper, so `ogImage` is prefixed with site.url when it starts with /. #}
+  {% set ogImageAbs = (site.url ~ ogImage) if (ogImage and ogImage[0] == "/") else ogImage %}
+  {% set pageTitle = title if title else site.name %}
   <meta property="og:site_name" content="{{ site.name }}">
-  <meta property="og:title" content="{% if title %}{{ title }}{% else %}{{ site.name }}{% endif %}">
+  <meta property="og:type" content="{{ ogType or 'website' }}">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:title" content="{{ pageTitle }}">
   {% if description %}<meta property="og:description" content="{{ description }}">{% endif %}
   <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-  {% if ogImage %}<meta property="og:image" content="{{ ogImage }}">{% endif %}
+  {% if ogImageAbs %}<meta property="og:image" content="{{ ogImageAbs }}">{% endif %}
+
+  <meta name="twitter:card" content="{{ 'summary_large_image' if ogImageAbs else 'summary' }}">
+  <meta name="twitter:title" content="{{ pageTitle }}">
+  {% if description %}<meta name="twitter:description" content="{{ description }}">{% endif %}
+  {% if ogImageAbs %}<meta name="twitter:image" content="{{ ogImageAbs }}">{% endif %}
 
   <link rel="stylesheet" href="/assets/css/site.css">
 

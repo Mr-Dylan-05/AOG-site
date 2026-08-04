@@ -7,7 +7,7 @@
 <header class="site-header" role="banner">
   <div class="site-header__inner">
     <a class="site-header__brand" href="/" aria-label="{{ site.name }} home">
-      <img src="{{ site.logo }}" alt="{{ site.name }}" class="site-header__logo" width="150" height="86">
+      <img src="{{ site.logo }}" alt="{{ site.name }}" class="site-header__logo" width="150" height="86" loading="eager" fetchpriority="high" decoding="async">
     </a>
 
     <button class="site-header__toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle menu">

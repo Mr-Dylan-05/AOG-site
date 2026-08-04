@@ -1,0 +1,43 @@
+# Ad On Group
+
+> Ad On Group is an Australian-owned company, operating since 2008, that helps Australian businesses work smarter and grow faster. It operates four divisions: Ad On Workforce (offshore staffing from the Philippines), Ad On AI (AI training and enablement), Ad On Digital (managed digital marketing), and Ad On Hold (on-hold messaging and caller experience), plus Ad On SA (remote talent from South Africa). Head office is on the Gold Coast, Queensland, with offices in the Philippines.
+
+## Divisions
+
+- [Ad On Workforce](https://adongroup.com.au/ad-on-workforce/): Offshore staffing from the Philippines — personal and executive assistants, general and finance admin, customer service, data entry, social media and bespoke repeat-process roles. Staff are dedicated to one client, not shared.
+- [Ad On AI](https://adongroup.com.au/ad-on-ai-division/): AI training and enablement for non-technical staff at Australian SMEs. A 3-month program taking staff from first prompts to deployed AI agents. Delivered by Certified Claude Experts; 40+ Australian businesses trained.
+- [Ad On Digital](https://adongroup.com.au/ad-on-digital/): Fully managed digital marketing for businesses that know they need to be online but have no time to manage it — websites, search visibility and ad spend with clear reporting.
+- [Ad On Hold](https://adongroup.com.au/ad-on-hold/): On-hold messaging and caller experience — turning hold time into a chance to answer common questions and promote products to a captive audience.
+- [Ad On SA](https://adongroup.com.au/ad-on-sa/): Remote talent from South Africa, for cover across time zones and busy periods where local hiring is slow or costly.
+
+## AI programs (Ad On AI)
+
+- [AI Training & Enablement Program](https://adongroup.com.au/programs/): The flagship 3-month program for non-technical SME staff. Foundations → automating tasks → agentic AI. Skills are tool-agnostic and transfer to ChatGPT, Copilot, Gemini and Claude.
+- [BPO AI Program](https://adongroup.com.au/bpo-program/): Structured AI enablement for BPO and outsourced teams, run on a monthly cycle across three months.
+- [Ongoing Support](https://adongroup.com.au/ongoing-support/): Optional add-ons after the program — webinars, masterclasses and community that keep skills current.
+
+## Company
+
+- [About Us](https://adongroup.com.au/about-us/): The mission — cost-effective, flexible outsourced staffing that saves businesses time, money and resources.
+- [History](https://adongroup.com.au/history/): Founded 2008. Through the global financial crisis, the pandemic, flooding, earthquakes, cyclones and fires — nearly 20 years of continuous operation.
+- [Our Culture](https://adongroup.com.au/culture/): Team culture in the Philippines offices — Friday lunches, celebrations and staff events.
+- [Our Offices](https://adongroup.com.au/our-offices/): Head office on the Gold Coast, Australia, where management and client-facing teams are based; operational offices in the Philippines.
+- [Security](https://adongroup.com.au/security/): IT and data protection — dedicated desktops, virus protection, regular security audits, Time Doctor monitoring and Practice Protect 2FA.
+- [FAQs](https://adongroup.com.au/faqs/): Common questions about services, staff location, contracts and how engagements work.
+- [Blogs](https://adongroup.com.au/blogs/): Articles on outsourcing, remote staffing and office administration.
+
+## Contact
+
+- [Contact Us](https://adongroup.com.au/contact-us/)
+- Phone: (07) 5586 1400
+- Email: info@adongroup.com.au
+- Address: 1/44 Township Drive, Burleigh Heads QLD 4219, Australia
+- ABN: 54 808 983 598
+
+## Key facts
+
+- Australian-owned, operating since 2008.
+- Four service divisions under one group: workforce, AI, digital, on-hold.
+- Offshore staff are based in the Philippines; South African talent available via Ad On SA.
+- Ad On AI is the group's AI division; its standalone site is https://www.adon-ai.com.au
+- Head office: Gold Coast, Queensland, Australia.

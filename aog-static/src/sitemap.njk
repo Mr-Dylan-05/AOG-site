@@ -2,11 +2,39 @@
 permalink: /sitemap.xml
 eleventyExcludeFromCollections: true
 ---
+{#
+  Covers BOTH page sources:
+    - collections.all  -> the auto-ported reference pages Eleventy builds
+    - staticPages      -> the flattened design pages passthrough-copied from public/
+
+  A redesigned page replaces its reference version, so the same slug can briefly
+  exist in both. `seen` de-duplicates, with the public/ version taking priority
+  since that is what actually gets served.
+#}
+{%- set seen = [] -%}
+{%- for url in staticPages -%}
+  {%- if url not in seen -%}{% set _ = seen.push(url) %}{%- endif -%}
+{%- endfor -%}
+{%- for page in collections.all -%}
+  {#- pages marked `noindex: true` are left out on purpose: asking search
+      engines not to index a page while listing it here is contradictory -#}
+  {%- if page.url and '/404.html' not in page.url and page.url not in seen and not page.data.noindex -%}
+    {% set _ = seen.push(page.url) %}
+  {%- endif -%}
+{%- endfor -%}
+{#-
+  lastmod comes from src/_data/lastmod.json (see scripts/build-lastmod.js): the
+  WordPress post_modified date for ported pages, and the authoring date for
+  redesigned ones. A URL with no known date simply omits lastmod — that is valid,
+  and better than stamping today's date on everything, which is a signal Google
+  learns to ignore.
+
+  Whitespace control matters here: the XML declaration must be the very first
+  byte of the file, so nothing may print above it.
+-#}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{%- for page in collections.all %}
-  {%- if page.url and '/404.html' not in page.url %}
-  <url><loc>{{ site.url }}{{ page.url }}</loc></url>
-  {%- endif %}
+{%- for url in seen | sort %}
+  <url><loc>{{ site.url }}{{ url }}</loc>{% if lastmod[url] %}<lastmod>{{ lastmod[url] }}</lastmod>{% endif %}</url>
 {%- endfor %}
 </urlset>
