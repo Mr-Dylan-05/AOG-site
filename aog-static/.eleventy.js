@@ -1,5 +1,29 @@
 const fs = require("fs");
 const path = require("path");
+const { execFileSync } = require("child_process");
+
+/**
+ * Run a post-build script as a child process.
+ *
+ * These used to be invoked with require(), which was a serious bug: require()
+ * caches, so each script ran ONCE per process. A one-off `npm run build` was
+ * fine, but under `eleventy --serve` every rebuild regenerated the HTML and the
+ * post-processing never ran again — silently stripping the mobile stylesheet,
+ * the JSON-LD, the analytics tag and the form endpoint from every page. The
+ * build still logged success, because the scripts had run (once, at startup).
+ *
+ * A child process has no such cache and re-runs on every build.
+ */
+function runStep(script, label) {
+  try {
+    const out = execFileSync("node", [path.join(__dirname, "scripts", script)], {
+      encoding: "utf8",
+    });
+    process.stdout.write(out);
+  } catch (e) {
+    console.warn(`[${label}] failed:`, e.message.split("\n")[0]);
+  }
+}
 
 module.exports = function (eleventyConfig) {
   // {% year %} -> current year (for footer copyright, etc.)
@@ -23,11 +47,7 @@ module.exports = function (eleventyConfig) {
   // Head metadata for the passthrough-copied design pages.
   // Runs before the schema step so JSON-LD can read the og:image it adds.
   eleventyConfig.on("eleventy.after", () => {
-    try {
-      require("./scripts/complete-head-meta.js");
-    } catch (e) {
-      console.warn("[head] completion failed:", e.message);
-    }
+    runStep("complete-head-meta.js", "head");
   });
 
   // Schema.org JSON-LD.
@@ -36,11 +56,7 @@ module.exports = function (eleventyConfig) {
   // (the flattened design pages in public/) is passthrough-copied and never goes
   // through base.njk. Doing it here covers both page sources from one place.
   eleventyConfig.on("eleventy.after", () => {
-    try {
-      require("./scripts/inject-schema.js");
-    } catch (e) {
-      console.warn("[schema] injection failed:", e.message);
-    }
+    runStep("inject-schema.js", "schema");
   });
 
   // Contact form endpoint.

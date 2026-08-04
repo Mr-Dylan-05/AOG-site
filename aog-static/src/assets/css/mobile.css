@@ -25,8 +25,16 @@
   /* --- 2. stack multi-column grids ------------------------------------- */
   /* Any inline grid becomes a single column. At 375px there is no useful
      two-column layout, and these were all authored for ~1200px. */
+  /* minmax(0,1fr), not 1fr. A plain 1fr resolves its minimum to min-content, so
+     a wide child (an app mock-up, a table, a long unbroken string) forces the
+     column wider than the screen and the text runs off the edge. minmax(0,...)
+     lets the column shrink. Same reason flex children need min-width:0. */
   [style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  [style*="grid-template-columns"] > *,
+  [style*="display:flex"] > * {
+    min-width: 0 !important;
   }
 
   /* --- 3. let flex rows wrap instead of overflowing --------------------- */
