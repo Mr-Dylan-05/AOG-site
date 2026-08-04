@@ -1,0 +1,126 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Is Fine-Tuning? (And Why You Probably Don't Need It) | Ad On Group"
+h1: "What is fine-tuning? (and why you probably don't need it)"
+cardTitle: "What is fine-tuning?"
+cardBlurb: "The expensive option most businesses reach for too early."
+description: "Fine-tuning retrains a model on your own examples to change how it behaves. For most businesses, better prompting or connecting your data solves the same problem for far less."
+updated: "4 August 2026"
+readingTime: 6
+permalink: "/resources/what-is-fine-tuning/index.html"
+shortAnswer: "Fine-tuning means taking an existing AI model and training it further on your own examples, so it adopts a particular style or format by default. It changes how the model behaves — not what it knows. Most business problems people reach for fine-tuning to solve are actually prompt problems or data-access problems, and those are far cheaper to fix."
+faq:
+  - q: "Will fine-tuning teach the model about our business?"
+    a: "Not reliably, and this is the most common misunderstanding. Fine-tuning shapes <em>behaviour</em> — tone, format, structure. For facts about your business, you want the model reading your actual documents, which is a retrieval problem, not a training one."
+  - q: "How much does it cost?"
+    a: "The training run itself is often modest. The real cost is preparing hundreds or thousands of high-quality examples, and then redoing that work each time you want to change something or move to a newer model. That maintenance burden is what catches people out."
+  - q: "When is fine-tuning actually the right answer?"
+    a: "When you need a consistent, narrow output format at high volume and prompting has genuinely failed — classifying thousands of records into your own categories, say. It's a specialist tool for a specialist job, not a general upgrade."
+  - q: "What should we try first?"
+    a: "In order: a better prompt, then a system prompt that sets standing rules, then giving the model access to your real documents. That sequence resolves the overwhelming majority of cases, and each step costs a fraction of fine-tuning."
+  - q: "Does fine-tuning make the model smarter?"
+    a: "No. A fine-tuned smaller model can beat a general larger one at one narrow task, but it doesn't gain general capability — and it often gets worse at everything outside the task you tuned it for."
+keepReading:
+  - url: "/resources/what-is-a-system-prompt/"
+    kind: "Explainer"
+    label: "What is a system prompt?"
+    blurb: "Standing instructions that apply to every conversation."
+  - url: "/resources/what-is-mcp/"
+    kind: "Explainer"
+    label: "What is MCP?"
+    blurb: "How AI connects to your real tools and data."
+---
+
+<p>
+  Fine-tuning is the option businesses ask about first and need least. It sounds
+  like the serious answer — a model trained on <em>your</em> data, tailored to
+  <em>your</em> business. In practice it's an expensive solution to a problem
+  that usually has a cheaper one.
+</p>
+
+<h2>What it actually does</h2>
+
+<p>
+  A general model has been trained on an enormous amount of text. Fine-tuning
+  continues that training with a much smaller set of examples you supply — say,
+  five hundred pairs of "here's the input, here's the output we want".
+</p>
+
+<p>
+  The model adjusts toward those examples. Give it hundreds of your support
+  replies and it starts writing in that register without being asked. Give it
+  hundreds of correctly categorised records and it internalises your categories.
+</p>
+
+<p>
+  What changes is disposition, not knowledge. Think of it as training a new
+  employee in your house style rather than telling them about this month's
+  projects.
+</p>
+
+<h2>The distinction that matters</h2>
+
+<table>
+  <tr><th>You want…</th><th>What you actually need</th></tr>
+  <tr><td>It to answer using our documents</td><td>Access to those documents</td></tr>
+  <tr><td>It to know our current prices</td><td>Access to the price list</td></tr>
+  <tr><td>It to always write in our tone</td><td>A system prompt — then maybe fine-tuning</td></tr>
+  <tr><td>It to output the same rigid structure every time, at volume</td><td>Fine-tuning is a fair candidate</td></tr>
+</table>
+
+<p>
+  Fine-tuning is also the worst possible way to give a model current
+  information. Anything you train in is frozen at training time — change your
+  prices and you'd have to train again.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Sydney insurance brokerage wants AI drafting client emails that sound like
+  them. They're quoted a fine-tuning project: gather examples, prepare data,
+  train, evaluate. Weeks of work.
+</p>
+
+<p>
+  Instead they write a system prompt: the tone they want, the phrases they never
+  use, the compliance line that goes at the bottom, and three example emails
+  pasted in. Twenty minutes.
+</p>
+
+<p>
+  It gets them roughly ninety per cent of the outcome. And when their compliance
+  wording changes, it's a one-line edit rather than another training round.
+</p>
+
+<h2>Fine-tuning, RAG and prompting, side by side</h2>
+
+<ul>
+  <li><strong>Prompting</strong> — instructions in the conversation. Instant, free, changeable any time. Try this first, always.</li>
+  <li><strong>System prompts</strong> — standing instructions applied to every conversation. Still instant and free, but consistent across a team.</li>
+  <li><strong>Retrieval (RAG)</strong> — the model looks things up in your documents as it answers. This is how you give it knowledge, and it stays current because the documents do.</li>
+  <li><strong>Fine-tuning</strong> — changes default behaviour. Expensive, slow to update, and locked to a specific model version.</li>
+</ul>
+
+<p>
+  That last point catches people. Fine-tune today, and when a materially better
+  model ships in six months you're choosing between your tuning and the upgrade.
+</p>
+
+<h2>The honest recommendation</h2>
+
+<p>
+  For nearly every Australian small and medium business, fine-tuning is a
+  distraction. The gains people hope for come from three cheaper things: writing
+  better instructions, making those instructions standing rather than repeated,
+  and letting the model see the real documents.
+</p>
+
+<p>
+  Exhaust those first. If you've done all three properly and still have a
+  narrow, high-volume task the model won't do consistently, fine-tuning becomes
+  a reasonable conversation — with a clear view of what it will cost to maintain.
+</p>

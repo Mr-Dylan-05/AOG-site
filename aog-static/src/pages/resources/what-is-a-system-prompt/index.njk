@@ -1,0 +1,131 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Is a System Prompt? Standing Rules for AI | Ad On Group"
+h1: "What is a system prompt?"
+cardTitle: "What is a system prompt?"
+cardBlurb: "Standing instructions that apply to every conversation."
+description: "A system prompt is a standing instruction that applies to every conversation with an AI tool — the rules it follows before you type anything."
+updated: "4 August 2026"
+readingTime: 6
+permalink: "/resources/what-is-a-system-prompt/index.html"
+shortAnswer: "A system prompt is a standing instruction that applies to every conversation, rather than being typed each time. It's where you put the things that are always true — who the AI is helping, what tone to use, what it must never do, what format to return. It's the single highest-leverage change most teams can make, because it fixes the same problem for everyone at once."
+faq:
+  - q: "Where do I put a system prompt?"
+    a: "It depends on the product. Most business AI tools expose it as 'custom instructions', 'project instructions' or a settings field. In team plans an administrator can often set one for everybody, which is where the real leverage is."
+  - q: "How long should it be?"
+    a: "Long enough to cover what's genuinely always true, and no longer. A focused half-page beats three pages of everything anyone could think of — the model has to weigh all of it against every request, and padding dilutes the parts that matter."
+  - q: "Does a system prompt use up the context window?"
+    a: "Yes — it's included in every request. That's another argument for keeping it tight. A bloated system prompt costs you room on every single conversation."
+  - q: "Can it stop the AI making things up?"
+    a: "It helps, and it's worth including an explicit instruction to say when it doesn't know rather than guess. It reduces the problem rather than removing it, so the review step still matters."
+  - q: "Should each team have its own?"
+    a: "Usually yes. Finance and marketing want different defaults. Shared company-wide rules (what's off limits, what tone) plus a team-specific layer works better than one prompt trying to serve everyone."
+keepReading:
+  - url: "/resources/what-are-tokens/"
+    kind: "Explainer"
+    label: "What are tokens?"
+    blurb: "How AI pricing and limits are actually measured."
+  - url: "/resources/how-to-review-ai-output/"
+    kind: "Guide"
+    label: "How to review AI output"
+    blurb: "A checking habit that catches the things AI gets wrong."
+---
+
+<p>
+  Most teams using AI have the same experience: it's genuinely useful, but they
+  find themselves typing the same preamble every time. "Write in Australian
+  English." "We're a B2B business." "Don't use exclamation marks." "Keep it
+  under 200 words."
+</p>
+
+<p>
+  A system prompt is where those instructions go so you stop repeating them.
+</p>
+
+<h2>How it differs from what you type</h2>
+
+<p>
+  Your prompt is the request. The system prompt is the standing brief that sits
+  behind every request — read by the model before it sees your message at all.
+</p>
+
+<p>
+  It's the difference between telling a new starter the house rules on their
+  first day and re-explaining them at the start of every task. The rules haven't
+  changed; you've just stopped paying the cost of repeating them.
+</p>
+
+<h2>What belongs in one</h2>
+
+<ul>
+  <li><strong>Who it's helping and at what.</strong> "You are assisting the operations team at an Australian offshore staffing business." Context shapes every answer that follows.</li>
+  <li><strong>Tone and language.</strong> Australian English, plain language, no marketing filler. Be specific — "professional" means nothing.</li>
+  <li><strong>Hard rules.</strong> Never invent figures. Never give legal or financial advice. Always flag uncertainty rather than guessing.</li>
+  <li><strong>Default format.</strong> If most outputs should be short paragraphs rather than bullet lists, say so once here.</li>
+  <li><strong>Words to avoid.</strong> Jargon you've banned, competitor names, phrasing that clashes with your brand.</li>
+</ul>
+
+<h2>What doesn't belong</h2>
+
+<ul>
+  <li><strong>Facts that change.</strong> Prices, staff names, current promotions. These go stale silently and the model states them with total confidence.</li>
+  <li><strong>Task-specific detail.</strong> If it only applies to one job, it belongs in that request.</li>
+  <li><strong>Long documents.</strong> Pasting a whole brand guide costs context on every conversation. Summarise the rules that actually bite.</li>
+</ul>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Perth building supplies company has four staff using AI for customer emails.
+  Each writes differently, so the outputs vary — some too casual, one prone to
+  American spelling, another producing walls of text.
+</p>
+
+<p>
+  They write a shared system prompt: Australian English, short paragraphs, no
+  exclamation marks, always offer a phone call as the next step, never quote a
+  price without checking, sign off with the team name.
+</p>
+
+<p>
+  The variation collapses immediately. Not because anyone got better at
+  prompting, but because the standing rules stopped depending on whether each
+  person remembered them at 4pm.
+</p>
+
+<h2>Writing a good one</h2>
+
+<p>
+  Start from output you didn't like. Every time the AI produces something
+  slightly wrong — too formal, wrong spelling, too long — that's a candidate
+  rule. Add it once and the correction becomes permanent.
+</p>
+
+<p>
+  Be concrete. "Be professional" gives the model nothing. "Write like you're
+  emailing a busy tradesperson: short sentences, no jargon, get to the point in
+  the first line" gives it something to act on.
+</p>
+
+<p>
+  Then review it every few months. System prompts accumulate rules written for
+  problems that no longer occur, and each one costs a little clarity on
+  everything else.
+</p>
+
+<h2>Why this is the highest-leverage change</h2>
+
+<p>
+  Better prompting is a skill each person has to learn individually. A system
+  prompt is a fix written once that raises the floor for everybody — including
+  the people who will never get particularly good at prompting and shouldn't
+  have to.
+</p>
+
+<p>
+  If a team is getting inconsistent AI output, this is almost always the first
+  thing to fix, and almost always cheaper than whatever else is being considered.
+</p>

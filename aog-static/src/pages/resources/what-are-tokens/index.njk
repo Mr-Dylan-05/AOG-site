@@ -1,0 +1,126 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Are Tokens in AI? Pricing and Limits Explained | Ad On Group"
+h1: "What are tokens? (and why your AI bill is measured in them)"
+cardTitle: "What are tokens?"
+cardBlurb: "How AI pricing and limits are actually measured."
+description: "Tokens are the chunks of text an AI model reads and writes. They're the unit behind both pricing and context limits — roughly three-quarters of a word each."
+updated: "4 August 2026"
+readingTime: 5
+permalink: "/resources/what-are-tokens/index.html"
+shortAnswer: "A token is a chunk of text — roughly three-quarters of a word in English. AI models read and write in tokens, and they're the unit behind both what you pay and how much the model can hold at once. As a working rule: 1,000 tokens is about 750 words, and a page of text is roughly 500 tokens."
+faq:
+  - q: "How many tokens is a page?"
+    a: "Around 500 for a typical A4 page of prose. A 20-page report is roughly 10,000. Spreadsheets and code run higher per visible character, because numbers and symbols split into more tokens than ordinary words."
+  - q: "Do I pay for what I send as well as what I get back?"
+    a: "Yes, on usage-based pricing — input and output are both counted, usually at different rates with output costing more. On a flat monthly subscription you're not counting tokens directly, but limits still apply behind the scenes."
+  - q: "Why does attaching a long document cost so much?"
+    a: "Because the whole document is sent with the request, and often re-sent as the conversation continues. A 100-page attachment discussed over twenty exchanges can be counted many times over. Attaching only the relevant section is both cheaper and more accurate."
+  - q: "Is it worth optimising for tokens?"
+    a: "Not for most businesses at typical volumes — staff time is worth far more than the difference. It becomes worth attention when you're running something automated at scale, where a small per-request saving multiplies."
+  - q: "Do other languages use more tokens?"
+    a: "Generally yes. English is the most efficiently tokenised, so the same meaning in another language often costs more tokens. Worth knowing if you operate across languages."
+keepReading:
+  - url: "/resources/what-is-a-context-window/"
+    kind: "Explainer"
+    label: "What is a context window?"
+    blurb: "Why AI forgets things mid-conversation."
+  - url: "/resources/free-vs-paid-ai-tools/"
+    kind: "Comparison"
+    label: "Free vs paid AI tools"
+    blurb: "What you actually get for the money."
+---
+
+<p>
+  Tokens are one of those terms you can happily ignore right up until you're
+  looking at a bill, or wondering why a long document made an AI tool slow down
+  and start losing the thread. Both come back to the same unit.
+</p>
+
+<h2>What a token is</h2>
+
+<p>
+  Models don't read letters or words. They read tokens — chunks that are usually
+  a whole common word, or a piece of a longer one.
+</p>
+
+<p>
+  "The invoice is overdue" is about five tokens. A rarer word like
+  "reconciliation" might split into three or four on its own. Punctuation,
+  spaces and line breaks all count.
+</p>
+
+<p>
+  The useful conversions:
+</p>
+
+<ul>
+  <li>1 token ≈ 0.75 English words</li>
+  <li>1,000 tokens ≈ 750 words ≈ 1.5 pages</li>
+  <li>A typical email ≈ 200–400 tokens</li>
+  <li>A 20-page report ≈ 10,000 tokens</li>
+</ul>
+
+<h2>Why tokens show up twice</h2>
+
+<p><strong>In what you pay.</strong> Usage-based pricing counts tokens in and tokens out, with output typically costing more than input.</p>
+
+<p><strong>In what fits.</strong> The context window — everything the model can consider at once — is measured in tokens too. Fill it and the earliest material drops out of view.</p>
+
+<p>
+  So a long attachment costs you twice: money, and room. It's the same
+  constraint wearing two hats.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Newcastle logistics firm sets up an assistant to answer questions about
+  their operations manual. To be safe, they attach the entire 180-page manual to
+  every conversation.
+</p>
+
+<p>
+  Each question now sends roughly 90,000 tokens before anyone types anything.
+  The answers are slower, more expensive, and — counter-intuitively — less
+  accurate, because the relevant paragraph is competing with 179 pages of
+  material that isn't.
+</p>
+
+<p>
+  Splitting the manual by section and attaching only the relevant one cuts the
+  cost dramatically and improves the answers. Less really is more here.
+</p>
+
+<h2>When to care, and when not to</h2>
+
+<p>
+  For a team of ten using AI through normal subscriptions, tokens are almost
+  irrelevant to your budget. The subscription covers it, and any time saved
+  dwarfs the difference.
+</p>
+
+<p>Tokens start mattering when:</p>
+
+<ul>
+  <li>You're running something automated across thousands of records</li>
+  <li>You're on usage-based pricing rather than a flat plan</li>
+  <li>You're attaching large documents repeatedly</li>
+  <li>Answers are degrading on long documents — a context problem showing up as a quality problem</li>
+</ul>
+
+<h2>The practical takeaway</h2>
+
+<p>
+  Don't optimise tokens for their own sake. Do develop one habit: send the
+  relevant part, not everything you have.
+</p>
+
+<p>
+  That single habit reduces cost, improves accuracy and avoids context problems
+  simultaneously — which is unusual, because those three normally trade against
+  each other.
+</p>
