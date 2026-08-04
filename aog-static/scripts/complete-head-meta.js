@@ -37,7 +37,7 @@ function walk(dir, out = []) {
 const attr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const has = (html, re) => re.test(html);
 
-let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, touched = 0;
+let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, navJs = 0, touched = 0;
 
 for (const file of walk(SITE)) {
   const html = fs.readFileSync(file, "utf8");
@@ -104,6 +104,13 @@ for (const file of walk(SITE)) {
   const tp = site.thirdParty || {};
   let body = null;
 
+  // Touch support for the header dropdowns. Deferred so it never blocks render,
+  // and it degrades to the previous behaviour if it fails to load.
+  if (!html.includes("/assets/js/mobile-nav.js")) {
+    body = `<script src="/assets/js/mobile-nav.js" defer></script>`;
+    navJs++;
+  }
+
   if (tp.googleAnalytics && !html.includes(tp.googleAnalytics)) {
     body = (body || "") +
       `<script async src="https://www.googletagmanager.com/gtag/js?id=${tp.googleAnalytics}"></script>\n` +
@@ -136,3 +143,4 @@ console.log(`  og:image defaulted: ${ogImage}`);
 console.log(`  mobile.css linked : ${mobileCss}`);
 console.log(`  analytics injected: ${ga}`);
 console.log(`  chat injected     : ${tawk}`);
+console.log(`  mobile nav js     : ${navJs}`);

@@ -84,6 +84,22 @@
     max-width: 100vw !important;
   }
 
+  /* Opened by assets/js/mobile-nav.js on first tap. Rendered in normal flow
+     rather than as an overlay so it can't run off the right edge, and so the
+     rest of the header stays reachable while it's open. */
+  .nav-prog.nav-open .nav-menu {
+    position: static !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    padding-top: 4px !important;
+    /* The page transitions opacity and transform (.18s). Those two were the
+       only properties in this block that failed to take effect — cancelling the
+       transition makes the state change apply immediately, which is what's
+       wanted for a tap-to-open menu anyway. */
+    transition: none !important;
+  }
+
   /* --- 10. tap targets --------------------------------------------------- */
   /* Nav and footer links render at 17-19px tall, below the 24px WCAG 2.2
      minimum and well below a comfortable thumb target. Prose links are
