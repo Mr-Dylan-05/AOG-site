@@ -10,9 +10,9 @@
     "tawkChat": false,
     "tawkSrc": "",
     "googleAnalytics": "G-3XBD8BYWWP",
-    "formEndpoint": "",
+    "formEndpoint": "https://formspree.io/f/mrpzzznb",
     "//formProvider": "'formspree' | 'basin' | 'netlify' | '' — netlify needs no endpoint",
-    "formProvider": ""
+    "formProvider": "formspree"
   },
   "defaultOgImage": "/assets/design/group-team.jpg",
   "social": [
