@@ -133,6 +133,31 @@ const ORGANIZATION = {
   },
   areaServed: { "@type": "Country", name: "Australia" },
   identifier: { "@type": "PropertyValue", propertyID: "ABN", value: "54 808 983 598" },
+  // Coordinates, hours and headcount are what turn a ProfessionalService entry
+  // from a name-and-address into something local search can actually rank and
+  // display. Coordinates are from the company's own Google Maps listing.
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: -28.1133038,
+    longitude: 153.4347102,
+  },
+  hasMap: "https://www.google.com/maps/place/Ad+On+Group/@-28.1133038,153.4347102,17z",
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "09:00",
+    closes: "17:00",
+  },
+  numberOfEmployees: { "@type": "QuantitativeValue", value: 141 },
+  foundingLocation: {
+    "@type": "Place",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Gold Coast",
+      addressRegion: "QLD",
+      addressCountry: "AU",
+    },
+  },
   // Verified company profiles. These are how a search engine confirms that the
   // entity on this site and the entity on those platforms are the same company.
   sameAs: site.social || [],
