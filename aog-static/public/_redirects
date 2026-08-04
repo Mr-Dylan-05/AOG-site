@@ -21,6 +21,21 @@
 /wp-admin/*             /   301
 /xmlrpc.php             /   301
 
+# --- WordPress archive URLs --------------------------------------------------
+# WordPress serves these even though they were never in the sitemap, and they
+# currently return 200 — so Google has them indexed and they may carry links:
+#   /category/<x>/   /tag/<x>/   /author/<x>/   /blog/page/2/   /2019/06/
+# The static site generates no archives, so without these they would all 404 and
+# any accumulated link equity would be thrown away. Sent to the blog index,
+# which lists the posts those archives used to group.
+/category/*             /blog/      301
+/tag/*                  /blog/      301
+/author/*               /blog/      301
+/blog/page/*            /blog/      301
+# Date archives (/2019/, /2019/06/). No real page starts with "20", so the
+# wildcard is safe — verified against the built output.
+/20*                    /blog/      301
+
 # --- Injected spam URLs ------------------------------------------------------
 # The compromised WordPress site served spam product pages on any unrecognised
 # URL, and Google has INDEXED them (confirmed in Search Console, last crawled
