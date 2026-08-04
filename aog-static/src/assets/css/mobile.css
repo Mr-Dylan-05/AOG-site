@@ -33,14 +33,22 @@
     grid-template-columns: minmax(0, 1fr) !important;
   }
   [style*="grid-template-columns"] > *,
-  [style*="display:flex"] > * {
+  [style*="display:flex"]:not([style*="width:max-content"]) > * {
     min-width: 0 !important;
   }
 
   /* --- 3. let flex rows wrap instead of overflowing --------------------- */
-  [style*="display:flex"]:not([style*="flex-direction:column"]) {
+  /* Wrapping is right for ordinary rows, but NOT for a marquee: those are
+     `display:flex; width:max-content` with a scrolling animation, and wrapping
+     one turns the partner-logo strip into a 2,000px vertical stack. */
+  [style*="display:flex"]:not([style*="flex-direction:column"]):not([style*="width:max-content"]) {
     flex-wrap: wrap !important;
   }
+  [style*="width:max-content"] {
+    flex-wrap: nowrap !important;
+    width: max-content !important;
+  }
+  [style*="width:max-content"] > * { flex: none !important; min-width: auto !important; }
 
   /* --- 4. media never exceeds the screen -------------------------------- */
   /* height is deliberately NOT touched: many of these images are inside
@@ -78,7 +86,9 @@
   }
 
   /* --- 6. fixed pixel widths ------------------------------------------- */
-  [style*="width:"]:not(img):not(svg) { max-width: 100% !important; }
+  /* A marquee is deliberately wider than the screen and clipped by its parent —
+     capping it to 100% stops it scrolling. */
+  [style*="width:"]:not(img):not(svg):not([style*="width:max-content"]) { max-width: 100% !important; }
 
   /* --- 7. text that refuses to break ------------------------------------ */
   [style*="white-space:nowrap"] { white-space: normal !important; }
@@ -141,4 +151,13 @@
 
   /* --- 11. horizontal padding so text is not flush to the bezel --------- */
   body.reference main { padding-left: 1rem !important; padding-right: 1rem !important; }
+
+  /* --- 12. header specifics ------------------------------------------- */
+  /* A 1px-wide vertical rule separating logo from nav. Once the row wraps it
+     becomes a stray line floating under the logo. */
+  .aog-m-pill span[style*="width:1px"] { display: none !important; }
+
+  /* 22px gaps between wrapped rows pushed the header to 203px tall. */
+  .aog-m-pill { gap: 10px !important; }
+  .aog-m-pill > div[style*="display:flex"] { gap: 12px !important; }
 }
