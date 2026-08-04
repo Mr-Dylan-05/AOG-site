@@ -125,7 +125,34 @@ function pagesIn(dir, ext) {
 }
 
 const result = {};
-const stats = { ai: 0, design: 0, wordpress: 0, none: 0 };
+const stats = { ai: 0, design: 0, wordpress: 0, resource: 0, none: 0 };
+
+/**
+ * Resource articles carry their own date in front matter ("updated: 4 August
+ * 2026"), which is the authoritative one — they're written here rather than
+ * ported from anywhere, so no external source knows better.
+ */
+const MONTHS = {
+  january: "01", february: "02", march: "03", april: "04", may: "05", june: "06",
+  july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
+};
+(function resources(dir) {
+  if (!fs.existsSync(dir)) return;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { resources(p); continue; }
+    if (e.name !== "index.njk") continue;
+    const text = fs.readFileSync(p, "utf8");
+    const url = (text.match(/^permalink:\s*"([^"]+)"/m) || [])[1];
+    const upd = text.match(/^updated:\s*"?(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})"?/m);
+    if (!url || !upd) continue;
+    const mm = MONTHS[upd[2].toLowerCase()];
+    if (!mm) continue;
+    result[url.replace(/index\.html$/, "")] =
+      `${upd[3]}-${mm}-${String(upd[1]).padStart(2, "0")}`;
+    stats.resource++;
+  }
+})(path.join(ROOT, "src", "pages", "resources"));
 
 for (const slug of pagesIn(path.join(ROOT, "public"), "index.html")) {
   const url = slug === "" ? "/" : `/${slug}/`;
@@ -154,5 +181,6 @@ console.log(`${DRY ? "[dry run] " : ""}lastmod dates`);
 console.log(`  from Ad On AI repo   : ${stats.ai}`);
 console.log(`  from design export   : ${stats.design}  (${design || "unavailable"})`);
 console.log(`  from WordPress dump  : ${stats.wordpress}`);
+console.log(`  from resource front matter : ${stats.resource}`);
 console.log(`  no date -> omitted   : ${stats.none}`);
 console.log(`  total written        : ${Object.keys(sorted).length}`);

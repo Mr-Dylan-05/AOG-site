@@ -1,0 +1,116 @@
+---
+layout: layouts/resource.njk
+tags: resource
+topic: "Foundations"
+kind: "Explainer"
+title: "What Are AI Guardrails? Limits That Keep AI Useful | Ad On Group"
+h1: "What are AI guardrails?"
+cardTitle: "What are AI guardrails?"
+cardBlurb: "The limits that keep an AI system inside safe territory."
+description: "Guardrails are the constraints that stop an AI system doing things it shouldn't — what it can access, what it can act on, and what happens before anything irreversible."
+updated: "4 August 2026"
+readingTime: 5
+permalink: "/resources/what-are-ai-guardrails/index.html"
+shortAnswer: "Guardrails are the limits placed around an AI system: what it can reach, what it can act on, what it must refuse, and what needs a human before it happens. The ones that matter in a business aren't inside the model — they're the boundaries you set around it, and they're mostly about access and approval rather than clever instructions."
+faq:
+  - q: "Don't the AI companies already build guardrails in?"
+    a: "They build safety behaviour into the model — refusing harmful requests, resisting manipulation. Those are real and worth having. But they know nothing about your business, so they can't stop an assistant emailing the wrong client or quoting an outdated price."
+  - q: "Isn't a good system prompt enough?"
+    a: "It's the weakest layer, though still worth having. Instructions can be argued with, forgotten in a long conversation, or overridden by text the model reads. Access limits can't be — if the assistant was never granted the folder, no instruction gets it there."
+  - q: "What's the single most effective guardrail?"
+    a: "A human approving anything irreversible. Drafting, summarising and suggesting are safe to automate; sending, paying, publishing and deleting are not. That one boundary prevents most real-world harm."
+  - q: "Do guardrails make AI less useful?"
+    a: "Badly designed ones do — if every action needs three approvals, people route around the system. Good ones are invisible in normal use and only bite at the edges. Scope tightly, approve narrowly."
+  - q: "How do we know they're working?"
+    a: "Test them deliberately. Ask the assistant to do something it shouldn't and see what happens. A guardrail nobody has tried is an assumption, not a control."
+keepReading:
+  - url: "/resources/what-is-prompt-injection/"
+    kind: "Risk"
+    label: "What is prompt injection?"
+    blurb: "When the content an AI reads tries to give it orders."
+  - url: "/resources/when-not-to-use-ai/"
+    kind: "Guide"
+    label: "When not to use AI"
+    blurb: "Nine situations where reaching for it makes things worse."
+---
+
+<p>
+  "Guardrails" gets used loosely enough to mean almost nothing. It's worth being
+  precise, because the guardrails that protect a business are mostly not the
+  ones people picture.
+</p>
+
+<h2>Four layers, weakest to strongest</h2>
+
+<p><strong>1. Model behaviour.</strong> What the provider trained in — refusing harmful requests, resisting manipulation. Genuinely valuable, and entirely generic. It has no idea what your business considers acceptable.</p>
+
+<p><strong>2. Instructions.</strong> Your system prompt: never quote prices, always flag uncertainty, never give legal advice. Useful and free, but it's the softest layer — instructions can drop out of a long conversation or be undermined by text the model reads.</p>
+
+<p><strong>3. Access limits.</strong> What the assistant can actually reach. This is where instructions become structural: an assistant that was never granted the finance folder cannot be talked into opening it, no matter what anyone types.</p>
+
+<p><strong>4. Approval gates.</strong> What requires a human before it happens. The strongest layer, because it doesn't depend on the AI behaving correctly at all.</p>
+
+<p>
+  Most discussion focuses on layer two. Most protection comes from layers three
+  and four.
+</p>
+
+<h2>The line that matters most</h2>
+
+<p>
+  Draw it between <strong>producing</strong> and <strong>doing</strong>.
+</p>
+
+<ul>
+  <li><strong>Producing</strong> — drafting, summarising, analysing, suggesting. If it's wrong, a person reads it and it goes no further. Safe to automate freely.</li>
+  <li><strong>Doing</strong> — sending, paying, publishing, deleting, committing. If it's wrong, it has already happened.</li>
+</ul>
+
+<p>
+  Nearly every AI incident worth reading about crossed that line without anyone
+  deciding to. Keeping a person on the "doing" side is the highest-value
+  guardrail available, and it costs almost nothing.
+</p>
+
+<h2>An Australian small-business example</h2>
+
+<p>
+  A Melbourne wholesaler sets up an assistant to answer stock enquiries: read
+  the inventory system, draft a reply, send it.
+</p>
+
+<p>
+  It works well until a customer asks about an item whose record is mid-update.
+  The assistant reads a partial figure, drafts a confident reply promising stock
+  that isn't there, and sends it — because sending was automated.
+</p>
+
+<p>
+  The same setup with drafts held for review would have produced a wrong draft
+  someone corrected in ten seconds. Identical AI behaviour, entirely different
+  outcome, and the only difference was where the approval sat.
+</p>
+
+<h2>Setting them without strangling it</h2>
+
+<ul>
+  <li><strong>Scope access to the task.</strong> An assistant handling maintenance requests needs that inbox, not the whole mail system.</li>
+  <li><strong>Automate producing, gate doing.</strong> The simplest rule that covers most risk.</li>
+  <li><strong>Make refusal explicit.</strong> Tell it what to do when unsure — say so and stop, rather than guess.</li>
+  <li><strong>Keep a record of actions.</strong> If an assistant does things, you want to know what it did.</li>
+  <li><strong>Test the edges.</strong> Try to make it misbehave. Untested guardrails are assumptions.</li>
+  <li><strong>Don't over-gate.</strong> If routine work needs approval, people stop using the system — and you've traded a small risk for no benefit.</li>
+</ul>
+
+<h2>The useful reframe</h2>
+
+<p>
+  Guardrails aren't about distrusting AI. They're the same discipline you'd
+  apply to a capable new starter: clear scope, access to what the job needs,
+  and someone checking the things that can't be undone.
+</p>
+
+<p>
+  Nobody would call that distrust. It's just how you let someone get on with
+  work without betting the business on them never having a bad day.
+</p>
