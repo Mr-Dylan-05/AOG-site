@@ -174,6 +174,36 @@ const ORGANIZATION_COMPACT = {
   address: ORGANIZATION.address,
 };
 
+/**
+ * Topic entities for the resource articles.
+ *
+ * `about` tells a search or answer engine what a page is *about* as an entity
+ * rather than as a string, and `sameAs` grounds that entity in a public
+ * knowledge base. It's the difference between "this page contains the words
+ * 'context window'" and "this page is about the concept Context Window, which
+ * is the thing Wikipedia describes here" — which is what lets an engine decide
+ * the page is a relevant source for a question phrased differently.
+ *
+ * Only concepts with a genuine public entry are listed; inventing a sameAs for
+ * something with no authoritative page would be worse than omitting it.
+ */
+const TOPIC_ENTITIES = {
+  "/resources/what-is-mcp/": ["Model Context Protocol", "https://en.wikipedia.org/wiki/Model_Context_Protocol"],
+  "/resources/what-is-a-context-window/": ["Context window", "https://en.wikipedia.org/wiki/Large_language_model"],
+  "/resources/what-are-tokens/": ["Lexical analysis", "https://en.wikipedia.org/wiki/Lexical_analysis"],
+  "/resources/what-are-embeddings/": ["Word embedding", "https://en.wikipedia.org/wiki/Word_embedding"],
+  "/resources/what-is-fine-tuning/": ["Fine-tuning (deep learning)", "https://en.wikipedia.org/wiki/Fine-tuning_(deep_learning)"],
+  "/resources/what-is-multimodal-ai/": ["Multimodal learning", "https://en.wikipedia.org/wiki/Multimodal_learning"],
+  "/resources/what-is-a-system-prompt/": ["Prompt engineering", "https://en.wikipedia.org/wiki/Prompt_engineering"],
+  "/resources/what-is-prompt-injection/": ["Prompt injection", "https://en.wikipedia.org/wiki/Prompt_injection"],
+  "/resources/what-is-ai-bias/": ["Algorithmic bias", "https://en.wikipedia.org/wiki/Algorithmic_bias"],
+  "/resources/ai-and-the-privacy-act/": ["Privacy Act 1988", "https://en.wikipedia.org/wiki/Privacy_Act_1988"],
+  "/resources/ai-and-copyright-in-australia/": ["Copyright law of Australia", "https://en.wikipedia.org/wiki/Copyright_law_of_Australia"],
+  "/resources/what-are-ai-guardrails/": ["AI safety", "https://en.wikipedia.org/wiki/AI_safety"],
+  "/resources/is-it-safe-to-put-company-data-into-ai/": ["Information privacy", "https://en.wikipedia.org/wiki/Information_privacy"],
+  "/resources/what-is-shadow-ai/": ["Shadow IT", "https://en.wikipedia.org/wiki/Shadow_IT"],
+};
+
 /** Pages where the company itself is the subject — these get the full entity. */
 const FULL_ORG_PAGES = new Set([
   "/", "/about-us/", "/about/", "/our-company/", "/contact-us/", "/contact/",
@@ -410,6 +440,18 @@ for (const p of pages) {
       inLanguage: "en-AU",
       isAccessibleForFree: true,
     };
+    const topic = TOPIC_ENTITIES[p.url];
+    if (topic) {
+      article.about = { "@type": "Thing", name: topic[0], sameAs: topic[1] };
+      // Also naming the discipline gives engines a broader entity to hang the
+      // page off when the specific concept isn't what was asked about.
+      article.mentions = {
+        "@type": "Thing",
+        name: "Artificial intelligence",
+        sameAs: "https://en.wikipedia.org/wiki/Artificial_intelligence",
+      };
+    }
+    article.audience = { "@type": "Audience", audienceType: "Australian small and medium businesses" };
     if (p.description) article.description = p.description;
     if (iso) { article.datePublished = iso; article.dateModified = iso; }
     if (p.ogImage) article.image = p.ogImage.startsWith("http") ? p.ogImage : `${BASE}${p.ogImage}`;

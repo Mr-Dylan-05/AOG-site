@@ -26,6 +26,10 @@
 - [FAQs](https://adongroup.com.au/faqs/): Common questions about services, staff location, contracts and how engagements work.
 - [Blogs](https://adongroup.com.au/blogs/): Articles on outsourcing, remote staffing and office administration.
 
+## Full reference
+
+- [Full company reference for AI](https://adongroup.com.au/llms-full.txt): a single, ready-to-cite document covering every division, the roles staffed, the programs, company history and common questions.
+
 ## Contact
 
 - [Contact Us](https://adongroup.com.au/contact-us/)

@@ -2,3 +2,24 @@ User-agent: *
 Allow: /
 
 Sitemap: https://adongroup.com.au/sitemap.xml
+
+# AI answer engines and crawlers are welcome. Listed explicitly rather than
+# relying on the wildcard above, so the intent is unambiguous.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Machine-readable summaries for answer engines
+# https://adongroup.com.au/llms.txt
+# https://adongroup.com.au/llms-full.txt

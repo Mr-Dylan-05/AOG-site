@@ -37,7 +37,8 @@ function walk(dir, out = []) {
 const attr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const has = (html, re) => re.test(html);
 
-let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, navJs = 0, formJs = 0, touched = 0;
+const upgradeRobots = [];
+let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, navJs = 0, formJs = 0, robots = 0, touched = 0;
 
 for (const file of walk(SITE)) {
   const html = fs.readFileSync(file, "utf8");
@@ -66,6 +67,22 @@ for (const file of walk(SITE)) {
   if (!html.includes("/assets/css/mobile.css")) {
     add.push(`<link rel="stylesheet" href="/assets/css/mobile.css">`);
     mobileCss++;
+  }
+
+  // Snippet limits. Without an explicit directive Google truncates to a
+  // conservative default, which caps how much of a page can appear in a rich
+  // result or be quoted in an AI Overview. Only added where no robots meta
+  // exists — a page that has set noindex must keep it.
+  const robotsTag = html.match(/<meta[^>]+name=["']robots["'][^>]*content=["']([^"']*)["'][^>]*>/i);
+  const FULL = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1";
+  if (!robotsTag) {
+    add.push(`<meta name="robots" content="${FULL}">`);
+    robots++;
+  } else if (!/noindex/i.test(robotsTag[1]) && !/max-snippet/i.test(robotsTag[1])) {
+    // A few design pages carry a partial directive (max-image-preview only).
+    // Upgrading them keeps the whole site consistent; noindex pages are left be.
+    upgradeRobots.push([file, robotsTag[0], `<meta name="robots" content="${FULL}">`]);
+    robots++;
   }
 
   if (image && !has(html, /<meta[^>]+property=["']og:image["']/i)) {
@@ -141,8 +158,14 @@ for (const file of walk(SITE)) {
   if (!DRY) fs.writeFileSync(file, out);
 }
 
+for (const [file, from, to] of upgradeRobots) {
+  const html = fs.readFileSync(file, "utf8");
+  if (!DRY) fs.writeFileSync(file, html.replace(from, to));
+}
+
 console.log(`${DRY ? "[dry run] " : ""}[head] ${touched} pages completed`);
 console.log(`  canonical added   : ${canonical}`);
+console.log(`  robots directive  : ${robots}`);
 console.log(`  open graph added  : ${og}`);
 console.log(`  twitter card added: ${tw}`);
 console.log(`  og:image defaulted: ${ogImage}`);

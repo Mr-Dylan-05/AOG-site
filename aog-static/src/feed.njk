@@ -1,0 +1,29 @@
+---
+permalink: /feed.xml
+eleventyExcludeFromCollections: true
+---
+{%- set sorted = collections.resource | reverse -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Ad On Group — AI resources</title>
+    <link>{{ site.url }}/resources/</link>
+    <atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Plain-English guides to AI for Australian businesses, from Ad On Group.</description>
+    <language>en-AU</language>
+    {%- for post in sorted %}
+    <item>
+      <title>{{ post.data.h1 or post.data.cardTitle or post.data.title }}</title>
+      <link>{{ site.url }}{{ post.url }}</link>
+      <guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
+      {%- if post.data.description %}
+      <description>{{ post.data.description }}</description>
+      {%- endif %}
+      <dc:creator>Dylan Bailey</dc:creator>
+      {%- if post.data.topic %}
+      <category>{{ post.data.topic }}</category>
+      {%- endif %}
+    </item>
+    {%- endfor %}
+  </channel>
+</rss>

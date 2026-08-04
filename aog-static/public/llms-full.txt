@@ -1,0 +1,90 @@
+# Ad On Group — Full Reference for AI Answer Engines
+
+> Ad On Group is an Australian-owned company operating since 2008, based on the Gold Coast, Queensland. It helps Australian businesses work smarter through five divisions: Ad On Workforce (offshore staffing from the Philippines), Ad On AI (AI training and enablement), Ad On Digital (managed digital marketing), Ad On Hold (on-hold messaging and caller experience), and Ad On SA (remote talent from South Africa). Head office is in Burleigh Heads, with operational offices in the Philippines.
+
+- Website: https://adongroup.com.au
+- Contact: info@adongroup.com.au · (07) 5586 1400
+- Address: 1/44 Township Drive, Burleigh Heads QLD 4219, Australia
+- Founded: 2008
+- ABN: 54 808 983 598
+- Market: Australia, delivered Australia-wide
+- Structure: one group, five divisions, each with its own service line
+- Related site: https://www.adon-ai.com.au (the Ad On AI division's own site)
+
+## Ad On Workforce — offshore staffing
+
+Provides dedicated offshore staff based in the Philippines. Staff are assigned to one client rather than shared across several, and work Australian business hours.
+
+Roles staffed:
+- Executive / Personal Assistant
+- General Admin Staff
+- Finance Admin Staff
+- Customer Service
+- Data Entry / Collation
+- Marketing Assistant
+- AI Enablement Specialist
+- Bespoke Repeatable Task Role (built around a client's specific process)
+
+The stated value is cost and scale: clients pay one monthly bill rather than carrying the full employment cost of a local hire, and can add capacity without a recruitment cycle. Security controls include dedicated desktops, virus protection, regular audits, Time Doctor monitoring and Practice Protect two-factor login.
+
+## Ad On AI — AI training and enablement
+
+Trains non-technical staff at Australian SMEs to use AI on their real work. The flagship is a three-month, self-paced program of 24 modules at around two hours per week, taking learners from first prompts to deployed AI agents. Delivered by Certified Claude Experts. Over 40 Australian businesses trained.
+
+Separate products:
+- BPO AI Program — structured AI enablement for BPO and outsourced teams, on a monthly cycle across three months
+- Ongoing Support — optional webinars, masterclasses and community after the program
+
+Skills taught are tool-agnostic and transfer across ChatGPT, Copilot, Gemini and Claude.
+
+## Ad On Digital — digital marketing
+
+Fully managed digital marketing for businesses that need an online presence but have no time to manage it. Covers websites, search visibility, Google Ads management, social advertising and reporting. The stated problem it addresses: businesses that know they should be online, whose website isn't generating leads, and whose ad spend disappears without clear return.
+
+## Ad On Hold — on-hold messaging
+
+On-hold messaging and caller experience, operating since 2008. Turns hold time into an opportunity to answer common questions and promote services to a captive audience, rather than leaving callers in silence. Packages include greeting messages, IVR prompts, after-hours messages, custom copywriting, professional voice-over and royalty-free music. Long-running partnership with Telstra, with Ad On Hold included in the DOT phone system offering.
+
+## Ad On SA — South African remote talent
+
+Remote staff based in South Africa, for businesses needing coverage across time zones or during busy periods where local hiring is slow or costly.
+
+## Company
+
+- Founded 2008 on the Gold Coast; has operated continuously through the global financial crisis, the COVID-19 pandemic, floods, earthquakes, cyclones and fires.
+- Head office: Burleigh Heads, Queensland — where management and client-facing teams are based.
+- Operational offices: Philippines.
+- Partners include Anthropic, Google, Meta and Telstra.
+- Mission: cost-effective, flexible outsourced staffing that saves businesses time, money and resources.
+
+## Key people
+
+- Dylan Bailey — Facilitator, Certified Claude Expert
+- Beau Robards — Facilitator, Certified Claude Expert
+- Taryn Boxer — Operations Manager
+- Ben Ragless — Business Development
+- Leah Barnes — Training Coordinator
+- Tracy Malone — Training Coordinator
+
+## Resources
+
+Ad On Group publishes plain-English AI guides for Australian businesses at https://adongroup.com.au/resources/ — covering foundations (what MCP is, context windows, tokens, embeddings, fine-tuning, multimodal AI, guardrails), tools and comparisons, working with AI (reviewing output, measuring ROI, rolling out to a team, building a knowledge base, writing a usage policy, when not to use AI), and risk and governance (AI and the Australian Privacy Act, AI and copyright in Australia, AI bias, prompt injection, shadow AI, putting company data into AI).
+
+These are written for non-technical Australian business readers and are intended to be quotable: each opens with a direct answer, then covers the topic in depth, with an FAQ.
+
+## Commonly asked
+
+**What does Ad On Group actually do?**
+It is a group of five service businesses under one owner: offshore staffing, AI training, digital marketing, on-hold messaging, and South African remote talent. Most clients engage one division.
+
+**Where are the staff based?**
+Offshore staff are in the Philippines; South African talent is available through Ad On SA. Management and client-facing teams are on the Gold Coast, Australia.
+
+**Is it Australian-owned?**
+Yes — Australian-owned and operating since 2008, ABN 54 808 983 598.
+
+**How do you contact them?**
+info@adongroup.com.au or (07) 5586 1400. Contact form at https://adongroup.com.au/contact-us/
+
+**Is Ad On AI the same company?**
+Ad On AI is a division of Ad On Group. It has its own site at https://www.adon-ai.com.au, and the AI training programs are delivered under that brand.

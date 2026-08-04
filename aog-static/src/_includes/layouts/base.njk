@@ -8,7 +8,16 @@
   {# Empty/placeholder pages set `noindex: true` so thin content stays out of
      search. Such pages are also excluded from sitemap.xml — listing a page you
      have asked search engines not to index is a contradictory signal. #}
-  {% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
+  {% if noindex %}
+  <meta name="robots" content="noindex, follow">
+  {% else %}
+  {# Lifts Google's default limits on how much of the page may be shown.
+     max-snippet:-1 allows an unlimited-length text snippet, max-image-preview:large
+     permits a full-size image, max-video-preview:-1 an unlimited video preview.
+     These govern eligibility for rich results and for being quoted in AI
+     Overviews — without them Google truncates to a conservative default. #}
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  {% endif %}
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
 
   <!-- Open Graph / social -->
@@ -28,6 +37,10 @@
   <meta name="twitter:title" content="{{ pageTitle }}">
   {% if description %}<meta name="twitter:description" content="{{ description }}">{% endif %}
   {% if ogImageAbs %}<meta name="twitter:image" content="{{ ogImageAbs }}">{% endif %}
+
+  {# Discoverable feed for the resource library — how aggregators and some
+     crawlers learn the site is an actively updated publication. #}
+  <link rel="alternate" type="application/rss+xml" title="Ad On Group — AI resources" href="{{ site.url }}/feed.xml">
 
   <link rel="stylesheet" href="/assets/css/site.css">
 

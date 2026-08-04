@@ -41,7 +41,10 @@ const LEGACY_HOSTS = [
 ];
 
 // Attributes that are meant to hold an absolute canonical URL.
-const ABSOLUTE_OK = /(?:rel="canonical"|property="og:(?:url|image)"|name="twitter:[a-z:]*"|"@id"|"url")/;
+// Tags whose whole job is to carry an absolute URL. A feed link belongs here
+// for the same reason canonical does: a relative one is ambiguous to anything
+// consuming it away from the page.
+const ABSOLUTE_OK = /(?:rel="canonical"|rel="alternate"|property="og:(?:url|image)"|name="twitter:[a-z:]*"|"@id"|"url")/;
 
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
