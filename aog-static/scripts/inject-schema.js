@@ -160,7 +160,14 @@ const ORGANIZATION = {
   },
   // Verified company profiles. These are how a search engine confirms that the
   // entity on this site and the entity on those platforms are the same company.
-  sameAs: site.social || [],
+  // The Google Business Profile listing is included alongside the social
+  // profiles. It gives Google an explicit statement that the entity described
+  // here and the entity in the knowledge panel are the same one, rather than
+  // leaving it to be inferred from matching name, address and phone.
+  sameAs: [
+    ...(site.social || []),
+    "https://www.google.com/maps/place/Ad+On+Group/@-28.1133038,153.4347102,17z",
+  ],
   employee: TEAM.map(([name, jobTitle, url]) => ({
     "@type": "Person",
     name,
