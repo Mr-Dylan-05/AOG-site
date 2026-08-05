@@ -6,8 +6,28 @@
   "trailingSlash": true,
   "redirects": [
     {
+      "source": "/canary-7f3a/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/canary-7f3a",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/contact/",
       "destination": "/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/terms/",
+      "destination": "/terms-and-conditions/",
       "permanent": true
     },
     {
@@ -26,6 +46,11 @@
       "permanent": true
     },
     {
+      "source": "/wp-admin/:path*/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/wp-admin/:path*",
       "destination": "/",
       "permanent": true
@@ -41,7 +66,17 @@
       "permanent": true
     },
     {
+      "source": "/category/:path*/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
       "source": "/category/:path*",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/tag/:path*/",
       "destination": "/blog/",
       "permanent": true
     },
@@ -51,7 +86,17 @@
       "permanent": true
     },
     {
+      "source": "/author/:path*/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
       "source": "/author/:path*",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/:path*/",
       "destination": "/blog/",
       "permanent": true
     },
@@ -61,7 +106,17 @@
       "permanent": true
     },
     {
+      "source": "/:year(20\\d{2})/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
       "source": "/:year(20\\d{2})",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/:year(20\\d{2})/:path*/",
       "destination": "/blog/",
       "permanent": true
     },
@@ -71,8 +126,18 @@
       "permanent": true
     },
     {
+      "source": "/edm/",
+      "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
       "source": "/edm",
       "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
+      "source": "/google-ads/",
+      "destination": "/google-ads-management/",
       "permanent": true
     },
     {
@@ -81,7 +146,17 @@
       "permanent": true
     },
     {
+      "source": "/ad-on-workforce/about/",
+      "destination": "/ad-on-workforce/",
+      "permanent": true
+    },
+    {
       "source": "/ad-on-workforce/about",
+      "destination": "/ad-on-workforce/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-workforce/services/",
       "destination": "/ad-on-workforce/",
       "permanent": true
     },
@@ -91,7 +166,17 @@
       "permanent": true
     },
     {
+      "source": "/faqs/aod-faqs/",
+      "destination": "/faqs/",
+      "permanent": true
+    },
+    {
       "source": "/faqs/aod-faqs",
+      "destination": "/faqs/",
+      "permanent": true
+    },
+    {
+      "source": "/faqs/aoh-faqs/",
       "destination": "/faqs/",
       "permanent": true
     },
@@ -101,8 +186,18 @@
       "permanent": true
     },
     {
+      "source": "/faqs/aow-faqs/",
+      "destination": "/faqs/",
+      "permanent": true
+    },
+    {
       "source": "/faqs/aow-faqs",
       "destination": "/faqs/",
+      "permanent": true
+    },
+    {
+      "source": "/package/customer-service/",
+      "destination": "/customer-service/",
       "permanent": true
     },
     {
@@ -111,8 +206,18 @@
       "permanent": true
     },
     {
+      "source": "/package/general-admin-staff/",
+      "destination": "/general-admin-staff/",
+      "permanent": true
+    },
+    {
       "source": "/package/general-admin-staff",
       "destination": "/general-admin-staff/",
+      "permanent": true
+    },
+    {
+      "source": "/package/finance-admin-staff/",
+      "destination": "/finance-admin-staff/",
       "permanent": true
     },
     {
@@ -121,8 +226,18 @@
       "permanent": true
     },
     {
+      "source": "/package/data-entry-collation-position/",
+      "destination": "/data-entry-collation/",
+      "permanent": true
+    },
+    {
       "source": "/package/data-entry-collation-position",
       "destination": "/data-entry-collation/",
+      "permanent": true
+    },
+    {
+      "source": "/package/bespoke-repeatable-task-role/",
+      "destination": "/bespoke-repeatable-task-role/",
       "permanent": true
     },
     {
@@ -131,8 +246,18 @@
       "permanent": true
     },
     {
+      "source": "/package/marketing-assistant/",
+      "destination": "/marketing-assistant/",
+      "permanent": true
+    },
+    {
       "source": "/package/marketing-assistant",
       "destination": "/marketing-assistant/",
+      "permanent": true
+    },
+    {
+      "source": "/package/executive-personal-assistant/",
+      "destination": "/executive-personal-assistant/",
       "permanent": true
     },
     {
@@ -141,8 +266,18 @@
       "permanent": true
     },
     {
+      "source": "/bpo-ai-program/",
+      "destination": "/bpo-program/",
+      "permanent": true
+    },
+    {
       "source": "/bpo-ai-program",
       "destination": "/bpo-program/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-group/",
+      "destination": "/",
       "permanent": true
     },
     {
@@ -151,7 +286,17 @@
       "permanent": true
     },
     {
+      "source": "/review-me/",
+      "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
       "source": "/review-me",
+      "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
+      "source": "/online-accelerator/",
       "destination": "/ad-on-digital/",
       "permanent": true
     },
@@ -161,13 +306,63 @@
       "permanent": true
     },
     {
+      "source": "/home-2025-copy/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/home-2025-copy",
       "destination": "/",
       "permanent": true
     },
     {
+      "source": "/website-examples/",
+      "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
       "source": "/website-examples",
       "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/home-2020-v3/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home-2020-v3",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/package/ai-enablement-specialist/",
+      "destination": "/ai-enablement-specialist/",
+      "permanent": true
+    },
+    {
+      "source": "/package/ai-enablement-specialist",
+      "destination": "/ai-enablement-specialist/",
+      "permanent": true
+    },
+    {
+      "source": "/__trashed/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/__trashed",
+      "destination": "/",
       "permanent": true
     }
   ],
