@@ -199,9 +199,10 @@ const PEOPLE = {
 // Each page pairs a hero (5:4, beside the pitch) with a "solution" image that
 // sits between the customer's stated problems and the answer to them.
 const AD_ON_DIGITAL = {
-  // Ad On Group's own Google Ads performance report — the literal thing the
-  // slot asks for. Portrait, so contained rather than cropped.
-  "digital-hero":     [M("2022/02/aog-sample-report.jpg"), "An Ad On Group Google Ads performance report showing spend, conversions and engagement", "contain"],
+  // A marketer working across search, ads and analytics — reads as the service
+  // itself. Replaces the earlier choice (a portrait screenshot of a sample Ads
+  // report), which sat awkwardly as a contained document in the hero frame.
+  "digital-hero":     [M("2025/09/shutterstock_2511675757.webp"), "A marketer working across a laptop and tablet with digital advertising, search and analytics panels"],
   "digital-solution": [M("2025/02/Group-388.png"), "The Ad On Digital team working together at their desks"],
 };
 
@@ -253,7 +254,7 @@ const PAGES = {
 // The hero-ish slots load eagerly; galleries below the fold do not.
 const EAGER = new Set([
   "culture-hero", "people-hero", "office-au", "history-1",
-  "about-hero", "staff-hero", "purpose-hero", "sa-hero",
+  "about-hero", "staff-hero", "purpose-hero", "sa-hero", "digital-hero",
 ]);
 
 // Photographs fill the frame. A document — the sample Google Ads report — is
