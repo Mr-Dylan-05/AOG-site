@@ -83,6 +83,24 @@ const WANT = [
   ["2026/03/Nontobeko-Gumede.jpg", "avatar"],
   ["2026/03/Yolanda-Drysdale-Photo.jpeg", "avatar"],
 
+  // people — the 15 headshots identified from adonworkforce.com.au/our-people/
+  // and adonsa.co.za/meet-the-team/, which name every face the library did not.
+  ["2025/03/Screenshot-2024-11-22-150703-e1733900092526.png", "avatar"],
+  ["2025/03/IMG-7775-scaled-e1733901081176.jpg", "avatar"],
+  ["2025/03/2-1-scaled-e1733964362970.jpg", "avatar"],
+  ["2025/03/Image_20241205_141835_165-scaled-e1733965774973.jpeg", "avatar"],
+  ["2025/03/3-2-e1733968468910.jpg", "avatar"],
+  ["2025/04/unnamed-2-e1744080935699.jpg", "avatar"],
+  ["2025/04/IMG_4816-scaled-e1744080961452.jpg", "avatar"],
+  ["2025/03/IMG_0162-scaled-e1733970936223.jpg", "avatar"],
+  ["2025/03/Delo-2-e1733971231915.jpg", "avatar"],
+  ["2025/03/1000019268-e1733971393293.jpg", "avatar"],
+  ["2025/03/1000042972-1-e1733971438510.jpg", "avatar"],
+  ["2025/09/da3bbc90-e490-44df-b156-fabed8209ecc.webp", "avatar"],
+  ["2025/09/SMY_8172-4-2.webp", "avatar"],
+  ["2025/09/received_555246257364131.webp", "avatar"],
+  ["2026/03/Kerry-Morris-Photo.jpg", "avatar"],
+
   // about-us, staff benefits and purpose
   ["2025/03/DSC_2294.jpg", "hero"],
   ["2025/04/DSC_2711.jpg", "hero"],
@@ -107,6 +125,15 @@ for (const [rel, kind] of WANT) {
 
   fs.mkdirSync(path.dirname(to), { recursive: true });
   try {
+    if (/\.webp$/i.test(from)) {
+      // sips cannot read webp. Nothing else here needs a decoder, so rather
+      // than add a dependency, copy it through — these are already web-sized.
+      fs.copyFileSync(from, to);
+      const n = fs.statSync(to).size;
+      copied++;
+      console.log(`  ${String(Math.round(n / 1024)).padStart(6)}KB -> ${String(Math.round(n / 1024)).padStart(5)}KB  ${rel}  (webp, copied as-is)`);
+      continue;
+    }
     execFileSync("sips", ["-Z", String(SIZES[kind]), from, "--out", to], { stdio: "pipe" });
     const a = fs.statSync(from).size;
     let b = fs.statSync(to).size;
