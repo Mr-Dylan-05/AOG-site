@@ -75,12 +75,66 @@ const WORKFORCE_ROLES = [
  * so they are omitted rather than invented.
  */
 const TEAM = [
-  ["Dylan Bailey", "Facilitator", "https://www.linkedin.com/in/dylan-bailey-544986378"],
-  ["Beau Robards", "Facilitator", "https://www.linkedin.com/in/beau-robards-6b4b09357"],
-  ["Taryn Boxer", "Operations Manager", "https://www.linkedin.com/in/taryn-boxer-84b482285"],
-  ["Ben Ragless", "Business Development", "https://www.linkedin.com/in/ben-ragless-46299386"],
-  ["Leah Barnes", "Training Coordinator", "https://www.linkedin.com/in/leah-barnes-91305a2a3"],
-  ["Tracy Malone", "Training Coordinator", "https://www.linkedin.com/in/tracy-malone-606907258"],
+  {
+    name: "Dylan Bailey",
+    jobTitle: "Facilitator",
+    url: "https://www.linkedin.com/in/dylan-bailey-544986378",
+    certs: [
+      { name: "Building with the Claude API", issued: "2026-05-24", id: "dcmuv8p7s79f" },
+      { name: "Claude Code in Action", issued: "2026-05-19", id: "x9zff2dxjtmc" },
+      { name: "Introduction to Model Context Protocol", issued: "2026-05-19", id: "es9q57inzwit" },
+    ],
+  },
+  {
+    name: "Beau Robards",
+    jobTitle: "Facilitator",
+    url: "https://www.linkedin.com/in/beau-robards-6b4b09357",
+    certs: [
+      { name: "Building with the Claude API", issued: "2026-05-17", id: "n62y3wsca8nc" },
+      { name: "Claude 101", issued: "2026-05-10", id: "ei9zawcy6zdt" },
+      { name: "Claude Code in Action", issued: "2026-05-19", id: "36o5os24aibf" },
+      { name: "Introduction to Agent Skills", issued: "2026-05-10", id: "gjqq2orqeime" },
+      { name: "Introduction to Model Context Protocol", issued: "2026-05-17", id: "f7pjhnffpx66" },
+    ],
+  },
+  {
+    name: "Taryn Boxer",
+    jobTitle: "Chief Operating Officer",
+    url: "https://www.linkedin.com/in/taryn-boxer-84b482285",
+    certs: [
+      { name: "Building with the Claude API", issued: "2026-05-18", id: "j8k76bz9oqu3" },
+      { name: "Claude Code in Action", issued: "2026-05-18", id: "gapbizujntkt" },
+      { name: "Introduction to Agent Skills", issued: "2026-05-17", id: "owyiz7r5cyzs" },
+      { name: "Introduction to Model Context Protocol", issued: "2026-05-18", id: "a9x73h8t6df8" },
+    ],
+  },
+  {
+    name: "Ben Ragless",
+    jobTitle: "Business Development",
+    url: "https://www.linkedin.com/in/ben-ragless-46299386",
+  },
+  {
+    name: "Leah Barnes",
+    jobTitle: "Training Coordinator",
+    url: "https://www.linkedin.com/in/leah-barnes-91305a2a3",
+    certs: [
+      { name: "Building with the Claude API", issued: "2026-05-17", id: "cbwr7q3yighj" },
+      { name: "Claude Code in Action", issued: "2026-05-17", id: "87a6e7oo4fbj" },
+      { name: "Introduction to Agent Skills", issued: "2026-05-17", id: "375jmiw9gf5s" },
+      { name: "Introduction to Model Context Protocol", issued: "2026-05-17", id: "h5rgbphj8y9n" },
+    ],
+  },
+  {
+    name: "Tracy Malone",
+    jobTitle: "Training Coordinator",
+    url: "https://www.linkedin.com/in/tracy-malone-606907258",
+    certs: [
+      { name: "Building with the Claude API" },
+      { name: "Claude Code in Action" },
+      { name: "Introduction to Agent Skills" },
+      { name: "Introduction to Model Context Protocol", issued: "2026-05-17", id: "8ibweuprumje" },
+    ],
+  },
 ];
 
 const ORGANIZATION = {
@@ -168,12 +222,33 @@ const ORGANIZATION = {
     ...(site.social || []),
     "https://www.google.com/maps/place/Ad+On+Group/@-28.1133038,153.4347102,17z",
   ],
-  employee: TEAM.map(([name, jobTitle, url]) => ({
+  employee: TEAM.map(({ name, jobTitle, url, certs }) => ({
     "@type": "Person",
     name,
     jobTitle,
     sameAs: [url],
     worksFor: { "@id": ORG_ID },
+    // Anthropic's own certificates, each independently verifiable at
+    // verify.skilljar.com. Course names and dates come from those verification
+    // pages, not from the PDFs — their filenames are opaque hashes and their
+    // text layer carries only the holder's name, with the course baked into
+    // the certificate image.
+    ...(certs && certs.length
+      ? {
+          hasCredential: certs.map((c) => ({
+            "@type": "EducationalOccupationalCredential",
+            name: c.name,
+            credentialCategory: "certificate",
+            recognizedBy: {
+              "@type": "Organization",
+              name: "Anthropic",
+              url: "https://www.anthropic.com/",
+            },
+            ...(c.issued ? { dateCreated: c.issued } : {}),
+            ...(c.id ? { url: `https://verify.skilljar.com/c/${c.id}` } : {}),
+          })),
+        }
+      : {}),
   })),
   contactPoint: {
     "@type": "ContactPoint",
