@@ -1263,11 +1263,16 @@
 
   document.querySelectorAll("div").forEach(function (parent) {
     var kids = Array.prototype.filter.call(parent.children, function (c) {
-      var s = getComputedStyle(c);
+      if (c.tagName !== "DIV") return false;
+      // Read the INLINE style, not the computed one. The mobile stylesheet
+      // reflows absolutely-positioned image wrappers to static so they stack
+      // instead of overlapping; that override made a computed-position check
+      // miss every deck on a phone, which is precisely where the panels were
+      // staying invisible. The author's intent survives in the attribute.
+      var inline = c.getAttribute("style") || "";
       return (
-        s.position === "absolute" &&
-        /opacity/.test(s.transitionProperty || "") &&
-        c.tagName === "DIV"
+        /position\s*:\s*absolute/.test(inline) &&
+        /transition[^;]*opacity/.test(inline)
       );
     });
     if (kids.length < 2) return;
@@ -1279,6 +1284,20 @@
     if (visible.length !== 1) return;
     // Ignore anything a pointer already controls (dropdowns, hover cards).
     if (parent.closest("nav, .nav-prog, .nav-menu")) return;
+
+    kids.forEach(function (c) {
+      // Mark them so an auditor can tell "cycling, currently faded out" apart
+      // from "hidden and never coming back" — the two look identical in a
+      // single-instant snapshot of the DOM.
+      c.setAttribute("data-aog-rotates", "");
+      // A deck only works stacked. The mobile rescue layer un-positions these
+      // with !important, which on a phone laid the panels out one under the
+      // other — three of them invisible, but still taking up the space. Put
+      // the geometry back for panels we are actually driving.
+      c.style.setProperty("position", "absolute", "important");
+      c.style.setProperty("inset", "0", "important");
+      c.style.setProperty("margin", "0", "important");
+    });
 
     groups.push({ kids: kids, at: kids.indexOf(visible[0]) });
   });

@@ -30,6 +30,14 @@ a { color: inherit; }
 .site-nav__submenu { list-style: none; margin: 0; padding: .4rem 0; position: absolute; top: 100%; left: 0; min-width: 220px; background: var(--aog-bg); border: 1px solid var(--aog-border); border-radius: 8px; box-shadow: 0 12px 30px rgba(0,0,0,.08); opacity: 0; visibility: hidden; transform: translateY(6px); transition: .15s ease; }
 .site-nav__item.has-children:hover > .site-nav__submenu,
 .site-nav__item.has-children:focus-within > .site-nav__submenu { opacity: 1; visibility: visible; transform: translateY(0); }
+/* The trailing dropdowns sit near the right of the header, and a 220px panel
+   anchored to the item's LEFT corner reached ~7px past the viewport. Because
+   the panel is absolutely positioned, it widened the scroll area even while
+   closed (visibility:hidden still takes part in layout) — so every page
+   carrying this header scrolled sideways a few pixels, on every desktop load.
+   Anchor the last two to their right edge so they open inwards. */
+.site-nav__item:nth-last-child(-n+2) > .site-nav__submenu { left: auto; right: 0; }
+
 .site-nav__submenu a { display: block; padding: .5rem 1rem; text-decoration: none; font-size: .9rem; }
 .site-nav__submenu a:hover { background: var(--aog-muted); }
 
@@ -45,7 +53,11 @@ a { color: inherit; }
 .site-footer { background: var(--aog-ink); color: #fff; margin-top: 4rem; }
 .site-footer__inner { max-width: var(--aog-maxw); margin: 0 auto; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; padding: 2.5rem 1rem; }
 .site-footer__brand { max-width: 360px; }
-.site-footer__brand img { filter: brightness(0) invert(1); opacity: .95; }
+/* No filter here. This used to be `brightness(0) invert(1)` to fake a white
+   logo, but that only works on a transparent source — against the opaque JPEG
+   it painted the entire 130x75 box solid white, so every page with this footer
+   showed a blank block. site.logoFooter is already white-on-transparent. */
+.site-footer__brand img { opacity: .95; height: auto; }
 .site-footer__brand p { color: #c9cdd6; font-size: .9rem; }
 .site-footer__nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
 .site-footer__nav a { color: #dfe3ea; text-decoration: none; font-size: .92rem; }

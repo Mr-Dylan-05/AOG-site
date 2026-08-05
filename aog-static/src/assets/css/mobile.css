@@ -41,14 +41,33 @@
   /* Wrapping is right for ordinary rows, but NOT for a marquee: those are
      `display:flex; width:max-content` with a scrolling animation, and wrapping
      one turns the partner-logo strip into a 2,000px vertical stack. */
-  [style*="display:flex"]:not([style*="flex-direction:column"]):not([style*="width:max-content"]) {
+  [style*="display:flex"]:not([style*="flex-direction:column"]):not([style*="width:max-content"]):not(summary) {
     flex-wrap: wrap !important;
   }
+
+  /* An accordion header is "question ... +". It is a flex row, so the blanket
+     rule above wrapped it — and because the + is `flex:none`, a long question
+     filled the first line and dropped the + onto a second one, left-aligned
+     under the text. That is 98 accordions across /faqs/ and
+     /ad-on-ai-division/. Keep the row intact and let the question wrap
+     internally instead. */
+  summary[style*="display:flex"] { flex-wrap: nowrap !important; }
+  summary[style*="display:flex"] > *:not([style*="flex:none"]) { min-width: 0 !important; }
   [style*="width:max-content"] {
     flex-wrap: nowrap !important;
     width: max-content !important;
   }
   [style*="width:max-content"] > * { flex: none !important; min-width: auto !important; }
+
+  /* The partner strip is spaced for a 1200px desktop row: a 110px gap between
+     logos that are themselves only ~150px wide. On a 390px phone that means
+     you almost never see more than one logo at a time, and the band reads as
+     an empty white strip that happens to drift — which is why it kept being
+     reported as "the logos don't work" even though it was scrolling, loading
+     and sized correctly the whole time. Tighten the gap so two logos share the
+     screen and it reads as a row. The other marquees on the site set their own
+     spacing (or none), so this only touches the one that needs it. */
+  [style*="animation:adonMarquee"][style*="gap:110px"] { gap: 34px !important; }
 
   /* --- 4. media never exceeds the screen -------------------------------- */
   /* height is deliberately NOT touched: many of these images are inside

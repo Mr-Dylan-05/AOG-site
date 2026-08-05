@@ -151,6 +151,10 @@ function pages() {
           if (!loaded) continue; // hidden AND unloaded: not user-visible, skip
 
           if (hidden || ancestorHidden) {
+            // A crossfade deck has all but one panel faded out at any instant.
+            // That is the design working, not a missing image, so skip panels
+            // the rotator has claimed.
+            if (img.closest("[data-aog-rotates]")) continue;
             out.push({
               type: "HIDDEN",
               src,
@@ -202,6 +206,46 @@ function pages() {
           }
         }
 
+        // Page-level sideways scroll. Worth reporting next to the images
+        // because the usual cause is one over-wide element, and an image is a
+        // prime suspect — but the symptom the user feels is the whole page
+        // sliding, so it belongs at page level, measured once.
+        const de = document.documentElement;
+        if (de.scrollWidth > de.clientWidth + 2) {
+          // Name the widest element that actually crosses the right edge,
+          // ignoring anything clipped by an ancestor (marquees are fine).
+          let worst = null;
+          for (const el of document.querySelectorAll("body *")) {
+            const r = el.getBoundingClientRect();
+            if (r.width < 1 || r.right <= de.clientWidth + 2) continue;
+            let clipped = false;
+            for (let a = el.parentElement; a && a !== de; a = a.parentElement) {
+              const o = getComputedStyle(a);
+              if (/hidden|clip|auto|scroll/.test(o.overflowX + o.overflow)) {
+                const pr = a.getBoundingClientRect();
+                if (pr.right <= de.clientWidth + 2) clipped = true;
+                break;
+              }
+            }
+            if (clipped) continue;
+            if (!worst || r.right > worst.right) {
+              worst = {
+                right: r.right,
+                tag: el.tagName.toLowerCase(),
+                cls: String(el.className || "").slice(0, 40),
+                img: el.tagName === "IMG" ? el.currentSrc || el.src : "",
+              };
+            }
+          }
+          out.push({
+            type: "_HSCROLL",
+            src: worst ? `${worst.tag}${worst.cls ? "." + worst.cls : ""}` : "(unidentified)",
+            alt: "",
+            detail: `page is ${de.scrollWidth}px wide in a ${de.clientWidth}px viewport` +
+              (worst ? ` — widest offender reaches ${Math.round(worst.right)}px` : ""),
+          });
+        }
+
         // CSS background images actually in use
         for (const el of document.querySelectorAll("*")) {
           const bg = getComputedStyle(el).backgroundImage;
@@ -222,6 +266,10 @@ function pages() {
         if (f.type === "_BG") {
           if (netFail.has(f.src))
             findings.push({ page: url, vp: vp.name, type: "BG-FAILED", ...f, detail: netFail.get(f.src) });
+          continue;
+        }
+        if (f.type === "_HSCROLL") {
+          findings.push({ page: url, vp: vp.name, ...f, type: "HSCROLL" });
           continue;
         }
         if (f.type === "FAILED" && netFail.has(f.src))
@@ -249,11 +297,12 @@ function pages() {
     process.exit(findings.length ? 1 : 0);
   }
 
-  const order = ["FAILED", "BG-FAILED", "COLLAPSED", "OVERFLOW", "SQUASHED", "HIDDEN"];
+  const order = ["FAILED", "BG-FAILED", "COLLAPSED", "HSCROLL", "OVERFLOW", "SQUASHED", "HIDDEN"];
   const blurb = {
     FAILED: "did not load — the user sees a broken image",
     "BG-FAILED": "CSS background image failed to load",
     COLLAPSED: "loaded but renders at zero size",
+    HSCROLL: "page scrolls sideways — the whole layout slides",
     OVERFLOW: "renders outside the viewport",
     SQUASHED: "stretched badly out of its natural aspect",
     HIDDEN: "loaded but hidden by CSS (often intentional)",

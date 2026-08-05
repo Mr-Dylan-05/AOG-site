@@ -4,6 +4,8 @@
   "url": "https://adongroup.com.au",
   "description": "Ad On Group — marketing, workforce, digital and on-hold services.",
   "logo": "/assets/media/2025/07/AdonGroup-logo-WF-Icon_on-white-300x172.jpg",
+  "//logoFooter": "White-on-transparent lockup for the dark footer. The main logo is a JPEG on solid white; the footer used to fake a white version with filter:brightness(0) invert(1), which needs transparency to work — on an opaque JPEG it turned the whole box into a solid white rectangle on every page.",
+  "logoFooter": "/assets/design/adon-logo-footer.png",
   "email": "info@adongroup.com.au",
   "thirdParty": {
     "//": "Toggle 3rd-party embeds on/off from one place. Wired up in the FINAL step.",
