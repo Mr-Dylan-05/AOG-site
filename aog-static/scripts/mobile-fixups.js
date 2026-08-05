@@ -65,7 +65,7 @@ function matchingEnd(html, start, tagName) {
   return -1;
 }
 
-let autoh = 0, stack = 0, pill = 0, filesTouched = 0;
+let autoh = 0, stack = 0, pill = 0, corner = 0, filesTouched = 0;
 
 for (const file of sources(path.join(ROOT, "public"))) {
   const before = fs.readFileSync(file, "utf8");
@@ -87,6 +87,26 @@ for (const file of sources(path.join(ROOT, "public"))) {
 
     return out;
   });
+
+  // --- small logo chips pinned to a card corner -------------------------
+  // A 62-128px chip sits absolutely in a card's top corner while the card's
+  // copy is centred and full-width. On a wide card the two never meet; at
+  // 390px the heading runs straight under the chip, which is what clipped
+  // "Ad On Workforce" on the division cards. Returning the chip to the flow
+  // puts it above the copy instead.
+  //
+  // Width-capped at 140px so this only ever catches chips — never a hero
+  // image that happens to be positioned.
+  html = html.replace(
+    /<(span|div)(\s+style="([^"]*position:\s*absolute[^"]*)")([^>]*)>(\s*<img\b)/gi,
+    (whole, tag, styleAttr, style, rest, img) => {
+      const w = style.match(/(?:^|;)\s*width:\s*(\d+)px/);
+      if (!w || Number(w[1]) > 140) return whole;
+      if (/aog-m-corner/.test(rest)) return whole;
+      corner++;
+      return `<${tag} class="aog-m-corner"${styleAttr}${rest}>${img}`;
+    }
+  );
 
   // --- absolutely-positioned wrappers that contain an image -------------
   // Done separately because it needs to look INSIDE the element.
@@ -119,4 +139,5 @@ console.log(`${DRY ? "[dry run] " : ""}mobile fixups`);
 console.log(`  fixed-height containers tagged : ${autoh}`);
 console.log(`  image wrappers tagged to stack : ${stack}`);
 console.log(`  oversized pill radii tagged    : ${pill}`);
+console.log(`  corner logo chips tagged       : ${corner}`);
 console.log(`  files changed                  : ${filesTouched}`);

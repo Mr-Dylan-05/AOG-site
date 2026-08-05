@@ -53,6 +53,22 @@
      internally instead. */
   summary[style*="display:flex"] { flex-wrap: nowrap !important; }
   summary[style*="display:flex"] > *:not([style*="flex:none"]) { min-width: 0 !important; }
+
+  /* Same failure, much more of it: an icon chip followed by a line of copy — a
+     tick and its bullet, a number and its label. The chip is `flex:none`, so
+     the blanket wrap rule puts the copy on its own line and leaves the chip
+     stranded above it. That was 142 rows across 23 pages, including the
+     homepage and every division page.
+
+     Scoped to rows with EXACTLY two children (:has(> :nth-child(2)) and not
+     :nth-child(3)), because a row of several flex:none chips is a different
+     thing and genuinely should wrap. */
+  [style*="display:flex"]:has(> [style*="flex:none"]):has(> :nth-child(2)):not(:has(> :nth-child(3))):not([style*="width:max-content"]):not([style*="flex-direction:column"]) {
+    flex-wrap: nowrap !important;
+  }
+  [style*="display:flex"]:has(> [style*="flex:none"]):has(> :nth-child(2)):not(:has(> :nth-child(3))) > *:not([style*="flex:none"]) {
+    min-width: 0 !important;
+  }
   [style*="width:max-content"] {
     flex-wrap: nowrap !important;
     width: max-content !important;
@@ -94,6 +110,19 @@
     margin: 0 auto 14px !important;
   }
   .aog-m-stack img { width: 100% !important; height: auto !important; }
+
+  /* A logo chip pinned to a card's top corner, with the card's copy centred
+     and full-width beneath it. There is room on a wide card; at 390px the
+     heading runs under the chip and gets clipped. Put the chip back in the
+     flow, centred above the copy. Applied by scripts/mobile-fixups.js, which
+     can read the chip's pixel width and so tell a chip from a hero image. */
+  .aog-m-corner {
+    position: static !important;
+    top: auto !important; right: auto !important;
+    left: auto !important; bottom: auto !important;
+    transform: none !important;
+    margin: 0 auto 16px !important;
+  }
 
   /* A 999px radius on a box that has wrapped to several rows becomes a giant
      oval whose curve clips its own contents — this is what broke the header. */

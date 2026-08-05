@@ -77,6 +77,15 @@ function pages() {
       viewport: { width: vp.width, height: vp.height },
       deviceScaleFactor: 1,
     });
+    // Never let the browser cache. A static file server sends Last-Modified,
+    // Chrome honours it, and a rebuilt stylesheet then goes unnoticed — you
+    // end up auditing the previous build and believing it. That has already
+    // produced one false "everything is broken" and one false "it's fixed".
+    await ctx.route("**/*", (route) =>
+      route.continue({
+        headers: { ...route.request().headers(), "Cache-Control": "no-cache", Pragma: "no-cache" },
+      })
+    );
 
     for (const url of urls) {
       const page = await ctx.newPage();
