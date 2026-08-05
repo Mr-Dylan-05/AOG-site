@@ -19,20 +19,24 @@
  * WordPress path means the /wp-content/uploads/* -> /assets/media/* redirect
  * still resolves old inbound image links to the same picture.
  *
+ * The office slots use the three location photographs that already ship as
+ * design assets, because the homepage offices row uses exactly those — the
+ * Gold Coast head office, Cape Town (the South African staff work remotely,
+ * so there is no office to photograph), and the Philippines building.
+ *
  * NOT filled, deliberately:
- *   office-au   no photograph of the Gold Coast head office exists anywhere in
- *               the library — putting a Philippines interior there would
- *               misrepresent it.
- *   office-sa   the South African staff are all work-from-home; there is no
- *               South African office to photograph.
  *   person-*    15 of the 24 team members have no identifiable headshot. Their
  *               photos are probably among the 36 unnamed People-attached files
  *               (1000000201.jpg and similar), but a filename cannot be matched
  *               to a face. Those stay as initials until someone identifies them.
+ *   purpose-hero  the design labels this "The founders", and no photograph of
+ *               the founders exists in the library. It carries the image the
+ *               live WordPress /purpose/ page used in that position instead.
  *
- * Idempotent — a slot that already holds an <img> is left alone.
+ * Idempotent — a slot already holding an <img> is left alone. Pass --replace
+ * to re-point slots whose mapping has since changed.
  *
- * Usage:  node scripts/fill-image-slots.js [--dry]
+ * Usage:  node scripts/fill-image-slots.js [--dry] [--replace]
  */
 
 const fs = require("fs");
@@ -41,6 +45,7 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
 const DRY = process.argv.includes("--dry");
+const REPLACE = process.argv.includes("--replace");
 
 // Where a photo lives once prepared. Paths mirror the WordPress library.
 const M = (p) => `/assets/media/${p}`;
@@ -92,9 +97,12 @@ const OUR_CULTURE = {
   "culture-g11":     CULTURE["conference-1"],
 };
 
-// office-au and office-sa are intentionally absent — see the header note.
+// The three location shots already ship as design assets — they are the same
+// photographs the homepage uses for its offices row, so the two pages agree.
 const OFFICES = {
-  "office-ph":  [M("2025/04/SMY_7534.jpg"), "Reception area of the Ad On Group office in the Philippines"],
+  "office-au":  [D("group-au-office.png"), "The Ad On Group head office building on the Gold Coast, Australia"],
+  "office-sa":  [D("group-capetown.webp"), "Cape Town, South Africa, where the South African team works remotely"],
+  "office-ph":  [D("group-ph-office.jpg"), "The Ad On Group office building in the Philippines"],
   "facility-0": [M("2025/08/SMY_7552-1.jpg"), "Staff at work on the office floor in the Philippines"],
   "facility-1": [M("2025/04/SMY_7369.jpg"), "Rows of workstations on the Philippines office floor"],
   "facility-2": [M("2025/04/SMY_7398.jpg"), "Technician working on the office server rack"],
@@ -106,7 +114,48 @@ const OFFICES = {
   "facility-8": [M("2025/04/DSC_2432.jpg"), "Staff kitchen and pantry area"],
 };
 
-const OUR_OFFICES = { "office-ph": OFFICES["office-ph"] };
+const OUR_OFFICES = {
+  "office-au": OFFICES["office-au"],
+  "office-sa": OFFICES["office-sa"],
+  "office-ph": OFFICES["office-ph"],
+};
+
+const ABOUT_US = {
+  "about-hero":    [M("2025/03/DSC_2294.jpg"), "Ad On Workforce staff at work on the office floor"],
+  "about-quality": [M("2025/04/SMY_7534.jpg"), "Reception area of the Ad On Group office in the Philippines"],
+  "about-success": [M("2025/04/SMY_0574-scaled.jpg"), "Team members celebrating together at a company event"],
+};
+
+const STAFF_BENEFITS = {
+  "staff-hero":  [M("2025/04/DSC_2711.jpg"), "Ad On Group staff together at a company event"],
+  "staff-gal-1": [M("2025/04/IMG_7182-1-scaled.jpg"), "Staff taking part in the annual team-building day"],
+  "staff-gal-2": [M("2025/04/IMG_9251-1-scaled.jpg"), "Team members at a staff wellness and sports session"],
+  "staff-gal-3": [M("2025/04/SMY_8394-scaled.jpg"), "Colleagues sharing a catered lunch in the office"],
+  "staff-gal-4": [M("2025/05/1000005485.jpg"), "The team together on the annual conference trip"],
+};
+
+// Both images are the ones the live WordPress /purpose/ page used itself.
+// The design labels the first slot "The founders", but no photograph of the
+// founders exists anywhere in the library — flagged rather than faked.
+const PURPOSE = {
+  "purpose-hero": [M("2025/07/shutterstock_2523853651-scaled.jpg"), "Colleagues in discussion around a meeting table"],
+  "purpose-1":    [M("2025/08/Group-638-3.png"), "An Ad On Group presentation to staff at a company conference"],
+};
+
+// Nine article cards, each linking to a post on adonworkforce.com.au. The
+// thumbnails are those posts' own featured images, downloaded from the CDN and
+// served locally — the static site must not depend on the old WordPress host.
+const BLOGS = {
+  "blog-0": [M("blog/1956688939.png"), "Overseas remote staff and the evolution of office administration"],
+  "blog-1": [M("blog/2135676263-Converted.png"), "The transformative power of remote staffing"],
+  "blog-2": [M("blog/1661363914.png"), "Streamlining staff training through outsourcing"],
+  "blog-3": [M("blog/2100479419.png"), "The hidden costs of hiring in Australia"],
+  "blog-4": [M("blog/1675928800_blog_05-e1733368613565.jpg"), "The role of technology in staff outsourcing"],
+  "blog-5": [M("blog/1837241830_blog_04-e1733368549399.jpg"), "Tips for managing an outsourced workforce"],
+  "blog-6": [M("blog/1856535433_blog_03-e1733374545133.jpg"), "The impact of COVID-19 on staff outsourcing"],
+  "blog-7": [M("blog/1820322704_blog_02-e1733368651861.jpg"), "Choosing the right outsourcing partner for your business"],
+  "blog-8": [M("blog/1802447638_blog_01-e1733368717528.jpg"), "The benefits of staff outsourcing services"],
+};
 
 const HISTORY = {
   "history-1": [M("2025/08/SMY_7715-2.jpg"), "Ad On Group staff at work on the office floor"],
@@ -136,14 +185,21 @@ const PAGES = {
   "history": HISTORY,
   "people": PEOPLE,
   "our-people": PEOPLE,
+  "about-us": ABOUT_US,
+  "our-staff-benefits": STAFF_BENEFITS,
+  "purpose": PURPOSE,
+  "blogs": BLOGS,
 };
 
 // The hero-ish slots load eagerly; galleries below the fold do not.
-const EAGER = new Set(["culture-hero", "people-hero", "office-ph", "history-1"]);
+const EAGER = new Set([
+  "culture-hero", "people-hero", "office-au", "history-1",
+  "about-hero", "staff-hero", "purpose-hero",
+]);
 
 const IMG_STYLE = "width:100%;height:100%;object-fit:cover;display:block";
 
-let filled = 0, already = 0, missing = 0, pagesTouched = 0;
+let filled = 0, already = 0, replaced = 0, missing = 0, pagesTouched = 0;
 const absent = new Set();
 
 for (const [slug, map] of Object.entries(PAGES)) {
@@ -162,8 +218,15 @@ for (const [slug, map] of Object.entries(PAGES)) {
       "g"
     );
     html = html.replace(re, (m, open, inner, close) => {
-      if (inner.includes("<img")) { already++; return m; }
-      filled++;
+      if (inner.includes("<img")) {
+        // Already filled. Leave it unless the mapping has since changed and
+        // --replace was passed, so a corrected choice can actually land.
+        const current = (inner.match(/<img[^>]*src="([^"]*)"/) || [])[1];
+        if (!REPLACE || current === src) { already++; return m; }
+        replaced++;
+      } else {
+        filled++;
+      }
       const load = EAGER.has(slot)
         ? 'loading="eager" fetchpriority="high"'
         : 'loading="lazy"';
@@ -180,6 +243,7 @@ for (const [slug, map] of Object.entries(PAGES)) {
 console.log(`${DRY ? "[dry run] " : ""}image slots`);
 console.log(`  slots filled          : ${filled}`);
 console.log(`  already had an image  : ${already}`);
+if (replaced) console.log(`  re-pointed to a new photo : ${replaced}`);
 console.log(`  pages changed         : ${pagesTouched}`);
 if (missing) {
   console.log(`  SKIPPED, file not prepared : ${missing}`);

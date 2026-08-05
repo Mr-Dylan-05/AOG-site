@@ -82,6 +82,18 @@ const WANT = [
   ["2026/03/Vincent-Ntentesa-Photo.jpg", "avatar"],
   ["2026/03/Nontobeko-Gumede.jpg", "avatar"],
   ["2026/03/Yolanda-Drysdale-Photo.jpeg", "avatar"],
+
+  // about-us, staff benefits and purpose
+  ["2025/03/DSC_2294.jpg", "hero"],
+  ["2025/04/DSC_2711.jpg", "hero"],
+  ["2025/04/SMY_0574-scaled.jpg", "gallery"],
+  ["2025/04/IMG_7182-1-scaled.jpg", "gallery"],
+  ["2025/04/IMG_9251-1-scaled.jpg", "gallery"],
+  ["2025/04/SMY_8394-scaled.jpg", "gallery"],
+  ["2025/05/1000005485.jpg", "gallery"],
+  // The two the live WordPress /purpose/ page itself used.
+  ["2025/07/shutterstock_2523853651-scaled.jpg", "hero"],
+  ["2025/08/Group-638-3.png", "gallery"],
 ];
 
 let copied = 0, skipped = 0, failed = 0, savedBytes = 0;
