@@ -1243,5 +1243,78 @@
   </footer>
 
 </div>
+
+<script>
+/* Panel crossfade rotator.
+ *
+ * The device mock-up on this page holds a stack of absolutely-positioned
+ * panels — Learning Library, Dashboard, ai-community, Company Profile — each
+ * carrying `transition:opacity` and all but the first set to `opacity:0`. The
+ * script that cycled them did not survive the flatten, so three of the four
+ * panels (and the two images inside them) were never visible to anyone.
+ *
+ * This finds any such group by shape rather than by hard-coded selector, so it
+ * keeps working if the mock-up is re-exported, and rotates it. Groups where a
+ * panel is revealed some other way (a :hover rule, e.g. the nav menu) are left
+ * alone: we only claim a group when exactly one child starts visible.
+ */
+(function () {
+  var groups = [];
+
+  document.querySelectorAll("div").forEach(function (parent) {
+    var kids = Array.prototype.filter.call(parent.children, function (c) {
+      var s = getComputedStyle(c);
+      return (
+        s.position === "absolute" &&
+        /opacity/.test(s.transitionProperty || "") &&
+        c.tagName === "DIV"
+      );
+    });
+    if (kids.length < 2) return;
+
+    var visible = kids.filter(function (c) {
+      return parseFloat(getComputedStyle(c).opacity) === 1;
+    });
+    // Exactly one showing = a crossfade deck with a resting state.
+    if (visible.length !== 1) return;
+    // Ignore anything a pointer already controls (dropdowns, hover cards).
+    if (parent.closest("nav, .nav-prog, .nav-menu")) return;
+
+    groups.push({ kids: kids, at: kids.indexOf(visible[0]) });
+  });
+
+  if (!groups.length) return;
+
+  // Respect the OS setting: show the first panel and stop.
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reduce && reduce.matches) return;
+
+  var timer = null;
+
+  function step() {
+    groups.forEach(function (g) {
+      g.kids[g.at].style.opacity = "0";
+      g.kids[g.at].style.transform = "translateY(20px)";
+      g.at = (g.at + 1) % g.kids.length;
+      g.kids[g.at].style.opacity = "1";
+      g.kids[g.at].style.transform = "none";
+    });
+  }
+
+  function start() {
+    if (!timer) timer = setInterval(step, 4200);
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  // Don't animate in a background tab.
+  document.addEventListener("visibilitychange", function () {
+    document.hidden ? stop() : start();
+  });
+  start();
+})();
+</script>
+
 </body>
 </html>
