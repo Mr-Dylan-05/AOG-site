@@ -195,8 +195,38 @@ const PEOPLE = {
   "person-yolanda":   [M("2026/03/Yolanda-Drysdale-Photo.jpeg"), "Yolanda Drysdale, Recruitment Manager at Ad On Group"],
 };
 
+// --- division pages -------------------------------------------------------
+// Each page pairs a hero (5:4, beside the pitch) with a "solution" image that
+// sits between the customer's stated problems and the answer to them.
+const AD_ON_DIGITAL = {
+  // Ad On Group's own Google Ads performance report — the literal thing the
+  // slot asks for. Portrait, so contained rather than cropped.
+  "digital-hero":     [M("2022/02/aog-sample-report.jpg"), "An Ad On Group Google Ads performance report showing spend, conversions and engagement", "contain"],
+  "digital-solution": [M("2025/02/Group-388.png"), "The Ad On Digital team working together at their desks"],
+};
+
+const AD_ON_HOLD = {
+  // hold-hero is left empty: there is no photograph of a recording studio,
+  // a microphone or voice production anywhere in the library.
+  "hold-solution": [M("2025/08/DSC_2286-1.png"), "Ad On Group staff handling calls on the office floor"],
+};
+
+const AD_ON_WORKFORCE_DIVISION = {
+  "wf-hero":     [M("2025/03/DSC_2294.jpg"), "Offshore staff at work on the office floor in the Philippines"],
+  "wf-solution": [M("2025/04/DSC_0034-scaled-circle-6a5b4b1601702299f9b8e502ff39e28e-w2gnu9a57dxj.jpg"), "An Ad On Group team meeting in the boardroom, with colleagues joining by video call"],
+};
+
+const OUR_COMPANY = {
+  "company-hero":    [M("2025/04/DSC_2483.jpg"), "Members of the Ad On Workforce team together at a company event"],
+  "company-support": [M("2025/04/SMY_7564.jpg"), "Modern office space with floor-to-ceiling windows"],
+};
+
 const PAGES = {
   "culture": CULTURE,
+  "ad-on-digital": AD_ON_DIGITAL,
+  "ad-on-hold": AD_ON_HOLD,
+  "ad-on-workforce-division": AD_ON_WORKFORCE_DIVISION,
+  "our-company": OUR_COMPANY,
   "our-culture": OUR_CULTURE,
   "offices": OFFICES,
   "our-offices": OUR_OFFICES,
@@ -215,7 +245,13 @@ const EAGER = new Set([
   "about-hero", "staff-hero", "purpose-hero",
 ]);
 
-const IMG_STYLE = "width:100%;height:100%;object-fit:cover;display:block";
+// Photographs fill the frame. A document — the sample Google Ads report — is
+// portrait in a landscape frame, so cover would crop most of it away; it is
+// contained instead and sits on the slot's own tint like a document preview.
+const FIT = {
+  cover: "width:100%;height:100%;object-fit:cover;display:block",
+  contain: "width:100%;height:100%;object-fit:contain;display:block;padding:22px",
+};
 
 let filled = 0, already = 0, replaced = 0, missing = 0, pagesTouched = 0;
 const absent = new Set();
@@ -226,7 +262,7 @@ for (const [slug, map] of Object.entries(PAGES)) {
   const before = fs.readFileSync(file, "utf8");
   let html = before;
 
-  for (const [slot, [src, alt]] of Object.entries(map)) {
+  for (const [slot, [src, alt, fit]] of Object.entries(map)) {
     // Check the file was actually prepared before pointing markup at it.
     const onDisk = path.join(PUBLIC, src.replace(/^\//, ""));
     if (!fs.existsSync(onDisk)) { absent.add(src); missing++; continue; }
@@ -248,7 +284,7 @@ for (const [slug, map] of Object.entries(PAGES)) {
       const load = EAGER.has(slot)
         ? 'loading="eager" fetchpriority="high"'
         : 'loading="lazy"';
-      return `${open}<img src="${src}" alt="${alt}" style="${IMG_STYLE}" ${load} decoding="async">${close}`;
+      return `${open}<img src="${src}" alt="${alt}" style="${FIT[fit || 'cover']}" ${load} decoding="async">${close}`;
     });
   }
 

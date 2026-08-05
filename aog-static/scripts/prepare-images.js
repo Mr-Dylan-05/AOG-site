@@ -101,6 +101,12 @@ const WANT = [
   ["2025/09/received_555246257364131.webp", "avatar"],
   ["2026/03/Kerry-Morris-Photo.jpg", "avatar"],
 
+  // division pages
+  ["2022/02/aog-sample-report.jpg", "hero"],
+  ["2025/02/Group-388.png", "gallery"],
+  ["2025/08/DSC_2286-1.png", "gallery"],
+  ["2025/04/DSC_0034-scaled-circle-6a5b4b1601702299f9b8e502ff39e28e-w2gnu9a57dxj.jpg", "hero"],
+
   // about-us, staff benefits and purpose
   ["2025/03/DSC_2294.jpg", "hero"],
   ["2025/04/DSC_2711.jpg", "hero"],
