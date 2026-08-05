@@ -186,16 +186,6 @@
       "permanent": true
     },
     {
-      "source": "/faqs/aow-faqs/",
-      "destination": "/faqs/",
-      "permanent": true
-    },
-    {
-      "source": "/faqs/aow-faqs",
-      "destination": "/faqs/",
-      "permanent": true
-    },
-    {
       "source": "/package/customer-service/",
       "destination": "/customer-service/",
       "permanent": true
