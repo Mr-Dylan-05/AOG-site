@@ -23,7 +23,8 @@
   <!-- Open Graph / social -->
   {# og:image and twitter:image must be absolute — relative paths are ignored by
      every scraper, so `ogImage` is prefixed with site.url when it starts with /. #}
-  {% set ogImageAbs = (site.url ~ ogImage) if (ogImage and ogImage[0] == "/") else ogImage %}
+  {% set ogImageSrc = ogImage or site.defaultOgImage %}
+  {% set ogImageAbs = (site.url ~ ogImageSrc) if (ogImageSrc and ogImageSrc[0] == "/") else ogImageSrc %}
   {% set pageTitle = title if title else site.name %}
   <meta property="og:site_name" content="{{ site.name }}">
   <meta property="og:type" content="{{ ogType or 'website' }}">
