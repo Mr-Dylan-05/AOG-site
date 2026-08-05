@@ -1,3 +1,12 @@
+# ############################################################################
+# NOT ACTIVE ON THE CURRENT HOST.
+#
+# The site is served by Vercel, which reads vercel.json and ignores .htaccess.
+# This file only matters if the site moves to Apache/cPanel hosting.
+#
+# ==> Edit aog-static/vercel.json.
+# ############################################################################
+
 # Apache / cPanel config — only used if the site is uploaded to traditional
 # hosting rather than a git-connected platform. Harmless (ignored) elsewhere.
 #

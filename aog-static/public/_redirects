@@ -1,3 +1,19 @@
+# ############################################################################
+# NOT ACTIVE ON THE CURRENT HOST.
+#
+# The site is served by Vercel, which reads redirects from vercel.json ONLY.
+# It ignores this file entirely (this is Netlify/Cloudflare Pages format), and
+# ignores .htaccess (Apache format). Every rule below was silently dead until
+# it was ported into vercel.json.
+#
+# ==> Edit aog-static/vercel.json. Mirror the change here only to keep this
+#     file useful if the site ever moves to Netlify or Cloudflare Pages.
+#
+# One rule could NOT be ported: /products/* returned 410 Gone here. Vercel's
+# redirects only emit 3xx, so those spam URLs now return a plain 404. Google
+# still drops them, just more slowly than with a 410.
+# ############################################################################
+
 # Host-level redirects (Netlify / Cloudflare Pages format).
 # The static site keeps the same URLs as the old WordPress site, so most
 # links carry over 1:1 with no redirect needed. Add old->new mappings here

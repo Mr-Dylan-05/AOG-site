@@ -9,13 +9,56 @@
     { "source": "/wp-content/plugins/:path*", "destination": "/assets/media/_plugins/:path*", "permanent": true },
     { "source": "/wp-admin/:path*", "destination": "/", "permanent": true },
     { "source": "/wp-login.php", "destination": "/", "permanent": true },
-    { "source": "/xmlrpc.php", "destination": "/", "permanent": true }
+    { "source": "/xmlrpc.php", "destination": "/", "permanent": true },
+
+    { "source": "/category/:path*", "destination": "/blog/", "permanent": true },
+    { "source": "/tag/:path*", "destination": "/blog/", "permanent": true },
+    { "source": "/author/:path*", "destination": "/blog/", "permanent": true },
+    { "source": "/blog/page/:path*", "destination": "/blog/", "permanent": true },
+    { "source": "/:year(20\\d{2})", "destination": "/blog/", "permanent": true },
+    { "source": "/:year(20\\d{2})/:path*", "destination": "/blog/", "permanent": true },
+
+    { "source": "/edm", "destination": "/ad-on-digital/", "permanent": true },
+    { "source": "/google-ads", "destination": "/google-ads-management/", "permanent": true },
+    { "source": "/ad-on-workforce/about", "destination": "/ad-on-workforce/", "permanent": true },
+    { "source": "/ad-on-workforce/services", "destination": "/ad-on-workforce/", "permanent": true },
+    { "source": "/faqs/aod-faqs", "destination": "/faqs/", "permanent": true },
+    { "source": "/faqs/aoh-faqs", "destination": "/faqs/", "permanent": true },
+    { "source": "/faqs/aow-faqs", "destination": "/faqs/", "permanent": true },
+    { "source": "/package/customer-service", "destination": "/customer-service/", "permanent": true },
+    { "source": "/package/general-admin-staff", "destination": "/general-admin-staff/", "permanent": true },
+    { "source": "/package/finance-admin-staff", "destination": "/finance-admin-staff/", "permanent": true },
+    { "source": "/package/data-entry-collation-position", "destination": "/data-entry-collation/", "permanent": true },
+    { "source": "/package/bespoke-repeatable-task-role", "destination": "/bespoke-repeatable-task-role/", "permanent": true },
+    { "source": "/package/marketing-assistant", "destination": "/marketing-assistant/", "permanent": true },
+    { "source": "/package/executive-personal-assistant", "destination": "/executive-personal-assistant/", "permanent": true },
+    { "source": "/bpo-ai-program", "destination": "/bpo-program/", "permanent": true },
+    { "source": "/ad-on-group", "destination": "/", "permanent": true },
+
+    { "source": "/review-me", "destination": "/ad-on-digital/", "permanent": true },
+    { "source": "/online-accelerator", "destination": "/ad-on-digital/", "permanent": true },
+    { "source": "/home-2025-copy", "destination": "/", "permanent": true },
+    { "source": "/website-examples", "destination": "/ad-on-digital/", "permanent": true }
   ],
   "headers": [
     {
       "source": "/assets/media/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/design/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
   ]
