@@ -211,6 +211,16 @@ const AD_ON_HOLD = {
   "hold-solution": [M("2025/08/DSC_2286-1.png"), "Ad On Group staff handling calls on the office floor"],
 };
 
+// Sourced from the live Ad On SA site (adonsa.co.za), which leads with the same
+// Cape Town waterfront the group already ships as a design asset. The team works
+// remotely, so there is no office to photograph — the "solution" slot carries a
+// real Ad On SA professional (the one team headshot that is landscape and so
+// fills a 4:3 frame without cropping the face).
+const AD_ON_SA = {
+  "sa-hero":     [D("group-capetown.webp"), "Aerial view of Cape Town, South Africa, where the Ad On SA team is based"],
+  "sa-solution": [M("2026/03/Vincent-Ntentesa-Photo.jpg"), "Vincent Ntentesa, a Talent Specialist on the Ad On SA remote team"],
+};
+
 const AD_ON_WORKFORCE_DIVISION = {
   "wf-hero":     [M("2025/03/DSC_2294.jpg"), "Offshore staff at work on the office floor in the Philippines"],
   "wf-solution": [M("2025/04/DSC_0034-scaled-circle-6a5b4b1601702299f9b8e502ff39e28e-w2gnu9a57dxj.jpg"), "An Ad On Group team meeting in the boardroom, with colleagues joining by video call"],
@@ -224,6 +234,7 @@ const OUR_COMPANY = {
 const PAGES = {
   "culture": CULTURE,
   "ad-on-digital": AD_ON_DIGITAL,
+  "ad-on-sa": AD_ON_SA,
   "ad-on-hold": AD_ON_HOLD,
   "ad-on-workforce-division": AD_ON_WORKFORCE_DIVISION,
   "our-company": OUR_COMPANY,
@@ -242,7 +253,7 @@ const PAGES = {
 // The hero-ish slots load eagerly; galleries below the fold do not.
 const EAGER = new Set([
   "culture-hero", "people-hero", "office-au", "history-1",
-  "about-hero", "staff-hero", "purpose-hero",
+  "about-hero", "staff-hero", "purpose-hero", "sa-hero",
 ]);
 
 // Photographs fill the frame. A document — the sample Google Ads report — is
