@@ -16,7 +16,16 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 img { max-width: 100%; height: auto; }
 a { color: inherit; }
 
-/* ---------- Header ---------- */
+/* ---------- Header ----------
+   The header markup now comes from the design (see partials/header.njk), so it
+   carries its own inline styling and needs only the dropdown behaviour here.
+   The .site-header/.site-nav rules below are retained for any page still using
+   the old bar, but nothing generates it any more. */
+.nav-prog { position: relative; }
+.nav-menu { opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity .18s ease, transform .18s ease; }
+.nav-prog:hover .nav-menu, .nav-menu:hover { opacity: 1; pointer-events: auto; transform: none; }
+
+/* ---------- Header (legacy) ---------- */
 .site-header { position: sticky; top: 0; z-index: 1000; background: var(--aog-bg); border-bottom: 1px solid var(--aog-border); }
 .site-header__inner { max-width: var(--aog-maxw); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .5rem 1rem; }
 .site-header__logo { display: block; width: auto; height: 48px; }

@@ -37,17 +37,54 @@
   .aoa-faq>div{ padding:0 0 18px; font-size:15px; line-height:1.62; color:#5A6473; }
   @media (max-width: 860px){ .pp-price,.pp-4,.pp-3,.pp-faq{ grid-template-columns:1fr; } .pp-guar{ grid-template-columns:1fr 1fr; } .pp-stats{ grid-template-columns:1fr 1fr; gap:20px 0; } }
 </style>
+<style>
+  .nav-prog { position: relative; }
+  .nav-menu { opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity .18s ease, transform .18s ease; }
+  .nav-prog:hover .nav-menu, .nav-menu:hover { opacity: 1; pointer-events: auto; transform: none; }
+</style>
 </head>
 <body>
 
   <!-- ===== NAV ===== -->
-  <nav style="position:sticky;top:16px;z-index:50;padding:0 20px;margin-top:16px">
+  <nav data-aog-header style="position:sticky;top:16px;z-index:50;padding:0 20px">
     <div class="aog-m-pill" style="max-width:1120px;margin:0 auto;background:rgba(252,251,250,0.70);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.06);border-radius:999px;box-shadow:0 6px 26px -12px rgba(11,18,32,0.14);padding:11px 14px 11px 22px;display:flex;align-items:center;justify-content:space-between">
-      <a href="/ad-on-ai-division/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B1220">
-        <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px"><img src="/assets/design/adon-logo.png" alt="Ad On AI" style="width:34px;height:34px;object-fit:contain;display:block" width="320" height="320" loading="eager" fetchpriority="high" decoding="async"></span>
-        <span style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:800;font-size:19px;letter-spacing:-0.02em;line-height:1">Ad On AI</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:#7C8696"><img src="/assets/design/logo-claude.svg" alt="Claude" style="width:12px;height:12px;object-fit:contain;display:block" loading="lazy" decoding="async">Certified Claude Experts</span></span>
+      <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B1220">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px"><img src="/assets/design/adon-logo.png" alt="Ad On Group" style="width:34px;height:34px;object-fit:contain;display:block" width="320" height="320" loading="eager" fetchpriority="high" decoding="async"></span>
+        <span style="font-weight:800;font-size:19px;letter-spacing:-0.02em;line-height:1">Ad On Group</span>
       </a>
-      <a href="mailto:info@adongroup.com.au?subject=AI%20Enablement%20Program%20Enquiry" style="text-decoration:none;font-size:15px;font-weight:600;color:#fff;background:#0B1220;padding:11px 20px;border-radius:14px">Book a discovery call</a>
+      <div style="display:flex;align-items:center;gap:22px">
+        <span style="width:1px;height:22px;background:rgba(11,18,32,0.12)"></span>
+        <div style="display:flex;align-items:center;gap:24px;font-size:15px;font-weight:500;color:#3A434F">
+          <div class="nav-prog" style="position:relative">
+            <a href="/about/" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:5px">About<svg viewBox="0 0 12 12" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6px;stroke-linecap:round;stroke-linejoin:round"><path d="M2.5 4.5L6 8L9.5 4.5"></path></svg></a>
+            <div class="nav-menu" style="position:absolute;top:100%;left:-16px;padding-top:12px;z-index:60">
+              <div style="width:220px;background:rgba(252,251,250,0.94);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.08);border-radius:16px;box-shadow:0 18px 44px -18px rgba(11,18,32,0.28);padding:8px">
+                <a href="/history/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h0">History</a>
+                <a href="/purpose/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h1">Purpose</a>
+                <a href="/people/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h2">People</a>
+                <a href="/culture/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h3">Culture</a>
+                <a href="/offices/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h4">Offices</a>
+              </div>
+            </div>
+          </div>
+                    <div class="nav-prog" style="position:relative">
+            <a href="/#divisions" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:5px">Divisions<svg viewBox="0 0 12 12" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6px;stroke-linecap:round;stroke-linejoin:round"><path d="M2.5 4.5L6 8L9.5 4.5"></path></svg></a>
+            <div class="nav-menu" style="position:absolute;top:100%;left:-16px;padding-top:12px;z-index:60">
+              <div style="width:220px;background:rgba(252,251,250,0.94);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.08);border-radius:16px;box-shadow:0 18px 44px -18px rgba(11,18,32,0.28);padding:8px">
+                <a href="/ad-on-ai-division/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h5">Ad On AI</a>
+                <a href="/ad-on-workforce-division/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h6">Ad On Workforce</a>
+                <a href="/ad-on-hold/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h7">Ad On Hold</a>
+                <a href="/ad-on-digital/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h8">Ad On Digital</a>
+                <a href="/ad-on-sa/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h9">Ad On SA</a>
+              </div>
+            </div>
+        </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-left:20px">
+          <a href="tel:+61755861400" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1BABE5;background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.35);padding:10px 18px;border-radius:14px;transition:background .2s ease, transform .2s ease" data-dc="ha"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"></path></svg>(07) 5586 1400</a>
+          <a href="/contact-us/" style="text-decoration:none;font-size:15px;font-weight:600;color:#fff;background:#0B1220;padding:11px 20px;border-radius:14px;transition:transform .22s ease, box-shadow .22s ease" data-dc="hb">Contact</a>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -202,7 +239,7 @@
       <div>
         <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B1220;margin-bottom:14px">
           <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px"><img src="/assets/design/adon-logo.png" alt="Ad On Group" style="width:32px;height:32px;object-fit:contain;display:block" width="320" height="320" loading="lazy" decoding="async"></span>
-          <span style="font-weight:800;font-size:18px;letter-spacing:-0.02em">Ad&#8202;On&#8202;Group</span>
+          <span style="font-weight:800;font-size:18px;letter-spacing:-0.02em">Ad On Group</span>
         </a>
         <p style="font-size:14px;line-height:1.55;color:#5A6473;max-width:280px;margin:0">Australian-owned since 2008 &mdash; offshore staffing, AI training, digital marketing and on-hold messaging.</p>
       </div>

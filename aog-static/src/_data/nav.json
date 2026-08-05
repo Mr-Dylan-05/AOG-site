@@ -116,7 +116,7 @@
     },
     {
       "label": "Contact",
-      "url": "/contact/"
+      "url": "/contact-us/"
     }
   ],
   "footer": [
@@ -126,11 +126,11 @@
     },
     {
       "label": "Contact",
-      "url": "/contact/"
+      "url": "/contact-us/"
     },
     {
       "label": "Careers",
-      "url": "/contact-us/"
+      "url": "/careers/"
     },
     {
       "label": "Privacy Policy",

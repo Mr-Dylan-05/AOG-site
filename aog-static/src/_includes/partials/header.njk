@@ -1,45 +1,55 @@
 {#
-  Shared site header + navigation. Edit this ONCE and every page updates.
-  Menu data lives in src/_data/nav.json.
-  Styling is intentionally minimal — your colleague's design can restyle it,
-  or replace this partial's markup while keeping nav.json as the source of links.
+  Shared site header.
+
+  This is the Ad On Group navigation bar, and it is deliberately the SAME
+  markup that the flattened design pages carry — scripts/unify-header.js copies
+  it from public/ad-on-digital/index.html, and this partial is generated from
+  that same source. The site was assembled from three design exports, each of
+  which shipped its own header, so clicking into a division used to swap the
+  logo and the menu for that division's. There is one header now.
+
+  Links are hard-coded rather than read from nav.json because this is the
+  design's own bar, with its own dropdown structure and styling. nav.json still
+  drives the footer.
 #}
-<header class="site-header" role="banner">
-  <div class="site-header__inner">
-    <a class="site-header__brand" href="/" aria-label="{{ site.name }} home">
-      <img src="{{ site.logo }}" alt="{{ site.name }}" class="site-header__logo" width="150" height="86" loading="eager" fetchpriority="high" decoding="async">
-    </a>
-
-    <button class="site-header__toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-
-    <nav class="site-nav" id="primary-nav" aria-label="Primary">
-      <ul class="site-nav__list">
-        {% for item in nav.primary %}
-        <li class="site-nav__item{% if item.children %} has-children{% endif %}">
-          <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.label }}</a>
-          {% if item.children %}
-          <ul class="site-nav__submenu">
-            {% for child in item.children %}
-            <li><a href="{{ child.url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.label }}</a></li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </li>
-        {% endfor %}
-      </ul>
-    </nav>
-  </div>
-</header>
-<script>
-/* Minimal, dependency-free mobile menu toggle */
-(function () {
-  var t = document.querySelector('.site-header__toggle');
-  var n = document.getElementById('primary-nav');
-  if (t && n) t.addEventListener('click', function () {
-    var open = n.classList.toggle('is-open');
-    t.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-})();
-</script>
+<nav data-aog-header style="position:sticky;top:16px;z-index:50;padding:0 20px">
+    <div class="aog-m-pill" style="max-width:1120px;margin:0 auto;background:rgba(252,251,250,0.70);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.06);border-radius:999px;box-shadow:0 6px 26px -12px rgba(11,18,32,0.14);padding:11px 14px 11px 22px;display:flex;align-items:center;justify-content:space-between">
+      <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B1220">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px"><img src="/assets/design/adon-logo.png" alt="Ad On Group" style="width:34px;height:34px;object-fit:contain;display:block" width="320" height="320" loading="eager" fetchpriority="high" decoding="async"></span>
+        <span style="font-weight:800;font-size:19px;letter-spacing:-0.02em;line-height:1">Ad On Group</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:22px">
+        <span style="width:1px;height:22px;background:rgba(11,18,32,0.12)"></span>
+        <div style="display:flex;align-items:center;gap:24px;font-size:15px;font-weight:500;color:#3A434F">
+          <div class="nav-prog" style="position:relative">
+            <a href="/about/" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:5px">About<svg viewBox="0 0 12 12" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6px;stroke-linecap:round;stroke-linejoin:round"><path d="M2.5 4.5L6 8L9.5 4.5"></path></svg></a>
+            <div class="nav-menu" style="position:absolute;top:100%;left:-16px;padding-top:12px;z-index:60">
+              <div style="width:220px;background:rgba(252,251,250,0.94);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.08);border-radius:16px;box-shadow:0 18px 44px -18px rgba(11,18,32,0.28);padding:8px">
+                <a href="/history/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h0">History</a>
+                <a href="/purpose/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h1">Purpose</a>
+                <a href="/people/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h2">People</a>
+                <a href="/culture/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h3">Culture</a>
+                <a href="/offices/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h4">Offices</a>
+              </div>
+            </div>
+          </div>
+                    <div class="nav-prog" style="position:relative">
+            <a href="/#divisions" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:5px">Divisions<svg viewBox="0 0 12 12" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6px;stroke-linecap:round;stroke-linejoin:round"><path d="M2.5 4.5L6 8L9.5 4.5"></path></svg></a>
+            <div class="nav-menu" style="position:absolute;top:100%;left:-16px;padding-top:12px;z-index:60">
+              <div style="width:220px;background:rgba(252,251,250,0.94);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.08);border-radius:16px;box-shadow:0 18px 44px -18px rgba(11,18,32,0.28);padding:8px">
+                <a href="/ad-on-ai-division/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h5">Ad On AI</a>
+                <a href="/ad-on-workforce-division/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h6">Ad On Workforce</a>
+                <a href="/ad-on-hold/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h7">Ad On Hold</a>
+                <a href="/ad-on-digital/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h8">Ad On Digital</a>
+                <a href="/ad-on-sa/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h9">Ad On SA</a>
+              </div>
+            </div>
+        </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-left:20px">
+          <a href="tel:+61755861400" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1BABE5;background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.35);padding:10px 18px;border-radius:14px;transition:background .2s ease, transform .2s ease" data-dc="ha"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"></path></svg>(07) 5586 1400</a>
+          <a href="/contact-us/" style="text-decoration:none;font-size:15px;font-weight:600;color:#fff;background:#0B1220;padding:11px 20px;border-radius:14px;transition:transform .22s ease, box-shadow .22s ease" data-dc="hb">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
