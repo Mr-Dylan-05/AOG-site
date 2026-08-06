@@ -17,6 +17,30 @@
    look better after a designer revisits them.
    ===================================================================== */
 
+/* ---------------------------------------------------------------------
+   Typography, at every width — NOT inside the media query below.
+
+   This file is the one stylesheet that reaches all 123 pages (site.css only
+   covers the 86 template pages), so the two rules that must apply on desktop
+   as well as mobile live here rather than in a fourth stylesheet.
+
+   The design review kept flagging the same thing: a heading's last word and
+   its full stop dropping onto a line of their own — "Business shouldn't be
+   this / hard.", "...under real staffing / pressure.", "...watched once and /
+   forgotten." Seven instances were listed and there are more; it is a
+   line-breaking problem, not a copy problem, so it is fixed once here instead
+   of by rewording anything.
+
+     balance  distributes a heading evenly across its lines, so no line is left
+              holding a single short word.
+     pretty   leaves body copy alone except that it refuses to end a paragraph
+              with a lone word on the last line.
+
+   Both degrade to normal wrapping in browsers that don't support them.
+   --------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+p, li, figcaption, blockquote { text-wrap: pretty; }
+
 @media (max-width: 767px) {
 
   /* --- 1. nothing may force the page sideways -------------------------- */
