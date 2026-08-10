@@ -113,6 +113,59 @@ module.exports = function (eleventyConfig) {
     console.log(`[form] contact form wired to ${endpoint}`);
   });
 
+  // Every other form on the site.
+  //
+  // The hook above only ever knew about /contact-us/. Forms elsewhere carry
+  // data-form="<key>" and take their endpoint from thirdParty.forms[key], so a
+  // new form needs one line of JSON rather than a code change. A key with no
+  // endpoint is left inert on purpose — the same rule the contact form follows,
+  // because a form that silently posts nowhere looks like it worked.
+  eleventyConfig.on("eleventy.after", () => {
+    const site = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "src", "_data", "site.json"), "utf8")
+    );
+    const forms = (site.thirdParty || {}).forms || {};
+    const out = path.join(__dirname, "_site");
+
+    const walk = (dir, hits = []) => {
+      if (!fs.existsSync(dir)) return hits;
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, e.name);
+        if (e.isDirectory()) walk(p, hits);
+        else if (e.name === "index.html") hits.push(p);
+      }
+      return hits;
+    };
+
+    const wired = [];
+    const inert = [];
+
+    for (const file of walk(out)) {
+      let html = fs.readFileSync(file, "utf8");
+      let touched = false;
+
+      html = html.replace(
+        /<form([^>]*?\bdata-form="([a-z-]+)"[^>]*?)onsubmit="return false"/g,
+        (whole, attrs, key) => {
+          const endpoint = forms[key];
+          const where = "/" + path.relative(out, path.dirname(file)) + "/";
+          if (!endpoint) {
+            inert.push(`${key} (${where})`);
+            return whole;
+          }
+          touched = true;
+          wired.push(`${key} -> ${endpoint}`);
+          return `<form${attrs}action="${endpoint}" method="POST"`;
+        }
+      );
+
+      if (touched) fs.writeFileSync(file, html);
+    }
+
+    for (const w of wired) console.log(`[form] ${w}`);
+    for (const i of inert) console.log(`[form] no endpoint for ${i} — left inert`);
+  });
+
   return {
     dir: {
       input: "src",

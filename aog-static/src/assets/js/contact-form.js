@@ -31,6 +31,16 @@
     var form = document.querySelector("form[data-contact-form]");
     if (!form) return;
 
+    // Hand validation over to this script.
+    //
+    // Without it the browser's own validation runs first on a form with
+    // required fields, shows its native bubble, and cancels the submit event
+    // before any listener here sees it — so the inline messages below never
+    // appeared. Set at runtime rather than as an attribute in the markup: with
+    // JavaScript off, the native validation is still the only thing standing
+    // between an empty form and the endpoint, and it should stay.
+    form.setAttribute("novalidate", "");
+
     var status = form.querySelector("[data-form-status]");
     var button = form.querySelector('button[type="submit"]');
     var buttonText = button ? button.innerHTML : "";
@@ -49,10 +59,48 @@
       field.setAttribute("aria-invalid", message ? "true" : "false");
     }
 
+    /**
+     * The message for a field, in order of preference: the hand-written one
+     * from MESSAGES, then one built from the field's own label.
+     *
+     * The hand-written map covers the contact form. The partner and referral
+     * forms carry a different set of names, and writing a bespoke line for
+     * every one of them would mean this file had to be edited each time a form
+     * gained a field. Deriving from the label keeps it general and keeps the
+     * wording in the markup, next to the field it belongs to.
+     */
+    function messageFor(field, name) {
+      if (MESSAGES[name]) return MESSAGES[name];
+      if (field.type === "checkbox") return "Please tick this to continue.";
+      if (field.type === "email") return "Please enter a valid email address.";
+      var wrap = field.closest("label, fieldset");
+      var label = wrap && wrap.querySelector("span, legend");
+      var text = label ? (label.textContent || "").trim() : "";
+      // "<Label> is required" rather than "Please enter your <label>": the
+      // labels vary too much for a possessive to stay grammatical. On the
+      // referral form "Contact name" is the person being referred, not the
+      // partner's own, so "your contact name" would be actively wrong.
+      return text ? text + " is required." : "Please complete this field.";
+    }
+
+    /** Every field the form actually requires, one entry per name. */
+    function requiredFields() {
+      var seen = {};
+      var out = [];
+      Array.prototype.forEach.call(form.querySelectorAll("[required]"), function (f) {
+        if (!f.name || seen[f.name]) return;
+        // a hidden conditional block is not being asked for
+        if (f.closest("[hidden]")) return;
+        seen[f.name] = true;
+        out.push(f.name);
+      });
+      return out;
+    }
+
     function validate(showAll) {
       var firstBad = null;
 
-      Object.keys(MESSAGES).forEach(function (name) {
+      requiredFields().forEach(function (name) {
         var fields = form.querySelectorAll('[name="' + name + '"]');
         if (!fields.length) return;
         var field = fields[0];
@@ -60,6 +108,8 @@
 
         if (field.type === "radio") {
           ok = Array.prototype.some.call(fields, function (r) { return r.checked; });
+        } else if (field.type === "checkbox") {
+          ok = field.checked;
         } else if (field.type === "email") {
           ok = field.value.trim() !== "" && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(field.value.trim());
         } else {
@@ -69,7 +119,7 @@
         // Only surface an error once the visitor has engaged with the field,
         // or once they've tried to submit. Shouting at an empty form is rude.
         if (!ok && (showAll || field.dataset.touched === "1")) {
-          setError(field, MESSAGES[name]);
+          setError(field, messageFor(field, name));
           if (!firstBad) firstBad = field;
         } else if (ok) {
           setError(field, "");
