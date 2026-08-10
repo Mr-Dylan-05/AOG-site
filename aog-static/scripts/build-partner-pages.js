@@ -133,7 +133,7 @@ ${FOOTER}
 /* ------------------------------------------------------ page 1: /partners/ */
 
 const HOW_IT_WORKS = [
-  ["01", "Register", "Fill in the form below. We set you up as a partner and send you your referral link."],
+  ["01", "Register", "Fill in the form below. We set you up as a partner and confirm by email."],
   ["02", "Refer", "Send us the business through the partner form. We take it from there and contact them directly."],
   ["03", "Get paid", "$500 ex GST for every seat they enrol, paid once their payment clears."],
 ];
@@ -148,7 +148,7 @@ const SUITS = [
 ];
 
 const FAQS = [
-  ["When do I get paid?", "Once the client's payment for their seats has cleared. We pay by bank transfer, and you invoice us or we self-bill, whichever suits you."],
+  ["When do I get paid?", "Once the client has paid for their seats and that payment has cleared."],
   ["What counts as a referral?", "A business you introduce to us that we had not already spoken to. Submit them through the partner form and the referral is recorded against your name from that point."],
   ["What if two partners refer the same business?", "The first submission recorded wins. If both arrive close together we will talk to both of you before anything is paid, rather than deciding quietly."],
   ["Do I need to sell anything?", "No. Send us the introduction and we do the rest. You are not expected to explain the program, quote on it, or handle objections."],
