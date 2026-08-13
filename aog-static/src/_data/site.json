@@ -18,7 +18,8 @@
     "//forms": "Extra forms beyond the main contact form, keyed by the value of a form's data-form attribute. A form whose key is missing or empty stays deliberately inert rather than posting nowhere and looking like it worked. Each needs its own endpoint so submissions land in separate lists.",
     "forms": {
       "partner": "",
-      "referral": ""
+      "referral": "",
+      "leads": ""
     }
   },
   "defaultOgImage": "/assets/design/group-team.jpg",

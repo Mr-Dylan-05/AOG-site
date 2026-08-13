@@ -176,6 +176,31 @@
           if (!res.ok) throw new Error("Bad response");
           form.reset();
           form.querySelectorAll("[data-error]").forEach(function (s) { s.textContent = ""; });
+
+          // Tell analytics a lead came in. The landing page is the destination
+          // of paid traffic, so without this there is no way to tell which ads
+          // produced enquiries and which only produced clicks.
+          if (typeof window.gtag === "function") {
+            window.gtag("event", "generate_lead", {
+              form_id: form.getAttribute("data-form") || "contact",
+              page_location: window.location.pathname,
+            });
+          }
+
+          // A form can name a panel to show in its place. Leaving a filled-in
+          // form on screen under a success line reads as though it might not
+          // have sent; swapping it for a plain confirmation does not.
+          var panelSel = form.getAttribute("data-success-panel");
+          var panel = panelSel && document.querySelector(panelSel);
+          if (panel) {
+            form.hidden = true;
+            panel.hidden = false;
+            if (typeof panel.scrollIntoView === "function") {
+              panel.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            return;
+          }
+
           if (status) {
             status.textContent = "Thanks — we've got your enquiry and will be in touch shortly.";
             status.className = "form-status form-status--ok";
