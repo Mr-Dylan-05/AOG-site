@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Are You Ready for AI? | Ad On AI</title>
+<meta name="description" content="Six questions, about a minute. Find out where you stand with AI and what to do next.">
+<meta name="robots" content="noindex">
+<link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/intertight.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/jetbrainsmono-500.woff2" crossorigin>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: radial-gradient(120% 62% at -4% -10%, rgba(27,171,229,0.12), transparent 56%), radial-gradient(115% 64% at 104% -4%, rgba(27,171,229,0.14), transparent 58%), radial-gradient(70% 44% at 60% 6%, rgba(70,196,242,0.08), transparent 60%), radial-gradient(85% 38% at 102% 40%, rgba(27,171,229,0.10), transparent 56%), radial-gradient(85% 36% at -2% 70%, rgba(95,205,245,0.12), transparent 56%), radial-gradient(80% 34% at 50% 100%, rgba(70,196,242,0.10), transparent 60%), linear-gradient(180deg, #F5F8FE 0%, #FAFBFE 32%, #F4F9FE 62%, #F1F5FC 100%); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #0B1220; letter-spacing: -0.011em; }
+  h1, h2, h3 { font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, sans-serif; letter-spacing: -0.045em !important; font-weight: 500 !important; }
+  a { color: #1BABE5; }
+  a:hover { color: #1483B5; }
+  .nav-prog { position: relative; }
+  .nav-menu { opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity .18s ease, transform .18s ease; }
+  .nav-prog:hover .nav-menu, .nav-menu:hover { opacity: 1; pointer-events: auto; transform: none; }
+  @keyframes adonShimmer { from { background-position: 0 0; } to { background-position: -200% 0; } }
+  @keyframes adonMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes adonFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes adonPulse { 0%,100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.07); opacity: 0.6; } }
+  @keyframes adonBorderFlow { to { background-position: 300% 0; } }
+  @keyframes adonSpin { to { transform: rotate(360deg); } }
+</style>
+<style>/* baked from style-hover/after (was support.js) */
+[data-dc="h0"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h1"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h2"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h3"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h4"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h5"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h6"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h7"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h8"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="h9"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="ha"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="hb"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="hc"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="hd"]:hover{background:rgba(27,171,229,0.08);}
+[data-dc="he"]:hover{transform:translateY(-5px);box-shadow:0 24px 48px -22px rgba(27,171,229,0.45);}
+[data-dc="hf"]:hover{transform:translateY(-2px);box-shadow:0 10px 22px -8px rgba(27,171,229,0.6);}
+[data-dc="hg"]:hover{transform:translateY(-2px);box-shadow:0 14px 28px -10px rgba(11,18,32,0.4);}
+[data-dc="hh"]:hover{transform:translateY(-3px);box-shadow:0 16px 30px -12px rgba(11,18,32,0.4);}
+[data-dc="ai"]::after{content:'';position:absolute;inset:0;border-radius:24px;padding:2px;background:linear-gradient(115deg,#1BABE5,#8FE6FF,#5FCDF5,#1483B5,#1BABE5);background-size:300% 100%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:adonBorderFlow 6s linear infinite;}
+</style>
+<style>@font-face{font-family:'Inter Tight';font-style:normal;font-weight:500 800;font-display:swap;src:url('/assets/design/fonts/intertight.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/assets/design/fonts/jetbrainsmono-500.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}</style>
+</head>
+<body>
+<div style="max-width:100%;overflow-x:clip;background:transparent;position:relative">
+
+  <header style="max-width:820px;margin:0 auto;padding:18px 20px 0;display:flex;align-items:center;justify-content:space-between;gap:16px">
+    <span style="display:flex;align-items:center;gap:10px">
+      <img src="/assets/design/adon-logo.png" alt="Ad On Group" style="width:30px;height:30px;object-fit:contain;display:block" width="320" height="320" loading="eager" fetchpriority="high" decoding="async">
+      <span style="font-weight:800;font-size:16px;letter-spacing:-0.02em;color:#0B1220">Ad On Group</span>
+    </span>
+    <a href="tel:+61755861400" style="text-decoration:none;font-size:14.5px;font-weight:700;color:#1483B5;white-space:nowrap">(07) 5586 1400</a>
+  </header>
+
+  <main style="max-width:820px;margin:0 auto;padding:22px 20px 70px">
+
+    <div id="quiz-progress" style="height:5px;border-radius:99px;background:rgba(11,18,32,0.08);overflow:hidden;margin:0 0 26px">
+      <div id="quiz-bar" style="height:100%;width:0%;background:#1BABE5;border-radius:99px;transition:width .3s ease"></div>
+    </div>
+
+    <div id="quiz-intro">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Six questions, about a minute</div>
+      <h1 style="font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:#0B1220;margin:14px 0 0">Are you ready for <span style="color:#1BABE5">AI</span>?</h1>
+      <p style="font-size:17px;line-height:1.6;color:#4A5462;margin:14px 0 0">Answer honestly and we will show you where you stand, what it is costing you, and what to do about it.</p>
+      <button type="button" id="quiz-start" style="font:inherit;font-size:17px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:16px 30px;min-height:54px;border-radius:14px;cursor:pointer;margin:24px 0 0;box-shadow:0 14px 26px -12px rgba(27,171,229,0.65)">Start &rarr;</button>
+    </div>
+
+    <div id="quiz-questions" hidden>
+      <div class="q-screen" data-step="0" >
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Where you are now</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">How are you using AI at the moment?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="current_use" data-pts="0" data-answer="Barely using it" data-idx="0">Barely using it</button>
+          <button type="button" class="q-opt" data-q="current_use" data-pts="1" data-answer="Mostly search, research and writing" data-idx="1">Mostly search, research and writing</button>
+          <button type="button" class="q-opt" data-q="current_use" data-pts="2" data-answer="I use ChatGPT or Claude regularly, but mainly as a chatbot" data-idx="2">I use ChatGPT or Claude regularly, but mainly as a chatbot</button>
+          <button type="button" class="q-opt" data-q="current_use" data-pts="3" data-answer="I am starting to automate tasks and workflows" data-idx="3">I am starting to automate tasks and workflows</button>
+          <button type="button" class="q-opt" data-q="current_use" data-pts="4" data-answer="I am experimenting with agents and more advanced automation" data-idx="4">I am experimenting with agents and more advanced automation</button>
+        </div>
+        
+      </div>
+      <div class="q-screen" data-step="1" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Imagine nothing changes</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Twelve months from now, which would worry you most?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="worry" data-pts="2" data-answer="People around me are much better at AI than I am" data-idx="0">People around me are much better at AI than I am</button>
+          <button type="button" class="q-opt" data-q="worry" data-pts="2" data-answer="My role has changed and my skills have not" data-idx="1">My role has changed and my skills have not</button>
+          <button type="button" class="q-opt" data-q="worry" data-pts="2" data-answer="I am still spending hours on things AI could have handled" data-idx="2">I am still spending hours on things AI could have handled</button>
+          <button type="button" class="q-opt" data-q="worry" data-pts="2" data-answer="Other businesses have moved ahead while I have not" data-idx="3">Other businesses have moved ahead while I have not</button>
+          <button type="button" class="q-opt" data-q="worry" data-pts="2" data-answer="I will wish I had started a year earlier" data-idx="4">I will wish I had started a year earlier</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+      <div class="q-screen" data-step="2" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Now the other way round</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">If you became genuinely good at AI, what would you most want it to change?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="motivation" data-pts="2" data-answer="Make me more valuable at work" data-idx="0">Make me more valuable at work</button>
+          <button type="button" class="q-opt" data-q="motivation" data-pts="2" data-answer="Give me back hours every week" data-idx="1">Give me back hours every week</button>
+          <button type="button" class="q-opt" data-q="motivation" data-pts="2" data-answer="Make my career feel more secure" data-idx="2">Make my career feel more secure</button>
+          <button type="button" class="q-opt" data-q="motivation" data-pts="2" data-answer="Open up new income opportunities" data-idx="3">Open up new income opportunities</button>
+          <button type="button" class="q-opt" data-q="motivation" data-pts="2" data-answer="Give me a better balance between work and life" data-idx="4">Give me a better balance between work and life</button>
+          <button type="button" class="q-opt" data-q="motivation" data-pts="2" data-answer="Stop me feeling left behind" data-idx="5">Stop me feeling left behind</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+      <div class="q-screen" data-step="3" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">The honest bit</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">If AI could make you significantly more productive, what is stopping you?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="barrier" data-pts="1" data-answer="I do not know where to start" data-idx="0">I do not know where to start</button>
+          <button type="button" class="q-opt" data-q="barrier" data-pts="1" data-answer="I do not know what is possible yet" data-idx="1">I do not know what is possible yet</button>
+          <button type="button" class="q-opt" data-q="barrier" data-pts="2" data-answer="I do not have the time to work it out" data-idx="2">I do not have the time to work it out</button>
+          <button type="button" class="q-opt" data-q="barrier" data-pts="2" data-answer="So much is changing that I do not know what to learn" data-idx="3">So much is changing that I do not know what to learn</button>
+          <button type="button" class="q-opt" data-q="barrier" data-pts="2" data-answer="I keep meaning to and have not made it a priority" data-idx="4">I keep meaning to and have not made it a priority</button>
+          <button type="button" class="q-opt" data-q="barrier" data-pts="4" data-answer="Nothing. I am ready to get good at it" data-idx="5">Nothing. I am ready to get good at it</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+      <div class="q-screen" data-step="4" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Learning it is one thing, keeping up is another</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Once you have the basics, how important is ongoing help?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="support" data-pts="1" data-answer="Not important. Give me the knowledge and I will run with it" data-idx="0">Not important. Give me the knowledge and I will run with it</button>
+          <button type="button" class="q-opt" data-q="support" data-pts="2" data-answer="Useful. Someone to ask when I get stuck" data-idx="1">Useful. Someone to ask when I get stuck</button>
+          <button type="button" class="q-opt" data-q="support" data-pts="3" data-answer="Important. Ongoing tuition and practical support" data-idx="2">Important. Ongoing tuition and practical support</button>
+          <button type="button" class="q-opt" data-q="support" data-pts="4" data-answer="Very important. A community where I keep learning" data-idx="3">Very important. A community where I keep learning</button>
+          <button type="button" class="q-opt" data-q="support" data-pts="4" data-answer="Essential. Ongoing guidance as AI keeps changing" data-idx="4">Essential. Ongoing guidance as AI keeps changing</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+      <div class="q-screen" data-step="5" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Last one</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Which sounds most like you?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="intent" data-pts="1" data-answer="I know I should learn AI. I have not got around to it" data-idx="0">I know I should learn AI. I have not got around to it</button>
+          <button type="button" class="q-opt" data-q="intent" data-pts="2" data-answer="I want to understand what I should be learning first" data-idx="1">I want to understand what I should be learning first</button>
+          <button type="button" class="q-opt" data-q="intent" data-pts="3" data-answer="I want to become genuinely good at using AI" data-idx="2">I want to become genuinely good at using AI</button>
+          <button type="button" class="q-opt" data-q="intent" data-pts="4" data-answer="I want to use AI to change how I work and open up opportunities" data-idx="3">I want to use AI to change how I work and open up opportunities</button>
+          <button type="button" class="q-opt" data-q="intent" data-pts="5" data-answer="I am ready to invest in myself and start now" data-idx="4">I am ready to invest in myself and start now</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+    </div>
+
+    <div id="quiz-result" hidden>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Your result</div>
+      <h2 id="band-title" style="font-size:clamp(26px,3.8vw,38px);line-height:1.1;letter-spacing:-0.035em;font-weight:600;color:#0B1220;margin:12px 0 0"></h2>
+      <p id="band-line" style="font-size:17px;line-height:1.62;color:#4A5462;margin:12px 0 0"></p>
+
+      <div class="result-grid" style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:32px;align-items:start;margin:30px 0 0">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:16px;padding:20px 20px;box-shadow:0 18px 40px -30px rgba(11,18,32,0.3)">
+            <div style="font-size:15.5px;font-weight:800;letter-spacing:-0.02em;color:#0B1220">Your biggest risk</div>
+            <p style="font-size:15px;line-height:1.6;color:#5A6473;margin:7px 0 0">Staying where you are while the people around you keep moving forward.</p>
+          </div>
+          <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:16px;padding:20px 20px;box-shadow:0 18px 40px -30px rgba(11,18,32,0.3)">
+            <div style="font-size:15.5px;font-weight:800;letter-spacing:-0.02em;color:#0B1220">Your biggest opportunity</div>
+            <p style="font-size:15px;line-height:1.6;color:#5A6473;margin:7px 0 0">You do not need to become an AI expert. You need to become highly capable at using AI to make yourself more valuable, productive and adaptable.</p>
+          </div>
+          <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:16px;padding:20px 20px;box-shadow:0 18px 40px -30px rgba(11,18,32,0.3)">
+            <div style="font-size:15.5px;font-weight:800;letter-spacing:-0.02em;color:#0B1220">Your next step</div>
+            <p style="font-size:15px;line-height:1.6;color:#5A6473;margin:7px 0 0">Do not try to learn everything. Learn the right things, apply them to your real work, and have someone in your corner as you keep progressing.</p>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.72);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 26px 62px -32px rgba(11,18,32,0.38);border-radius:20px;padding:24px 22px">
+          <div style="font-size:18px;font-weight:800;letter-spacing:-0.022em;color:#0B1220">Want us to show you what that looks like?</div>
+          <p style="font-size:14.5px;line-height:1.55;color:#5A6473;margin:7px 0 16px">Talk to one of our AI Training Facilitators and we will help you work out your best AI learning path.</p>
+
+          <form data-contact-form data-form="quiz" data-success-panel="#quiz-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:13px">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+            <input type="hidden" name="_subject" value="AI readiness quiz result">
+            <input type="hidden" name="source" value="/ai-quiz/">
+            <input type="hidden" name="score" id="f-score">
+            <input type="hidden" name="band" id="f-band">
+            <input type="hidden" name="current_use" id="f-current_use">
+            <input type="hidden" name="worry" id="f-worry">
+            <input type="hidden" name="motivation" id="f-motivation">
+            <input type="hidden" name="barrier" id="f-barrier">
+            <input type="hidden" name="support" id="f-support">
+            <input type="hidden" name="intent" id="f-intent">
+            <input type="hidden" name="utm_source" id="f-utm_source">
+            <input type="hidden" name="utm_medium" id="f-utm_medium">
+            <input type="hidden" name="utm_campaign" id="f-utm_campaign">
+            <input type="hidden" name="utm_content" id="f-utm_content">
+
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-size:14px;font-weight:700;color:#0B1220">Your name</span>
+              <input type="text" name="name" required autocomplete="name" autocapitalize="words" style="font:inherit;font-size:16px;padding:14px 15px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box">
+              <span data-error style="font-size:13px;color:#C2410C"></span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-size:14px;font-weight:700;color:#0B1220">Email</span>
+              <input type="email" name="email" required autocomplete="email" inputmode="email" spellcheck="false" enterkeyhint="send" style="font:inherit;font-size:16px;padding:14px 15px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box">
+              <span data-error style="font-size:13px;color:#C2410C"></span>
+            </label>
+
+            <button type="submit" style="font:inherit;font-size:16.5px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:15px 24px;min-height:54px;border-radius:14px;cursor:pointer;width:100%;box-shadow:0 14px 26px -12px rgba(27,171,229,0.65)">Show me my AI path &rarr;</button>
+            <p data-form-status class="form-status" role="status" aria-live="polite" style="font-size:14px;margin:0"></p>
+            <p style="font-size:12.5px;line-height:1.5;color:#8A93A1;margin:0">No obligation. We never share your details.</p>
+          </form>
+
+          <div id="quiz-thanks" hidden style="text-align:center;padding:8px 2px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:rgba(27,171,229,0.12)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>
+            <div style="font-size:20px;font-weight:800;letter-spacing:-0.025em;color:#0B1220;margin:14px 0 0">Thanks, we have got that.</div>
+            <p style="font-size:15px;line-height:1.6;color:#5A6473;margin:9px 0 0">One of our facilitators will be in touch to walk you through your AI learning path. If you would rather talk now, call <a href="tel:+61755861400" style="color:#1483B5;font-weight:700;text-decoration:none">(07) 5586 1400</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="border-top:1px solid rgba(11,18,32,0.08)">
+    <div style="max-width:820px;margin:0 auto;padding:20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
+      <span style="font-size:13px;color:#8A93A1">&copy; 2026 Ad On Group. All rights reserved.</span>
+      <span style="display:flex;gap:18px;font-size:13px">
+        <a href="/privacy-policy/" style="color:#8A93A1;text-decoration:none">Privacy Policy</a>
+        <a href="/terms-and-conditions/" style="color:#8A93A1;text-decoration:none">Terms of Use</a>
+      </span>
+    </div>
+  </footer>
+
+  <style>
+    .q-opt {
+      font: inherit; font-size: 16px; line-height: 1.45; text-align: left;
+      color: #0B1220; background: #fff;
+      border: 1.5px solid rgba(11,18,32,0.14); border-radius: 14px;
+      padding: 15px 17px; min-height: 54px; width: 100%; cursor: pointer;
+      transition: border-color .15s ease, background .15s ease, transform .12s ease;
+    }
+    .q-opt:hover { border-color: #1BABE5; background: rgba(27,171,229,0.04); }
+    .q-opt:active { transform: scale(0.99); }
+    .q-opt[aria-pressed="true"] { border-color: #1BABE5; background: rgba(27,171,229,0.10); }
+    .q-back {
+      font: inherit; font-size: 14.5px; font-weight: 600; color: #8A93A1;
+      background: none; border: none; padding: 8px 2px; cursor: pointer;
+    }
+    .q-back:hover { color: #0B1220; }
+    @media (max-width: 820px) {
+      .result-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
+      /* Form first on a phone: someone who has answered six questions came for
+         the result, and the result is directly above it either way. */
+      .result-grid > div:last-child { order: -1; }
+    }
+  </style>
+
+  <script>
+  (function () {
+    "use strict";
+    var QS = ["current_use","worry","motivation","barrier","support","intent"];
+    var BANDS = [{"max":10,"title":"You have not really started","line":"You are near the beginning, which is a better place to be than it feels. Nothing here needs undoing first."},{"max":17,"title":"You have made a start","line":"You are using AI, but not yet in the way that changes how much you get done. That gap is the whole opportunity."},{"max":99,"title":"You are ready to go further","line":"You are already past the basics. What you are missing is structure, and someone to keep you moving as things change."}];
+    var total = QS.length, step = 0, score = 0;
+    var answers = {};
+
+    var intro = document.getElementById("quiz-intro");
+    var wrap = document.getElementById("quiz-questions");
+    var result = document.getElementById("quiz-result");
+    var bar = document.getElementById("quiz-bar");
+
+    function show(i) {
+      var all = wrap.querySelectorAll(".q-screen");
+      for (var k = 0; k < all.length; k++) all[k].hidden = k !== i;
+      bar.style.width = Math.round((i / total) * 100) + "%";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("quiz-start").addEventListener("click", function () {
+      intro.hidden = true;
+      wrap.hidden = false;
+      show(0);
+    });
+
+    wrap.addEventListener("click", function (e) {
+      var opt = e.target.closest(".q-opt");
+      if (opt) {
+        var q = opt.getAttribute("data-q");
+        // going back and changing an answer must not double-count
+        if (answers[q]) score -= answers[q].pts;
+        answers[q] = { text: opt.getAttribute("data-answer"), pts: Number(opt.getAttribute("data-pts")) };
+        score += answers[q].pts;
+
+        var sibs = opt.parentElement.querySelectorAll(".q-opt");
+        for (var i = 0; i < sibs.length; i++) sibs[i].setAttribute("aria-pressed", sibs[i] === opt ? "true" : "false");
+
+        step++;
+        if (step >= total) { finish(); } else { setTimeout(function () { show(step); }, 180); }
+        return;
+      }
+      if (e.target.closest(".q-back")) { step = Math.max(0, step - 1); show(step); }
+    });
+
+    function finish() {
+      bar.style.width = "100%";
+      wrap.hidden = true;
+      result.hidden = false;
+
+      var band = BANDS[BANDS.length - 1];
+      for (var i = 0; i < BANDS.length; i++) if (score <= BANDS[i].max) { band = BANDS[i]; break; }
+      document.getElementById("band-title").textContent = band.title;
+      document.getElementById("band-line").textContent = band.line;
+
+      var set = function (id, v) { var el = document.getElementById(id); if (el) el.value = v; };
+      set("f-score", String(score));
+      set("f-band", band.title);
+      QS.forEach(function (q) { set("f-" + q, answers[q] ? answers[q].text : ""); });
+
+      // Carry the ad's tracking through so a lead can be traced to its creative.
+      var p = new URLSearchParams(window.location.search);
+      ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(function (k) {
+        set("f-" + k, p.get(k) || "");
+      });
+
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "quiz_complete", { score: score, band: band.title });
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  })();
+  </script>
+
+</div>
+</body>
+</html>

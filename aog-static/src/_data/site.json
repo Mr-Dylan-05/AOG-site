@@ -19,7 +19,8 @@
     "forms": {
       "partner": "",
       "referral": "",
-      "leads": "https://formspree.io/f/mzepgkyw"
+      "leads": "https://formspree.io/f/mzepgkyw",
+      "quiz": ""
     }
   },
   "defaultOgImage": "/assets/design/group-team.jpg",
