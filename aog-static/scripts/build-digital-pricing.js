@@ -88,8 +88,8 @@ const row = (r) => {
             <a href="/${r.slug}/" style="font-size:15.5px;font-weight:700;color:${INK};text-decoration:none">${r.name}</a>
             <div style="font-size:13.5px;line-height:1.5;color:#8A93A1;margin:4px 0 0">${r.blurb}</div>
           </td>
-          <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15.5px;font-weight:700;color:${missing ? "#C2410C" : INK}">${
-            price || "not published"
+          <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15.5px;font-weight:700;color:${INK}">${
+            price || "&mdash;"
           }${price && r.prices.length > 1 ? '<div style="font-size:12px;font-weight:600;color:#8A93A1;margin-top:3px">tiers</div>' : ""}</td>
           <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15px;color:${GREY}">${setup || "&mdash;"}</td>
           <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15px;color:${GREY}">${r.term ? r.term + " months" : "&mdash;"}</td>
@@ -100,11 +100,9 @@ const missing = rows.filter((r) => r.prices.length === 0);
 
 const body = `
   <section style="max-width:1000px;margin:0 auto;padding:60px 24px 30px">
-    <span style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:${BLUE};text-transform:uppercase;font-weight:600"><span style="width:22px;height:1.5px;background:${BLUE}"></span>Internal reference</span>
-    <h1 style="font-size:clamp(30px,4vw,48px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:${INK};margin:16px 0 0">Ad On Digital <span style="color:${BLUE}">pricing</span>.</h1>
-    <p style="font-size:16.5px;line-height:1.65;color:${GREY};margin:16px 0 0;max-width:640px">Every figure below is read from that product's own page, so this stays in step with what is published. All prices exclude GST. Not linked from the site and not indexed.</p>
+    <h1 style="font-size:clamp(30px,4vw,48px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:${INK};margin:0">Ad On Digital <span style="color:${BLUE}">pricing</span>.</h1>
 
-    <div style="overflow-x:auto;margin:30px 0 0;-webkit-overflow-scrolling:touch">
+    <div style="overflow-x:auto;margin:26px 0 0;-webkit-overflow-scrolling:touch">
       <table style="width:100%;border-collapse:collapse;min-width:620px;background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:16px;overflow:hidden">
         <thead>
           <tr style="background:rgba(11,18,32,0.03)">
@@ -119,22 +117,8 @@ const body = `
       </table>
     </div>
 
-    <p style="font-size:13.5px;line-height:1.6;color:#8A93A1;margin:16px 0 0">Where two or three figures are shown, that product has tiers. Open the product page for what separates them. Google Ads and Facebook exclude the ad spend itself.</p>
 
-    ${
-      missing.length
-        ? `<div style="border:2px dashed rgba(27,171,229,0.55);background:rgba(27,171,229,0.05);border-radius:14px;padding:20px 22px;margin:26px 0 0">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#1483B5;font-weight:600">Placeholder &middot; missing price</div>
-      <p style="font-size:14.5px;line-height:1.6;color:${GREY};margin:9px 0 0">${missing
-            .map((r) => r.name)
-            .join(", ")} ${missing.length === 1 ? "does" : "do"} not publish a price on ${
-            missing.length === 1 ? "its" : "their"
-          } own page, so nothing could be sourced. The old WordPress data suggests a figure but pairing it to the product would be a guess. Add the price to /${missing[0].slug}/ and re-run scripts/build-digital-pricing.js, or tell me the number.</p>
-    </div>`
-        : ""
-    }
 
-    <p style="font-size:13px;color:#8A93A1;margin:26px 0 0">Generated from the product pages. Re-run <code style="font-family:'JetBrains Mono',monospace;font-size:12.5px">node scripts/build-digital-pricing.js</code> after any price change.</p>
   </section>
 `;
 
@@ -148,8 +132,8 @@ const html = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ad On Digital Pricing (internal) | Ad On Group</title>
-<meta name="description" content="Internal reference of Ad On Digital product pricing.">
+<title>Ad On Digital Pricing | Ad On Group</title>
+<meta name="description" content="Ad On Digital product pricing.">
 <meta name="robots" content="noindex">
 ${assets}
 </head>
