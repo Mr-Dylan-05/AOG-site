@@ -1,39 +1,29 @@
 #!/usr/bin/env node
 /**
- * build-digital-pricing.js — /digital-pricing/, the Ad On Digital price sheet.
+ * build-digital-pricing.js — /digital-pricing/, the old product pages as they were.
  *
- * Account managers screenshare this with clients, so everything on it is
- * written for a client to read. Nothing internal, no build instructions, no
- * placeholders, and no "(internal)" in the title, because a browser tab is on
- * screen for the whole call.
+ * This page is for reviewing what used to be up, so it reproduces the old
+ * WordPress pages rather than restating them. Nothing here is written, priced,
+ * grouped or summarised by the build: every word and every figure comes out of
+ * src/_data/oldPages.json, which scripts/extract-old-pages.py pulls straight
+ * from the published rows of the WordPress dump.
  *
- * WHAT IS ON IT
- * The two bundles first, because they are what gets sold, then every
- * individual package underneath so a manager can price a custom mix on the
- * same screen without opening a second tab.
+ * That constraint is the point. Earlier versions of this page summarised the
+ * products and had to pick between conflicting prices to do it, and the picks
+ * were wrong — SEO Finder went up at $800 when its own live page said $1000.
+ * Reproducing the pages removes the judgement call entirely.
  *
- * WHERE THE NUMBERS COME FROM
- * The WordPress dump. Several packages appear at two different prices there,
- * from two different price lists, so the figures below were resolved with a
- * rule rather than a guess:
+ * The only things stripped are editor furniture that no visitor ever saw:
+ * Gutenberg comments, shortcodes, and the "Modal Popup" placeholder text that
+ * says outright it is not visible on the frontend. Image URLs are repointed
+ * from the old WordPress uploads folder to the assets this site already
+ * carries. Everything else is left alone, including offers that have since
+ * expired, because knowing what was on the page is the whole purpose.
  *
- *   1. A product's own live page beats any revision of it. This is what settles
- *      the Accelerator: page 3558, /online-accelerator/, modified 2024-11-21,
- *      says $900. An earlier 2023 revision says $600 and is not used.
- *   2. Where two lists disagree, the one where the set-up fee equals the first
- *      month wins. That relationship holds across every package that states
- *      both figures — Accelerator 900/900, Stimulus 400/400 through 700/700,
- *      Illuminate 400/400, Showcase Ecommerce 500/500, SEO Finder 800/800 —
- *      so it identifies one internally consistent list. The competing list
- *      (Illuminate $250 with a $200 set-up, SEO Finder $1000) does not hold it.
- *
- * SUPERSEDED, and flagged here because it is the one figure on the page that
- * the rule above could not confirm: Website Showcase at $375. It exists only in
- * the older list, and it sits below Illuminate's $400 despite including more
- * pages. It is on the page because every package was asked for; it wants a
- * human to confirm it before anyone quotes from it.
+ * noindex, and linked from nowhere.
  *
  * Usage:  node scripts/build-digital-pricing.js
+ *   (re-extract first with: python3 scripts/extract-old-pages.py)
  */
 
 const fs = require("fs");
@@ -41,6 +31,8 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
+const PAGES = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "_data", "oldPages.json"), "utf8"));
+
 const SHELL = fs.readFileSync(path.join(PUBLIC, "contact-us", "index.html"), "utf8");
 const head = SHELL.slice(0, SHELL.indexOf("</head>"));
 const ASSETS =
@@ -50,158 +42,118 @@ const ASSETS =
 
 const BLUE = "#1BABE5", INK = "#0B1220", GREY = "#5A6473";
 
-const TERM = "12 month minimum term, then month by month";
-
 /**
- * Every individual package. `setup` is stated per row rather than derived, so
- * that a package whose set-up fee stops matching its first month can be
- * corrected here without anyone having to know the rule that produced it.
- * `check` marks a figure the resolution rule could not confirm.
+ * Styling for the reproduced markup. This is Beaver Builder output — headings,
+ * paragraphs, and feature lists built as <li> holding a tick image and a <p> —
+ * so it needs its own rules rather than the site's page styles. Deliberately
+ * plain: the job is legibility, not a redesign of pages that are no longer up.
  */
-const GROUPS = [
-  {
-    name: "Websites",
-    items: [
-      { name: "Website Illuminate", price: "$400", setup: "$400",
-        desc: "Up to 6 pages, with the content written, designed and project managed for you. Quarterly content and graphic updates, speed and mobile optimisation, hosting and security, and monthly traffic and search reporting." },
-      { name: "Website Showcase", price: "$375", setup: "$300", check: true,
-        desc: "Up to 12 pages, with the same writing, design and ongoing updates as Illuminate." },
-      { name: "Website Showcase Ecommerce", price: "$500", setup: "$500",
-        desc: "Website Showcase plus up to 30 shopping cart items, so customers buy directly from your site." },
-    ],
-  },
-  {
-    name: "Getting found",
-    items: [
-      { name: "SEO Finder", price: "$800", setup: "$800",
-        desc: "Ongoing search optimisation across your website, your Google Business Profile and the questions customers actually search, with a monthly report showing the movement." },
-      { name: "Google Ads Management", price: "$800", setup: "$800",
-        desc: "Search campaign build and ongoing management, so you can hold the top of the first page while your organic ranking builds." },
-      { name: "Google Ads Remarketing", price: "$400", setup: "$400",
-        desc: "Follow the visitors who did not enquire the first time and put your business back in front of them." },
-    ],
-  },
-  {
-    name: "Reviews",
-    items: [
-      { name: "Ad On Review Easy Rate App", price: "$200", setup: "$200",
-        desc: "Automatically asks your customers for feedback after they deal with you, so the reviews keep coming without anyone having to chase them." },
-      { name: "Ad On Review 5 Star", price: "$400", setup: "$400",
-        desc: "The full review programme. Builds your Google rating and routes unhappy customers to you offline before they post." },
-    ],
-  },
-  {
-    name: "Staying front of mind",
-    items: [
-      { name: "Blog Package", price: "$300", setup: "$300",
-        desc: "A written blog every month, on the keywords you want to rank for." },
-      { name: "Brochure Campaign", price: "$600", setup: "$600",
-        desc: "A monthly digital brochure to your existing customer database, sent by email or SMS." },
-      { name: "Video Flexi", price: "$300", setup: "$300",
-        desc: "A motion graphic video about your business plus an animated logo, with changes every two months." },
-    ],
-  },
-  {
-    name: "On hold",
-    items: [
-      { name: "Ad On Hold Flexi Message", price: "$80", setup: "$80",
-        desc: "Professionally written and produced on-hold messaging, updated as your offers change." },
-    ],
-  },
-];
+const PAGE_CSS = `
+  .old { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; }
+  .old h1 { font-size: clamp(28px,3.4vw,40px); line-height: 1.1; letter-spacing: -0.035em; font-weight: 700; color: ${INK}; margin: 34px 0 0; text-transform: none; }
+  .old h2 { font-size: 25px; letter-spacing: -0.025em; font-weight: 700; color: ${INK}; margin: 34px 0 0; }
+  .old h3 { font-size: 21px; font-weight: 700; color: ${INK}; margin: 30px 0 0; }
+  .old h4 { font-size: 18px; font-weight: 700; color: ${INK}; margin: 28px 0 0; }
+  .old h5 { font-size: 16px; font-weight: 700; color: ${INK}; margin: 24px 0 0; }
+  .old h6 { font-size: 15px; font-weight: 700; color: ${INK}; margin: 22px 0 0; }
+  .old p { font-size: 16px; line-height: 1.68; color: #1F2733; margin: 12px 0 0; }
+  .old ul { list-style: none; padding: 0; margin: 14px 0 0; }
+  .old li { display: flex; align-items: flex-start; gap: 11px; margin: 10px 0 0; }
+  .old li p { margin: 0; }
+  /* the tick graphic each feature row starts with */
+  .old li img { flex: none; width: 20px; height: 20px; margin-top: 3px; }
+  .old img { max-width: 100%; height: auto; border-radius: 12px; display: block; margin: 22px auto 0; }
+  .old a { color: ${BLUE}; }
+  .old hr { border: 0; border-top: 1px solid rgba(11,18,32,0.10); margin: 34px 0 0; }
 
-const tick = `<span style="flex:none;width:22px;height:22px;border-radius:7px;background:${BLUE};display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>`;
-
-const kicker = (t) =>
-  `<div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#8A93A1;font-weight:700">${t}</div>`;
-
-const body = `
-  <section style="max-width:1000px;margin:0 auto;padding:56px 24px 18px">
-    <h1 style="font-size:clamp(30px,4vw,48px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:${INK};margin:0">Ad On Digital <span style="color:${BLUE}">pricing</span>.</h1>
-    <p style="font-size:16.5px;line-height:1.65;color:${GREY};margin:14px 0 0;max-width:640px">All prices exclude GST. Every package carries a ${TERM.toLowerCase()}, and a once off set-up fee equal to the first month unless shown otherwise.</p>
-    <nav style="display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0">
-      ${[...GROUPS.map((g) => [g.name, g.name.toLowerCase().replace(/\s+/g, "-")])]
-        .map(
-          ([t, id]) =>
-            `<a href="#${id}" style="text-decoration:none;font-size:13.5px;font-weight:600;color:${INK};background:rgba(27,171,229,0.09);border:1px solid rgba(27,171,229,0.24);border-radius:999px;padding:7px 14px">${t}</a>`
-        )
-        .join("\n      ")}
-    </nav>
-  </section>
-
-  <section style="max-width:1000px;margin:0 auto;padding:18px 24px 60px">
-    ${kicker("Individual packages")}
-    ${GROUPS.map(
-      (g) => `
-    <div id="${g.name.toLowerCase().replace(/\s+/g, "-")}" style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:22px;padding:26px 28px;margin:14px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3);scroll-margin-top:20px">
-      <div style="font-size:19px;font-weight:800;letter-spacing:-0.024em;color:${INK}">${g.name}</div>
-      <div style="display:flex;flex-direction:column;margin:14px 0 0">
-        ${g.items
-          .map(
-            (it, i) => `<div class="pkg-row" style="display:flex;align-items:flex-start;justify-content:space-between;gap:26px;padding:${i ? "18px" : "4px"} 0 18px;${i ? "border-top:1px solid rgba(11,18,32,0.07)" : ""}">
-          <div style="min-width:0">
-            <div style="font-size:16.5px;font-weight:700;color:${INK}">${it.name}</div>
-            <p style="font-size:14.5px;line-height:1.6;color:${GREY};margin:6px 0 0;max-width:62ch">${it.desc}</p>
-          </div>
-          <div class="pkg-price" style="flex:none;text-align:right">
-            <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;color:${INK};line-height:1.1;white-space:nowrap">${it.price}<span style="font-size:13px;font-weight:600;color:#8A93A1"> /mo</span></div>
-            <div style="font-size:13px;color:#8A93A1;margin-top:4px;white-space:nowrap">${it.setup} set-up</div>
-          </div>
-        </div>`
-          )
-          .join("\n        ")}
-      </div>
-    </div>`
-    ).join("\n    ")}
-
-    <p style="font-size:13.5px;line-height:1.55;color:#8A93A1;margin:22px 0 0">All prices exclude GST. ${TERM}.</p>
-  </section>
-
-  <style>
-    @media (max-width: 860px) {
-      .bundle-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
-      /* Price first on a phone: it is the thing being asked about. */
-      .bundle-grid > div:last-child { order: -1; }
-      .extras-grid { grid-template-columns: 1fr !important; }
-    }
-    @media (max-width: 560px) {
-      /* The price sat in its own column and pushed the set-up figure off the
-         side of a 390px screen. Stacked under the name it always fits, and
-         nothing is hidden behind a horizontal scroll nobody notices. */
-      .pkg-row { flex-direction: column; gap: 10px !important; }
-      .pkg-price { text-align: left !important; }
-      .pkg-price > div:last-child { display: inline; margin-left: 10px; }
-      .price-table { font-size: 14px; }
-    }
-  </style>
+  @media (max-width: 560px) {
+    /* A row of six prices left the slug a column two words wide, so
+       "/brochure-campaign/ last edited 2025-09-08" broke over five lines.
+       Stacked, each half gets the full width. */
+    .idx-row { flex-direction: column; align-items: flex-start !important; gap: 10px !important; }
+    .idx-row > span:last-child { text-align: left !important; }
+  }
 `;
 
-const html = `<!doctype html>
+const card = (inner, extra = "") =>
+  `<div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3);${extra}">${inner}</div>`;
+
+const shell = (title, desc, bodyHtml) => `<!doctype html>
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ad On Digital Pricing | Ad On Group</title>
-<meta name="description" content="Ad On Digital bundle and package pricing.">
+<title>${title}</title>
+<meta name="description" content="${desc}">
 <meta name="robots" content="noindex">
 ${ASSETS}
+<style>${PAGE_CSS}</style>
 </head>
 <body>
 <div style="max-width:100%;overflow-x:clip;background:transparent;position:relative">
-${body}
+${bodyHtml}
 </div>
 </body>
 </html>
 `;
 
-const dir = path.join(PUBLIC, "digital-pricing");
-fs.mkdirSync(dir, { recursive: true });
-fs.writeFileSync(path.join(dir, "index.html"), html);
+const write = (dir, html) => {
+  const out = path.join(PUBLIC, dir);
+  fs.mkdirSync(out, { recursive: true });
+  fs.writeFileSync(path.join(out, "index.html"), html);
+};
 
-const total = GROUPS.reduce((n, g) => n + g.items.length, 0);
-console.log(`  wrote digital-pricing/index.html — ${total} priced entries`);
-for (const g of GROUPS) {
-  for (const it of g.items) {
-    console.log(`    ${it.name.padEnd(28)} ${it.price}/mo  set-up ${it.setup}${it.check ? "   <-- superseded list, needs confirming" : ""}`);
-  }
+// ---------------------------------------------------------------- index
+
+const indexBody = `
+  <section style="max-width:860px;margin:0 auto;padding:56px 24px 10px">
+    <h1 style="font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-0.042em;font-weight:600;color:${INK};margin:0">The old product <span style="color:${BLUE}">pages</span>.</h1>
+    <p style="font-size:16.5px;line-height:1.65;color:${GREY};margin:14px 0 0;max-width:600px">Each one reproduced as it stood on the old site, wording and prices unchanged. The date is when that page was last edited in WordPress.</p>
+  </section>
+
+  <section style="max-width:860px;margin:0 auto;padding:22px 24px 70px">
+    ${PAGES.map((p) => {
+      const prices = [...new Set((p.html.match(/\$[0-9][0-9,]*/g) || []))]
+        .sort((a, b) => parseInt(a.slice(1).replace(/,/g, ""), 10) - parseInt(b.slice(1).replace(/,/g, ""), 10));
+      return card(
+        `<a class="idx-row" href="/digital-pricing/${p.slug}/" style="display:flex;align-items:center;justify-content:space-between;gap:20px;text-decoration:none;padding:20px 24px">
+        <span style="min-width:0">
+          <span style="display:block;font-size:17px;font-weight:700;color:${INK}">${p.title}</span>
+          <span style="display:block;font-size:13.5px;color:#8A93A1;margin-top:4px">/${p.slug}/ &middot; last edited ${p.modified}</span>
+        </span>
+        <span style="flex:none;font-size:14px;font-weight:700;color:${prices.length ? INK : "#B4BBC5"};text-align:right">${prices.length ? prices.join("&nbsp; ") : "no prices"}</span>
+      </a>`,
+        "margin:12px 0 0"
+      );
+    }).join("\n    ")}
+  </section>
+`;
+
+write("digital-pricing", shell("The old product pages | Ad On Group", "The old Ad On Digital product pages, reproduced as they were.", indexBody));
+
+// ---------------------------------------------------------------- one page each
+
+PAGES.forEach((p, i) => {
+  const prev = PAGES[i - 1];
+  const next = PAGES[i + 1];
+  const body = `
+  <section style="max-width:760px;margin:0 auto;padding:34px 24px 0">
+    <a href="/digital-pricing/" style="font-size:14px;font-weight:600;color:${BLUE};text-decoration:none">&larr; All old pages</a>
+    <p style="font-size:13px;line-height:1.6;color:#8A93A1;margin:14px 0 0">Reproduced from the old <strong style="color:${GREY}">/${p.slug}/</strong>, last edited ${p.modified}. Wording and prices are unchanged.</p>
+  </section>
+
+  <div class="old">${p.html}</div>
+
+  <section style="max-width:760px;margin:0 auto;padding:0 24px 70px;display:flex;justify-content:space-between;gap:16px">
+    <span>${prev ? `<a href="/digital-pricing/${prev.slug}/" style="font-size:14px;font-weight:600;color:${BLUE};text-decoration:none">&larr; ${prev.title}</a>` : ""}</span>
+    <span style="text-align:right">${next ? `<a href="/digital-pricing/${next.slug}/" style="font-size:14px;font-weight:600;color:${BLUE};text-decoration:none">${next.title} &rarr;</a>` : ""}</span>
+  </section>
+`;
+  write(path.join("digital-pricing", p.slug), shell(`${p.title} (old page) | Ad On Group`, `The old ${p.title} page, reproduced as it was.`, body));
+});
+
+console.log(`  wrote digital-pricing/ index + ${PAGES.length} reproduced pages`);
+for (const p of PAGES) {
+  const prices = [...new Set((p.html.match(/\$[0-9][0-9,]*/g) || []))];
+  console.log(`    /digital-pricing/${(p.slug + "/").padEnd(24)} ${p.modified}  ${prices.join(" ") || "-"}`);
 }
