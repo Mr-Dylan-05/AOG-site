@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Google Ads Management (old page) | Ad On Group</title>
-<meta name="description" content="The old Google Ads Management page, reproduced as it was.">
+<title>Google Ads Management | Ad On Group</title>
+<meta name="description" content="Google Ads Management pricing.">
 <meta name="robots" content="noindex">
 <link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/intertight.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/jetbrainsmono-500.woff2" crossorigin>
@@ -49,28 +49,18 @@
 <style>@font-face{font-family:'Inter Tight';font-style:normal;font-weight:500 800;font-display:swap;src:url('/assets/design/fonts/intertight.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/assets/design/fonts/jetbrainsmono-500.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}</style>
 <style>
-  .old { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; }
-  .old h1 { font-size: clamp(28px,3.4vw,40px); line-height: 1.1; letter-spacing: -0.035em; font-weight: 700; color: #0B1220; margin: 34px 0 0; text-transform: none; }
-  .old h2 { font-size: 25px; letter-spacing: -0.025em; font-weight: 700; color: #0B1220; margin: 34px 0 0; }
-  .old h3 { font-size: 21px; font-weight: 700; color: #0B1220; margin: 30px 0 0; }
-  .old h4 { font-size: 18px; font-weight: 700; color: #0B1220; margin: 28px 0 0; }
-  .old h5 { font-size: 16px; font-weight: 700; color: #0B1220; margin: 24px 0 0; }
-  .old h6 { font-size: 15px; font-weight: 700; color: #0B1220; margin: 22px 0 0; }
-  .old p { font-size: 16px; line-height: 1.68; color: #1F2733; margin: 12px 0 0; }
-  .old ul { list-style: none; padding: 0; margin: 14px 0 0; }
-  .old li { display: flex; align-items: flex-start; gap: 11px; margin: 10px 0 0; }
-  .old li p { margin: 0; }
-  /* the tick graphic each feature row starts with */
-  .old li img { flex: none; width: 20px; height: 20px; margin-top: 3px; }
-  .old img { max-width: 100%; height: auto; border-radius: 12px; display: block; margin: 22px auto 0; }
-  .old a { color: #1BABE5; }
-  .old hr { border: 0; border-top: 1px solid rgba(11,18,32,0.10); margin: 34px 0 0; }
-
-  @media (max-width: 560px) {
-    /* A row of six prices left the slug a column two words wide, so
-       "/brochure-campaign/ last edited 2025-09-08" broke over five lines.
-       Stacked, each half gets the full width. */
-    .idx-row { flex-direction: column; align-items: flex-start !important; gap: 10px !important; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  details.faq { border-top: 1px solid rgba(11,18,32,0.08); }
+  details.faq summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 15.5px; font-weight: 700; color: #0B1220; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+  details.faq summary::-webkit-details-marker { display: none; }
+  details.faq summary::after { content: "+"; flex: none; color: #1BABE5; font-weight: 700; font-size: 19px; line-height: 1; }
+  details.faq[open] summary::after { content: "\2212"; }
+  details.faq p { font-size: 15px; line-height: 1.65; color: #5A6473; margin: 0 0 16px; }
+  @media (max-width: 820px) {
+    .prod-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
+    /* price first on a phone: it is what the call is about */
+    .prod-grid > div:last-child { order: -1; }
+    .idx-row { flex-direction: column; align-items: flex-start !important; gap: 8px !important; }
     .idx-row > span:last-child { text-align: left !important; }
   }
 </style>
@@ -78,142 +68,170 @@
 <body>
 <div style="max-width:100%;overflow-x:clip;background:transparent;position:relative">
 
-  <section style="max-width:760px;margin:0 auto;padding:34px 24px 0">
-    <a href="/digital-pricing/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; All old pages</a>
-    <p style="font-size:13px;line-height:1.6;color:#8A93A1;margin:14px 0 0">Reproduced from the old <strong style="color:#5A6473">/google-ads-management/</strong>, last edited 2025-09-08. Wording and prices are unchanged.</p>
+  <section class="wrap" style="padding-top:52px">
+    <a href="/digital-pricing/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; All pricing</a>
+    <h1 style="font-size:clamp(29px,3.8vw,44px);line-height:1.06;letter-spacing:-0.04em;font-weight:600;color:#0B1220;margin:16px 0 0">Google Ads Management</h1>
+    <p style="font-size:16.5px;line-height:1.68;color:#5A6473;margin:14px 0 0;max-width:66ch">Ponder this. Do you think Google, who charges businesses to be on the first page, will continue to allow businesses who don't pay them, to be front and centre on their first page for much longer?</p><p style="font-size:16.5px;line-height:1.68;color:#5A6473;margin:14px 0 0;max-width:66ch">The moral of the story is either you need to pay Google to be at the top of their first page or be the best business, (as voted by your customers with the best reviews) with the best website, in your industry and area.</p><p style="font-size:16.5px;line-height:1.68;color:#5A6473;margin:14px 0 0;max-width:66ch">So what makes our Google Ads management different?</p><p style="font-size:16.5px;line-height:1.68;color:#5A6473;margin:14px 0 0;max-width:66ch">Have you ever searched for a product or service and seen the Googles paid ads that come up at the top of the search are not relevant to your search? Well, simply put, that's down to bad Google Ads management. Our simple pledge is, your Ad will be the perfect match for the relevant search…..no prospects thinking why have I been shown an ad for a local florist, when I'm actually searching for a wholesale flower provider?!?</p>
   </section>
 
-  <div class="old"><h1>
-		Google Ads Management
-	</h1>
-	<p>Ponder this. Do you think Google, who charges businesses to be on the first page, will continue to allow businesses who don't pay them, to be front and centre on their first page for much longer?</p>
-<p>The moral of the story is either you need to pay Google to be at the top of their first page or be the best business, (as voted by your customers with the best reviews) with the best website, in your industry and area.</p>
-				<img src="/assets/media/2025/08/Group-639-2.png" alt="Group 639 (2)" itemprop="image" height="800" width="800" title="Group 639 (2)"  />
-<img src="/assets/media/2025/03/DSC_0007-scaled.jpg" />So what makes our Google Ads management different?
-	<p>Have you ever searched for a product or service and seen the Googles paid ads that come up at the top of the search are not relevant to your search? Well, simply put, that's down to bad Google Ads management. Our simple pledge is, your Ad will be the perfect match for the relevant search&#8230;..no prospects thinking why have I been shown an ad for a local florist, when I'm actually searching for a wholesale flower provider?!?</p>
-				<img src="/assets/media/2020/12/macbook-adwords-search.png" alt="MacBook" itemprop="image" height="317" width="586" title="macbook-adwords-search"  />
-<h2>
-		Google Ads Search
-	</h2>
-	<p><b>Target customers who are </b><b>looking now</b></p>
-	<ul>
-		<li>		
-				<img src="/assets/media/2025/03/ic-check-1-1.png" alt="ic-check 1 (1)" title="ic-check 1 (1)" itemprop="image"/>
-		<p>Account set-up and ongoing Google Ads management by our Google Ads certified specialists</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-1.png" alt="ic-check 1 (1)" title="ic-check 1 (1)" itemprop="image"/>
-		<p>A search-based campaign, including up to 3 Ad Groups with ongoing optimisation</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-1.png" alt="ic-check 1 (1)" title="ic-check 1 (1)" itemprop="image"/>
-		<p>Unlimited keywords, selected and optimised to get you the maximum click conversions</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-1.png" alt="ic-check 1 (1)" title="ic-check 1 (1)" itemprop="image"/>
-		<p>Ad copywriting and design to spark maximum interest, with ongoing changes when necessary</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-1.png" alt="ic-check 1 (1)" title="ic-check 1 (1)" itemprop="image"/>
-		<p>Conversion tracking - so you know how many calls and website leads you're gaining directly from your ads</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-1.png" alt="ic-check 1 (1)" title="ic-check 1 (1)" itemprop="image"/>
-		<p>Ongoing monthly simple to understand reports, showing you what we are doing and clear results</p></li>	</ul>
-		<h2>$800</h2>
-		<h6>excluding GST per month</h6>
-$800 excluding GST once off set up fee<br />
-12 month minimum term, then month by month thereafter<br />
-*This does not include cost per click Google Adwords spend with google
-			<a href="#" target="_self">
-						ENQUIRE NOW
-					</a>
-<h2>
-		Google Ads Display
-	</h2>
-	<p><b>Target customers based on </b><b>genuine interest </b></p>
-	<ul>
-		<li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Account set-up and ongoing Google Ads management by our Google Ads certified specialists</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>A display campaign setup with ongoing optimisation</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Keyword, audiences, content &amp; placement targeting, selected and optimised to get you the maximum results</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Display Ad design and copy to spark maximum interest, with quarterly changes available.</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Conversion tracking - so you know how much traffic and how many leads you're gaining from your ads</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Ongoing simple to understand reports, giving you all the facts</p></li>	</ul>
-		<h2>$800</h2>
-		<h6>excluding GST per month</h6>
-$800 excluding GST once off set up fee<br />
-12 month minimum term, then month by month thereafter<br />
-*This does not include cost per click Google Adwords spend with google
-			<a href="#" target="_self">
-						ENQUIRE NOW
-					</a>
-				<img src="/assets/media/2021/08/search-campaign-image-1.png" alt="search-campaign-image-1" itemprop="image" height="906" width="1047" title="search-campaign-image-1"  />
-				<img src="/assets/media/2021/08/youtube.png" alt="youtube" itemprop="image" height="473" width="965" title="youtube"  />
-<h2>
-		Google Ads Video
-	</h2>
-	<p><b>Target customers based on </b><b>interest on YouTube</b></p>
-	<ul>
-		<li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>YouTube Marketing strategy creation &amp; targeting</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Video design and copy to spark maximum interest, with quarterly changes available.*</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Conversion tracking - so you know how many times your ad has been seen, how much traffic it's generated and how many leads you're gaining.</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Ongoing simple to understand reports, giving you all the facts</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Ongoing optimisation and campaign management</p></li>	</ul>
-		<h2>$800</h2>
-		<h6>excluding GST per month</h6>
-$800 excluding GST once off set up fee<br />
-12 month minimum term, then month by month thereafter<br />
-*Up to 15 sec video with quarterly changes $100ex per month (You Tube Video)
-			<a href="#" target="_self">
-						ENQUIRE NOW
-					</a>
-<h2>
-		Google Ads Remarketing
-	</h2>
-	<p><b>Target customers who have </b><b>visited you online</b></p>
-	<ul>
-		<li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Setup and installation of remarketing tag</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Setup of new audience</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Bidding strategy and optimisation of campaigns</p></li>	</ul>
-		<h2>$400</h2>
-		<h6>excluding GST per month</h6>
-$400 excluding GST once off set up fee<br />
-12 month minimum term, then month by month thereafter<br />
-*This does not include cost per click Google Adwords spend with google
-			<a href="#" target="_self">
-						ENQUIRE NOW
-					</a>
-				<img src="/assets/media/2021/08/google-remarketing.png" alt="google-remarketing" itemprop="image" height="906" width="1047" title="google-remarketing"  />
-<h2>
-		Start your consultation now
-	</h2>
-<h2>Got Questions?</h2>
-						<h6>Do I need an account for Google Ads and who sets that up?</h6>
-			<p>Yes you do and Ad On Group will help set this up with you</p>
-						<h6>Who pays Google for the cost per click and how does this happen?</h6>
-			<p>You do. When your account is set up, you will need to put your credit card details into the payment section, so Google can charge you directly.</p>
-						<h6>How does my Google budget work and How much does a click cost me?</h6>
-			<p>Different search terms or words cost different amounts depending on how popular they are in a particular area. Google uses a bid system. Click costs vary from a few cents per click up to multiple dollars</p>
-						<h6>What is a click?</h6>
-			<p>When someone sees your Ad and clicks on it to be taken to your landing page or website.</p>
-						<h6>What does the Ad On Group monthly management get me?</h6>
-			<p>Finding the right search terms or words in your market at the best price takes expertise. Our account managers are constantly optimising the search terms to provide the best possible outcome. We also provide monthly reports</p>
-						<h6>How long does it take to set up?</h6>
-			<p>2-4 weeks</p>
-						<h6>Who designs the concept and display ad?</h6>
-			<p>Ad on Group does</p>
-	<!--AOG - Feb 1, 2022--></div>
+  <section class="wrap" style="padding-top:14px;padding-bottom:10px">
+    
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:28px;margin:16px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div class="prod-grid" style="display:grid;grid-template-columns:1.3fr 0.7fr;gap:30px;align-items:start">
+        <div style="min-width:0">
+          <div style="font-size:21px;font-weight:800;letter-spacing:-0.026em;color:#0B1220">Google Ads Search</div>
+          <p style="font-size:15.5px;line-height:1.65;color:#5A6473;margin:10px 0 0">Target customers who are looking now</p>
+          
+        <div style="margin:18px 0 0">
+          
+          <div style="display:flex;flex-direction:column;gap:10px;margin:11px 0 0">
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Account set-up and ongoing Google Ads management by our Google Ads certified specialists</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">A search-based campaign, including up to 3 Ad Groups with ongoing optimisation</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Unlimited keywords, selected and optimised to get you the maximum click conversions</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Ad copywriting and design to spark maximum interest, with ongoing changes when necessary</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Conversion tracking - so you know how many calls and website leads you're gaining directly from your ads</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Ongoing monthly simple to understand reports, showing you what we are doing and clear results</span></div>
+          </div>
+        </div>
+          
+        </div>
+        <div>
+        <div style="background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#1BABE5;line-height:1">$800</span>
+          </div>
+          <div style="font-size:14px;color:#5A6473;margin-top:4px">per month, excluding GST</div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:15px 0"></div>
+          <div style="font-size:14px;line-height:1.6;color:#5A6473">
+            <div><strong style="color:#0B1220">$800</strong> once off set-up fee</div>
+            <div style="margin-top:6px">12 month minimum term, then month by month thereafter</div>
+          </div>
+          
+          <div style="margin-top:14px"><div style="font-size:13px;line-height:1.55;color:#8A93A1;margin-top:6px">This does not include cost per click Google Adwords spend with google</div></div>
+        </div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:28px;margin:16px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div class="prod-grid" style="display:grid;grid-template-columns:1.3fr 0.7fr;gap:30px;align-items:start">
+        <div style="min-width:0">
+          <div style="font-size:21px;font-weight:800;letter-spacing:-0.026em;color:#0B1220">Google Ads Display</div>
+          <p style="font-size:15.5px;line-height:1.65;color:#5A6473;margin:10px 0 0">Target customers based on genuine interest</p>
+          
+        <div style="margin:18px 0 0">
+          
+          <div style="display:flex;flex-direction:column;gap:10px;margin:11px 0 0">
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Account set-up and ongoing Google Ads management by our Google Ads certified specialists</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">A display campaign setup with ongoing optimisation</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Keyword, audiences, content &amp; placement targeting, selected and optimised to get you the maximum results</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Display Ad design and copy to spark maximum interest, with quarterly changes available.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Conversion tracking - so you know how much traffic and how many leads you're gaining from your ads</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Ongoing simple to understand reports, giving you all the facts</span></div>
+          </div>
+        </div>
+          
+        </div>
+        <div>
+        <div style="background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#1BABE5;line-height:1">$800</span>
+          </div>
+          <div style="font-size:14px;color:#5A6473;margin-top:4px">per month, excluding GST</div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:15px 0"></div>
+          <div style="font-size:14px;line-height:1.6;color:#5A6473">
+            <div><strong style="color:#0B1220">$800</strong> once off set-up fee</div>
+            <div style="margin-top:6px">12 month minimum term, then month by month thereafter</div>
+          </div>
+          
+          <div style="margin-top:14px"><div style="font-size:13px;line-height:1.55;color:#8A93A1;margin-top:6px">This does not include cost per click Google Adwords spend with google</div></div>
+        </div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:28px;margin:16px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div class="prod-grid" style="display:grid;grid-template-columns:1.3fr 0.7fr;gap:30px;align-items:start">
+        <div style="min-width:0">
+          <div style="font-size:21px;font-weight:800;letter-spacing:-0.026em;color:#0B1220">Google Ads Video</div>
+          <p style="font-size:15.5px;line-height:1.65;color:#5A6473;margin:10px 0 0">Target customers based on interest on YouTube</p>
+          
+        <div style="margin:18px 0 0">
+          
+          <div style="display:flex;flex-direction:column;gap:10px;margin:11px 0 0">
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">YouTube Marketing strategy creation &amp; targeting</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Video design and copy to spark maximum interest, with quarterly changes available.*</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Conversion tracking - so you know how many times your ad has been seen, how much traffic it's generated and how many leads you're gaining.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Ongoing simple to understand reports, giving you all the facts</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Ongoing optimisation and campaign management</span></div>
+          </div>
+        </div>
+          
+        </div>
+        <div>
+        <div style="background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#1BABE5;line-height:1">$800</span>
+          </div>
+          <div style="font-size:14px;color:#5A6473;margin-top:4px">per month, excluding GST</div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:15px 0"></div>
+          <div style="font-size:14px;line-height:1.6;color:#5A6473">
+            <div><strong style="color:#0B1220">$800</strong> once off set-up fee</div>
+            <div style="margin-top:6px">12 month minimum term, then month by month thereafter</div>
+          </div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:15px 0"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700">Optional extras</div>
+          <div style="font-size:14px;line-height:1.55;color:#5A6473;margin-top:7px">Up to 15 sec video with quarterly changes $100ex per month (You Tube Video)</div>
+          
+        </div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:28px;margin:16px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div class="prod-grid" style="display:grid;grid-template-columns:1.3fr 0.7fr;gap:30px;align-items:start">
+        <div style="min-width:0">
+          <div style="font-size:21px;font-weight:800;letter-spacing:-0.026em;color:#0B1220">Google Ads Remarketing</div>
+          <p style="font-size:15.5px;line-height:1.65;color:#5A6473;margin:10px 0 0">Target customers who have visited you online</p>
+          
+        <div style="margin:18px 0 0">
+          
+          <div style="display:flex;flex-direction:column;gap:10px;margin:11px 0 0">
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Setup and installation of remarketing tag</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Setup of new audience</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Bidding strategy and optimisation of campaigns</span></div>
+          </div>
+        </div>
+          
+        </div>
+        <div>
+        <div style="background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#1BABE5;line-height:1">$400</span>
+          </div>
+          <div style="font-size:14px;color:#5A6473;margin-top:4px">per month, excluding GST</div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:15px 0"></div>
+          <div style="font-size:14px;line-height:1.6;color:#5A6473">
+            <div><strong style="color:#0B1220">$400</strong> once off set-up fee</div>
+            <div style="margin-top:6px">12 month minimum term, then month by month thereafter</div>
+          </div>
+          
+          <div style="margin-top:14px"><div style="font-size:13px;line-height:1.55;color:#8A93A1;margin-top:6px">This does not include cost per click Google Adwords spend with google</div></div>
+        </div></div>
+      </div>
+    </div>
+  </section>
 
-  <section style="max-width:760px;margin:0 auto;padding:0 24px 70px;display:flex;justify-content:space-between;gap:16px">
-    <span><a href="/digital-pricing/finder-seo-package/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; SEO Finder Package</a></span>
-    <span style="text-align:right"><a href="/digital-pricing/facebook-packages/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">Facebook Packages &rarr;</a></span>
+  <section class="wrap" style="padding-bottom:60px">
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:8px 26px 10px;margin:22px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div style="font-size:19px;font-weight:800;letter-spacing:-0.024em;color:#0B1220;padding:20px 0 6px">Common questions</div>
+      <details class="faq"><summary>Do I need an account for Google Ads and who sets that up?</summary><p>Yes you do and Ad On Group will help set this up with you</p></details>
+      <details class="faq"><summary>Who pays Google for the cost per click and how does this happen?</summary><p>You do. When your account is set up, you will need to put your credit card details into the payment section, so Google can charge you directly.</p></details>
+      <details class="faq"><summary>How does my Google budget work and How much does a click cost me?</summary><p>Different search terms or words cost different amounts depending on how popular they are in a particular area. Google uses a bid system. Click costs vary from a few cents per click up to multiple dollars</p></details>
+      <details class="faq"><summary>What is a click?</summary><p>When someone sees your Ad and clicks on it to be taken to your landing page or website.</p></details>
+      <details class="faq"><summary>What does the Ad On Group monthly management get me?</summary><p>Finding the right search terms or words in your market at the best price takes expertise. Our account managers are constantly optimising the search terms to provide the best possible outcome. We also provide monthly reports</p></details>
+      <details class="faq"><summary>How long does it take to set up?</summary><p>2-4 weeks</p></details>
+      <details class="faq"><summary>Who designs the concept and display ad?</summary><p>Ad on Group does</p></details>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:70px;display:flex;justify-content:space-between;gap:16px">
+    <span><a href="/digital-pricing/finder-seo-package/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; SEO Finder</a></span>
+    <span style="text-align:right"><a href="/digital-pricing/facebook-packages/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">Facebook and Instagram &rarr;</a></span>
   </section>
 
 </div>

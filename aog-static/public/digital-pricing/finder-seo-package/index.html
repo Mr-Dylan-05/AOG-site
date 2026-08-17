@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SEO Finder Package (old page) | Ad On Group</title>
-<meta name="description" content="The old SEO Finder Package page, reproduced as it was.">
+<title>SEO Finder | Ad On Group</title>
+<meta name="description" content="SEO Finder pricing.">
 <meta name="robots" content="noindex">
 <link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/intertight.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/jetbrainsmono-500.woff2" crossorigin>
@@ -49,28 +49,18 @@
 <style>@font-face{font-family:'Inter Tight';font-style:normal;font-weight:500 800;font-display:swap;src:url('/assets/design/fonts/intertight.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/assets/design/fonts/jetbrainsmono-500.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}</style>
 <style>
-  .old { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; }
-  .old h1 { font-size: clamp(28px,3.4vw,40px); line-height: 1.1; letter-spacing: -0.035em; font-weight: 700; color: #0B1220; margin: 34px 0 0; text-transform: none; }
-  .old h2 { font-size: 25px; letter-spacing: -0.025em; font-weight: 700; color: #0B1220; margin: 34px 0 0; }
-  .old h3 { font-size: 21px; font-weight: 700; color: #0B1220; margin: 30px 0 0; }
-  .old h4 { font-size: 18px; font-weight: 700; color: #0B1220; margin: 28px 0 0; }
-  .old h5 { font-size: 16px; font-weight: 700; color: #0B1220; margin: 24px 0 0; }
-  .old h6 { font-size: 15px; font-weight: 700; color: #0B1220; margin: 22px 0 0; }
-  .old p { font-size: 16px; line-height: 1.68; color: #1F2733; margin: 12px 0 0; }
-  .old ul { list-style: none; padding: 0; margin: 14px 0 0; }
-  .old li { display: flex; align-items: flex-start; gap: 11px; margin: 10px 0 0; }
-  .old li p { margin: 0; }
-  /* the tick graphic each feature row starts with */
-  .old li img { flex: none; width: 20px; height: 20px; margin-top: 3px; }
-  .old img { max-width: 100%; height: auto; border-radius: 12px; display: block; margin: 22px auto 0; }
-  .old a { color: #1BABE5; }
-  .old hr { border: 0; border-top: 1px solid rgba(11,18,32,0.10); margin: 34px 0 0; }
-
-  @media (max-width: 560px) {
-    /* A row of six prices left the slug a column two words wide, so
-       "/brochure-campaign/ last edited 2025-09-08" broke over five lines.
-       Stacked, each half gets the full width. */
-    .idx-row { flex-direction: column; align-items: flex-start !important; gap: 10px !important; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  details.faq { border-top: 1px solid rgba(11,18,32,0.08); }
+  details.faq summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 15.5px; font-weight: 700; color: #0B1220; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+  details.faq summary::-webkit-details-marker { display: none; }
+  details.faq summary::after { content: "+"; flex: none; color: #1BABE5; font-weight: 700; font-size: 19px; line-height: 1; }
+  details.faq[open] summary::after { content: "\2212"; }
+  details.faq p { font-size: 15px; line-height: 1.65; color: #5A6473; margin: 0 0 16px; }
+  @media (max-width: 820px) {
+    .prod-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
+    /* price first on a phone: it is what the call is about */
+    .prod-grid > div:last-child { order: -1; }
+    .idx-row { flex-direction: column; align-items: flex-start !important; gap: 8px !important; }
     .idx-row > span:last-child { text-align: left !important; }
   }
 </style>
@@ -78,93 +68,75 @@
 <body>
 <div style="max-width:100%;overflow-x:clip;background:transparent;position:relative">
 
-  <section style="max-width:760px;margin:0 auto;padding:34px 24px 0">
-    <a href="/digital-pricing/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; All old pages</a>
-    <p style="font-size:13px;line-height:1.6;color:#8A93A1;margin:14px 0 0">Reproduced from the old <strong style="color:#5A6473">/finder-seo-package/</strong>, last edited 2025-09-08. Wording and prices are unchanged.</p>
+  <section class="wrap" style="padding-top:52px">
+    <a href="/digital-pricing/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; All pricing</a>
+    <h1 style="font-size:clamp(29px,3.8vw,44px);line-height:1.06;letter-spacing:-0.04em;font-weight:600;color:#0B1220;margin:16px 0 0">SEO Finder</h1>
+    <p style="font-size:16.5px;line-height:1.68;color:#5A6473;margin:14px 0 0;max-width:66ch">We know the value of ranking on Google's first page - our goal is to get you there. Our strategy focuses on consistently improving your ranking and showing you the results every month. Google uses over 200 factors to decide rankings. We work on these daily, ensuring your site appears for relevant searches. Our SEO is different because we follow Google's best practice: providing regular, relevant, high-quality content. Articles that answer your audience's questions and highlight your product or service are rewarded by Google with higher rankings. So, if your SEO provider isn't creating this kind of content, what are you really paying for?</p>
   </section>
 
-  <div class="old"><h1>
-		seo finder
-	</h1>
-	We know the value of ranking on Google's first page - our goal is to get you there. Our strategy focuses on consistently improving your ranking and showing you the results every month.
-Google uses over 200 factors to decide rankings. We work on these daily, ensuring your site appears for relevant searches.
-Our SEO is different because we follow Google's best practice: providing regular, relevant, high-quality content. Articles that answer your audience's questions and highlight your product or service are rewarded by Google with higher rankings. So, if your SEO provider isn't creating this kind of content, what are you really paying for?
-				<img src="/assets/media/2025/08/Group-639-3.png" alt="Group 639 (3)" itemprop="image" height="800" width="800" title="Group 639 (3)"  />
-	<h3>We focus in 3 areas</h3>
-	<ul>
-		<li>		
-				<img src="/assets/media/2025/03/ic-check-1-2.png" alt="ic-check 1 (2)" title="ic-check 1 (2)" itemprop="image"/>
-		<p>Your website</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-2.png" alt="ic-check 1 (2)" title="ic-check 1 (2)" itemprop="image"/>
-		<p>Your GMB Page with great Google reviews and more</p></li><li>		
-				<img src="/assets/media/2025/03/ic-check-1-2.png" alt="ic-check 1 (2)" title="ic-check 1 (2)" itemprop="image"/>
-		<p>The questions people ask eg The best ways to ...,"The top 10....","The most....","How to....","Near me....," etc.</p></li>	</ul>
-				<img src="/assets/media/2020/12/macbook-monthly-blogs.png" alt="macbook-monthly-blogs" itemprop="image" height="473" width="965" title="macbook-monthly-blogs"  />
-<h2>
-		SEO Finder Package
-	</h2>
-<h3>
-		Features
-	</h3>
-	<ul>
-		<li>		
-				<img src="/assets/media/2021/08/website-audit.svg" alt="website-audit" title="website-audit" itemprop="image"/>
-		<h3>Website Audit</h3><p>A review of current analytics and tracking, speed, ranking for keywords, backlinks structure and general performance.</p></li><li>		
-				<img src="/assets/media/2021/08/seo-setup.svg" alt="seo-setup" title="seo-setup" itemprop="image"/>
-		<h3>SEO Set up</h3><p>Including analytics and tracking</p></li><li>		
-				<img src="/assets/media/2021/08/keyword-research.svg" alt="keyword-research" title="keyword-research" itemprop="image"/>
-		<h3>Keyword Research and Planning</h3><p>Monthly optimisation in line with keyword plan with up to 25 keywords. More keywords are charged extra, with POA</p></li><li>		
-				<img src="/assets/media/2021/08/content-writing.svg" alt="content-writing" title="content-writing" itemprop="image"/>
-		<h3>SEO Content writing</h3>One SEO blog (up to 400 words) every 2 months, minor website content updates<br />
-( Current offer inclusion - worth $200 per month )
-</li><li>		
-				<img src="/assets/media/2021/08/off-page-seo.svg" alt="off-page-seo" title="off-page-seo" itemprop="image"/>
-		<h3>Off-page SEO</h3><p>The ongoing creation of backlinks, forum posting, managing local listings and Ongoing Competitor research into their results</p></li><li>		
-				<img src="/assets/media/2021/08/on-page-seo.svg" alt="on-page-seo" title="on-page-seo" itemprop="image"/>
-		<h3>On-page SEO</h3><p>Local SEO Structured data, page naming and tagging, URL mapping and redirects, alt tag review</p></li><li>		
-				<img src="/assets/media/2021/08/monthly-report.svg" alt="monthly-report" title="monthly-report" itemprop="image"/>
-		<h3>Monthly Report</h3><p>Easy to understand, Performance showing key search term rankings showing starting points, progress and work completed during the month</p></li>	</ul>
-			<h3>Benefits</h3>			
-	<ul>
-		<li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Be there when people search for your product or service</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Be there when people ask questions</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Capture the organic traffic and don't pay for Ads</p></li><li>		
-				<img src="/assets/media/2020/12/ic-check.svg" alt="ic-check" title="ic-check" itemprop="image"/>
-		<p>Grow your enquiries and your business</p></li>	</ul>
-		<h2>$1000</h2>
-		<h6>excluding GST per month</h6>
-$1000 excluding GST once off set up fee<br />
-12 month minimum term, then month by month thereafter
-			<a href="#" target="_self">
-						ENQUIRE NOW
-					</a>
-<h2>
-		Start your consultation now
-	</h2>
-<h2>
-		FAQs
-	</h2>
-						<h6>Do I get monthly report showing my ranking progress for my most important search terms?</h6>
-			<p>Yes, you get a full breakdown of how your keywords are ranking each month</p>
-						<h6>Do I have an account manager in Australia who I can communicate with?</h6>
-			<p>Yes, they will have regular contact with you</p>
-						<h6>How long does it take before I can start to see results of improved rankings?</h6>
-			<p>We usually start seeing results at the 3 - 6 month mark ( depending on the initial audit we do, as there may be substantial fixes needed first before ranking can occur )</p>
-						<h6>If I have had previous SEO work done on my website, can Ad On Group build on this?</h6>
-			<p>Yes</p>
-						<h6>What will the initial strategy, audit and roadmap show me?</h6>
-			<p>We see what needs to be done and set out a plan to share with you. Which keywords, what needs to happen on your website, what needs to happen off your website, what blogs we need to write. All laid out in a timeframe. </p>
-						<h6>My package includes a 400 word blog every 2 months, do I have to do anything and why is this important?</h6>
-			<p>No, we write and load your blogs. They are important because they cover topics about your business and industry that people search for. If they do a search, simply put, your website should show up. Google also loves websites with new, relevant, regular content.</p>
-						<h6>Is there a minimum term?</h6>
-			<p>Yes, like all of Ad On Group's marketing packages there is a 12 month minimum term, and then it is on a month by month basis.</p>
-	<!--AOG - Feb 1, 2022--></div>
+  <section class="wrap" style="padding-top:14px;padding-bottom:10px">
+    
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:28px;margin:16px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div class="prod-grid" style="display:grid;grid-template-columns:1.3fr 0.7fr;gap:30px;align-items:start">
+        <div style="min-width:0">
+          <div style="font-size:21px;font-weight:800;letter-spacing:-0.026em;color:#0B1220">SEO Finder Package</div>
+          
+          
+        <div style="margin:18px 0 0">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700">Features</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin:11px 0 0">
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Website AuditA review of current analytics and tracking, speed, ranking for keywords, backlinks structure and general performance.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">SEO Set upIncluding analytics and tracking</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Keyword Research and PlanningMonthly optimisation in line with keyword plan with up to 25 keywords. More keywords are charged extra, with POA</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">SEO Content writingOne SEO blog (up to 400 words) every 2 months, minor website content updates ( Current offer inclusion - worth $200 per month )</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Off-page SEOThe ongoing creation of backlinks, forum posting, managing local listings and Ongoing Competitor research into their results</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">On-page SEOLocal SEO Structured data, page naming and tagging, URL mapping and redirects, alt tag review</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Monthly ReportEasy to understand, Performance showing key search term rankings showing starting points, progress and work completed during the month</span></div>
+          </div>
+        </div>
+          
+        <div style="margin:18px 0 0">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700">Benefits</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin:11px 0 0">
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Be there when people search for your product or service</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Be there when people ask questions</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Capture the organic traffic and don't pay for Ads</span></div>
+            <div style="display:flex;align-items:flex-start;gap:11px"><span style="flex:none;width:20px;height:20px;border-radius:6px;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.55;color:#1F2733">Grow your enquiries and your business</span></div>
+          </div>
+        </div>
+        </div>
+        <div>
+        <div style="background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#1BABE5;line-height:1">$1000</span>
+          </div>
+          <div style="font-size:14px;color:#5A6473;margin-top:4px">per month, excluding GST</div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:15px 0"></div>
+          <div style="font-size:14px;line-height:1.6;color:#5A6473">
+            <div><strong style="color:#0B1220">$1000</strong> once off set-up fee</div>
+            <div style="margin-top:6px">12 month minimum term, then month by month thereafter</div>
+          </div>
+          
+          
+        </div></div>
+      </div>
+    </div>
+  </section>
 
-  <section style="max-width:760px;margin:0 auto;padding:0 24px 70px;display:flex;justify-content:space-between;gap:16px">
+  <section class="wrap" style="padding-bottom:60px">
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:8px 26px 10px;margin:22px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div style="font-size:19px;font-weight:800;letter-spacing:-0.024em;color:#0B1220;padding:20px 0 6px">Common questions</div>
+      <details class="faq"><summary>Do I get monthly report showing my ranking progress for my most important search terms?</summary><p>Yes, you get a full breakdown of how your keywords are ranking each month</p></details>
+      <details class="faq"><summary>Do I have an account manager in Australia who I can communicate with?</summary><p>Yes, they will have regular contact with you</p></details>
+      <details class="faq"><summary>How long does it take before I can start to see results of improved rankings?</summary><p>We usually start seeing results at the 3 - 6 month mark ( depending on the initial audit we do, as there may be substantial fixes needed first before ranking can occur )</p></details>
+      <details class="faq"><summary>If I have had previous SEO work done on my website, can Ad On Group build on this?</summary><p>Yes</p></details>
+      <details class="faq"><summary>What will the initial strategy, audit and roadmap show me?</summary><p>We see what needs to be done and set out a plan to share with you. Which keywords, what needs to happen on your website, what needs to happen off your website, what blogs we need to write. All laid out in a timeframe.</p></details>
+      <details class="faq"><summary>My package includes a 400 word blog every 2 months, do I have to do anything and why is this important?</summary><p>No, we write and load your blogs. They are important because they cover topics about your business and industry that people search for. If they do a search, simply put, your website should show up. Google also loves websites with new, relevant, regular content.</p></details>
+      <details class="faq"><summary>Is there a minimum term?</summary><p>Yes, like all of Ad On Group's marketing packages there is a 12 month minimum term, and then it is on a month by month basis.</p></details>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:70px;display:flex;justify-content:space-between;gap:16px">
     <span><a href="/digital-pricing/websites/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">&larr; Websites</a></span>
     <span style="text-align:right"><a href="/digital-pricing/google-ads-management/" style="font-size:14px;font-weight:600;color:#1BABE5;text-decoration:none">Google Ads Management &rarr;</a></span>
   </section>
