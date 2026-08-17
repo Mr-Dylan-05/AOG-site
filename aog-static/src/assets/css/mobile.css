@@ -78,6 +78,15 @@ p, li, figcaption, blockquote { text-wrap: pretty; }
   summary[style*="display:flex"] { flex-wrap: nowrap !important; }
   summary[style*="display:flex"] > *:not([style*="flex:none"]) { min-width: 0 !important; }
 
+  /* An accordion header on the division pages is a bare 21px line of text —
+     less than half the ~44px a thumb reliably hits, on a control whose whole
+     job is to be tapped. /faqs/ and /programs/ already pad theirs (62px and
+     56px), and min-height leaves those alone rather than stacking on top.
+     The flex pair centres the question in the taller box; summaries that
+     already set their own display keep it. */
+  details > summary { min-height: 44px; box-sizing: border-box; }
+  details > summary:not([style*="display:flex"]) { display: flex; align-items: center; }
+
   /* Same failure, much more of it: an icon chip followed by a line of copy — a
      tick and its bullet, a number and its label. The chip is `flex:none`, so
      the blanket wrap rule puts the copy on its own line and leaves the chip
