@@ -1,30 +1,30 @@
 #!/usr/bin/env node
 /**
- * build-digital-pricing.js — /digital-pricing/, the internal Ad On Digital price list.
+ * build-digital-pricing.js — /digital-pricing/, the Ad On Digital bundle sheet.
  *
- * Restored after the migration dropped it. The old page lived inside
- * /online-accelerator/ and /stimulus-marketing-packages/, both of which were
- * redirected to /ad-on-digital/ during consolidation.
+ * Account managers screenshare this with clients, so everything on it is
+ * written for a client to read. Nothing internal, no build instructions, no
+ * placeholders, and no "(internal)" in the title, because a browser tab is on
+ * screen for the whole call.
+ *
+ * BUNDLES, NOT PRODUCTS. The first version of this page listed the individual
+ * products with their own prices. That was wrong: the page it replaces sold
+ * bundles, and a client looking at a per-product list will add the numbers up
+ * and arrive at a figure nobody quotes.
  *
  * WHERE THE NUMBERS COME FROM
+ * The WordPress dump, taking the live pages rather than their revisions:
  *
- * Not from the WordPress dump. The dump does still hold the old pricing, but
- * only as Beaver Builder module records whose titles are bare amounts and
- * image filenames, with the product names in separate sibling modules. Pairing
- * a price to a product from that would have been inference, and a PM quoting
- * an inferred price to a client is worse than having no page.
+ *   Online Accelerator   page 3558, /online-accelerator/, modified 2024-11-21.
+ *                        RRP $2300, offer $900/month, $900 set-up. An earlier
+ *                        2023 revision of the same page says $600; that is the
+ *                        superseded version and is deliberately not used.
+ *   Stimulus Package     the packages price list, 2 to 5 product tiers.
  *
- * Instead every figure is read from the product's OWN live page at build time,
- * which is the company's currently published price. Re-run this after changing
- * any product page and the table follows.
- *
- * That distinction caught a real error: a naive read of /finder-seo-package/
- * returns "$200 per month", which is not the price. It is an inclusion,
- * "Current offer inclusion - worth $200 per month". SEO is $1000. This script
- * ignores any amount preceded by "worth".
- *
- * NOINDEX, and deliberately so. It is an internal reference for the team to
- * quote from, not a public price list, and prices change.
+ * Both carry conditions that matter commercially, and they are on the page
+ * because a client should see them: the Accelerator's inclusions cannot be
+ * dropped for a lower price, and Stimulus is an existing-customer offer subject
+ * to qualification.
  *
  * Usage:  node scripts/build-digital-pricing.js
  */
@@ -34,108 +34,156 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
-const SITE = path.join(ROOT, "_site");
-
-const PRODUCTS = [
-  ["Websites", "websites", "Design, build and hosting, with ongoing changes."],
-  ["SEO", "finder-seo-package", "On-page and off-page work, with monthly ranking reports."],
-  ["Google Ads", "google-ads-management", "Managed search campaigns. Excludes the ad spend itself."],
-  ["Facebook Packages", "facebook-packages", "Managed Meta campaigns. Excludes the ad spend itself."],
-  ["Brochure Campaign", "brochure-campaign", "Digital brochures for your products and services."],
-  ["Blogs", "blogs", "Written and published for you."],
-  ["Video Flexi", "video-flexi", "Animated video, with changes every two months."],
-];
-
-const money = (s) => Number(String(s).replace(/[$,]/g, ""));
-
-/** Read the published figures off a product's own built page. */
-function figuresFor(slug) {
-  const file = path.join(SITE, slug, "index.html");
-  if (!fs.existsSync(file)) return null;
-  let t = fs.readFileSync(file, "utf8");
-  t = t.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, "");
-  t = t.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-
-  // "$N per month", but never "worth $N per month" — that is an inclusion, not
-  // a price, and reading it as one puts SEO at $200 instead of $1000.
-  const prices = [];
-  const priceRe = /(worth\s+)?\$([0-9][0-9,]*)\s*(?:ex(?:cl(?:uding)?)?\.?\s*gst\s*)?per month/gi;
-  let m;
-  while ((m = priceRe.exec(t)) !== null) if (!m[1]) prices.push("$" + m[2]);
-
-  const setups = (t.match(/\$[0-9][0-9,]*\s*(?:ex(?:cl(?:uding)?)?\.?\s*gst\s*)?once[- ]off\s*set[- ]?up fee/gi) || [])
-    .map((s) => (s.match(/\$[0-9][0-9,]*/) || [])[0]);
-
-  const term = (t.match(/(\d+)\s*month minimum term/i) || [])[1];
-
-  const uniq = (a) => [...new Set(a)].sort((x, y) => money(x) - money(y));
-  return { prices: uniq(prices), setups: uniq(setups), term };
-}
-
-const rows = PRODUCTS.map(([name, slug, blurb]) => ({ name, slug, blurb, ...(figuresFor(slug) || { prices: [], setups: [] }) }));
-
-const fmt = (list) => (list.length === 0 ? null : list.length === 1 ? list[0] : list.join(" / "));
+const SHELL = fs.readFileSync(path.join(PUBLIC, "contact-us", "index.html"), "utf8");
+const head = SHELL.slice(0, SHELL.indexOf("</head>"));
+const ASSETS =
+  (head.match(/<link rel="preload"[^>]*>/g) || []).join("\n") +
+  "\n" +
+  (head.match(/<style>[\s\S]*?<\/style>/g) || []).join("\n");
 
 const BLUE = "#1BABE5", INK = "#0B1220", GREY = "#5A6473";
 
-const row = (r) => {
-  const price = fmt(r.prices);
-  const setup = fmt(r.setups);
-  const missing = !price;
-  return `
-        <tr style="border-top:1px solid rgba(11,18,32,0.08)">
-          <td style="padding:16px 14px;vertical-align:top">
-            <a href="/${r.slug}/" style="font-size:15.5px;font-weight:700;color:${INK};text-decoration:none">${r.name}</a>
-            <div style="font-size:13.5px;line-height:1.5;color:#8A93A1;margin:4px 0 0">${r.blurb}</div>
-          </td>
-          <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15.5px;font-weight:700;color:${INK}">${
-            price || "&mdash;"
-          }${price && r.prices.length > 1 ? '<div style="font-size:12px;font-weight:600;color:#8A93A1;margin-top:3px">tiers</div>' : ""}</td>
-          <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15px;color:${GREY}">${setup || "&mdash;"}</td>
-          <td style="padding:16px 14px;vertical-align:top;white-space:nowrap;font-size:15px;color:${GREY}">${r.term ? r.term + " months" : "&mdash;"}</td>
-        </tr>`;
+const ACCELERATOR = {
+  name: "Online Accelerator",
+  rrp: "$2,300",
+  price: "$900",
+  setup: "$900",
+  term: "12 month minimum term, then month by month",
+  note: "Removing any of the standard inclusions does not change the bundle price.",
+  includes: [
+    ["Local SEO", "Climb the organic results on Google above your competition. As per our SEO Finder package."],
+    ["Website", "New build, or maintain and improve your existing site, optimised for Google. Includes ongoing updates and hosting. As per our Website Illuminate package."],
+    ["Google Business Profile", "Manage and update opening hours, contact details, FAQs, keywords, services, images, blogs, offers and reviews."],
+    ["Monthly blog", "Engage your customers and boost your keywords on Google. As per our Blog package."],
+    ["Monthly digital brochure", "Stay front of mind with existing customers, sent by email or SMS. As per our Digital Brochure package."],
+  ],
+  extras: [
+    ["Google Ads search campaign management", "$400"],
+    ["Facebook lead generation and awareness campaign management", "$400"],
+  ],
 };
 
-const missing = rows.filter((r) => r.prices.length === 0);
+const STIMULUS = {
+  name: "Stimulus Package",
+  term: "12 month minimum term, then month by month",
+  note: "A bundled offer for existing Ad On Group customers who qualify.",
+  tiers: [
+    ["2 products", "$400", "$400"],
+    ["3 products", "$500", "$500"],
+    ["4 products", "$600", "$600"],
+    ["5 products", "$700", "$700"],
+  ],
+};
+
+const tick = `<span style="flex:none;width:22px;height:22px;border-radius:7px;background:${BLUE};display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>`;
 
 const body = `
-  <section style="max-width:1000px;margin:0 auto;padding:60px 24px 30px">
-    <h1 style="font-size:clamp(30px,4vw,48px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:${INK};margin:0">Ad On Digital <span style="color:${BLUE}">pricing</span>.</h1>
-
-    <div style="overflow-x:auto;margin:26px 0 0;-webkit-overflow-scrolling:touch">
-      <table style="width:100%;border-collapse:collapse;min-width:620px;background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:16px;overflow:hidden">
-        <thead>
-          <tr style="background:rgba(11,18,32,0.03)">
-            <th style="text-align:left;padding:13px 14px;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace">Product</th>
-            <th style="text-align:left;padding:13px 14px;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace">Per month</th>
-            <th style="text-align:left;padding:13px 14px;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace">Set-up</th>
-            <th style="text-align:left;padding:13px 14px;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace">Min term</th>
-          </tr>
-        </thead>
-        <tbody>${rows.map(row).join("")}
-        </tbody>
-      </table>
-    </div>
-
-
-
+  <section style="max-width:1000px;margin:0 auto;padding:56px 24px 20px">
+    <h1 style="font-size:clamp(30px,4vw,48px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:${INK};margin:0">Ad On Digital <span style="color:${BLUE}">bundles</span>.</h1>
+    <p style="font-size:16.5px;line-height:1.65;color:${GREY};margin:14px 0 0;max-width:620px">All prices exclude GST.</p>
   </section>
-`;
 
-const shell = fs.readFileSync(path.join(PUBLIC, "contact-us", "index.html"), "utf8");
-const head = shell.slice(0, shell.indexOf("</head>"));
-const assets =
-  (head.match(/<link rel="preload"[^>]*>/g) || []).join("\n") + "\n" + (head.match(/<style>[\s\S]*?<\/style>/g) || []).join("\n");
+  <section style="max-width:1000px;margin:0 auto;padding:14px 24px 20px">
+    <div style="background:#fff;border:1px solid rgba(27,171,229,0.35);border-radius:22px;padding:32px 30px;box-shadow:0 26px 60px -34px rgba(11,18,32,0.34)">
+      <div class="bundle-grid" style="display:grid;grid-template-columns:1.25fr 0.75fr;gap:34px;align-items:start">
+        <div>
+          <div style="font-size:24px;font-weight:800;letter-spacing:-0.028em;color:${INK}">${ACCELERATOR.name}</div>
+          <div style="display:flex;flex-direction:column;gap:13px;margin:22px 0 0">
+            ${ACCELERATOR.includes
+              .map(
+                ([t, d]) => `<div style="display:flex;align-items:flex-start;gap:12px">
+              ${tick}
+              <span style="font-size:15px;line-height:1.55;color:#1F2733"><strong style="color:${INK}">${t}.</strong> ${d}</span>
+            </div>`
+              )
+              .join("\n            ")}
+          </div>
+        </div>
+
+        <div style="background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22);border-radius:16px;padding:22px 20px">
+          <div style="font-size:14px;color:#8A93A1;text-decoration:line-through">${ACCELERATOR.rrp} per month</div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin:6px 0 0">
+            <span style="font-size:40px;font-weight:800;letter-spacing:-0.04em;color:${BLUE};line-height:1">${ACCELERATOR.price}</span>
+            <span style="font-size:14.5px;color:${GREY}">per month</span>
+          </div>
+          <div style="height:1px;background:rgba(11,18,32,0.10);margin:16px 0"></div>
+          <div style="font-size:14.5px;line-height:1.6;color:${GREY}">
+            <div><strong style="color:${INK}">${ACCELERATOR.setup}</strong> once off set-up fee</div>
+            <div style="margin-top:6px">${ACCELERATOR.term}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:rgba(11,18,32,0.08);margin:26px 0 0"></div>
+
+      <div style="margin:22px 0 0">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#8A93A1;font-weight:700">Add to the Accelerator</div>
+        <div class="extras-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 0">
+          ${ACCELERATOR.extras
+            .map(
+              ([t, p]) => `<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;background:rgba(11,18,32,0.02);border:1px solid rgba(11,18,32,0.08);border-radius:12px;padding:14px 16px">
+            <span style="font-size:14.5px;line-height:1.45;color:#1F2733">${t}</span>
+            <span style="flex:none;font-size:16px;font-weight:800;color:${INK}">${p}<span style="font-size:12.5px;font-weight:600;color:#8A93A1"> /mo</span></span>
+          </div>`
+            )
+            .join("\n          ")}
+        </div>
+        <p style="font-size:13.5px;line-height:1.55;color:#8A93A1;margin:12px 0 0">These rates apply when added to the Online Accelerator. ${ACCELERATOR.note}</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:20px 24px 70px">
+    <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:22px;padding:30px;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-0.026em;color:${INK}">${STIMULUS.name}</div>
+      <p style="font-size:15px;line-height:1.6;color:${GREY};margin:8px 0 0">Bundle two or more products and the monthly price is set by how many you take.</p>
+
+      <div style="overflow-x:auto;margin:22px 0 0;-webkit-overflow-scrolling:touch">
+        <table style="width:100%;border-collapse:collapse;min-width:420px">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace;border-bottom:1px solid rgba(11,18,32,0.10)">Bundle</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace;border-bottom:1px solid rgba(11,18,32,0.10)">Per month</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#8A93A1;font-family:'JetBrains Mono',monospace;border-bottom:1px solid rgba(11,18,32,0.10)">Set-up</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${STIMULUS.tiers
+              .map(
+                ([n, p, s]) => `<tr>
+              <td style="padding:14px 12px;font-size:15.5px;font-weight:700;color:${INK};border-top:1px solid rgba(11,18,32,0.07)">${n}</td>
+              <td style="padding:14px 12px;font-size:15.5px;font-weight:700;color:${INK};border-top:1px solid rgba(11,18,32,0.07);white-space:nowrap">${p}</td>
+              <td style="padding:14px 12px;font-size:15px;color:${GREY};border-top:1px solid rgba(11,18,32,0.07);white-space:nowrap">${s}</td>
+            </tr>`
+              )
+              .join("\n            ")}
+          </tbody>
+        </table>
+      </div>
+
+      <p style="font-size:13.5px;line-height:1.55;color:#8A93A1;margin:16px 0 0">${STIMULUS.note} ${STIMULUS.term}.</p>
+    </div>
+  </section>
+
+  <style>
+    @media (max-width: 860px) {
+      .bundle-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+      /* Price first on a phone: it is the thing being asked about. */
+      .bundle-grid > div:last-child { order: -1; }
+      .extras-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+`;
 
 const html = `<!doctype html>
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ad On Digital Pricing | Ad On Group</title>
-<meta name="description" content="Ad On Digital product pricing.">
+<title>Ad On Digital Bundles | Ad On Group</title>
+<meta name="description" content="Ad On Digital bundle pricing.">
 <meta name="robots" content="noindex">
-${assets}
+${ASSETS}
 </head>
 <body>
 <div style="max-width:100%;overflow-x:clip;background:transparent;position:relative">
@@ -150,8 +198,5 @@ fs.mkdirSync(dir, { recursive: true });
 fs.writeFileSync(path.join(dir, "index.html"), html);
 
 console.log("  wrote digital-pricing/index.html");
-for (const r of rows) {
-  console.log(
-    `    ${r.name.padEnd(20)} ${(fmt(r.prices) || "NOT PUBLISHED").padEnd(22)} setup ${(fmt(r.setups) || "-").padEnd(14)} ${r.term ? r.term + "mth" : "-"}`
-  );
-}
+console.log(`    ${ACCELERATOR.name.padEnd(24)} ${ACCELERATOR.price}/mo (RRP ${ACCELERATOR.rrp})  set-up ${ACCELERATOR.setup}  ${ACCELERATOR.includes.length} inclusions, ${ACCELERATOR.extras.length} extras`);
+for (const [n, p, s] of STIMULUS.tiers) console.log(`    ${(STIMULUS.name + " " + n).padEnd(24)} ${p}/mo  set-up ${s}`);
