@@ -187,6 +187,16 @@
             });
           }
 
+          // Meta's equivalent, for the paid campaigns. Guarded on fbq existing,
+          // because there is no Pixel on the site yet: nothing here breaks
+          // without one, and the moment the Pixel snippet is added this starts
+          // reporting conversions with no further code change.
+          if (typeof window.fbq === "function") {
+            window.fbq("track", "Lead", {
+              content_name: form.getAttribute("data-form") || "contact",
+            });
+          }
+
           // A form can name a panel to show in its place. Leaving a filled-in
           // form on screen under a success line reads as though it might not
           // have sent; swapping it for a plain confirmation does not.
