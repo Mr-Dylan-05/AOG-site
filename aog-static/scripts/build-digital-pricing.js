@@ -31,6 +31,7 @@
  *   Online Accelerator and Stimulus  — discontinued (Taryn).
  *   Easy Rate App                    — its page carries no price at all.
  *   Products                         — an index page, replaced by this one.
+ *   Review Me                        — removed on request.
  *
  * noindex, and linked from nowhere.
  *
@@ -46,7 +47,7 @@ const ROOT = path.join(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
 const ALL = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "_data", "oldPages.json"), "utf8"));
 
-const SKIP = new Set(["products", "online-accelerator", "easy-rate-app"]);
+const SKIP = new Set(["products", "online-accelerator", "easy-rate-app", "review-me"]);
 const PAGES = ALL.filter((p) => !SKIP.has(p.slug));
 
 const SHELL = fs.readFileSync(path.join(PUBLIC, "contact-us", "index.html"), "utf8");
@@ -177,8 +178,23 @@ function model(page) {
   let bucket = null;   // "features" | "benefits"
   let q = null;
 
+  /**
+   * On a page that sells one thing — Blogs, Brochure Campaign, Video Flexi —
+   * the Features and Benefits lists come BEFORE the price, and it is the price
+   * heading that creates the product. So at the moment those lists are read
+   * there is nothing to attach them to: they fell through to prose and never
+   * rendered, leaving three products priced with no statement of what you get.
+   * Hold them here and hand them over when the product opens.
+   */
+  const pending = { features: [], benefits: [] };
+
   const openProduct = (name) => {
-    cur = { name, features: [], benefits: [], paras: [], price: null, img: null };
+    cur = {
+      name,
+      features: pending.features.splice(0),
+      benefits: pending.benefits.splice(0),
+      paras: [], price: null, img: null,
+    };
     m.products.push(cur);
     bucket = null;
   };
@@ -235,6 +251,7 @@ function model(page) {
     if (b.k === "ul") {
       if (cur && bucket) cur[bucket].push(...b.items);
       else if (cur) cur.features.push(...b.items);
+      else if (bucket) pending[bucket].push(...b.items);
       else m.prose.push(b);
       continue;
     }
@@ -381,10 +398,15 @@ const indexBody = `
     <div style="background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:20px;padding:22px 26px;margin:14px 0 0;box-shadow:0 20px 46px -32px rgba(11,18,32,0.3)">
       <a href="/digital-pricing/${m.slug}/" style="text-decoration:none;display:block"><span style="font-size:18px;font-weight:800;letter-spacing:-0.024em;color:${INK}">${esc(m.title)}</span></a>
       <div style="display:flex;flex-direction:column;margin:12px 0 0">
-        ${m.products.map((p, i) => `<a class="idx-row" href="/digital-pricing/${m.slug}/" style="display:flex;align-items:center;justify-content:space-between;gap:20px;text-decoration:none;padding:11px 0;${i ? "border-top:1px solid rgba(11,18,32,0.07)" : ""}">
-          <span style="font-size:15.5px;color:#1F2733;min-width:0">${esc(p.name === m.title ? "" : p.name)}</span>
-          <span style="flex:none;text-align:right;white-space:nowrap"><strong style="font-size:17px;font-weight:800;color:${INK}">${esc(p.price.amount)}</strong><span style="font-size:12.5px;color:#8A93A1;font-weight:600"> /mo</span>${p.price.setup ? `<span style="font-size:12.5px;color:#8A93A1"> &middot; ${esc(p.price.setup)} set-up</span>` : ""}</span>
-        </a>`).join("")}
+        ${m.products.map((p, i) => `<div style="padding:13px 0;${i ? "border-top:1px solid rgba(11,18,32,0.07)" : ""}">
+          <a class="idx-row" href="/digital-pricing/${m.slug}/" style="display:flex;align-items:baseline;justify-content:${p.name === m.title ? "flex-start" : "space-between"};gap:20px;text-decoration:none">
+            ${p.name === m.title ? "" : `<span style="font-size:15.5px;font-weight:700;color:${INK};min-width:0">${esc(p.name)}</span>`}
+            <span style="flex:none;text-align:right;white-space:nowrap"><strong style="font-size:17px;font-weight:800;color:${INK}">${esc(p.price.amount)}</strong><span style="font-size:12.5px;color:#8A93A1;font-weight:600"> /mo</span>${p.price.setup ? `<span style="font-size:12.5px;color:#8A93A1"> &middot; ${esc(p.price.setup)} set-up</span>` : ""}</span>
+          </a>
+          ${p.features.length ? `<ul style="list-style:none;padding:0;margin:9px 0 0;display:flex;flex-direction:column;gap:6px">
+            ${p.features.map((t) => `<li style="display:flex;align-items:flex-start;gap:9px"><span style="flex:none;width:5px;height:5px;border-radius:50%;background:${BLUE};margin-top:8px"></span><span style="font-size:14px;line-height:1.55;color:${GREY}">${esc(t)}</span></li>`).join("")}
+          </ul>` : ""}
+        </div>`).join("")}
       </div>
     </div>`).join("")}
   </section>
