@@ -35,6 +35,15 @@
  *   the footer wordmark, /ad-on-ai/#top             -> /
  *                                                       It reads "Ad On Group" and belongs on home.
  *
+ * Separately, the page's own "Book a call" button pointed at /#contact — the
+ * homepage's full contact form, which asks for first name, last name, phone,
+ * contact preference and a message. The AI campaign is meant to land on the
+ * short name-and-email form at /ai-training/, so that one button is repointed
+ * there. Scoped to this page: /#contact is a legitimate homepage anchor
+ * everywhere else, and the header and footer "Contact" links are deliberately
+ * left alone, since those are shared chrome and have to stay identical across
+ * the site.
+ *
  * Idempotent, and safe to re-run after any re-export of the page.
  *
  * Usage:  node scripts/fix-ai-division-links.js [--dry]
@@ -76,12 +85,25 @@ function walk(dir, out = []) {
   return out;
 }
 
+/**
+ * Page-scoped rewrites: [path suffix, regex, target]. Kept separate from PLAIN
+ * because these hrefs are correct on other pages.
+ */
+const SCOPED = [
+  ["ad-on-ai-division/index.html", /href="\/#contact"/g, "/ai-training/"],
+];
+
 let files = 0, links = 0;
 const tally = {};
 
 for (const file of walk(PUBLIC)) {
   let s = fs.readFileSync(file, "utf8");
   const before = s;
+
+  for (const [suffix, re, to] of SCOPED) {
+    if (!file.endsWith(suffix)) continue;
+    s = s.replace(re, () => { links++; tally[to] = (tally[to] || 0) + 1; return `href="${to}"`; });
+  }
 
   for (const [re, to] of PLAIN) {
     s = s.replace(re, () => { links++; tally[to] = (tally[to] || 0) + 1; return `href="${to}"`; });
