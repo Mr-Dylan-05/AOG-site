@@ -94,13 +94,21 @@ const SCOPED = [
 ];
 
 /**
- * Label rewrites: [path suffix, regex, replacement]. "Book a call" promised a
+ * Copy rewrites: [path suffix, regex, replacement]. "Book a call" promised a
  * booking, but the page it now lands on asks for a name and an email and
  * answers with "Send me the details" — no call is scheduled. "Enquire now"
  * describes what the button actually does.
  */
 const SCOPED_TEXT = [
   ["ad-on-ai-division/index.html", /(<a href="\/ai-training\/"[^>]*>)Book a call(<\/a>)/g, "$1Enquire now$2"],
+  // The social-proof line under the client logos. The export claimed "trained
+  // over 40+ ... to use AI", which counts AI training clients; the line is
+  // meant to carry the group's whole client base.
+  [
+    "ad-on-ai-division/index.html",
+    /We&rsquo;ve trained over (<span[^>]*>)40\+(<\/span>) Australian businesses just like yours to use AI\./g,
+    "We&rsquo;ve worked with over $114,000$2 Australian businesses just like yours.",
+  ],
 ];
 
 let files = 0, links = 0, labels = 0;
@@ -140,7 +148,7 @@ for (const file of walk(PUBLIC)) {
   }
 }
 
-console.log(`${DRY ? "[dry] " : ""}repointed ${links} links, relabelled ${labels} button(s), across ${files} file(s)`);
+console.log(`${DRY ? "[dry] " : ""}repointed ${links} links, rewrote ${labels} text run(s), across ${files} file(s)`);
 for (const [to, n] of Object.entries(tally).sort((a, b) => b[1] - a[1])) {
   console.log(`   ${String(n).padStart(2)} -> ${to}`);
 }
