@@ -93,7 +93,17 @@ const SCOPED = [
   ["ad-on-ai-division/index.html", /href="\/#contact"/g, "/ai-training/"],
 ];
 
-let files = 0, links = 0;
+/**
+ * Label rewrites: [path suffix, regex, replacement]. "Book a call" promised a
+ * booking, but the page it now lands on asks for a name and an email and
+ * answers with "Send me the details" — no call is scheduled. "Enquire now"
+ * describes what the button actually does.
+ */
+const SCOPED_TEXT = [
+  ["ad-on-ai-division/index.html", /(<a href="\/ai-training\/"[^>]*>)Book a call(<\/a>)/g, "$1Enquire now$2"],
+];
+
+let files = 0, links = 0, labels = 0;
 const tally = {};
 
 for (const file of walk(PUBLIC)) {
@@ -103,6 +113,11 @@ for (const file of walk(PUBLIC)) {
   for (const [suffix, re, to] of SCOPED) {
     if (!file.endsWith(suffix)) continue;
     s = s.replace(re, () => { links++; tally[to] = (tally[to] || 0) + 1; return `href="${to}"`; });
+  }
+
+  for (const [suffix, re, to] of SCOPED_TEXT) {
+    if (!file.endsWith(suffix)) continue;
+    s = s.replace(re, (...m) => { labels++; return to.replace("$1", m[1]).replace("$2", m[2]); });
   }
 
   for (const [re, to] of PLAIN) {
@@ -125,7 +140,7 @@ for (const file of walk(PUBLIC)) {
   }
 }
 
-console.log(`${DRY ? "[dry] " : ""}repointed ${links} links across ${files} file(s)`);
+console.log(`${DRY ? "[dry] " : ""}repointed ${links} links, relabelled ${labels} button(s), across ${files} file(s)`);
 for (const [to, n] of Object.entries(tally).sort((a, b) => b[1] - a[1])) {
   console.log(`   ${String(n).padStart(2)} -> ${to}`);
 }
