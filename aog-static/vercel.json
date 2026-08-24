@@ -6,16 +6,6 @@
   "trailingSlash": true,
   "redirects": [
     {
-      "source": "/canary-7f3a/",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/canary-7f3a",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/contact/",
       "destination": "/contact-us/",
       "permanent": true
@@ -313,6 +303,16 @@
     {
       "source": "/website-examples",
       "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai",
+      "destination": "/ad-on-ai-division/",
       "permanent": true
     },
     {
