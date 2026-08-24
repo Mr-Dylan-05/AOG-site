@@ -306,6 +306,506 @@
       "permanent": true
     },
     {
+      "source": "/ad-on-ai-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ai-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adonai-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-onai-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad_on_ai-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon_ai-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-a-i-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-training/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-training",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-program/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-program",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-page/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-a-i-page",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ai-division/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ai-division",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ia/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ia",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ia/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/adon-ia",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-divison/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-divison",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-devision/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-ai-devision",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-al/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/ad-on-al",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Ad-On-AI/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Ad-On-AI",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/AD-ON-AI/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/AD-ON-AI",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Ad-on-ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Ad-on-ai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Ad-On-Ai/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Ad-On-Ai",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Adon-AI/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/Adon-AI",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/AdOnAI/",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
+      "source": "/AdOnAI",
+      "destination": "/ad-on-ai-division/",
+      "permanent": true
+    },
+    {
       "source": "/ad-on-ai/",
       "destination": "/ad-on-ai-division/",
       "permanent": true
