@@ -90,7 +90,13 @@ function walk(dir, out = []) {
  * because these hrefs are correct on other pages.
  */
 const SCOPED = [
-  ["ad-on-ai-division/index.html", /href="\/#contact"/g, "/ai-training/"],
+  // The export ships this button as /#contact, the homepage's long contact
+  // form. It briefly pointed at /ai-training/, the short name-and-email lead
+  // page; that page has been removed because the real sales landing page is
+  // expected to take its place. Until that lands, the button goes to the
+  // contact page, which has a working, tracked form. Both hrefs are matched so
+  // a stale build is corrected as readily as a fresh export.
+  ["ad-on-ai-division/index.html", /href="(?:\/#contact|\/ai-training\/)"/g, "/contact-us/"],
 ];
 
 /**
@@ -100,7 +106,9 @@ const SCOPED = [
  * describes what the button actually does.
  */
 const SCOPED_TEXT = [
-  ["ad-on-ai-division/index.html", /(<a href="\/ai-training\/"[^>]*>)Book a call(<\/a>)/g, "$1Enquire now$2"],
+  // Keyed on data-dc rather than the href, so it survives the button being
+  // repointed. "Book a call" promised a booking the destination never offered.
+  ["ad-on-ai-division/index.html", /(<a [^>]*data-dc="hd"[^>]*>)Book a call(<\/a>)/g, "$1Enquire now$2"],
   // The social-proof line under the client logos. The export claimed "trained
   // over 40+ ... to use AI", which counts AI training clients; the line is
   // meant to carry the group's whole client base.

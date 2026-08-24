@@ -1,5 +1,17 @@
 #!/usr/bin/env node
 /**
+ * RETIRED — this page has been removed from the site.
+ *
+ * /ai-training/ was the short name-and-email lead page for the paid campaign.
+ * It is gone because the real sales landing page is expected to take that URL.
+ * Nothing links to it and it is not in the sitemap, so re-running this script
+ * would resurrect a page the site no longer wants. Kept only as the source if
+ * that page ever needs rebuilding; delete it once the replacement is live.
+ *
+ * The Formspree "leads" endpoint it used is still configured in site.json,
+ * ready for whatever takes its place.
+ */
+/**
  * build-lead-page.js — /ai-training/, the paid-ads landing page.
  *
  * This is where paid traffic lands, so it is built to convert rather than to
