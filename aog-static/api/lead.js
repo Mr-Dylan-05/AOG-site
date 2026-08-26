@@ -43,7 +43,7 @@ const PREFERRED = [
   "submitted_at", "form",
   "name", "firstName", "lastName", "email", "phone", "company",
   "role", "website", "job_title", "industry",
-  "message", "contactPreference",
+  "message", "ai_goal", "contactPreference",
   "score", "band",
   "current_use", "worry", "motivation", "barrier", "support", "intent",
   "source", "page",
