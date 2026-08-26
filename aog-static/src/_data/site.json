@@ -12,15 +12,16 @@
     "tawkChat": false,
     "tawkSrc": "",
     "googleAnalytics": "G-3XBD8BYWWP",
-    "formEndpoint": "https://formspree.io/f/mppaaedl",
-    "//formProvider": "'formspree' | 'basin' | 'netlify' | '' — netlify needs no endpoint",
-    "formProvider": "formspree",
-    "//forms": "Extra forms beyond the main contact form, keyed by the value of a form's data-form attribute. A form whose key is missing or empty stays deliberately inert rather than posting nowhere and looking like it worked. Each needs its own endpoint so submissions land in separate lists.",
+    "formEndpoint": "/api/lead",
+    "//formProvider": "'internal' | 'formspree' | 'basin' | 'netlify' | '' — netlify needs no endpoint",
+    "//formEndpoint": "Every form now posts to our own /api/lead function, which appends the submission to the Google Sheet named by LEADS_SHEET_ID (see api/lead.js). Formspree is gone: it capped submissions, branded the emails, and rendered the quiz's fourteen fields as one unreadable blob.",
+    "formProvider": "internal",
+    "//forms": "Forms beyond the main contact form, keyed by the value of a form's data-form attribute. A form whose key is empty stays deliberately inert rather than posting nowhere and looking like it worked. All live forms share /api/lead; the key itself decides which tab of the sheet the row lands in, so submissions stay separated without separate endpoints.",
     "forms": {
       "partner": "",
       "referral": "",
-      "leads": "https://formspree.io/f/mzepgkyw",
-      "quiz": "https://formspree.io/f/myegnkbv"
+      "leads": "/api/lead",
+      "quiz": "/api/lead"
     }
   },
   "defaultOgImage": "/assets/design/group-team.jpg",

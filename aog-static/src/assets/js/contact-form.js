@@ -167,10 +167,24 @@
       if (button) { button.disabled = true; button.innerHTML = "Sending…"; }
       if (status) { status.textContent = ""; status.className = "form-status"; }
 
+      // Sent url-encoded rather than as a raw FormData object. FormData makes
+      // the browser send multipart/form-data, which a serverless function
+      // cannot read without a parser library; url-encoded is parsed natively,
+      // and every hosted form service accepts it too.
+      var payload = new URLSearchParams(new FormData(form));
+      // Which form this is, added here rather than as a hidden input in every
+      // form's markup. /api/lead uses it to choose the sheet tab, so a new form
+      // is separated correctly the moment it carries a data-form attribute.
+      payload.set("form", form.getAttribute("data-form") || "contact");
+      payload.set("page", window.location.pathname + window.location.search);
+
       fetch(form.getAttribute("action"), {
         method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" },
+        body: payload,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
       })
         .then(function (res) {
           if (!res.ok) throw new Error("Bad response");

@@ -67,14 +67,91 @@
     </div>
 
     <div id="quiz-intro">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Six questions, about a minute</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">A few quick questions, about a minute</div>
       <h1 style="font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-0.042em;font-weight:600;color:#0B1220;margin:14px 0 0">Are you ready for <span style="color:#1BABE5">AI</span>?</h1>
       <p style="font-size:17px;line-height:1.6;color:#4A5462;margin:14px 0 0">Answer honestly and we will show you where you stand, what it is costing you, and what to do about it.</p>
       <button type="button" id="quiz-start" style="font:inherit;font-size:17px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:16px 30px;min-height:54px;border-radius:14px;cursor:pointer;margin:24px 0 0;box-shadow:0 14px 26px -12px rgba(27,171,229,0.65)">Start &rarr;</button>
     </div>
 
     <div id="quiz-questions" hidden>
-      <div class="q-screen" data-step="0" >
+      <div class="q-screen" data-screen="role" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">First up</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Which best describes you?</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
+          <button type="button" class="q-opt" data-q="role" data-pts="0" data-role="business" data-answer="I own or help lead a business">I own or help lead a business</button>
+          <button type="button" class="q-opt" data-q="role" data-pts="0" data-role="individual" data-answer="I am an individual employee">I am an individual employee</button>
+        </div>
+      </div>
+      <div class="q-screen" data-screen="business" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Your business</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">What is your company website?</h2>
+        <p style="font-size:15px;line-height:1.6;color:#5A6473;margin:12px 0 0;max-width:520px">We use this to look up your business so the audit reflects what you actually do, rather than generic advice.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin:22px 0 0;max-width:480px">
+          <label class="q-field">
+            <span>Company website</span>
+            <input type="text" name="website" data-intake="website" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="yourcompany.com.au">
+            <span class="q-err" data-err></span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:22px 0 0">
+          <button type="button" class="q-next">Continue &rarr;</button>
+          <button type="button" class="q-skip">Skip this</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+      <div class="q-screen" data-screen="individual" hidden>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Your role</div>
+        <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">What do you do?</h2>
+        <p style="font-size:15px;line-height:1.6;color:#5A6473;margin:12px 0 0;max-width:520px">So we can show you where AI fits in a role like yours, not in general.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin:22px 0 0;max-width:480px">
+          <label class="q-field">
+            <span>Job title</span>
+            <select name="job_title" data-intake="job_title">
+              <option value="">Select job title</option>
+              <option value="Administration or office support">Administration or office support</option>
+              <option value="Customer service">Customer service</option>
+              <option value="Finance or accounts">Finance or accounts</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Sales or business development">Sales or business development</option>
+              <option value="Operations">Operations</option>
+              <option value="HR or people">HR or people</option>
+              <option value="Executive or personal assistant">Executive or personal assistant</option>
+              <option value="IT or technical">IT or technical</option>
+              <option value="Management or team lead">Management or team lead</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="q-err" data-err></span>
+          </label>
+          <label class="q-field">
+            <span>Industry</span>
+            <select name="industry" data-intake="industry">
+              <option value="">Select industry</option>
+              <option value="Professional services">Professional services</option>
+              <option value="Construction and trades">Construction and trades</option>
+              <option value="Real estate and property">Real estate and property</option>
+              <option value="Healthcare and medical">Healthcare and medical</option>
+              <option value="Retail and e-commerce">Retail and e-commerce</option>
+              <option value="Hospitality and tourism">Hospitality and tourism</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Transport and logistics">Transport and logistics</option>
+              <option value="Education and training">Education and training</option>
+              <option value="Financial services and insurance">Financial services and insurance</option>
+              <option value="Technology">Technology</option>
+              <option value="Marketing and creative">Marketing and creative</option>
+              <option value="Not for profit">Not for profit</option>
+              <option value="Government">Government</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="q-err" data-err></span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:22px 0 0">
+          <button type="button" class="q-next">Continue &rarr;</button>
+          <button type="button" class="q-skip">Skip this</button>
+        </div>
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
+      </div>
+      <div class="q-screen" data-screen="current_use" hidden>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Where you are now</div>
         <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">How are you using AI at the moment?</h2>
         <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
@@ -84,9 +161,9 @@
           <button type="button" class="q-opt" data-q="current_use" data-pts="3" data-answer="I am starting to automate tasks and workflows" data-idx="3">I am starting to automate tasks and workflows</button>
           <button type="button" class="q-opt" data-q="current_use" data-pts="4" data-answer="I am experimenting with agents and more advanced automation" data-idx="4">I am experimenting with agents and more advanced automation</button>
         </div>
-        
+        <button type="button" class="q-back" style="margin-top:18px">Back</button>
       </div>
-      <div class="q-screen" data-step="1" hidden>
+      <div class="q-screen" data-screen="worry" hidden>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Imagine nothing changes</div>
         <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Twelve months from now, which would worry you most?</h2>
         <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
@@ -98,7 +175,7 @@
         </div>
         <button type="button" class="q-back" style="margin-top:18px">Back</button>
       </div>
-      <div class="q-screen" data-step="2" hidden>
+      <div class="q-screen" data-screen="motivation" hidden>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Now the other way round</div>
         <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">If you became genuinely good at AI, what would you most want it to change?</h2>
         <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
@@ -111,7 +188,7 @@
         </div>
         <button type="button" class="q-back" style="margin-top:18px">Back</button>
       </div>
-      <div class="q-screen" data-step="3" hidden>
+      <div class="q-screen" data-screen="barrier" hidden>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">The honest bit</div>
         <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">If AI could make you significantly more productive, what is stopping you?</h2>
         <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
@@ -124,7 +201,7 @@
         </div>
         <button type="button" class="q-back" style="margin-top:18px">Back</button>
       </div>
-      <div class="q-screen" data-step="4" hidden>
+      <div class="q-screen" data-screen="support" hidden>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Learning it is one thing, keeping up is another</div>
         <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Once you have the basics, how important is ongoing help?</h2>
         <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
@@ -136,7 +213,7 @@
         </div>
         <button type="button" class="q-back" style="margin-top:18px">Back</button>
       </div>
-      <div class="q-screen" data-step="5" hidden>
+      <div class="q-screen" data-screen="intent" hidden>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.15em;text-transform:uppercase;color:#1BABE5;font-weight:700">Last one</div>
         <h2 style="font-size:clamp(22px,3.4vw,30px);line-height:1.2;letter-spacing:-0.03em;font-weight:600;color:#0B1220;margin:12px 0 0">Which sounds most like you?</h2>
         <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 0">
@@ -181,6 +258,10 @@
             <input type="hidden" name="source" value="/ai-quiz/">
             <input type="hidden" name="score" id="f-score">
             <input type="hidden" name="band" id="f-band">
+            <input type="hidden" name="role" id="f-role">
+            <input type="hidden" name="website" id="f-website">
+            <input type="hidden" name="job_title" id="f-job_title">
+            <input type="hidden" name="industry" id="f-industry">
             <input type="hidden" name="current_use" id="f-current_use">
             <input type="hidden" name="worry" id="f-worry">
             <input type="hidden" name="motivation" id="f-motivation">
@@ -244,6 +325,37 @@
       background: none; border: none; padding: 8px 2px; cursor: pointer;
     }
     .q-back:hover { color: #0B1220; }
+
+    /* Intake screens. 16px on the controls is deliberate: anything smaller and
+       iOS Safari zooms the page when the field takes focus. */
+    .q-field { display: flex; flex-direction: column; gap: 7px; }
+    .q-field > span { font-size: 14px; font-weight: 700; color: #0B1220; }
+    .q-field input, .q-field select {
+      font: inherit; font-size: 16px; padding: 14px 15px; min-height: 54px;
+      border-radius: 12px; border: 1.5px solid rgba(11,18,32,0.16);
+      background: #fff; color: #0B1220; outline: none; width: 100%;
+      box-sizing: border-box; appearance: none; -webkit-appearance: none;
+    }
+    .q-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5L6 8l3.5-3.5' fill='none' stroke='%235A6473' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 15px center;
+      background-size: 13px; padding-right: 40px;
+    }
+    .q-field input:focus, .q-field select:focus { border-color: #1BABE5; }
+    .q-field[data-invalid="true"] input, .q-field[data-invalid="true"] select { border-color: #C2410C; }
+    .q-err { font-size: 13px; color: #C2410C; margin: 0; }
+    .q-next {
+      font: inherit; font-size: 16.5px; font-weight: 700; color: #fff;
+      background: #1BABE5; border: none; padding: 15px 28px; min-height: 54px;
+      border-radius: 14px; cursor: pointer;
+      box-shadow: 0 14px 26px -12px rgba(27,171,229,0.65);
+    }
+    .q-skip {
+      font: inherit; font-size: 14.5px; font-weight: 600; color: #8A93A1;
+      background: none; border: none; padding: 8px 2px; cursor: pointer;
+      text-decoration: underline;
+    }
+    .q-skip:hover { color: #0B1220; }
     @media (max-width: 820px) {
       .result-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
       /* Form first on a phone: someone who has answered six questions came for
@@ -257,19 +369,35 @@
     "use strict";
     var QS = ["current_use","worry","motivation","barrier","support","intent"];
     var BANDS = [{"max":10,"title":"You have not really started","line":"You are near the beginning, which is a better place to be than it feels. Nothing here needs undoing first."},{"max":17,"title":"You have made a start","line":"You are using AI, but not yet in the way that changes how much you get done. That gap is the whole opportunity."},{"max":99,"title":"You are ready to go further","line":"You are already past the basics. What you are missing is structure, and someone to keep you moving as things change."}];
-    var total = QS.length, step = 0, score = 0;
+    var step = 0, score = 0;
     var answers = {};
+    var intake = { role: "", website: "", job_title: "", industry: "" };
+
+    /* The run of screens for this visitor. The branch screen is spliced in once
+       they say who they are, so the length (and the progress bar) is honest
+       either way. Rebuilt if they go back and switch. */
+    var flow = ["role"].concat(QS);
 
     var intro = document.getElementById("quiz-intro");
     var wrap = document.getElementById("quiz-questions");
     var result = document.getElementById("quiz-result");
     var bar = document.getElementById("quiz-bar");
 
+    function screenEl(id) { return wrap.querySelector('.q-screen[data-screen="' + id + '"]'); }
+
     function show(i) {
+      step = i;
       var all = wrap.querySelectorAll(".q-screen");
-      for (var k = 0; k < all.length; k++) all[k].hidden = k !== i;
-      bar.style.width = Math.round((i / total) * 100) + "%";
+      for (var k = 0; k < all.length; k++) all[k].hidden = true;
+      var el = screenEl(flow[i]);
+      if (el) el.hidden = false;
+      bar.style.width = Math.round((i / flow.length) * 100) + "%";
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function next() {
+      if (step + 1 >= flow.length) finish();
+      else show(step + 1);
     }
 
     document.getElementById("quiz-start").addEventListener("click", function () {
@@ -277,6 +405,39 @@
       wrap.hidden = false;
       show(0);
     });
+
+    // A website only has to be plausible. Anything stricter rejects real input
+    // (no protocol, a trailing path) for no gain: a human reads this later.
+    function plausibleSite(v) {
+      var host = v.trim().replace(/^https?:\/\//i, "").split("/")[0];
+      return /^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(host);
+    }
+
+    function readIntake(el, opts) {
+      var ok = true;
+      var fields = el.querySelectorAll("[data-intake]");
+      for (var i = 0; i < fields.length; i++) {
+        var f = fields[i];
+        var name = f.getAttribute("data-intake");
+        var val = (f.value || "").trim();
+        var box = f.closest(".q-field");
+        var err = box && box.querySelector("[data-err]");
+        if (err) err.textContent = "";
+        if (box) box.removeAttribute("data-invalid");
+
+        // Empty is allowed everywhere: the screen is skippable by design. Only
+        // something typed gets checked, and only the website can be malformed.
+        if (opts.validate && val && name === "website" && !plausibleSite(val)) {
+          if (err) err.textContent = "That does not look like a website address.";
+          if (box) box.setAttribute("data-invalid", "true");
+          ok = false;
+          continue;
+        }
+        intake[name] = opts.clear ? "" : val;
+        if (opts.clear) f.value = "";
+      }
+      return ok;
+    }
 
     wrap.addEventListener("click", function (e) {
       var opt = e.target.closest(".q-opt");
@@ -290,11 +451,34 @@
         var sibs = opt.parentElement.querySelectorAll(".q-opt");
         for (var i = 0; i < sibs.length; i++) sibs[i].setAttribute("aria-pressed", sibs[i] === opt ? "true" : "false");
 
-        step++;
-        if (step >= total) { finish(); } else { setTimeout(function () { show(step); }, 180); }
+        var branch = opt.getAttribute("data-role");
+        if (branch) {
+          intake.role = opt.getAttribute("data-answer");
+          // Switching branch must not leave the other branch's answers behind.
+          var drop = screenEl(branch === "business" ? "individual" : "business");
+          if (drop) readIntake(drop, { clear: true });
+          flow = ["role", branch].concat(QS);
+        }
+
+        setTimeout(next, 180);
         return;
       }
-      if (e.target.closest(".q-back")) { step = Math.max(0, step - 1); show(step); }
+
+      var cont = e.target.closest(".q-next");
+      if (cont) {
+        var scr = cont.closest(".q-screen");
+        if (readIntake(scr, { validate: true })) next();
+        return;
+      }
+
+      var skip = e.target.closest(".q-skip");
+      if (skip) {
+        readIntake(skip.closest(".q-screen"), { clear: true });
+        next();
+        return;
+      }
+
+      if (e.target.closest(".q-back")) show(Math.max(0, step - 1));
     });
 
     function finish() {
@@ -310,6 +494,10 @@
       var set = function (id, v) { var el = document.getElementById(id); if (el) el.value = v; };
       set("f-score", String(score));
       set("f-band", band.title);
+      set("f-role", intake.role);
+      set("f-website", intake.website);
+      set("f-job_title", intake.job_title);
+      set("f-industry", intake.industry);
       QS.forEach(function (q) { set("f-" + q, answers[q] ? answers[q].text : ""); });
 
       // Carry the ad's tracking through so a lead can be traced to its creative.
