@@ -125,6 +125,101 @@ const QUESTIONS = [
   },
 ];
 
+/* THE BUSINESS TRACK
+   A separate set, not a reworded version of the individual one. The individual
+   questions ask how someone feels about their own readiness; these ask what is
+   actually true of the business, because the offer on this side is an audit.
+   Q2 and Q3 are the backbone: where the repeatable work sits, and whether
+   anyone has governed AI use at all. Most businesses fail Q3.
+
+   SCORING. The ceiling is 21, the same as the individual track, so the three
+   bands apply unchanged. The distribution differs: on the individual track two
+   questions award a flat 2 to every option and never move the band, which is
+   wasted signal in an audit, so every question here counts. 4+3+3+3+3+5 = 21.
+
+   The floor moved as a side effect, and it is worth knowing. An individual who
+   answers everything at the bottom still scores 7, because those flat-2
+   questions hand over 4 points for nothing. A business answering everything at
+   the bottom scores 3. Business scores therefore sit lower against the same
+   thresholds, and more land in the first band. That reads as correct: a
+   business with no policy, no owner and no visibility of its own workload is
+   genuinely less ready than a person who simply has not started. If the two
+   tracks ever need to feel comparable, give this one its own thresholds rather
+   than flattening the questions. */
+const BUSINESS_QUESTIONS = [
+  {
+    id: "b_adoption",
+    intro: "Where you are now",
+    q: "Where is AI actually being used in the business today?",
+    a: [
+      ["Nowhere yet", 0],
+      ["A few people use it on their own, unofficially", 1],
+      ["Several people use it regularly, but everyone does it differently", 2],
+      ["We have standardised a few tasks on it", 3],
+      ["We have automated workflows running across more than one team", 4],
+    ],
+  },
+  {
+    id: "b_repetitive",
+    intro: "The work itself",
+    q: "How much of your team's week goes on work that follows the same steps every time?",
+    a: [
+      ["We have never looked at it", 0],
+      ["Some, but we could not put a number on it", 1],
+      ["A fair amount, and we know roughly where", 2],
+      ["We know which tasks, and roughly what they cost us", 3],
+    ],
+  },
+  {
+    id: "b_governance",
+    intro: "The bit most businesses skip",
+    q: "What is in place for how your staff use AI?",
+    a: [
+      ["Nothing, and it has not come up", 0],
+      ["We have talked about it, nothing written down", 1],
+      ["Informal rules people mostly follow", 2],
+      ["A written policy, with approved tools and training", 3],
+    ],
+  },
+  {
+    id: "b_owner",
+    intro: "Who carries it",
+    q: "If you started next month, who would drive it?",
+    a: [
+      ["Nobody obvious", 1],
+      ["Me, on top of everything else", 1],
+      ["Someone capable, but already stretched", 2],
+      ["A named person with time set aside for it", 3],
+    ],
+  },
+  {
+    id: "b_team",
+    intro: "Your people",
+    q: "If you gave your team a capable AI tool tomorrow, what would happen?",
+    a: [
+      ["Most would not know where to start", 1],
+      ["One or two would run with it, the rest would not", 2],
+      ["Most would use it for the obvious tasks", 2],
+      ["Most would find real uses in their own work", 3],
+    ],
+  },
+  {
+    id: "b_intent",
+    intro: "Last one",
+    q: "What is the honest position on investing in this?",
+    a: [
+      ["Curious, not budgeting for it", 1],
+      ["Something for next financial year", 2],
+      ["We want to move on it this year", 3],
+      ["The budget is there, we need the right partner", 4],
+      ["Ready to start now", 5],
+    ],
+  },
+];
+
+/* Every screen is rendered into the page; the flow decides which set runs. */
+const ALL_QUESTIONS = QUESTIONS.concat(BUSINESS_QUESTIONS);
+
 /* INTAKE (before the scored questions)
    Segments the lead and collects the one detail that makes the follow-up
    specific: a website for a business, a role and industry for an employee.
@@ -269,7 +364,7 @@ const intakeScreens = Object.values(INTAKE)
   )
   .join("");
 
-const screens = QUESTIONS.map(
+const screens = ALL_QUESTIONS.map(
   (item) => `
       <div class="q-screen" data-screen="${item.id}" hidden>
         ${eyebrow(item.intro)}
@@ -346,7 +441,7 @@ const body = `
             <input type="hidden" name="website" id="f-website">
             <input type="hidden" name="job_title" id="f-job_title">
             <input type="hidden" name="industry" id="f-industry">
-            ${QUESTIONS.map((q) => `<input type="hidden" name="${q.id}" id="f-${q.id}">`).join("\n            ")}
+            ${ALL_QUESTIONS.map((q) => `<input type="hidden" name="${q.id}" id="f-${q.id}">`).join("\n            ")}
             <input type="hidden" name="utm_source" id="f-utm_source">
             <input type="hidden" name="utm_medium" id="f-utm_medium">
             <input type="hidden" name="utm_campaign" id="f-utm_campaign">
@@ -446,7 +541,8 @@ const body = `
   <script>
   (function () {
     "use strict";
-    var QS = ${JSON.stringify(QUESTIONS.map((q) => q.id))};
+    var QS  = ${JSON.stringify(QUESTIONS.map((q) => q.id))};
+    var BQS = ${JSON.stringify(BUSINESS_QUESTIONS.map((q) => q.id))};
     var BANDS = ${JSON.stringify(BANDS)};
     var step = 0, score = 0;
     var answers = {};
@@ -463,6 +559,18 @@ const body = `
     var bar = document.getElementById("quiz-bar");
 
     function screenEl(id) { return wrap.querySelector('.q-screen[data-screen="' + id + '"]'); }
+
+    /* Forget a track's answers: drop their points, and clear the pressed state
+       so its screens do not look answered if the visitor comes back. */
+    function clearAnswers(ids) {
+      ids.forEach(function (id) {
+        if (answers[id]) { score -= answers[id].pts; delete answers[id]; }
+        var scr = screenEl(id);
+        if (!scr) return;
+        var opts = scr.querySelectorAll(".q-opt");
+        for (var i = 0; i < opts.length; i++) opts[i].setAttribute("aria-pressed", "false");
+      });
+    }
 
     function show(i) {
       step = i;
@@ -536,7 +644,11 @@ const body = `
           // Switching branch must not leave the other branch's answers behind.
           var drop = screenEl(branch === "business" ? "individual" : "business");
           if (drop) readIntake(drop, { clear: true });
-          flow = ["role", branch].concat(QS);
+          // ...nor their points. Each track has its own questions now, so
+          // answering a few, going back and switching would otherwise carry
+          // the abandoned track's score across into the new one.
+          clearAnswers(branch === "business" ? QS : BQS);
+          flow = ["role", branch].concat(branch === "business" ? BQS : QS);
         }
 
         setTimeout(next, 180);
@@ -577,7 +689,7 @@ const body = `
       set("f-website", intake.website);
       set("f-job_title", intake.job_title);
       set("f-industry", intake.industry);
-      QS.forEach(function (q) { set("f-" + q, answers[q] ? answers[q].text : ""); });
+      QS.concat(BQS).forEach(function (q) { set("f-" + q, answers[q] ? answers[q].text : ""); });
 
       // Carry the ad's tracking through so a lead can be traced to its creative.
       var p = new URLSearchParams(window.location.search);
@@ -616,4 +728,6 @@ const dir = path.join(PUBLIC, "ai-quiz");
 fs.mkdirSync(dir, { recursive: true });
 fs.writeFileSync(path.join(dir, "index.html"), html);
 console.log(`  wrote ai-quiz/index.html  (${html.length} bytes)`);
-console.log(`  ${QUESTIONS.length} questions, ${BANDS.length} result bands, max score ${QUESTIONS.reduce((s, q) => s + Math.max(...q.a.map((a) => a[1])), 0)}`);
+console.log(`  individual track: ${QUESTIONS.length} questions, max ${QUESTIONS.reduce((n,q)=>n+Math.max(...q.a.map(x=>x[1])),0)}`);
+  console.log(`  business track:   ${BUSINESS_QUESTIONS.length} questions, max ${BUSINESS_QUESTIONS.reduce((n,q)=>n+Math.max(...q.a.map(x=>x[1])),0)}`);
+  console.log(`  ${BANDS.length} result bands, thresholds ${BANDS.map(b=>b.max).join("/")}`);
