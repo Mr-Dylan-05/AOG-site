@@ -1,18 +1,24 @@
 # Lead capture
 
-Every form on the site posts to **`/api/lead`**, a function in this repo
-(`api/lead.js`) that appends the submission to a Google Sheet.
+The **quiz** posts to **`/api/lead`**, a function in this repo (`api/lead.js`)
+that appends the submission to a Google Sheet.
 
-There is no Formspree, no monthly cap, no third-party branding, and no separate
-endpoint to paste in when a new form is added.
+The **contact form is deliberately not part of this** and still posts to
+Formspree. Its enquiries get read and replied to in an inbox, which is what a
+form-to-email service is good at. The quiz is the opposite case: fourteen fields
+per submission, which belong in spreadsheet columns you can sort, not in an
+email.
 
 ## How it fits together
 
 ```
-form (data-form="quiz")
+quiz form (data-form="quiz")
   -> src/assets/js/contact-form.js   posts url-encoded, adds `form` and `page`
   -> /api/lead                       (same origin, so no CORS)
-  -> Google Sheet, one tab per form  quiz | contact | ...
+  -> Google Sheet, one tab per form  quiz | ...
+
+contact form
+  -> Formspree (thirdParty.formEndpoint in src/_data/site.json)
 ```
 
 The tab is named after the form's `data-form` value and is **created on first
@@ -87,6 +93,10 @@ Deliberately not built in, because Sheets already does it: in the sheet,
 1. Give the form `data-form="something"` and the fields `name` attributes.
 2. Add `"something": "/api/lead"` under `thirdParty.forms` in
    `src/_data/site.json`.
+
+It will get its own `something` tab in the sheet on first submission. Point the
+key at a Formspree URL instead if that form is really an enquiry someone answers
+by email.
 
 A form whose key is missing or empty is deliberately left inert, so a half-built
 form cannot silently post nowhere and look like it worked.
