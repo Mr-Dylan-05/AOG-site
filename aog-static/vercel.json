@@ -4,7 +4,6 @@
   "outputDirectory": "_site",
   "framework": null,
   "trailingSlash": true,
-  "//rewrites": "trailingSlash:true makes Vercel prefer /api/lead/ over /api/lead. A 308 does preserve the POST body, so the form would still work, but it costs a round trip on every submission and only holds while redirects keep behaving that way. This maps the slashed form back onto the function so both spellings hit it directly.",
   "rewrites": [{ "source": "/api/lead/", "destination": "/api/lead" }],
   "redirects": [
     {

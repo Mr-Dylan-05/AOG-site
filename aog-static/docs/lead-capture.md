@@ -27,6 +27,18 @@ gains a field, that field becomes a new column on the end. Existing columns are
 never reordered, so old rows stay aligned. Adding a quiz question needs no
 change to `api/lead.js`.
 
+## Why there is a rewrite in vercel.json
+
+`trailingSlash: true` makes Vercel prefer `/api/lead/` over `/api/lead`. A 308
+does preserve the POST body, so the form would still work, but it costs a round
+trip on every submission and only holds while redirects keep behaving that way.
+The rewrite maps the slashed spelling back onto the function so both hit it
+directly.
+
+Note that `vercel.json` is schema-validated: unlike `src/_data/site.json`, it
+rejects `"//comment"` keys and the whole deployment fails. Explain things here
+instead.
+
 ## One-time setup (about five minutes)
 
 **1. Make the sheet.** Create a Google Sheet. From its URL, copy the id:
