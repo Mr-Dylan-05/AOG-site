@@ -116,9 +116,90 @@ call, rather than showing a thank-you for a lead that was never saved.
 
 ## Getting told about new leads
 
-Deliberately not built in, because Sheets already does it: in the sheet,
-**Tools > Notification settings > Notify me at ...**, and choose *Any changes* /
-*Right away*.
+Every saved lead is posted to a **Google Chat** space as a card: who they are,
+what they said, which ad they came from, and a button that opens the sheet at
+the right tab.
+
+It is sent from `api/lead.js`, at the moment the row is written, and **not**
+from the sheet. That is the important part. Sheets' own *Tools > Notification
+settings*, and an Apps Script `onEdit`/`onChange` trigger, both react to a
+**person editing the sheet**. Neither fires for a write made through the API by
+a service account, which is the only way a lead ever arrives here. Wiring it to
+the sheet looks simpler and quietly never fires.
+
+The post is best-effort. A lead in the sheet is safe whether or not Chat hears
+about it, so a webhook that is missing, slow or broken is logged and ignored
+rather than failing the submission and showing the visitor an error. With no
+webhook configured the whole path is inert, the same way a form with no
+endpoint is.
+
+If the *sheet write itself* fails, Chat is told anyway, with the lead's details
+on the card and a NOT SAVED warning. That is the moment a notification is worth
+most, because the row that would otherwise be the record does not exist.
+
+### Setting it up (about two minutes)
+
+**1. Create the webhook.** In Google Chat, open the space that should get the
+leads (make one, e.g. *Website Leads*, and add whoever needs to see them).
+Space name > **Apps & integrations** > **Webhooks** > **Add webhooks**. Name it
+something like `Website leads`, **Save**, then copy the URL. It looks like:
+
+```
+https://chat.googleapis.com/v1/spaces/AAAA.../messages?key=...&token=...
+```
+
+> Treat it as a password: anyone holding it can post into the space. It only
+> ever lives in Vercel's environment variables, never in this repo.
+>
+> Webhooks are a Google Workspace feature and are only available in a space,
+> not a DM. If the **Webhooks** item is missing, an admin has turned it off in
+> the Workspace admin console.
+
+**2. Add it in Vercel.** Project > **Settings** > **Environment Variables**,
+added to *Production*, *Preview* and *Development*:
+
+| Name | Value |
+| --- | --- |
+| `GOOGLE_CHAT_WEBHOOK_URL` | the URL from step 1 |
+| `GOOGLE_CHAT_MENTION` | *optional*, `<users/all>` to ping everyone in the space |
+| `GOOGLE_CHAT_WEBHOOK_URL_QUIZ` | *optional*, sends quiz leads to a different space |
+
+`GOOGLE_CHAT_MENTION` is what makes it interrupt people. Without it the message
+still lands in the space, but whether anyone is notified depends on each
+person's own notification setting for that space, which is not something you
+control. With it, everyone in the space gets pinged for every lead — right for
+a low-volume campaign space, wrong for a busy one.
+
+The per-form variable is `GOOGLE_CHAT_WEBHOOK_URL_` plus the form's `data-form`
+value in capitals (`..._QUIZ`, `..._ENQUIRY`). Any form without one falls back
+to `GOOGLE_CHAT_WEBHOOK_URL`, so one space for everything needs no extra
+config.
+
+**3. Redeploy.** Environment variables only reach a new deployment.
+
+### Checking it works
+
+Submit `/ai-enquiry/` on the live site with your own details. The card should
+appear in the space within a second or two, and the row in the `enquiry` tab.
+
+If the row lands but no card does, the notification failed on its own and the
+reason is in **Vercel > Logs** on a line starting `[lead] chat notify`:
+
+- nothing logged at all - `GOOGLE_CHAT_WEBHOOK_URL` is not set, or the
+  deployment predates it.
+- `chat notify 404` - the webhook was deleted, or the URL is truncated. It must
+  keep its whole `?key=...&token=...` query string.
+- `chat notify 403` - the space or the webhook no longer exists for that app.
+- `chat notify failed: The operation was aborted due to timeout` - Chat did not
+  answer within four seconds. The lead is still in the sheet.
+
+### Changing what is on the card
+
+`CARD_FIELDS` in `api/lead.js` picks the fields and their order, `CARD_LABELS`
+renames one, `CARD_ICONS` gives it an icon. A field that is not listed still
+lands in the sheet, it just does not clutter the notification. A new quiz
+question needs nothing here unless you want it on the card, and if you add it,
+the label is worked out from the field name.
 
 ## Adding another form
 

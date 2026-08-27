@@ -20,14 +20,32 @@
  * token, which is about thirty lines with node:crypto. Pulling in googleapis
  * for that would add tens of megabytes to a function that appends one row.
  *
+ * GOOGLE CHAT
+ * Every saved lead is also posted to a Google Chat space, because a row
+ * appearing in a spreadsheet is not a notification and nobody watches a sheet.
+ * It is done here rather than from the sheet on purpose: an Apps Script
+ * trigger and Sheets' own notification rules both react to people editing the
+ * sheet, and neither fires for a write made through the API by a service
+ * account, which is the only way rows ever arrive.
+ *
+ * The post is best-effort. A lead that is in the sheet is safe whether or not
+ * Chat hears about it, so a webhook that is missing, slow or broken is logged
+ * and ignored rather than failing the submission. With no webhook set, this
+ * whole path is inert, the same way a form with no endpoint is.
+ *
  * ENV (set in Vercel > Settings > Environment Variables)
  *   GOOGLE_SERVICE_ACCOUNT_JSON  the whole service-account key file, pasted in
  *   LEADS_SHEET_ID               the id from the sheet's URL
+ *   GOOGLE_CHAT_WEBHOOK_URL      incoming webhook for the space to notify
+ *   GOOGLE_CHAT_WEBHOOK_URL_<FORM>  optional, routes one form to its own space
+ *                                (e.g. GOOGLE_CHAT_WEBHOOK_URL_QUIZ)
+ *   GOOGLE_CHAT_MENTION          optional, e.g. <users/all>, to ping the space
  *
  * FAILURE
  * If Sheets rejects the write we return 502 rather than a cheerful 200, so the
  * visitor sees the error and can retry or call. The payload is also written to
- * the Vercel log, so a lead is recoverable even in that case.
+ * the Vercel log, and Chat is told the lead arrived but was not saved, so a
+ * lead is recoverable even in that case.
  */
 
 const crypto = require("crypto");
@@ -49,6 +67,42 @@ const PREFERRED = [
   "source", "page",
   "utm_source", "utm_medium", "utm_campaign", "utm_content",
 ];
+
+/* What goes on the Chat card, in the order a person reads a lead. Everything
+   else stays in the sheet: the card is a nudge to act, not the record. */
+const CARD_FIELDS = [
+  "name", "firstName", "lastName", "email", "phone", "company", "role",
+  "job_title", "industry", "website", "message", "ai_goal", "intent",
+  "contactPreference", "band", "score",
+];
+
+const CARD_LABELS = {
+  ai_goal: "What they want from AI",
+  contactPreference: "Prefers",
+  job_title: "Job title",
+  firstName: "First name",
+  lastName: "Last name",
+  band: "Quiz band",
+  score: "Quiz score",
+};
+
+/* Fallback for a field with no entry above: "job_title" -> "Job title". A new
+   quiz question then reads properly on the card without touching this file. */
+const label = (key) => {
+  const words = key.replace(/[_-]+/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const CARD_ICONS = {
+  name: "PERSON", firstName: "PERSON", lastName: "PERSON",
+  email: "EMAIL", phone: "PHONE", company: "STORE", website: "BOOKMARK",
+  message: "DESCRIPTION", ai_goal: "DESCRIPTION",
+  band: "STAR", score: "STAR",
+};
+
+/* Where the team reading the notification is, so the timestamp on the card is
+   their time rather than UTC. */
+const TIMEZONE = "Australia/Sydney";
 
 const b64url = (b) =>
   Buffer.from(b).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -100,19 +154,142 @@ function api(token) {
   };
 }
 
-/* Returns the tab's header row, creating the tab if it is not there yet. */
+/* Returns the tab's header row and its gid, creating the tab if it is not
+   there yet. The gid is only wanted so the Chat card can link to the tab the
+   lead actually landed in rather than to whichever one opens first. */
 async function ensureTab(call, sheetId, tab) {
-  const meta = await call(`${sheetId}?fields=sheets.properties.title`);
-  const titles = (meta.sheets || []).map((s) => s.properties.title);
-  if (!titles.includes(tab)) {
-    await call(`${sheetId}:batchUpdate`, {
+  const meta = await call(`${sheetId}?fields=sheets.properties(title,sheetId)`);
+  const existing = (meta.sheets || []).find((s) => s.properties.title === tab);
+  if (!existing) {
+    const made = await call(`${sheetId}:batchUpdate`, {
       method: "POST",
       body: JSON.stringify({ requests: [{ addSheet: { properties: { title: tab } } }] }),
     });
-    return [];
+    const props = ((made.replies || [])[0] || {}).addSheet;
+    return { header: [], gid: props ? props.properties.sheetId : null };
   }
   const row = await call(`${sheetId}/values/${encodeURIComponent(tab)}!1:1`);
-  return (row.values && row.values[0]) || [];
+  return { header: (row.values && row.values[0]) || [], gid: existing.properties.sheetId };
+}
+
+/* Chat card text takes a small subset of HTML, so anything a visitor typed has
+   to be escaped or a stray angle bracket eats the rest of the line. */
+const escapeHtml = (v) =>
+  String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/* A form can have its own space; otherwise everything lands in one. */
+function webhookFor(form) {
+  const own = `GOOGLE_CHAT_WEBHOOK_URL_${form.toUpperCase().replace(/[^A-Z0-9]/g, "_")}`;
+  return process.env[own] || process.env.GOOGLE_CHAT_WEBHOOK_URL || "";
+}
+
+function chatMessage(form, record, sheetUrl, failed) {
+  const named = [record.name, record.firstName, record.lastName]
+    .filter(Boolean).join(" ").trim();
+  // Angle brackets are how Chat writes a mention, so they are stripped from
+  // the plain-text line rather than escaped.
+  const who = (named || record.email || "Someone").replace(/[<>]/g, "").slice(0, 80);
+  const mention = process.env.GOOGLE_CHAT_MENTION
+    ? `${process.env.GOOGLE_CHAT_MENTION} ` : "";
+
+  const widgets = [];
+  for (const key of CARD_FIELDS) {
+    const value = String(record[key] == null ? "" : record[key]).trim();
+    if (!value) continue;
+    widgets.push({
+      decoratedText: {
+        topLabel: CARD_LABELS[key] || label(key),
+        text: escapeHtml(value.slice(0, 400)),
+        wrapText: true,
+        ...(CARD_ICONS[key] ? { startIcon: { knownIcon: CARD_ICONS[key] } } : {}),
+      },
+    });
+  }
+
+  // Which ad or page produced this, which is the whole point of running the
+  // campaign pages separately from the main contact form.
+  const from = ["utm_source", "utm_campaign", "utm_medium", "utm_content"]
+    .map((k) => record[k]).filter(Boolean).join(" \u00b7 ") || record.source || record.page;
+  if (from) {
+    widgets.push({
+      decoratedText: {
+        topLabel: "Came from",
+        text: escapeHtml(String(from).slice(0, 300)),
+        wrapText: true,
+        startIcon: { knownIcon: "BOOKMARK" },
+      },
+    });
+  }
+
+  if (failed) {
+    widgets.push({
+      decoratedText: {
+        topLabel: "Warning",
+        text: "This lead was <b>not saved to the sheet</b>. The full payload is in the Vercel log.",
+        wrapText: true,
+      },
+    });
+  }
+
+  const sections = [{ widgets }];
+  if (sheetUrl && !failed) {
+    sections.push({
+      widgets: [{
+        buttonList: {
+          buttons: [{ text: "Open the sheet", onClick: { openLink: { url: sheetUrl } } }],
+        },
+      }],
+    });
+  }
+
+  let when = "";
+  try {
+    when = new Date().toLocaleString("en-AU", {
+      timeZone: TIMEZONE, dateStyle: "medium", timeStyle: "short",
+    });
+  } catch (_) { /* a bad timezone name should not cost us the notification */ }
+
+  return {
+    // Chat's notification popup shows this line, not the card, so it has to
+    // say who and which form on its own.
+    text: failed
+      ? `${mention}\u26a0\ufe0f ${form} lead from ${who} could NOT be saved to the sheet`
+      : `${mention}New ${form} lead: ${who}`,
+    cardsV2: [{
+      cardId: "lead",
+      card: {
+        header: {
+          title: escapeHtml(who),
+          subtitle: [failed ? `${form} \u2014 NOT SAVED` : form, when].filter(Boolean).join(" \u00b7 "),
+        },
+        sections,
+      },
+    }],
+  };
+}
+
+/* Best-effort: the lead is already safe in the sheet, so nothing here is
+   allowed to throw. Awaited rather than left running, because a serverless
+   function is frozen the moment it responds and a floating fetch would be
+   killed mid-flight; the timeout keeps a hung webhook off the visitor's
+   thank-you page. */
+async function notifyChat(form, record, sheetUrl, failed) {
+  const url = webhookFor(form);
+  if (!url) return;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+      body: JSON.stringify(chatMessage(form, record, sheetUrl, failed)),
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      console.error(`[lead] chat notify ${res.status}:`, detail.slice(0, 300));
+    }
+  } catch (err) {
+    console.error("[lead] chat notify failed:", err.message);
+  }
 }
 
 module.exports = async (req, res) => {
@@ -162,7 +339,10 @@ module.exports = async (req, res) => {
   const sheetId = process.env.LEADS_SHEET_ID;
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   if (!sheetId || !raw) {
+    // Same reasoning as the write failure below: the lead exists, the record
+    // of it does not, so say so anywhere that can still be heard.
     console.error("[lead] not configured; payload:", JSON.stringify(record));
+    await notifyChat(form, record, "", true);
     return res.status(500).json({ ok: false, error: "Lead capture is not configured" });
   }
 
@@ -170,7 +350,7 @@ module.exports = async (req, res) => {
     const creds = JSON.parse(raw);
     const call = api(await accessToken(creds));
 
-    let header = await ensureTab(call, sheetId, form);
+    let { header, gid } = await ensureTab(call, sheetId, form);
 
     // Extend, never reorder: existing rows are already aligned to the header
     // that is there, so a new field becomes a new column on the end.
@@ -197,10 +377,18 @@ module.exports = async (req, res) => {
       }
     );
 
+    const sheetUrl =
+      `https://docs.google.com/spreadsheets/d/${sheetId}/edit` +
+      (gid == null ? "" : `#gid=${gid}`);
+    await notifyChat(form, record, sheetUrl, false);
+
     return res.status(200).json({ ok: true });
   } catch (err) {
-    // Logged in full so the lead survives even when the write does not.
+    // Logged in full so the lead survives even when the write does not, and
+    // Chat is told too: a lead that failed to save is the one most worth
+    // interrupting somebody about.
     console.error("[lead] write failed:", err.message, "payload:", JSON.stringify(record));
+    await notifyChat(form, record, "", true);
     return res.status(502).json({ ok: false, error: "Could not record submission" });
   }
 };
