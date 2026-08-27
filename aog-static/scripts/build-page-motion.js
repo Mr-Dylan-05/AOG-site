@@ -72,7 +72,8 @@ const SCRIPT_TAG = `<script id="motion-js">
             ['.campaign-why',      '.why-banner, .why-reason, .why-people > li'],
             ['.campaign-reviews',  'h2, .cr-card, .cr-foot'],
             ['.faq',               ':scope > div'],
-            ['.cta',               ':scope > *']
+            ['.quiz-strip',        '.qs-text, .qs-link'],
+            ['.campaign-close',    '.cc-eyebrow, .cc-head, .cc-copy, .cc-btn']
           ];
 
           var io = new IntersectionObserver(function(entries){
