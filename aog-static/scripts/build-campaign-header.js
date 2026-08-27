@@ -29,6 +29,13 @@
  * 110px on a 1440 screen and 24px on a phone, which is exactly where the hero
  * headline and its eyebrow sit.
  *
+ * It also drops the hero's "AD ON GROUP" eyebrow. That line sat under a logo
+ * inside a pill and read as a label; with the pill gone the wordmark sits
+ * directly above it and the page said "Ad On Group" twice in the first 60px.
+ * The eyebrow is removed rather than reworded, because nothing else needs
+ * saying between the logo and the headline. It lives in this script because
+ * it is a consequence of the header change, not a separate edit.
+ *
  * Idempotent: replaces its own header if it is already there.
  *
  * Usage:  node scripts/build-campaign-header.js
@@ -49,7 +56,19 @@ const HEADER = `<nav data-aog-header data-campaign-header style="position:relati
       </div>
     </nav>`;
 
+const EYEBROW = '<p class="overline">AD ON GROUP</p>';
+
 let html = fs.readFileSync(PAGE, "utf8");
+
+const heroAt = html.indexOf('class="hero"');
+let eyebrowDropped = false;
+if (heroAt !== -1) {
+  const hero = html.slice(heroAt, heroAt + 800);
+  if (hero.includes(EYEBROW)) {
+    html = html.slice(0, heroAt) + hero.replace(EYEBROW, "") + html.slice(heroAt + 800);
+    eyebrowDropped = true;
+  }
+}
 
 const at = html.indexOf("<nav data-aog-header");
 if (at === -1) throw new Error("no <nav data-aog-header> on the page");
@@ -63,3 +82,4 @@ html = html.slice(0, at) + HEADER + html.slice(end + "</nav>".length);
 
 fs.writeFileSync(PAGE, html);
 console.log(`  campaign header: ${wasPill ? "pill replaced with" : "already"} logo only, ${oldNav.length} -> ${HEADER.length} bytes`);
+console.log(eyebrowDropped ? "  hero eyebrow removed (duplicated the wordmark above it)" : "  hero eyebrow already gone");
