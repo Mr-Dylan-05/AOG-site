@@ -21,6 +21,19 @@
  *   "2 one on one"      -> "two one-on-one", matching the hero, which
  *                          already writes "one-on-one"
  *
+ * It also fills the one FAQ that shipped with a question and no answer at all:
+ * "What's the benefit of being trained and mentored by Claude Certified
+ * Associates?" Clicking it did nothing, and the page styles .faq-item:has(p)
+ * differently, so it was visibly the odd grey card among the blue ones.
+ *
+ * That answer is the only one here not supplied. It is assembled from copy
+ * already approved elsewhere on the site rather than written fresh:
+ *   /ad-on-ai-about/  "current, official certifications, not yesterday's
+ *                      prompt tricks"
+ *   /ad-on-ai-about/  "the same people who rolled AI out across our own
+ *                      business now deliver it to yours"
+ * It is worth a read before it goes live.
+ *
  * Idempotent: its own items carry data-faq="campaign" and are replaced.
  *
  * Usage:  node scripts/build-campaign-faqs.js
@@ -60,6 +73,14 @@ const item = ([q, a]) =>
 
 const BLOCK = FAQS.map(item).join("");
 
+/* The answerless question, and the answer to give it. */
+const ORPHAN_Q = "benefit of being trained and mentored by Claude Certified Associates";
+const ORPHAN_A =
+  "Certification means current, official credentials rather than yesterday&#x27;s prompt tricks. " +
+  "Our associates are a small, hands-on team who rolled AI out across our own business first, so you " +
+  "are learning from people who have done it rather than people who have read about it. You also get " +
+  "them directly, in your two one-on-one sessions every month.";
+
 let html = fs.readFileSync(PAGE, "utf8");
 
 // drop a previous run
@@ -81,5 +102,21 @@ const insertAt = secStart + section.indexOf("</div>", closeAt) + "</div>".length
 
 html = html.slice(0, insertAt) + BLOCK + html.slice(insertAt);
 
+// Fill the answerless item. Matched on its question rather than its position,
+// so it still finds it if the surrounding markup is re-exported. The negative
+// lookahead skips the items this script appends, which already have answers.
+const ORPHAN_RE = new RegExp(
+  '(<div class="faq-item"(?![^>]*data-faq)[^>]*>' +
+    "<button><b>[^<]*" + ORPHAN_Q + "[^<]*</b><span>[^<]*</span></button>)" +
+    "(<p[\\s\\S]*?</p>)?(</div>)"
+);
+
+let filled = false;
+html = html.replace(ORPHAN_RE, (_m, head, _existing, tail) => {
+  filled = true;
+  return head + '<p data-faq="campaign-answer"><i>' + ORPHAN_A + "</i></p>" + tail;
+});
+
 fs.writeFileSync(PAGE, html);
 console.log(`  campaign FAQs: ${FAQS.length} appended`);
+console.log(filled ? "  filled the answerless Certified Associates question" : "  [warn] answerless question not found, nothing filled");
