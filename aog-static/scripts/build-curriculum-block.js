@@ -22,12 +22,17 @@
  *
  *   AI Fundamentals ............ 01
  *   Prompt Engineering ......... 02, 03
- *   Accuracy & Verification .... 03, 05, 08
+ *   Claude Cowork .............. 14, 15
  *   Connected Second Brain ..... 04, 06
  *   AI Workflows ............... 07, 11
  *   Custom Claude Skills ....... 09, 10
- *   Automation ................. 12-16
+ *   Automation ................. 12, 13, 16
  *   AI Agents .................. 17-24
+ *
+ * Modules 05 and 08, multimodal verification and the audit loop, no longer
+ * have a label of their own: "Accuracy & Verification" covered them and was
+ * replaced with "Claude Cowork" on request. They are still in the program,
+ * just not surfaced in this eight-item summary.
  *
  * The deliverables are verbatim from /programs/, reframed to second person
  * because this page sells to the reader rather than to their employer.
@@ -50,7 +55,7 @@ const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 const TOPICS = [
   "AI Fundamentals",
   "Prompt Engineering",
-  "Accuracy & Verification",
+  "Claude Cowork",
   "Connected Second Brain",
   "AI Workflows",
   "Custom Claude Skills",
@@ -65,7 +70,7 @@ const esc = (s) =>
 const CARD_FROM =
   "<article><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p></article>";
 
-const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you'll learn</p><ul class="cur-topics">${TOPICS.map(
+const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you'll learn &amp; apply</p><ul class="cur-topics">${TOPICS.map(
   (t, i) => `<li><span>${String(i + 1).padStart(2, "0")}</span>${esc(t)}</li>`
 ).join("")}</ul><p class="cur-foot">24 practical modules taking you from AI fundamentals through to real business implementation.</p><a class="cur-more" href="/programs/">See the full list <span aria-hidden="true">&rarr;</span></a></div></article>`;
 
