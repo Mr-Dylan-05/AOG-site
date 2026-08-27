@@ -6,12 +6,15 @@
  * card: a heading, a number and five empty bars. At its rendered size it read
  * as a mostly blank white box next to three real images.
  *
- * It becomes training-recording-studio.jpg, which already sits in the campaign
- * folder. It earns the slot on three counts: it is a genuine Ad On Group
- * person in a branded tee rather than stock, the subject is centred so it
- * survives the crop to a 255x300 portrait tile, and it shows a side of the
- * business the other three tiles do not, that the training modules are
- * actually produced in house.
+ * It becomes group-au-office.png, the Gold Coast head office. It is a real
+ * Ad On Group building with the wordmark on it rather than stock, and a
+ * centre crop keeps the logo, the entrance and the street number, so the
+ * portrait tile costs it nothing.
+ *
+ * Worth knowing: 648x362 is the only copy of this photo anywhere in the repo,
+ * including every dist-old folder in the WordPress theme. The tile needs
+ * 510x600 at 2x, so it is upscaled about 1.66x and will be a little soft on a
+ * retina screen. A larger original would be a straight improvement.
  *
  * The tile keeps the .visual-chart class so it inherits the slot's own
  * per-breakpoint heights. The page pins those explicitly, and the chart slot
@@ -35,7 +38,7 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
-const IMG = "/assets/campaign/training-recording-studio.jpg";
+const IMG = "/assets/design/group-au-office.png";
 
 const CHART =
   '<div class="visual-card visual-chart"><span>Learning progress</span><b>50%</b><i></i><i></i><i></i><i></i><i></i></div>';
@@ -43,15 +46,15 @@ const CHART =
 const TILE_CSS =
   "display:block!important;padding:0!important;background:none!important;" +
   "gap:0!important;overflow:hidden!important";
-// object-position sits the face just above centre: a straight centre crop of a
-// 16:9 frame puts the chin on the tile's midline.
+// A straight centre crop is right here: the wordmark, the entrance and the
+// street number all sit mid-frame, so nothing worth seeing is cut away.
 const IMG_CSS =
   "width:100%!important;height:100%!important;object-fit:cover!important;" +
-  "object-position:50% 32%!important;display:block!important";
+  "object-position:50% 50%!important;display:block!important";
 
 const PHOTO =
   '<figure class="visual-card visual-chart visual-studio" style="' + TILE_CSS + '">' +
-  '<img src="' + IMG + '" alt="An Ad On Group trainer recording a module in the studio" style="' + IMG_CSS + '"/>' +
+  '<img src="' + IMG + '" alt="The Ad On Group head office on the Gold Coast" style="' + IMG_CSS + '"/>' +
   '</figure>';
 
 
