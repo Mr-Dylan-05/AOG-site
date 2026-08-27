@@ -77,7 +77,7 @@ const CARD_FROM =
 
 const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you'll learn</p><ul class="cur-topics">${TOPICS.map(
   (t, i) => `<li><span>${String(i + 1).padStart(2, "0")}</span>${esc(t)}</li>`
-).join("")}</ul><p class="cur-foot">24 practical modules taking you from AI fundamentals through to real business implementation.</p></div></article>`;
+).join("")}</ul><p class="cur-foot">24 practical modules taking you from AI fundamentals through to real business implementation.</p><a class="cur-more" href="/programs/">See the full list <span aria-hidden="true">&rarr;</span></a></div></article>`;
 
 const STRIP = `<div class="cur-away"><div class="cur-away-head"><p class="cur-label">What you'll walk away with</p><p class="cur-away-h">You finish with <b>20+ working AI builds</b>, tied to your own job.</p></div><ul class="cur-away-list">${WALKAWAY.map(
   ([n, t]) => `<li><b>${esc(n)}</b> ${esc(t)}</li>`
@@ -93,6 +93,9 @@ const STYLE = `<style id="cur-style">
         .cur-topics li{display:flex!important;gap:9px;align-items:baseline;font-size:14.5px;line-height:1.4;color:#27313f;min-width:0;padding:0!important;border:0!important;margin:0!important}
         .cur-topics li span{flex:none;font-family:'DM Mono',monospace;font-size:11px;color:#a2abb7}
         .cur-foot{font-size:12.5px;line-height:1.5;color:#8a93a1;margin:16px 0 0}
+        .cur-more{display:inline-flex;align-items:center;gap:7px;margin:14px 0 0;font-size:14px;font-weight:700;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:2px;line-height:1.2}
+        .cur-more span{transition:transform .18s ease}
+        .cur-more:hover span{transform:translateX(3px)}
 
         .cur-away{margin:22px 0 0;background:#0b1830;border-radius:18px;padding:24px 26px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:26px;align-items:center}
         .cur-away .cur-label{color:#7fb2ff;margin-bottom:9px}
@@ -107,7 +110,23 @@ const STYLE = `<style id="cur-style">
            column across both rows and let the other two stack beside it, which
            is how the reference lays it out. */
         @media(min-width:861px){
-          /* The page sets this row with ten chained :root selectors, so a plain
+          /* The cards flip to a dark gradient on :hover and the page recolours its
+           own <p> and <strong> to suit. Anything added here keeps whatever
+           colour it was given, so the label row and the topic list stayed dark
+           slate on dark navy and effectively vanished. These restate both
+           states at the page's own specificity. */
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-label{color:#2867e8!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-label{color:#a9ccff!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-topics li{color:#27313f!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-topics li{color:#eaf1ff!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-topics li span{color:#a2abb7!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-topics li span{color:#93b8f5!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-more{color:#2867e8!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-more{color:#ffffff!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-learn{border-top-color:rgba(11,24,48,.10)!important}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-learn{border-top-color:rgba(255,255,255,.22)!important}
+
+        /* The page sets this row with ten chained :root selectors, so a plain
              .program-cards loses even with !important. Matching the prefix and
              relying on source order (this <style> sits later in the document)
              is what actually wins. */
