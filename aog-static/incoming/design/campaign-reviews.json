@@ -1,0 +1,131 @@
+{
+  "//": "Reviews for the /ai-training/ block. The page renders the most recent `show`, sorted by date, so adding a newer one pushes the oldest off with no code change.",
+  "//date": "YYYY-MM. Google shows relative dates (\"5 days ago\"), so these were converted at transcription time.",
+  "//verbatim": "Text is copied word for word from the Google profile, typos and all. Do not tidy it: an edited review is no longer the review someone left.",
+  "//georgia": "Georgia Harding's review was edited in Aug 2026 to cover the AI course; the owner reply beneath it is six years old, so she is a long-standing client. Dated by when the current text was written.",
+  "profile": {
+    "rating": 4.8,
+    "count": 229,
+    "url": "https://www.google.com/search?q=Ad+On+Group+Burleigh+Heads+reviews"
+  },
+  "show": 6,
+  "reviews": [
+    {
+      "name": "Georgia Harding",
+      "initials": "GH",
+      "av": "#8034A8",
+      "date": "2026-08",
+      "rating": 5,
+      "topic": "AI course + Claude automation",
+      "text": "Working with Ad On Group and Claude we were able to build a co work automation to assess our FB and Insta campaigns to see whats working and whats not. We can now cut underperforming social campaigns and focus on the ones working. The AI course plus the support we were able to build something that really makes a difference. Thanks Ad On Group and Claude!!"
+    },
+    {
+      "name": "Will",
+      "initials": "W",
+      "av": "#5B2D91",
+      "date": "2026-08",
+      "rating": 5,
+      "topic": "AI course",
+      "text": "The AI course is amazing, I have recommended it to everyone I know who has an interest in this sort of thing"
+    },
+    {
+      "name": "Ava Brown",
+      "initials": "AB",
+      "av": "#E8552D",
+      "date": "2026-08",
+      "rating": 5,
+      "topic": "AI course",
+      "text": "I did the AI course and it was spectacular 11/10, I couldn’t recommend it enough"
+    },
+    {
+      "name": "Victoria",
+      "initials": "V",
+      "av": "#7C8696",
+      "date": "2026-08",
+      "rating": 5,
+      "topic": "AI training course",
+      "text": "I’ve been working through the AI training course for a couple of months now and it’s been really helpful! My client is happy with the increased productivity and they enjoy reading through the monthly progress report they receive. Highly recommended!"
+    },
+    {
+      "name": "Mary Jean Gregorio",
+      "initials": "MG",
+      "av": "#4F46B8",
+      "date": "2026-08",
+      "rating": 5,
+      "topic": "AI training",
+      "text": "The AI training was both practical and insightful, and its applications were immediately useful. I learned how to utilize AI tools more effectively to enhance workflows, save time, and develop more efficient processes, while also understanding the importance of responsible AI use. The training provided practical skills that I could apply straight away in my role and has changed the way I approach everyday tasks."
+    },
+    {
+      "name": "Emelita Jadraque",
+      "initials": "EJ",
+      "av": "#14A08C",
+      "date": "2026-07",
+      "rating": 5,
+      "topic": "AI training academy",
+      "text": "I’ve been part of the Ad On AI training academy for a while now and it’s genuinely helped me grow. The sessions are practical, not just theory, so I’ve been able to apply what I learn straight away. Beyond what’s covered in the program, it’s given me the confidence to keep exploring AI tools on my own to work smarter and get more done day-to-day. Would recommend it to anyone wanting to build real, usable AI skills rather than just ticking a box."
+    },
+    {
+      "name": "A and D Discount Roofing Supplies",
+      "initials": "AD",
+      "av": "#1BABE5",
+      "date": "2025-11",
+      "rating": 5,
+      "text": "I highly recommend Ad On Group to create your website and manage your digital marketing. Their creative team is highly skilled in designing and writing informative blogs and digital brochures, and adept in SEO strategies that have consistently driven traffic and sales. Their cutting-edge approach lets us focus on our business goals.",
+      "topic": "legacy"
+    },
+    {
+      "name": "Gayle Slater",
+      "initials": "GS",
+      "av": "#14A08C",
+      "date": "2025-10",
+      "rating": 5,
+      "text": "Thank you Charlotte, I am extremely happy with the adjustments and your work. It looks fantastic.",
+      "topic": "legacy"
+    },
+    {
+      "name": "Thérèse Hallett",
+      "initials": "TH",
+      "av": "#6C5CD6",
+      "date": "2025-07",
+      "rating": 5,
+      "text": "What can I say about my experience with Ad On Hold. The lovely young lady who looks after our account, Alaskah, was simply amazing — super patient and understanding. I feel we are treated as a person firstly and a business owner second, certainly not just a number. She is a gem!",
+      "topic": "legacy"
+    },
+    {
+      "name": "Ashar Rees",
+      "initials": "AR",
+      "av": "#E0842F",
+      "date": "2025-07",
+      "rating": 5,
+      "text": "Great team, very professional, great results. Highly recommended.",
+      "topic": "legacy"
+    },
+    {
+      "name": "John Milios",
+      "initials": "JM",
+      "av": "#1BABE5",
+      "date": "2025-04",
+      "rating": 5,
+      "text": "Great team to work with — professional, easy, friendly, can’t do enough for us. Recommend Ad On Group for all your business needs. A++",
+      "topic": "legacy"
+    },
+    {
+      "name": "John Martin",
+      "initials": "JM",
+      "av": "#14A08C",
+      "date": "2025-01",
+      "rating": 5,
+      "text": "Happy to sing praises for Ad On Group! We’ve been a customer for quite a few years and recently had our website revamped by their team — a painless process with terrific results. Alaskah was a treasure to deal with.",
+      "topic": "legacy"
+    },
+    {
+      "name": "Ashmore City Medical Centre",
+      "initials": "AC",
+      "av": "#6C5CD6",
+      "date": "2024-09",
+      "rating": 5,
+      "text": "The flow of the changes to the script is simple and easy. They keep up to date with the changes required and remind me to update. Excellent service — would highly recommend.",
+      "topic": "legacy"
+    }
+  ]
+}
