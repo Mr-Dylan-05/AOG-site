@@ -7,9 +7,11 @@
  * read as one Why Us section: who you would be trained by, then what people
  * say about being trained by them.
  *
- * The wording is the strip's own. "Meet your certified associates" is promoted
- * from a label to the heading rather than a new headline being written for it,
- * and no lede is invented; the reviews below supply the evidence.
+ * The section banners "Why us" and then gives the first reason, one-on-one
+ * support from Claude Certified Associates, with the associates underneath as
+ * the proof. The second reason lives on the reviews block below, which carries
+ * "Trusted by over 14,000 Australian businesses just like yours" as its own
+ * heading, so the two read as one Why Us section in two beats.
  *
  * Avatars pick the square crop where one exists (-sq) and the JPEG over the
  * PNG where both do. team-dylan.png and team-beau.png are 1.9MB and 320KB for
@@ -40,6 +42,11 @@ const PEOPLE = [
   ["McLean", "IT and Data Manager", "team-mclean.jpg"],
 ];
 
+// The page escalates specificity by repeating :root, up to 61 times, and its
+// mobile rules shrink every h2 to about 6vw. 64 clears the deepest chain in
+// the file, which is what it takes for the banner to keep its size on a phone.
+const DEEP = "html" + ":root".repeat(64) + " body main";
+
 const esc = (s) =>
   String(s).replace(/&(?![a-zA-Z#0-9]+;)/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -55,15 +62,17 @@ const person = ([name, role, file]) => `
           </li>`;
 
 const BLOCK = `<section class="campaign-why" id="why-us" aria-label="Why us">
-        <p class="overline">Why us</p>
-        <h2>Meet your <b>certified associates</b>.</h2>
+        <h2 class="why-banner">Why <b>us</b>.</h2>
+        <h3 class="why-reason">One-on-one support from Claude Certified&nbsp;Associates.</h3>
         <ul class="why-people">${PEOPLE.map(person).join("")}
         </ul>
         <style>
           .campaign-why{padding:88px 7vw 76px;background:#0b1830}
-          .campaign-why .overline{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7fb2ff;margin:0 0 14px}
-          .campaign-why h2{font-size:clamp(28px,3.6vw,46px);line-height:1.1;letter-spacing:-2px;margin:0 0 46px;color:#fff}
-          .campaign-why h2 b{color:#FBB400}
+          /* The section banner, then the first reason under it. The reviews
+             block below carries the second reason as its own heading. */
+          ${DEEP} .why-banner{font-size:clamp(42px,6.4vw,78px)!important;line-height:1!important;letter-spacing:-3px!important;margin:0!important;color:#fff!important;font-weight:800!important;max-width:none!important}
+          ${DEEP} .why-banner b{color:#FBB400!important;font-weight:800!important}
+          ${DEEP} .why-reason{font-size:clamp(21px,2.5vw,32px)!important;line-height:1.18!important;letter-spacing:-1px!important;margin:26px 0 44px!important;color:#dce6f5!important;font-weight:700!important;max-width:22ch!important}
           .why-people{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:26px 18px}
           .why-people li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0;border:0;margin:0;min-width:0}
           .why-av{width:88px;height:88px;border-radius:50%;overflow:hidden;background:#1a2536;border:2px solid rgba(255,255,255,.18);box-shadow:0 12px 26px -14px rgba(0,0,0,.7)}
@@ -75,7 +84,7 @@ const BLOCK = `<section class="campaign-why" id="why-us" aria-label="Why us">
           @media(max-width:1024px){ .why-people{grid-template-columns:repeat(4,minmax(0,1fr));gap:30px 16px} }
           @media(max-width:640px){
             .campaign-why{padding:64px 24px 58px}
-            .campaign-why h2{margin-bottom:34px}
+            ${DEEP} .why-reason{margin:18px 0 32px!important}
             .why-people{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 12px}
             .why-av{width:72px;height:72px}
             .why-name{font-size:13.5px;margin-top:11px}

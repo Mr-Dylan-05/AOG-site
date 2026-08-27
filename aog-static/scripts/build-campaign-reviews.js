@@ -8,6 +8,10 @@
  * here, so adding a newer one pushes the oldest off the block with no edit to
  * this file or to the page.
  *
+ * The heading is the second reason in the Why Us section that opens above this
+ * block, rather than a label of its own, so the eyebrow is gone and the Google
+ * rating in the footer is what marks these as reviews.
+ *
  * The card is the same one the rest of the site uses for Google reviews
  * (initial avatar, five gold stars, date, Google mark) so it reads as a real
  * review rather than a testimonial we wrote. Type and accent colour follow the
@@ -53,8 +57,7 @@ const card = (r) => `
         </article>`;
 
 const BLOCK = `<section class="campaign-reviews" id="reviews" aria-label="Google reviews">
-      <p class="overline">Reviews</p>
-      <h2>What people say about <b>working with us</b>.</h2>
+      <h2>Trusted by over <b>14,000 Australian businesses</b> just like&nbsp;yours.</h2>
       <div class="cr-grid">${picked.map(card).join("")}
       </div>
       <p class="cr-foot">${GOOGLE}<span class="cr-score">${cfg.profile.rating}</span><span class="cr-stars">${STAR.repeat(5)}</span><span>from ${cfg.profile.count} Google reviews</span></p>
