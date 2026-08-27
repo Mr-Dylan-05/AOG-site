@@ -28,6 +28,24 @@
  * Matching that is an arms race with no ceiling; an inline !important sits
  * above every selector in the cascade and cannot be out-specified.
  *
+ * MOBILE. Two faults on a phone, both from the export rather than this swap:
+ *
+ *   The left stack carries transform:translateY(-22px) and the right +24px, a
+ *   stagger that reads well on a wide layout. Stacked on a phone it drags the
+ *   first tile up under the "Claude Certified Associates" badge, which they
+ *   visibly overlap. The offsets are dropped below 760px.
+ *
+ *   The academy screenshot is set to width:100%;height:auto. On desktop the
+ *   frame is deliberately wider than its tile (420px inside 247px) so the
+ *   screenshot bleeds past the edge and fills the height. On a phone the tile
+ *   turns portrait, the shot shrinks to the tile's width and fills only 36% of
+ *   it, leaving a pale empty block. Sizing it by height instead restores the
+ *   bleed the desktop layout was designed around.
+ *
+ * These need a media query, so unlike the tile swap they cannot be inline.
+ * .platform-shot is declared on a 61-deep :root chain, the deepest in the
+ * file, so the block below sits at 64 to clear it.
+ *
  * Idempotent: restores the original card first, so re-running never nests.
  *
  * Usage:  node scripts/fix-hero-visual.js
@@ -39,6 +57,19 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 const IMG = "/assets/design/group-au-office.png";
+
+// 64 :root repetitions: one deeper than the 61 the page uses for .platform-shot.
+const DEEP = "html" + ":root".repeat(64) + " body main";
+
+const MOBILE_STYLE = `<style id="hero-mobile-style">
+        @media(max-width:760px){
+          ${DEEP} .hero-visual-stack-left,
+          ${DEEP} .hero-visual-stack-right{transform:none!important}
+          ${DEEP} .hero-visual{margin-top:16px!important}
+          ${DEEP} .visual-platform .platform-shot{width:auto!important;max-width:none!important;height:100%!important}
+          ${DEEP} .visual-platform .platform-shot img{width:auto!important;max-width:none!important;height:100%!important;display:block!important}
+        }
+      </style>`;
 
 const CHART =
   '<div class="visual-card visual-chart"><span>Learning progress</span><b>50%</b><i></i><i></i><i></i><i></i><i></i></div>';
@@ -76,5 +107,11 @@ if (missing) throw new Error(`image not found: public${IMG}`);
 html = html.replace(CHART, PHOTO);
 
 
+html = html.replace(/<style id="hero-mobile-style">[\s\S]*?<\/style>/, "");
+const heroEnd = html.indexOf("</section>", html.indexOf('class="hero"'));
+if (heroEnd === -1) throw new Error("could not find the end of the hero section");
+html = html.slice(0, heroEnd) + MOBILE_STYLE + html.slice(heroEnd);
+
 fs.writeFileSync(PAGE, html);
 console.log(`  hero tile 4: progress card -> ${IMG}`);
+console.log("  mobile: stagger offsets dropped, academy shot sized to fill");
