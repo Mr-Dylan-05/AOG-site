@@ -56,7 +56,7 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
-const IMG = "/assets/design/group-au-office.png";
+const IMG = "/assets/campaign/team-office-floor.jpg";
 
 /* Tile 3, bottom left. The export shipped a studio-style shot of the same two
    people indoors; this is them outside the building with the wordmark behind,
@@ -96,7 +96,7 @@ const IMG_CSS =
 
 const PHOTO =
   '<figure class="visual-card visual-chart visual-studio" style="' + TILE_CSS + '">' +
-  '<img src="' + IMG + '" alt="The Ad On Group head office on the Gold Coast" style="' + IMG_CSS + '"/>' +
+  '<img src="' + IMG + '" alt="The Ad On Group team at work in the office" style="' + IMG_CSS + '"/>' +
   '</figure>';
 
 
