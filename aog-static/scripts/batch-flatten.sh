@@ -41,5 +41,9 @@ else
   echo "  ⚠  dylan-website not found at $ADONAI_SRC — skipped deployed AI pages"
 fi
 
+# Point "Book a call" at the form. The imported Ad On AI pages used mailto,
+# which is a dead end on a phone and never reaches the leads sheet.
+node scripts/fix-cta-links.js
+
 # Use the Ad On Group footer sitewide (and fix links to the retired /ad-on-ai/)
 node scripts/apply-group-footer.js
