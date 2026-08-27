@@ -17,10 +17,13 @@
  * opens and closes on the same note.
  *
  * The closing copy is adapted from lines already on the site rather than
- * written fresh, but it is new wording on the page and worth a read:
- *   /ai-quiz/            "Talk to one of our AI Training Facilitators and we
- *                         will help you work out your best AI learning path."
- *   hero                 "Get ahead with it."
+ * written fresh:
+ *   /ai-quiz/   "Talk to one of our AI Training Facilitators and we will help
+ *                you work out your best AI learning path." The opening half is
+ *                kept; the tail was changed on request to "how to get ahead
+ *                with AI", which ties it back to the headline above it and the
+ *                hero at the top instead of naming a learning path.
+ *   hero        "Get ahead with it."
  *
  * Idempotent: rebuilds both blocks from the original section every run.
  *
@@ -47,7 +50,7 @@ const CLOSE = `<section class="campaign-close" id="contact" aria-label="Get in t
         <div class="cc-inner">
           <p class="cc-eyebrow">Get started</p>
           <h2 class="cc-head">Ready to get ahead <b>with AI?</b></h2>
-          <p class="cc-copy">Talk to one of our Claude Certified Associates and we will help you work out your best AI learning path.</p>
+          <p class="cc-copy">Talk to one of our Claude Certified Associates and we will help you work out how to get ahead with AI.</p>
           <a class="cc-btn" href="/ai-enquiry/">GET IN TOUCH <span aria-hidden="true">&rarr;</span></a>
         </div>
       </section>`;
