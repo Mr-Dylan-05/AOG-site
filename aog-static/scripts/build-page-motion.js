@@ -72,7 +72,7 @@ const SCRIPT_TAG = `<script id="motion-js">
             ['.campaign-why',      '.why-banner, .why-reason, .why-people > li'],
             ['.campaign-reviews',  'h2, .cr-card, .cr-foot'],
             ['.faq',               ':scope > div'],
-            ['.quiz-strip',        '.qs-text, .qs-link'],
+            ['.cta--compact',      ':scope > *'],
             ['.campaign-close',    '.cc-eyebrow, .cc-head, .cc-copy, .cc-btn']
           ];
 
