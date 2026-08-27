@@ -58,6 +58,17 @@ const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 const IMG = "/assets/design/group-au-office.png";
 
+/* Tile 3, bottom left. The export shipped a studio-style shot of the same two
+   people indoors; this is them outside the building with the wordmark behind,
+   which is unmistakably Ad On Group. The crop is biased right so both faces
+   stay in frame and the parked car falls outside it. */
+const TEAM_FROM = '<img src="/assets/campaign/ad-on-group-team-members.jpg" alt="Ad On Group team members"/>';
+const TEAM_TO =
+  '<img src="/assets/campaign/team-outside-office.jpg" ' +
+  'alt="Two Ad On Group team members outside the Gold Coast office" ' +
+  'style="width:100%!important;height:100%!important;object-fit:cover!important;' +
+  'object-position:62% 50%!important;display:block!important"/>';
+
 // 64 :root repetitions: one deeper than the 61 the page uses for .platform-shot.
 const DEEP = "html" + ":root".repeat(64) + " body main";
 
@@ -107,6 +118,12 @@ if (missing) throw new Error(`image not found: public${IMG}`);
 html = html.replace(CHART, PHOTO);
 
 
+// tile 3: the outside-the-office shot, restoring the original first so a
+// re-run never doubles up
+html = html.replace(/<img src="\/assets\/campaign\/team-outside-office\.jpg"[^>]*\/>/, TEAM_FROM);
+if (html.includes(TEAM_FROM)) html = html.replace(TEAM_FROM, TEAM_TO);
+else console.warn("  [warn] tile 3 image not found, left alone");
+
 html = html.replace(/<style id="hero-mobile-style">[\s\S]*?<\/style>/, "");
 const heroEnd = html.indexOf("</section>", html.indexOf('class="hero"'));
 if (heroEnd === -1) throw new Error("could not find the end of the hero section");
@@ -115,3 +132,4 @@ html = html.slice(0, heroEnd) + MOBILE_STYLE + html.slice(heroEnd);
 fs.writeFileSync(PAGE, html);
 console.log(`  hero tile 4: progress card -> ${IMG}`);
 console.log("  mobile: stagger offsets dropped, academy shot sized to fill");
+console.log("  hero tile 3: studio shot -> /assets/campaign/team-outside-office.jpg");
