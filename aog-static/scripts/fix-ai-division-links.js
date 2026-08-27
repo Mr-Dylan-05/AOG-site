@@ -91,12 +91,15 @@ function walk(dir, out = []) {
  */
 const SCOPED = [
   // The export ships this button as /#contact, the homepage's long contact
-  // form. It briefly pointed at /ai-training/, the short name-and-email lead
-  // page; that page has been removed because the real sales landing page is
-  // expected to take its place. Until that lands, the button goes to the
-  // contact page, which has a working, tracked form. Both hrefs are matched so
-  // a stale build is corrected as readily as a fresh export.
-  ["ad-on-ai-division/index.html", /href="(?:\/#contact|\/ai-training\/)"/g, "/contact-us/"],
+  // form, so it is repointed at the contact page, which has a working tracked
+  // form.
+  //
+  // It deliberately no longer matches /ai-training/. That href was rewritten
+  // here while the lead page was removed, but the campaign landing page now
+  // lives at that URL. Leaving it in the pattern meant this script would strip
+  // any link to the landing page and quietly send it to the generic contact
+  // form instead, every time it ran.
+  ["ad-on-ai-division/index.html", /href="\/#contact"/g, "/contact-us/"],
 ];
 
 /**
