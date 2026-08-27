@@ -5,6 +5,10 @@
  * The campaign page explains the format (24 modules, 1:1s, community) but never
  * said what is actually taught, and never said what someone ends up holding.
  *
+ * The walk-away list that sat under the card row has been removed on request.
+ * The undo step below still strips it, so an older build is cleaned up rather
+ * than left with an orphan.
+ *
  * COMPACT, AND INSIDE THE CARD THAT ALREADY EXISTS. A first version added a
  * full-width section with the 24 module titles behind three accordions. It was
  * accurate and far too big: 1,312px on a phone before anyone expanded
@@ -54,20 +58,6 @@ const TOPICS = [
   "AI Agents",
 ];
 
-/* Straight from /programs/. Totals 21, which is where the "20+" comes from. */
-const WALKAWAY = [
-  ["5–6", "reusable prompt packs"],
-  ["1", "end-to-end AI workflow"],
-  ["3", "multimodal AI tasks"],
-  ["3", "custom Claude skills"],
-  ["1", "meta skill"],
-  ["2", "cross-tool workflows"],
-  ["1", "Claude Cowork automation"],
-  ["1", "Claude-in-Chrome automation"],
-  ["3", "AI agents"],
-  ["1", "agentic orchestrator"],
-];
-
 const esc = (s) =>
   String(s).replace(/&(?![a-zA-Z#0-9]+;)/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -78,10 +68,6 @@ const CARD_FROM =
 const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you'll learn</p><ul class="cur-topics">${TOPICS.map(
   (t, i) => `<li><span>${String(i + 1).padStart(2, "0")}</span>${esc(t)}</li>`
 ).join("")}</ul><p class="cur-foot">24 practical modules taking you from AI fundamentals through to real business implementation.</p><a class="cur-more" href="/programs/">See the full list <span aria-hidden="true">&rarr;</span></a></div></article>`;
-
-const STRIP = `<div class="cur-away"><div class="cur-away-head"><p class="cur-label">What you'll walk away with</p><p class="cur-away-h">You finish with <b>20+ working AI builds</b>, tied to your own job.</p></div><ul class="cur-away-list">${WALKAWAY.map(
-  ([n, t]) => `<li><b>${esc(n)}</b> ${esc(t)}</li>`
-).join("")}</ul></div>`;
 
 const STYLE = `<style id="cur-style">
         .cur-card .cur-learn{margin-top:20px;padding-top:18px;border-top:1px solid rgba(11,24,48,.10)}
@@ -97,13 +83,6 @@ const STYLE = `<style id="cur-style">
         .cur-more span{transition:transform .18s ease}
         .cur-more:hover span{transform:translateX(3px)}
 
-        .cur-away{margin:22px 0 0;background:#0b1830;border-radius:18px;padding:24px 26px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:26px;align-items:center}
-        .cur-away .cur-label{color:#7fb2ff;margin-bottom:9px}
-        .cur-away-h{font-size:19px;line-height:1.25;letter-spacing:-.4px;color:#fff;margin:0;font-weight:700}
-        .cur-away-h b{color:#FBB400;font-weight:700}
-        .cur-away-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px}
-        .cur-away-list li{font-size:13.5px;line-height:1.4;color:#c8d3e4;min-width:0;padding:0!important;border:0!important;margin:0!important}
-        .cur-away-list b{color:#fff;font-weight:700}
 
         /* The row is three equal columns, so the taller modules card stretched
            the other two into half-empty boxes. Give the modules card the left
@@ -140,12 +119,6 @@ const STYLE = `<style id="cur-style">
              mobile than the full-width section it replaced. */
           .cur-topics{gap:9px 14px}
           .cur-topics li{font-size:13.5px}
-          .cur-away{grid-template-columns:minmax(0,1fr);gap:14px;padding:20px 18px}
-          /* Ten stacked rows is most of a screen. Inline and wrapped, the same
-             ten read as a sentence and take a third of the height. */
-          .cur-away-list{display:flex;flex-wrap:wrap;gap:4px 0}
-          .cur-away-list li{font-size:13px}
-          .cur-away-list li:not(:last-child)::after{content:"·";color:#5a6b85;margin:0 7px}
         }
       </style>`;
 
@@ -164,12 +137,11 @@ if (!html.includes(CARD_FROM)) {
 }
 html = html.replace(CARD_FROM, CARD_TO);
 
-// The strip goes straight after the three cards, before the community feature.
+// The style block goes straight after the three cards.
 const CARDS_END = '</article></div>';
 const at = html.indexOf(CARDS_END, html.indexOf('<div class="program-cards">'));
 if (at === -1) throw new Error("could not find the end of the program-cards row");
-html = html.slice(0, at + CARDS_END.length) + STRIP + STYLE + html.slice(at + CARDS_END.length);
+html = html.slice(0, at + CARDS_END.length) + STYLE + html.slice(at + CARDS_END.length);
 
 fs.writeFileSync(PAGE, html);
 console.log(`  topics in the modules card: ${TOPICS.length}`);
-console.log(`  walk-away strip: ${WALKAWAY.length} deliverables, ${WALKAWAY.reduce((n, [q]) => n + Number(String(q).split("–")[0]), 0)} builds minimum`);
