@@ -47,3 +47,7 @@ node scripts/fix-cta-links.js
 
 # Use the Ad On Group footer sitewide (and fix links to the retired /ad-on-ai/)
 node scripts/apply-group-footer.js
+
+# Ongoing Support is a centrepiece of Ad On AI, not an optional add-on.
+# The design export says otherwise; this puts the framing back.
+node scripts/fix-ongoing-support-copy.js
