@@ -22,8 +22,7 @@
       "referral": "",
       "leads": "/api/lead",
       "quiz": "/api/lead",
-      "enquiry": "/api/lead",
-      "curriculum": "/api/lead"
+      "enquiry": "/api/lead"
     }
   },
   "defaultOgImage": "/assets/design/group-team.jpg",
