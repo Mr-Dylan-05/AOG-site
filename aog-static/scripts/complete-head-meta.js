@@ -38,6 +38,19 @@ const attr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const has = (html, re) => re.test(html);
 
 const upgradeRobots = [];
+/* Content hash of a built asset, for cache-busting its URL. Short because it
+   only has to change when the file does, not be unguessable. Falls back to a
+   constant if the file is missing, so a build never dies over a cache query. */
+function assetVersion(rel) {
+  try {
+    const buf = fs.readFileSync(path.join(SITE, rel));
+    return require("crypto").createHash("md5").update(buf).digest("hex").slice(0, 8);
+  } catch (_) {
+    return "0";
+  }
+}
+const formJsVersion = assetVersion("assets/js/contact-form.js");
+
 let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, navJs = 0, formJs = 0, robots = 0, touched = 0;
 let pixel = 0, utmJs = 0;
 
@@ -138,8 +151,14 @@ for (const file of walk(SITE)) {
   }
 
   // Contact form validation — only on the page that actually has the form.
+  //
+  // Versioned by content. The handler decides which Meta event each form
+  // reports, so a returning visitor running a cached copy keeps reporting the
+  // old one — a quiz completion counted as a Lead — until their cache expires.
+  // The query changes whenever the file does, which makes the deploy the
+  // moment the change takes effect rather than some hours later.
   if (html.includes("data-contact-form") && !html.includes("/assets/js/contact-form.js")) {
-    body = (body || "") + `\n<script src="/assets/js/contact-form.js" defer></script>`;
+    body = (body || "") + `\n<script src="/assets/js/contact-form.js?v=${formJsVersion}" defer></script>`;
     formJs++;
   }
 
