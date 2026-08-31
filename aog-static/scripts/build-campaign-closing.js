@@ -141,16 +141,19 @@ html = html.replace(/<style id="closing-head-style">[\s\S]*?<\/style>/, "");
 // The original quiz section, if it is still the one the export shipped.
 html = html.replace(/<section class="cta" id="contact">[\s\S]*?<\/section>/, "");
 
-// The closing section carries the enquiry form, so it is the last thing asked
-// for. The quiz goes below it rather than above the FAQs: it is a softer ask,
-// and it should not sit between the page and its own form.
+// The quiz sits above the FAQs, where it was, and the closing section with the
+// enquiry form goes after them. The form is still the last thing on the page,
+// so it remains the final ask; the quiz is simply back where it reads as a
+// softer offer partway down rather than an afterthought below the form.
 const faqAt = html.search(/<section[^>]*class="faq"/);
 if (faqAt === -1) throw new Error("could not find the FAQ section");
-const faqEnd = html.indexOf("</section>", faqAt) + "</section>".length;
-html = html.slice(0, faqEnd) + CLOSE + QUIZ + html.slice(faqEnd);
+html = html.slice(0, faqAt) + QUIZ + html.slice(faqAt);
+
+const faqEnd = html.indexOf("</section>", html.search(/<section[^>]*class="faq"/)) + "</section>".length;
+html = html.slice(0, faqEnd) + CLOSE + html.slice(faqEnd);
 
 const headEnd = html.indexOf("</head>");
 html = html.slice(0, headEnd) + STYLE + HEAD_CSS + html.slice(headEnd);
 
 fs.writeFileSync(PAGE, html);
-console.log("  closing section with the enquiry form added after the FAQs, quiz below it");
+console.log("  quiz above the FAQs, closing section with the enquiry form after them");
