@@ -65,7 +65,8 @@ const PREFERRED = [
   "score", "band",
   "current_use", "worry", "motivation", "barrier", "support", "intent",
   "source", "page",
-  "utm_source", "utm_medium", "utm_campaign", "utm_content",
+  "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+  "fbclid", "landing_page",
 ];
 
 /* What goes on the Chat card, in the order a person reads a lead. Everything

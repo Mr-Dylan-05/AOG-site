@@ -13,6 +13,19 @@
 (function () {
   "use strict";
 
+  /* Which forms count as a Meta conversion. The booking form on /ai-enquiry/
+     is the destination of the paid campaign, so it is the only one Meta should
+     optimise towards — counting the quiz or a partner referral as the same
+     event would train the ad delivery on the wrong people. */
+  var LEAD_FORMS = ["enquiry"];
+
+  /* The pixel is only initialised on the production hostname, so anywhere else
+     is a developer looking at the site. */
+  function isDev() {
+    var h = window.location.hostname;
+    return h !== "adongroup.com.au" && h !== "www.adongroup.com.au";
+  }
+
   var MESSAGES = {
     firstName: "Please enter your first name.",
     lastName: "Please enter your last name.",
@@ -40,6 +53,11 @@
     // JavaScript off, the native validation is still the only thing standing
     // between an empty form and the endpoint, and it should stay.
     form.setAttribute("novalidate", "");
+
+    // A Lead is one conversion no matter how many times the handler runs.
+    // Double-clicking submit, or a browser replaying the event, must not
+    // report two.
+    var leadReported = false;
 
     var status = form.querySelector("[data-form-status]");
     var button = form.querySelector('button[type="submit"]');
@@ -178,6 +196,25 @@
       payload.set("form", form.getAttribute("data-form") || "contact");
       payload.set("page", window.location.pathname + window.location.search);
 
+      // Campaign parameters captured by utm.js when the visitor first arrived,
+      // which is normally a different page to this one. Every key is set even
+      // when empty so the sheet's columns stay aligned across submissions.
+      var attribution =
+        typeof window.aogAttribution === "function" ? window.aogAttribution() : {};
+      Object.keys(attribution).forEach(function (key) {
+        payload.set(key, attribution[key]);
+      });
+
+      // submitted_at is deliberately not sent. /api/lead stamps it server-side
+      // from a clock we control; a value posted from the browser would overwrite
+      // that with whatever the visitor's device thinks the time is.
+
+      if (isDev()) {
+        console.log("[aog] attribution captured:", attribution);
+        console.log("[aog] posting to", form.getAttribute("action"),
+                    Object.fromEntries(payload));
+      }
+
       fetch(form.getAttribute("action"), {
         method: "POST",
         body: payload,
@@ -201,14 +238,17 @@
             });
           }
 
-          // Meta's equivalent, for the paid campaigns. Guarded on fbq existing,
-          // because there is no Pixel on the site yet: nothing here breaks
-          // without one, and the moment the Pixel snippet is added this starts
-          // reporting conversions with no further code change.
-          if (typeof window.fbq === "function") {
-            window.fbq("track", "Lead", {
-              content_name: form.getAttribute("data-form") || "contact",
-            });
+          // Meta's equivalent, for the paid campaigns.
+          //
+          // This sits inside the .then of a response that was checked for
+          // res.ok, so it reports only a submission the Sheet actually
+          // accepted. A validation failure, a dead endpoint or a 502 from
+          // /api/lead all return before reaching here.
+          var formKey = form.getAttribute("data-form") || "contact";
+          if (!leadReported && LEAD_FORMS.indexOf(formKey) !== -1 &&
+              typeof window.fbq === "function") {
+            leadReported = true;
+            window.fbq("track", "Lead", { content_name: formKey });
           }
 
           // A form can name a panel to show in its place. Leaving a filled-in

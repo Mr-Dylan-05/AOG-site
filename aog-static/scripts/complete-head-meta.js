@@ -39,6 +39,7 @@ const has = (html, re) => re.test(html);
 
 const upgradeRobots = [];
 let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, navJs = 0, formJs = 0, robots = 0, touched = 0;
+let pixel = 0, utmJs = 0;
 
 for (const file of walk(SITE)) {
   const html = fs.readFileSync(file, "utf8");
@@ -128,6 +129,14 @@ for (const file of walk(SITE)) {
     navJs++;
   }
 
+  // Campaign attribution. Every page, not just the ones with a form: the ad
+  // lands on /ai-training/ and the form is on /ai-enquiry/, so the parameters
+  // have to be captured a page or two before anyone submits anything.
+  if (!html.includes("/assets/js/utm.js")) {
+    body = (body || "") + `\n<script src="/assets/js/utm.js"></script>`;
+    utmJs++;
+  }
+
   // Contact form validation — only on the page that actually has the form.
   if (html.includes("data-contact-form") && !html.includes("/assets/js/contact-form.js")) {
     body = (body || "") + `\n<script src="/assets/js/contact-form.js" defer></script>`;
@@ -141,6 +150,33 @@ for (const file of walk(SITE)) {
       `gtag('js',new Date());gtag('config','${tp.googleAnalytics}');</script>`;
     ga++;
   }
+  // Meta Pixel, in the head so PageView fires as early as possible.
+  //
+  // Wrapped in a hostname check: the same HTML is served from localhost and
+  // from Vercel preview URLs, and a developer reloading a page twenty times
+  // would otherwise land in the same dataset the ad campaign is optimised on.
+  // The check is on the hostname rather than a build flag because the built
+  // files are identical everywhere — there is no separate dev build to gate on.
+  if (tp.metaPixel && !html.includes(tp.metaPixel)) {
+    add.push(
+      `<script>!function(){var h=location.hostname;` +
+      `if(h!=="adongroup.com.au"&&h!=="www.adongroup.com.au")return;` +
+      `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?` +
+      `n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;` +
+      `n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;` +
+      `t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}` +
+      `(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");` +
+      `fbq("init","${tp.metaPixel}");fbq("track","PageView");}();</script>`
+    );
+    // The fallback only renders for a visitor with JavaScript disabled, so it
+    // cannot carry the hostname guard. A developer is not that visitor.
+    add.push(
+      `<noscript><img height="1" width="1" style="display:none" alt=""` +
+      ` src="https://www.facebook.com/tr?id=${tp.metaPixel}&ev=PageView&noscript=1"></noscript>`
+    );
+    pixel++;
+  }
+
   if (tp.tawkChat && tp.tawkSrc && !html.includes(tp.tawkSrc)) {
     body = (body || "") + `\n<script async src="${tp.tawkSrc}" crossorigin="*"></script>`;
     tawk++;
@@ -173,4 +209,6 @@ console.log(`  mobile.css linked : ${mobileCss}`);
 console.log(`  analytics injected: ${ga}`);
 console.log(`  chat injected     : ${tawk}`);
 console.log(`  mobile nav js     : ${navJs}`);
+console.log(`  utm capture js    : ${utmJs}`);
+console.log(`  meta pixel        : ${pixel}`);
 console.log(`  contact form js   : ${formJs}`);
