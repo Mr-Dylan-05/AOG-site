@@ -70,9 +70,7 @@ const esc = (s) =>
 const CARD_FROM =
   "<article><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p></article>";
 
-const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you'll learn &amp; apply</p><ul class="cur-topics">${TOPICS.map(
-  (t, i) => `<li><span>${String(i + 1).padStart(2, "0")}</span>${esc(t)}</li>`
-).join("")}</ul><p class="cur-foot">24 practical modules taking you from AI fundamentals through to real business implementation.</p><a class="cur-more" href="/programs/">See the full list <span aria-hidden="true">&rarr;</span></a></div></article>`;
+const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you&rsquo;ll learn</p><ol class="cur-months"><li class="cur-month"><p class="cur-mhead"><b>Month 1</b>Foundations<i>get fluent</i></p><p class="cur-mout">Learning <em>advanced prompt engineering</em> and <em>context management</em> techniques. <em>Claude Projects</em> that hold everything about your business so you stop re-explaining it. Get AI to work across your documents, images and screenshots. Building your first <em>AI-powered workflow</em>, end to end.</p></li><li class="cur-month"><p class="cur-mhead"><b>Month 2</b>Automating Your Tasks<i>get your time back</i></p><p class="cur-mout">Teaching AI your job. <em>Custom Claude skills</em> built around how you actually work, and a <em>meta skill</em> that writes the next ones. <em>Claude Cowork automations</em> and <em>Claude in Chrome browser automations</em> across the tools you already use, scheduled to run without you.</p></li><li class="cur-month"><p class="cur-mhead"><b>Month 3</b>Agentic AI<i>go autonomous</i></p><p class="cur-mout">Handing whole jobs over to AI. Building <em>autonomous AI agents</em> that carry out complete processes on their own &mdash; deciding what to do next, working across your tools, running start to finish without you &mdash; then an <em>orchestrator AI agent</em> that directs them all as one system. Effectively, your own <em>virtual employees</em>.</p></li></ol><a class="cur-more" href="#enquire">Request the full curriculum <span aria-hidden="true">&rarr;</span></a><a class="dark-button cur-cta" href="#enquire">See if this fits your business &rarr;</a></div></article>`;
 
 const STYLE = `<style id="cur-style">
         .cur-card .cur-learn{margin-top:20px;padding-top:18px;border-top:1px solid rgba(11,24,48,.10)}
@@ -84,9 +82,27 @@ const STYLE = `<style id="cur-style">
         .cur-topics li{display:flex!important;gap:9px;align-items:baseline;font-size:14.5px;line-height:1.4;color:#27313f;min-width:0;padding:0!important;border:0!important;margin:0!important}
         .cur-topics li span{flex:none;font-family:'DM Mono',monospace;font-size:11px;color:#a2abb7}
         .cur-foot{font-size:12.5px;line-height:1.5;color:#8a93a1;margin:16px 0 0}
+        /* Months, not module names. The 24 titles are the thing people enquire
+           for; what sells here is what they walk away holding. */
+        .cur-months{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+        .cur-month{display:block}
+        .cur-mhead{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:0 0 4px}
+        .cur-mhead b{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;
+          text-transform:uppercase;font-weight:700;color:#2867e8}
+        .cur-mhead i{font-style:normal;font-size:12px;color:#8a93a1}
+        .cur-mhead{font-size:14.5px;font-weight:700;color:#0b1830;letter-spacing:-.01em}
+        .cur-mout{margin:0;font-size:13.5px;line-height:1.5;color:#4a5462}
+        .cur-foot b{color:#0b1830;font-weight:800}
+
+        .cur-mout em{font-style:normal;font-weight:700;color:#2867e8}html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-mout em{color:#2867e8!important}html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-mout em{color:#a9ccff!important}
+
+
+
+
         .cur-more{display:inline-flex;align-items:center;gap:7px;margin:14px 0 0;font-size:14px;font-weight:700;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:2px;line-height:1.2}
         .cur-more span{transition:transform .18s ease}
         .cur-more:hover span{transform:translateX(3px)}
+        html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-cta{background:#0b1631!important;color:#fff!important}html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-cta{background:#fff!important;color:#0b1631!important}
 
 
         /* The row is three equal columns, so the taller modules card stretched
