@@ -591,11 +591,11 @@
       set("f-industry", intake.industry);
       QS.concat(BQS).forEach(function (q) { set("f-" + q, answers[q] ? answers[q].text : ""); });
 
-      // Carry the ad's tracking through so a lead can be traced to its creative.
-      var p = new URLSearchParams(window.location.search);
-      ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(function (k) {
-        set("f-" + k, p.get(k) || "");
-      });
+      // The ad's tracking is not read here. It is captured on arrival by
+      // utm.js and added to the payload at submit — the quiz is usually
+      // several clicks from the page the ad landed on, so by this point the
+      // URL no longer carries anything. The hidden utm_* fields above stay as
+      // the no-JavaScript shape of the form and are overwritten on submit.
 
       if (typeof window.gtag === "function") {
         window.gtag("event", "quiz_complete", { score: score, band: band.title });

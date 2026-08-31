@@ -122,17 +122,6 @@
     </div>
   </footer>
 
-  <script>
-  // Carry the ad's tracking through so an enquiry can be traced to the creative
-  // that produced it. Same approach as the quiz.
-  (function () {
-    var p = new URLSearchParams(window.location.search);
-    var f = document.querySelectorAll("[data-utm]");
-    for (var i = 0; i < f.length; i++) {
-      f[i].value = p.get(f[i].getAttribute("data-utm")) || "";
-    }
-  })();
-  </script>
 
 </div>
 </body>

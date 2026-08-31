@@ -13,11 +13,18 @@
 (function () {
   "use strict";
 
-  /* Which forms count as a Meta conversion. The booking form on /ai-enquiry/
-     is the destination of the paid campaign, so it is the only one Meta should
-     optimise towards — counting the quiz or a partner referral as the same
-     event would train the ad delivery on the wrong people. */
-  var LEAD_FORMS = ["enquiry"];
+  /* Which forms count as a Meta conversion.
+     Both are campaign destinations: the booking form on /ai-enquiry/ and the
+     form at the end of the AI quiz. Everything else is excluded on purpose —
+     the general contact form is ordinary site enquiry traffic, and the partner
+     and referral forms are not leads at all. Feeding those to Meta would train
+     ad delivery on people the campaign is not for.
+
+     Matched on the form's own data-form value, not on the page path, so moving
+     or duplicating a form cannot silently change what gets reported. Every form
+     on the site carries a distinct value: enquiry, quiz, partner, referral, and
+     the contact form which has none and falls back to "contact". */
+  var LEAD_FORMS = ["enquiry", "quiz"];
 
   /* The pixel is only initialised on the production hostname, so anywhere else
      is a developer looking at the site. */
