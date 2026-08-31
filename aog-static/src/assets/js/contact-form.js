@@ -13,18 +13,26 @@
 (function () {
   "use strict";
 
-  /* Which forms count as a Meta conversion.
-     Both are campaign destinations: the booking form on /ai-enquiry/ and the
-     form at the end of the AI quiz. Everything else is excluded on purpose —
-     the general contact form is ordinary site enquiry traffic, and the partner
-     and referral forms are not leads at all. Feeding those to Meta would train
-     ad delivery on people the campaign is not for.
+  /* What each form reports to Meta, keyed by its own data-form value.
+     A form absent from here reports nothing.
 
-     Matched on the form's own data-form value, not on the page path, so moving
-     or duplicating a form cannot silently change what gets reported. Every form
-     on the site carries a distinct value: enquiry, quiz, partner, referral, and
-     the contact form which has none and falls back to "contact". */
-  var LEAD_FORMS = ["enquiry", "quiz"];
+     Only the enquiry form is a Lead. It asks for a name, an email, a phone
+     number and what someone wants from AI, which is a person asking to be
+     contacted. The quiz is a different thing: someone answering six questions
+     to see their own result. Both are worth knowing about, but counting them
+     as the same conversion would train ad delivery towards quiz takers, who
+     are cheaper to acquire and further from buying. QuizComplete is a custom
+     event so it can be watched, or optimised towards deliberately, without
+     diluting Lead.
+
+     Matched on data-form rather than the page path, so moving or duplicating a
+     form cannot silently change what gets reported. Every form on the site
+     carries a distinct value: enquiry, quiz, partner, referral, and the
+     contact form which has none and falls back to "contact". */
+  var PIXEL_EVENTS = {
+    enquiry: { method: "track", name: "Lead" },
+    quiz: { method: "trackCustom", name: "QuizComplete" },
+  };
 
   /* The pixel is only initialised on the production hostname, so anywhere else
      is a developer looking at the site. */
@@ -61,10 +69,10 @@
     // between an empty form and the endpoint, and it should stay.
     form.setAttribute("novalidate", "");
 
-    // A Lead is one conversion no matter how many times the handler runs.
+    // One event per page load no matter how many times the handler runs.
     // Double-clicking submit, or a browser replaying the event, must not
     // report two.
-    var leadReported = false;
+    var pixelReported = false;
 
     var status = form.querySelector("[data-form-status]");
     var button = form.querySelector('button[type="submit"]');
@@ -252,10 +260,13 @@
           // accepted. A validation failure, a dead endpoint or a 502 from
           // /api/lead all return before reaching here.
           var formKey = form.getAttribute("data-form") || "contact";
-          if (!leadReported && LEAD_FORMS.indexOf(formKey) !== -1 &&
-              typeof window.fbq === "function") {
-            leadReported = true;
-            window.fbq("track", "Lead", { content_name: formKey });
+          // hasOwnProperty, so a form named "constructor" or "toString" reads
+          // as absent rather than picking up something off Object.prototype.
+          var pixel = Object.prototype.hasOwnProperty.call(PIXEL_EVENTS, formKey)
+            ? PIXEL_EVENTS[formKey] : null;
+          if (!pixelReported && pixel && typeof window.fbq === "function") {
+            pixelReported = true;
+            window.fbq(pixel.method, pixel.name, { content_name: formKey });
           }
 
           // A form can name a panel to show in its place. Leaving a filled-in
