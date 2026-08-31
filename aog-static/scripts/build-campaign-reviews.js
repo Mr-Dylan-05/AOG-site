@@ -68,7 +68,16 @@ const BLOCK = `<section class="campaign-reviews" id="reviews" aria-label="Google
         .campaign-reviews h2 b{color:#2867e8}
         /* minmax(0,...) not 1fr: the reviewer name is nowrap, so its min-content
            width would otherwise push a card wider than the column. */
-        .cr-grid{display:grid;grid-template-columns:repeat(${Math.min(show, 3)},minmax(0,1fr));gap:20px;align-items:start}
+        /* Six columns with each card spanning two, rather than three columns
+           of one. Same three-across row, but it gives the last row somewhere
+           to sit: with five cards the trailing pair would otherwise stack
+           left and leave a hole on the right. Card four starts a column in,
+           which centres the two of them under the three above. The rule is
+           keyed on "fourth, and second from last", so it stops applying by
+           itself if the count changes. */
+        .cr-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:20px;align-items:start}
+        .cr-grid>.cr-card{grid-column:span 2}
+        .cr-grid>.cr-card:nth-child(4):nth-last-child(2){grid-column:2/span 2}
         .cr-card{background:#f4f5f4;border-radius:16px;padding:26px 24px;min-width:0}
         .cr-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
         .cr-avatar{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;letter-spacing:-.01em}
@@ -83,6 +92,7 @@ const BLOCK = `<section class="campaign-reviews" id="reviews" aria-label="Google
         @media(max-width:860px){
           .campaign-reviews{padding:64px 24px}
           .cr-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+          .cr-grid>.cr-card,.cr-grid>.cr-card:nth-child(4):nth-last-child(2){grid-column:1/-1}
         }
       </style>
     </section>`;

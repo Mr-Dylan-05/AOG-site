@@ -8,7 +8,7 @@
     "count": 229,
     "url": "https://www.google.com/search?q=Ad+On+Group+Burleigh+Heads+reviews"
   },
-  "show": 6,
+  "show": 5,
   "reviews": [
     {
       "name": "Georgia Harding",
@@ -18,15 +18,6 @@
       "rating": 5,
       "topic": "AI course + Claude automation",
       "text": "Working with Ad On Group and Claude we were able to build a co work automation to assess our FB and Insta campaigns to see whats working and whats not. We can now cut underperforming social campaigns and focus on the ones working. The AI course plus the support we were able to build something that really makes a difference. Thanks Ad On Group and Claude!!"
-    },
-    {
-      "name": "Will",
-      "initials": "W",
-      "av": "#5B2D91",
-      "date": "2026-08",
-      "rating": 5,
-      "topic": "AI course",
-      "text": "The AI course is amazing, I have recommended it to everyone I know who has an interest in this sort of thing"
     },
     {
       "name": "Ava Brown",
@@ -127,5 +118,6 @@
       "text": "The flow of the changes to the script is simple and easy. They keep up to date with the changes required and remind me to update. Excellent service — would highly recommend.",
       "topic": "legacy"
     }
-  ]
+  ],
+  "//show": "Five: the AI-course reviews. Raising this reaches back into 2025 website and on-hold reviews, which belong on other pages."
 }
