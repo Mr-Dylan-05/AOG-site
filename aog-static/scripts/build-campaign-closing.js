@@ -44,21 +44,38 @@ const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 const QUIZ = `<section class="cta cta--compact" id="quiz">
         <p class="overline">Take your AI readiness quiz</p>
         <h2>Ready to see where you sit <b>with AI?</b></h2>
-        <p class="cta-copy">Answer six quick questions and receive your own personalised report, compared with 1,000s of others.</p>
+        <p class="cta-copy">Answer six quick questions and receive your own personalised report, compared with 1,000s of others on their AI journey.</p>
         <a class="quiz-button" href="/ai-quiz/">Take the quiz &rarr;</a>
         <div class="cta-stats">
           <div><strong>6</strong><span>quick questions</span></div>
-          <div><strong>5 min</strong><span>to complete</span></div>
+          <div><strong>1 minute</strong><span>to complete</span></div>
           <div><strong>Your report</strong><span>personalised to you</span></div>
         </div>
       </section>`;
 
-const CLOSE = `<section class="campaign-close" id="contact" aria-label="Get in touch">
+const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in touch">
         <div class="cc-inner">
           <p class="cc-eyebrow">Get started</p>
           <h2 class="cc-head">Ready to get ahead <b>with AI?</b></h2>
           <p class="cc-copy">Talk to one of our Claude Certified Associates and we will help you work out how to get ahead with AI.</p>
-          <a class="cc-btn" href="/ai-enquiry/">GET IN TOUCH <span aria-hidden="true">&rarr;</span></a>
+                    <div class="cc-form">
+            <form data-contact-form data-form="enquiry" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:14px">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+            <input type="hidden" name="source" value="/ai-training/">
+            <input type="hidden" name="utm_source" data-utm="utm_source">
+            <input type="hidden" name="utm_medium" data-utm="utm_medium">
+            <input type="hidden" name="utm_campaign" data-utm="utm_campaign">
+            <input type="hidden" name="utm_content" data-utm="utm_content">
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">Your name</span><input type="text" name="name" required autocomplete="name" autocapitalize="words" style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box"><span data-error style="font-size:13px;color:#C2410C"></span></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">Email</span><input type="email" name="email" required autocomplete="email" inputmode="email" spellcheck="false" style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box"><span data-error style="font-size:13px;color:#C2410C"></span></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">Phone</span><input type="tel" name="phone" required autocomplete="tel" inputmode="tel" style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box"><span data-error style="font-size:13px;color:#C2410C"></span></label>
+            <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">What are you hoping to achieve with AI?</span><textarea name="ai_goal" required rows="4" placeholder="For example: cut down admin time, get quotes out faster, or help the team write better." style="font:inherit;font-size:16px;line-height:1.5;padding:14px 15px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box;resize:vertical"></textarea><span data-error style="font-size:13px;color:#C2410C"></span></label>
+            <button type="submit" style="font:inherit;font-size:17px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:16px 26px;min-height:54px;border-radius:14px;cursor:pointer;width:100%;box-shadow:0 14px 26px -12px rgba(27,171,229,0.65)">Send my enquiry &rarr;</button>
+            <p data-form-status class="form-status" role="status" aria-live="polite" style="font-size:14px;margin:0"></p>
+            <p style="font-size:12.5px;line-height:1.5;color:#8A93A1;margin:2px 0 0">No obligation. We never share your details.</p>
+            </form>
+            <div id="enquire-thanks" hidden style="text-align:center;padding:10px 4px"><span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:rgba(27,171,229,0.12)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><div style="font-size:21px;font-weight:800;letter-spacing:-0.025em;color:#0B1220;margin:15px 0 0">Thanks, we have got that.</div><p style="font-size:15.5px;line-height:1.6;color:#5A6473;margin:10px 0 0">One of our team will be in touch shortly. If you would rather talk now, call <a href="tel:+61755861400" style="color:#1483B5;font-weight:700;text-decoration:none">(07) 5586 1400</a>.</p></div>
+          </div>
         </div>
       </section>`;
 
@@ -83,23 +100,22 @@ const STYLE = `<style id="closing-style">
         .cc-inner{max-width:900px;margin:0 auto;padding:104px 24px 112px;text-align:center}
         .cc-eyebrow{margin:0 0 18px;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#7fb2ff}
         .cc-copy{margin:22px auto 38px;max-width:54ch;font-size:17px;line-height:1.6;color:#c3d1e8}
-        .cc-btn{display:inline-flex;align-items:center;gap:12px;text-decoration:none;background:#F4EF32;color:#0b1830;
-          font-size:17px;font-weight:800;letter-spacing:.01em;padding:20px 40px;border-radius:999px;
-          box-shadow:0 20px 44px -18px rgba(244,239,50,.55);transition:transform .2s ease,box-shadow .2s ease}
-        .cc-btn:hover{transform:translateY(-2px);box-shadow:0 26px 52px -18px rgba(244,239,50,.7)}
-        .cc-btn span{transition:transform .18s ease}
-        .cc-btn:hover span{transform:translateX(4px)}
+        /* The enquiry form sits on the dark section, so it is given a white
+           card rather than restyled: every field keeps the styling it has on
+           /ai-enquiry/, and the labels stay dark on white instead of
+           disappearing into the navy. */
+        .campaign-close{scroll-margin-top:24px}
+        .cc-form{max-width:560px;margin:34px auto 0;padding:26px 26px 24px;background:#fff;
+          border-radius:20px;text-align:left;box-shadow:0 30px 60px -30px rgba(0,0,0,.55)}
+        .cc-form .form-status--ok{color:#166534}
+        .cc-form .form-status--error{color:#C2410C}
 
         @media(max-width:640px){
           ${DEEP} .cta--compact{padding:50px 24px 40px!important}
           ${DEEP} .cta--compact .cta-stats{gap:18px!important;margin-top:30px!important}
           .cc-inner{padding:76px 24px 84px}
           .cc-copy{font-size:16px;margin-bottom:32px}
-          .cc-btn{width:100%;justify-content:center;padding:19px 28px}
-        }
-        @media(prefers-reduced-motion:reduce){
-          .cc-btn,.cc-btn span{transition:none}
-          .cc-btn:hover{transform:none}
+          .cc-form{margin-top:26px;padding:20px 18px 18px;border-radius:16px}
         }
       </style>`;
 
@@ -125,15 +141,16 @@ html = html.replace(/<style id="closing-head-style">[\s\S]*?<\/style>/, "");
 // The original quiz section, if it is still the one the export shipped.
 html = html.replace(/<section class="cta" id="contact">[\s\S]*?<\/section>/, "");
 
+// The closing section carries the enquiry form, so it is the last thing asked
+// for. The quiz goes below it rather than above the FAQs: it is a softer ask,
+// and it should not sit between the page and its own form.
 const faqAt = html.search(/<section[^>]*class="faq"/);
 if (faqAt === -1) throw new Error("could not find the FAQ section");
-html = html.slice(0, faqAt) + QUIZ + html.slice(faqAt);
-
-const faqEnd = html.indexOf("</section>", html.search(/<section[^>]*class="faq"/)) + "</section>".length;
-html = html.slice(0, faqEnd) + CLOSE + html.slice(faqEnd);
+const faqEnd = html.indexOf("</section>", faqAt) + "</section>".length;
+html = html.slice(0, faqEnd) + CLOSE + QUIZ + html.slice(faqEnd);
 
 const headEnd = html.indexOf("</head>");
 html = html.slice(0, headEnd) + STYLE + HEAD_CSS + html.slice(headEnd);
 
 fs.writeFileSync(PAGE, html);
-console.log("  quiz demoted to a band above the FAQs, closing section added after them");
+console.log("  closing section with the enquiry form added after the FAQs, quiz below it");
