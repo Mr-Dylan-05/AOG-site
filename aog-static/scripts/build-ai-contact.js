@@ -53,9 +53,9 @@ const input = (o) => `
           <label style="display:flex;flex-direction:column;gap:7px">
             <span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:${INK}">${o.label}</span>
             ${o.textarea
-              ? `<textarea name="${o.name}" required rows="4" placeholder="${o.placeholder || ""}"
+              ? `<textarea name="${o.name}"${o.optional ? "" : " required"} rows="4" placeholder="${o.placeholder || ""}"
                       style="font:inherit;font-size:16px;line-height:1.5;padding:14px 15px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:${INK};outline:none;width:100%;box-sizing:border-box;resize:vertical"></textarea>`
-              : `<input type="${o.type}" name="${o.name}" required ${o.attrs || ""}
+              : `<input type="${o.type}" name="${o.name}"${o.optional ? "" : " required"} ${o.attrs || ""}
                       style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:${INK};outline:none;width:100%;box-sizing:border-box">`}
             <span data-error style="font-size:13px;color:#C2410C"></span>
           </label>`;
@@ -66,7 +66,12 @@ const FIELDS = [
   { name: "phone", label: "Phone", type: "tel", attrs: 'autocomplete="tel" inputmode="tel"' },
   {
     name: "ai_goal",
-    label: "What are you hoping to achieve with AI?",
+    // Optional. Asking someone to write a paragraph before they can send a
+    // form is the most expensive field on it — name, email and phone are
+    // enough to call them back, and what they want from AI is a conversation
+    // rather than a required text box.
+    label: "What would you like to use AI for? (optional)",
+    optional: true,
     textarea: true,
     placeholder: "For example: cut down admin time, get quotes out faster, or help the team write better.",
   },
@@ -119,17 +124,6 @@ ${FIELDS.map(input).join("")}
     </div>
   </footer>
 
-  <script>
-  // Carry the ad's tracking through so an enquiry can be traced to the creative
-  // that produced it. Same approach as the quiz.
-  (function () {
-    var p = new URLSearchParams(window.location.search);
-    var f = document.querySelectorAll("[data-utm]");
-    for (var i = 0; i < f.length; i++) {
-      f[i].value = p.get(f[i].getAttribute("data-utm")) || "";
-    }
-  })();
-  </script>
 `;
 
 const html = `<!doctype html>
