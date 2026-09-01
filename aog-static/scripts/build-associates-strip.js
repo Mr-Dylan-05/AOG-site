@@ -63,9 +63,9 @@ const person = ([name, role, file]) => `
 
 const BLOCK = `<section class="campaign-why" id="why-us" aria-label="Why us">
         <h2 class="why-banner">Why <b>us</b>.</h2>
-        <h3 class="why-reason">One-on-one support from Claude Certified&nbsp;Associates.</h3>
-        <ul class="why-people">${PEOPLE.map(person).join("")}
-        </ul>
+        <h3 class="why-reason">Meet your Claude Certified&nbsp;Associates, committed to your success.</h3>
+        <ul class="why-people">${PEOPLE.map(person).join("")}</ul>
+        <ul class="why-points"><li>Qualified <em>Claude Associates</em> facilitate your learning. A real team invested in your success.</li><li>A well established company trusted by over <em>14,000 Australian businesses</em>.</li><li>AI training course <em>plus</em> ongoing one-on-one monthly <em>support</em>.</li></ul>
         <style>
           .campaign-why{padding:88px 7vw 76px;background:#0b1830}
           /* The section banner, then the first reason under it. The reviews
@@ -73,6 +73,13 @@ const BLOCK = `<section class="campaign-why" id="why-us" aria-label="Why us">
           ${DEEP} .why-banner{font-size:clamp(42px,6.4vw,78px)!important;line-height:1!important;letter-spacing:-3px!important;margin:0!important;color:#fff!important;font-weight:800!important;max-width:none!important}
           ${DEEP} .why-banner b{color:#FBB400!important;font-weight:800!important}
           ${DEEP} .why-reason{font-size:clamp(21px,2.5vw,32px)!important;line-height:1.18!important;letter-spacing:-1px!important;margin:26px 0 44px!important;color:#dce6f5!important;font-weight:700!important;max-width:22ch!important}
+          /* The page gives every <li> a rule and vertical padding for its own
+             long-form lists; these are three short lines, so the resets match
+             what .why-people already does. */
+          .why-points{list-style:none;margin:46px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 30px}
+          .why-points li{display:flex!important;gap:12px;align-items:flex-start;font-size:16px;line-height:1.55;color:#c3d1e8;padding:0!important;border:0!important;margin:0!important;min-width:0}
+          .why-points li:before{content:"";flex:none;width:7px;height:7px;margin-top:9px;border-radius:50%;background:#7fb2ff}
+          .why-points em{font-style:normal;font-weight:800;color:#fff}
           .why-people{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:26px 18px}
           .why-people li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0;border:0;margin:0;min-width:0}
           .why-av{width:88px;height:88px;border-radius:50%;overflow:hidden;background:#1a2536;border:2px solid rgba(255,255,255,.18);box-shadow:0 12px 26px -14px rgba(0,0,0,.7)}
@@ -85,6 +92,7 @@ const BLOCK = `<section class="campaign-why" id="why-us" aria-label="Why us">
           @media(max-width:640px){
             .campaign-why{padding:64px 24px 58px}
             ${DEEP} .why-reason{margin:18px 0 32px!important}
+            .why-points{grid-template-columns:1fr;gap:16px;margin-top:34px;font-size:15.5px}
             .why-people{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 12px}
             .why-av{width:72px;height:72px}
             .why-name{font-size:13.5px;margin-top:11px}
