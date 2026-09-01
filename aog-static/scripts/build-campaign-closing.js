@@ -41,23 +41,11 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 
-const QUIZ = `<section class="cta cta--compact" id="quiz">
-        <p class="overline">Take your AI readiness quiz</p>
-        <h2>Ready to see where you sit <b>with AI?</b></h2>
-        <p class="cta-copy">Answer six quick questions and receive your own personalised report, compared with 1,000s of others on their AI journey.</p>
-        <a class="quiz-button" href="/ai-quiz/">Take the quiz &rarr;</a>
-        <div class="cta-stats">
-          <div><strong>6</strong><span>quick questions</span></div>
-          <div><strong>1 minute</strong><span>to complete</span></div>
-          <div><strong>Your report</strong><span>personalised to you</span></div>
-        </div>
-      </section>`;
-
 const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in touch">
         <div class="cc-inner">
           <p class="cc-eyebrow">Get started</p>
-          <h2 class="cc-head">Ready to get ahead <b>with AI?</b></h2>
-          <p class="cc-copy">Talk to one of our Claude Certified Associates and we will help you work out how to get ahead with AI.</p>
+          <h2 class="cc-head">Ready to start your <b>AI training journey?</b></h2>
+          <p class="cc-copy">Talk to one of our course facilitators.</p>
                     <div class="cc-form">
             <form data-contact-form data-form="enquiry" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
@@ -78,6 +66,8 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
           </div>
         </div>
       </section>`;
+
+const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire">GET IN TOUCH &rarr;</a></div>`;
 
 const DEEP = "html" + ":root".repeat(64) + " body main";
 
@@ -105,6 +95,9 @@ const STYLE = `<style id="closing-style">
            /ai-enquiry/, and the labels stay dark on white instead of
            disappearing into the navy. */
         .campaign-close{scroll-margin-top:24px}
+        .faq-cta{background:#fff;text-align:center;padding:0 24px 84px}
+        .faq-cta .dark-button{margin-top:0}
+        @media(max-width:640px){.faq-cta{padding:0 24px 56px}}
         .cc-form{max-width:460px;margin:26px auto 0;padding:22px 22px 20px;background:#fff;
           border-radius:16px;text-align:left;box-shadow:0 18px 40px -24px rgba(0,0,0,.4)}
         .cc-form .form-status--ok{color:#166534}
@@ -141,24 +134,24 @@ html = html.replace(/<section class="cta cta--compact"[\s\S]*?<\/section>/, "");
 // than ending up with both.
 html = html.replace(/<section class="quiz-strip"[\s\S]*?<\/section>/, "");
 html = html.replace(/<section class="campaign-close"[\s\S]*?<\/section>/, "");
+// The FAQ CTA is a div rather than a section, so it needs its own line here
+// or every run leaves another one behind.
+html = html.replace(/<div class="faq-cta">[\s\S]*?<\/div>/, "");
 html = html.replace(/<style id="closing-style">[\s\S]*?<\/style>/, "");
 html = html.replace(/<style id="closing-head-style">[\s\S]*?<\/style>/, "");
 // The original quiz section, if it is still the one the export shipped.
 html = html.replace(/<section class="cta" id="contact">[\s\S]*?<\/section>/, "");
 
-// The quiz sits above the FAQs, where it was, and the closing section with the
-// enquiry form goes after them. The form is still the last thing on the page,
-// so it remains the final ask; the quiz is simply back where it reads as a
-// softer offer partway down rather than an afterthought below the form.
+// A CTA of its own after the FAQs, then the closing section with the form.
+// The quiz section is no longer part of this page; the removal line above
+// stays so a page built by an earlier version is cleaned up.
 const faqAt = html.search(/<section[^>]*class="faq"/);
 if (faqAt === -1) throw new Error("could not find the FAQ section");
-html = html.slice(0, faqAt) + QUIZ + html.slice(faqAt);
-
 const faqEnd = html.indexOf("</section>", html.search(/<section[^>]*class="faq"/)) + "</section>".length;
-html = html.slice(0, faqEnd) + CLOSE + html.slice(faqEnd);
+html = html.slice(0, faqEnd) + FAQ_CTA + CLOSE + html.slice(faqEnd);
 
 const headEnd = html.indexOf("</head>");
 html = html.slice(0, headEnd) + STYLE + HEAD_CSS + html.slice(headEnd);
 
 fs.writeFileSync(PAGE, html);
-console.log("  quiz above the FAQs, closing section with the enquiry form after them");
+console.log("  CTA after the FAQs, closing section with the enquiry form after that");

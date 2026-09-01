@@ -53,11 +53,7 @@ const FAQS = [
   [
     "Does the course only cover using Claude?",
     "The course covers AI use generally, but Claude is a focus given that it's the most popular AI platform for business use. The principles remain transferable across most of the AI platforms.",
-  ],
-  [
-    "Can I cancel my monthly membership?",
-    "Yes, but you will lose access to the course as well as your one-on-one support and access to the valuable insights in the community.",
-  ],
+  ]
 ];
 
 // The page writes apostrophes as &#x27; throughout; match it.
