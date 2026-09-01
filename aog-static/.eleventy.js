@@ -50,6 +50,57 @@ module.exports = function (eleventyConfig) {
     runStep("complete-head-meta.js", "head");
   });
 
+  // The booking link on the enquiry thank-you panels.
+  //
+  // The generators emit the button hidden and without a URL. If
+  // thirdParty.calendly is set it is stamped in and revealed; if it is not, the
+  // button is removed outright rather than left as dead markup. Same rule the
+  // forms follow: unconfigured means absent, not broken.
+  eleventyConfig.on("eleventy.after", () => {
+    const site = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "src", "_data", "site.json"), "utf8")
+    );
+    const url = ((site.thirdParty || {}).calendly || "").trim();
+    const out = path.join(__dirname, "_site");
+
+    const walk = (dir, hits = []) => {
+      if (!fs.existsSync(dir)) return hits;
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, e.name);
+        if (e.isDirectory()) walk(p, hits);
+        else if (e.name === "index.html") hits.push(p);
+      }
+      return hits;
+    };
+
+    let on = 0, off = 0;
+    for (const file of walk(out)) {
+      const html = fs.readFileSync(file, "utf8");
+      if (!html.includes("data-calendly")) continue;
+      let next;
+      if (url) {
+        next = html.replace(/data-calendly hidden style="display:none;/g,
+                            `data-calendly="${url}" style="`);
+        on++;
+      } else {
+        // No link, so no button — and the copy cannot be left pointing at one.
+        // It falls back to the phone number, which is what it said before the
+        // booking option existed.
+        next = html
+          .replace(/<button type="button" data-calendly[\s\S]*?<\/button>/g, "")
+          .replace(
+            /If you would rather talk now, book a time with our team below\./g,
+            'If you would rather talk now, call <a href="tel:+61755861400" ' +
+              'style="color:#1483B5;font-weight:700;text-decoration:none">(07) 5586 1400</a>.'
+          );
+        off++;
+      }
+      if (next !== html) fs.writeFileSync(file, next);
+    }
+    if (on) console.log(`[calendly] booking button enabled on ${on} page(s)`);
+    if (off) console.log(`[calendly] thirdParty.calendly not set — button removed from ${off} page(s)`);
+  });
+
   // Schema.org JSON-LD.
   //
   // Injected after the build rather than from a template, because half the site

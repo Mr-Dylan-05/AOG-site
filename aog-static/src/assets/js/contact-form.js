@@ -299,3 +299,72 @@
     });
   });
 })();
+
+/**
+ * The booking option on the thank-you panel.
+ *
+ * Deliberately not a conversion. The Lead has already been reported by the
+ * submission that revealed this panel; firing anything here would count the
+ * same person twice and teach Meta to optimise for people who click a second
+ * button. Booking is an extra, not the goal.
+ *
+ * The widget is fetched on the first click rather than on page load. Most
+ * visitors never reach the thank-you panel, and of those who do most will not
+ * book, so loading Calendly's script and stylesheet up front would put a
+ * third-party request on every form page to serve a minority. Nothing external
+ * is contacted until someone asks for it.
+ *
+ * The button only exists when thirdParty.calendly is set — see .eleventy.js.
+ */
+(function () {
+  "use strict";
+
+  var WIDGET = "https://assets.calendly.com/assets/external/widget.js";
+  var STYLES = "https://assets.calendly.com/assets/external/widget.css";
+  var pending = null;
+
+  function loadWidget() {
+    if (pending) return pending;
+    pending = new Promise(function (resolve, reject) {
+      var css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = STYLES;
+      document.head.appendChild(css);
+
+      var js = document.createElement("script");
+      js.src = WIDGET;
+      js.async = true;
+      js.onload = resolve;
+      js.onerror = reject;
+      document.head.appendChild(js);
+    });
+    return pending;
+  }
+
+  document.addEventListener("click", function (e) {
+    var button = e.target.closest && e.target.closest("[data-calendly]");
+    if (!button) return;
+    var url = button.getAttribute("data-calendly");
+    if (!url) return;
+
+    e.preventDefault();
+    var label = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = "Opening…";
+
+    loadWidget()
+      .then(function () {
+        button.disabled = false;
+        button.innerHTML = label;
+        if (window.Calendly) window.Calendly.initPopupWidget({ url: url });
+        else window.open(url, "_blank", "noopener");
+      })
+      .catch(function () {
+        // A blocked or failed third-party script must not cost someone the
+        // booking: the link still opens, just in a tab instead of a modal.
+        button.disabled = false;
+        button.innerHTML = label;
+        window.open(url, "_blank", "noopener");
+      });
+  });
+})();
