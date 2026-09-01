@@ -158,7 +158,15 @@ for (const file of walk(SITE)) {
   // The query changes whenever the file does, which makes the deploy the
   // moment the change takes effect rather than some hours later.
   if (html.includes("data-contact-form") && !html.includes("/assets/js/contact-form.js")) {
-    body = (body || "") + `\n<script src="/assets/js/contact-form.js?v=${formJsVersion}" defer></script>`;
+    // On success the handler sets form.hidden and reveals the thank-you panel.
+    // [hidden] does its work through a UA rule of display:none, and these forms
+    // carry style="display:flex" inline — an inline declaration beats a UA one,
+    // so the attribute landed and nothing happened: the blanked-out form stayed
+    // on screen, its button still reading "Sending...", above a panel saying the
+    // enquiry had been received. This is what actually hides it.
+    body = (body || "") +
+      `\n<style id="form-hidden-style">form[data-contact-form][hidden]{display:none!important}</style>` +
+      `\n<script src="/assets/js/contact-form.js?v=${formJsVersion}" defer></script>`;
     formJs++;
   }
 
