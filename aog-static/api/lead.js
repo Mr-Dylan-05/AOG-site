@@ -349,6 +349,8 @@ async function notifyChat(form, record, sheetUrl, failed) {
  *                    UNSET = nothing is sent. That is the switch.
  *   AUTOREPLY_NAME   display name, defaults to "Ad On Group"
  *   BOOKING_URL      optional, the Calendly link to offer in the mail
+ *   AUTOREPLY_BCC    optional, silent copy; defaults to adonai@adongroup.com.au,
+ *                    set it to an empty string to send no copy at all
  */
 
 /* Which forms get a confirmation.
@@ -438,16 +440,18 @@ const b64body = (v) =>
  */
 function buildMessage(from, name, to, copy) {
   const boundary = "aog-" + crypto.randomBytes(12).toString("hex");
-  // Cc rather than Bcc, so a reply-all reaches the team as well as info@.
-  // Set AUTOREPLY_CC to "" to turn it off; unset falls back to the default.
-  const cc =
-    process.env.AUTOREPLY_CC !== undefined
-      ? process.env.AUTOREPLY_CC.trim()
+  // Bcc, so the copy is invisible to the person who enquired — they see a
+  // reply from info@ and nothing else. Gmail honours a Bcc header on a raw
+  // message: it delivers to the address and strips the header on the way out.
+  // Set AUTOREPLY_BCC to "" to turn it off; unset falls back to the default.
+  const bcc =
+    process.env.AUTOREPLY_BCC !== undefined
+      ? process.env.AUTOREPLY_BCC.trim()
       : "adonai@adongroup.com.au";
   return [
     `From: ${encodeHeader(name)} <${from}>`,
     `To: <${to}>`,
-    ...(cc ? [`Cc: <${cc}>`] : []),
+    ...(bcc ? [`Bcc: <${bcc}>`] : []),
     `Subject: ${encodeHeader(copy.subject)}`,
     "MIME-Version: 1.0",
     `Content-Type: multipart/alternative; boundary="${boundary}"`,
