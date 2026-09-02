@@ -51,6 +51,8 @@
 const crypto = require("crypto");
 
 const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
+const GMAIL_SCOPE = "https://www.googleapis.com/auth/gmail.send";
+const GMAIL_SEND = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const SHEETS = "https://sheets.googleapis.com/v4/spreadsheets";
 
@@ -108,16 +110,22 @@ const TIMEZONE = "Australia/Sydney";
 const b64url = (b) =>
   Buffer.from(b).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
-async function accessToken(creds) {
+/**
+ * A token for one scope. `subject` impersonates a Workspace mailbox, which is
+ * how mail leaves as info@ rather than as the service account — it requires
+ * domain-wide delegation for that scope, granted once in the Admin console.
+ */
+async function accessToken(creds, scope = SCOPE, subject = "") {
   const now = Math.floor(Date.now() / 1000);
   const head = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
   const claim = b64url(
     JSON.stringify({
       iss: creds.client_email,
-      scope: SCOPE,
+      scope,
       aud: TOKEN_URL,
       iat: now,
       exp: now + 3600,
+      ...(subject ? { sub: subject } : {}),
     })
   );
   const signature = crypto
@@ -293,6 +301,156 @@ async function notifyChat(form, record, sheetUrl, failed) {
   }
 }
 
+/* ----------------------------------------------------- the auto-reply ---- */
+
+/**
+ * The confirmation sent to the person who enquired.
+ *
+ * WHY FROM HERE AND NOT FROM THE SHEET
+ * Same reason the Chat notification lives here: every row arrives through the
+ * Sheets API as a service account, and neither an Apps Script trigger nor
+ * Sheets' own notification rules fire for that. A time-based poll would put
+ * minutes between someone pressing submit and the mail they were promised on
+ * the thank-you panel.
+ *
+ * WHY GMAIL AND NOT AN EMAIL SERVICE
+ * It sends as a real Workspace mailbox, so SPF and DKIM already pass with no
+ * DNS change, replies land in the inbox someone is already watching, and a
+ * copy appears in Sent. It also reuses the service account and the JWT code
+ * that are already here — no vendor, no key, no dependency.
+ *
+ * SETUP (once, by a Workspace super-admin)
+ *   Admin console > Security > Access and data control > API controls
+ *     > Domain-wide delegation > Add new
+ *   Client ID : the service account's numeric "Unique ID"
+ *               (Cloud Console > IAM & Admin > Service Accounts)
+ *   Scope     : https://www.googleapis.com/auth/gmail.send   (this one only)
+ *
+ * ENV
+ *   AUTOREPLY_FROM   the mailbox to send as, e.g. info@adongroup.com.au.
+ *                    UNSET = nothing is sent. That is the switch.
+ *   AUTOREPLY_NAME   display name, defaults to "Ad On Group"
+ *   BOOKING_URL      optional, the Calendly link to offer in the mail
+ */
+
+/* Which forms get a confirmation. A partner referral is not an enquiry. */
+const AUTOREPLY_FORMS = ["enquiry", "quiz"];
+
+/**
+ * ============ PLACEHOLDER COPY — NOT APPROVED, REPLACE BEFORE ENABLING ======
+ * Nothing below has been signed off. It exists so the path can be tested end
+ * to end; leaving AUTOREPLY_FROM unset keeps it unsent. Editing this function
+ * is the whole job of changing the email.
+ */
+function autoReplyCopy(record) {
+  const first = String(record.name || record.firstName || "").trim().split(/\s+/)[0];
+  const hello = first ? `Hi ${first},` : "Hi,";
+  const booking = process.env.BOOKING_URL || "";
+
+  const subject = "We have got your AI training enquiry";
+  const lines = [
+    hello,
+    "",
+    "Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
+    ...(booking ? ["", `If you would rather talk sooner, you can book a time here: ${booking}`] : []),
+    "",
+    "Ad On Group",
+    "(07) 5586 1400",
+  ];
+  const text = lines.join("\n");
+  const html =
+    `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">` +
+    lines
+      .map((l) =>
+        l === ""
+          ? "<p style=\"margin:0 0 14px\"></p>"
+          : `<p style="margin:0 0 14px">${escapeHtml(l).replace(
+              /(https?:\/\/\S+)/,
+              '<a href="$1" style="color:#1483B5">$1</a>'
+            )}</p>`
+      )
+      .join("") +
+    `</div>`;
+  return { subject, text, html };
+}
+/* =========================================================================== */
+
+/** RFC 2047, so a subject with an accent or a dash does not arrive as mojibake. */
+const encodeHeader = (v) =>
+  /^[\x20-\x7E]*$/.test(v)
+    ? v
+    : `=?UTF-8?B?${Buffer.from(v, "utf8").toString("base64")}?=`;
+
+/** Base64 body, wrapped at 76 columns as the MIME spec requires. */
+const b64body = (v) =>
+  (Buffer.from(v, "utf8").toString("base64").match(/.{1,76}/g) || []).join("\r\n");
+
+/**
+ * multipart/alternative: a plain-text part alongside the HTML. Text-only
+ * clients and spam filters both prefer a message that carries one.
+ */
+function buildMessage(from, name, to, copy) {
+  const boundary = "aog-" + crypto.randomBytes(12).toString("hex");
+  return [
+    `From: ${encodeHeader(name)} <${from}>`,
+    `To: <${to}>`,
+    `Subject: ${encodeHeader(copy.subject)}`,
+    "MIME-Version: 1.0",
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+    "",
+    `--${boundary}`,
+    'Content-Type: text/plain; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+    "",
+    b64body(copy.text),
+    `--${boundary}`,
+    'Content-Type: text/html; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+    "",
+    b64body(copy.html),
+    `--${boundary}--`,
+    "",
+  ].join("\r\n");
+}
+
+/**
+ * Best-effort, exactly like the Chat notification. The lead is already in the
+ * sheet; a mail that fails is worth a log line and nothing more. Awaited rather
+ * than left running, because the function is frozen the moment it responds.
+ */
+async function sendAutoReply(creds, form, record) {
+  const from = (process.env.AUTOREPLY_FROM || "").trim();
+  if (!from) return;                                   // unset = the feature is off
+  if (!AUTOREPLY_FORMS.includes(form)) return;
+
+  const to = String(record.email || "").trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(to)) return;
+
+  try {
+    const token = await accessToken(creds, GMAIL_SCOPE, from);
+    const raw = Buffer.from(
+      buildMessage(from, process.env.AUTOREPLY_NAME || "Ad On Group", to, autoReplyCopy(record))
+    )
+      .toString("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
+    const res = await fetch(GMAIL_SEND, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ raw }),
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      console.error(`[lead] auto-reply ${res.status}:`, detail.slice(0, 300));
+    }
+  } catch (err) {
+    console.error("[lead] auto-reply failed:", err.message);
+  }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -382,6 +540,7 @@ module.exports = async (req, res) => {
       `https://docs.google.com/spreadsheets/d/${sheetId}/edit` +
       (gid == null ? "" : `#gid=${gid}`);
     await notifyChat(form, record, sheetUrl, false);
+    await sendAutoReply(creds, form, record);
 
     return res.status(200).json({ ok: true });
   } catch (err) {
