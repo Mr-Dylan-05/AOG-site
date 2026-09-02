@@ -79,8 +79,9 @@ module.exports = function (eleventyConfig) {
       if (!html.includes("data-calendly")) continue;
       let next;
       if (url) {
+        const attr = url.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
         next = html.replace(/data-calendly hidden style="display:none;/g,
-                            `data-calendly="${url}" style="`);
+                            `data-calendly="${attr}" style="`);
         on++;
       } else {
         // No link, so no button — and the copy cannot be left pointing at one.
