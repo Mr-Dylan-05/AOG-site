@@ -351,8 +351,38 @@ async function notifyChat(form, record, sheetUrl, failed) {
  *   BOOKING_URL      optional, the Calendly link to offer in the mail
  */
 
-/* Which forms get a confirmation. A partner referral is not an enquiry. */
-const AUTOREPLY_FORMS = ["enquiry", "quiz"];
+/* Which forms get a confirmation.
+   data-form="enquiry" and nothing else. That key is used on exactly two
+   pages, the inline form on /ai-training/ and /ai-enquiry/, both of them AI
+   training — so the mail can talk about AI training and be right every time.
+   The quiz is deliberately out: answering six questions to see your own
+   result is not an enquiry, and "we have got your enquiry" would be wrong.
+   The contact, partner and referral forms are not AI training at all. */
+const AUTOREPLY_FORMS = ["enquiry"];
+
+/**
+ * The first name from whatever they typed into the name field.
+ *
+ * People type "jane smith", "SMITH, Jane", "Dr Jane Smith" and " jane ". The
+ * greeting has to survive all of it, and fall back to a plain "Hi," rather
+ * than greet someone by a title or an empty string.
+ */
+function firstName(record) {
+  let raw = String(record.firstName || record.name || "").trim();
+  if (!raw) return "";
+  if (raw.includes(",")) raw = raw.split(",")[1] || raw.split(",")[0];   // "Smith, Jane"
+  const skip = /^(mr|mrs|ms|miss|mx|dr|prof|sir)\.?$/i;
+  const word = raw.trim().split(/[\s]+/).find((w) => w && !skip.test(w)) || "";
+  if (word.includes("@")) return "";            // an address typed into the name field
+  const clean = word.replace(/[^\p{L}\p{M}'-]/gu, "");
+  if (!clean || clean.length > 30) return "";
+  // "jane" and "JANE" both become "Jane". Mixed case is left alone, so
+  // "McLean" and "O'Neil" keep the capitals their owner gave them.
+  const uniform = clean === clean.toLowerCase() || clean === clean.toUpperCase();
+  return uniform
+    ? clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase()
+    : clean;
+}
 
 /**
  * ============ PLACEHOLDER COPY — NOT APPROVED, REPLACE BEFORE ENABLING ======
@@ -361,8 +391,7 @@ const AUTOREPLY_FORMS = ["enquiry", "quiz"];
  * is the whole job of changing the email.
  */
 function autoReplyCopy(record) {
-  const first = String(record.name || record.firstName || "").trim().split(/\s+/)[0];
-  const hello = first ? `Hi ${first},` : "Hi,";
+  const hello = `Hi${firstName(record) ? " " + firstName(record) : ""},`;
   const booking = process.env.BOOKING_URL || "";
 
   const subject = "We have got your AI training enquiry";
@@ -409,9 +438,16 @@ const b64body = (v) =>
  */
 function buildMessage(from, name, to, copy) {
   const boundary = "aog-" + crypto.randomBytes(12).toString("hex");
+  // Cc rather than Bcc, so a reply-all reaches the team as well as info@.
+  // Set AUTOREPLY_CC to "" to turn it off; unset falls back to the default.
+  const cc =
+    process.env.AUTOREPLY_CC !== undefined
+      ? process.env.AUTOREPLY_CC.trim()
+      : "adonai@adongroup.com.au";
   return [
     `From: ${encodeHeader(name)} <${from}>`,
     `To: <${to}>`,
+    ...(cc ? [`Cc: <${cc}>`] : []),
     `Subject: ${encodeHeader(copy.subject)}`,
     "MIME-Version: 1.0",
     `Content-Type: multipart/alternative; boundary="${boundary}"`,
