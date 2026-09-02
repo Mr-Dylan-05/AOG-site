@@ -28,9 +28,23 @@ let reader = try AVAssetReader(asset: asset)
 let writer = try AVAssetWriter(outputURL: outURL, fileType: .mp4)
 writer.shouldOptimizeForNetworkUse = true          // faststart: moov before mdat
 
-// Scale during the read, via a composition sized to the target.
-let comp = AVMutableVideoComposition(propertiesOf: asset)
+// Scale during the read.
+//
+// AVMutableVideoComposition(propertiesOf:) copies the asset's own instructions,
+// which place the source at 1:1. Shrinking renderSize under that does NOT
+// resize the picture — it renders the full-size frame into a smaller canvas and
+// crops whatever falls outside. The layer needs an explicit scale transform.
+let comp = AVMutableVideoComposition()
 comp.renderSize = CGSize(width: outW, height: outH)
+let fps = srcVideo.nominalFrameRate > 0 ? srcVideo.nominalFrameRate : 30
+comp.frameDuration = CMTime(value: 1, timescale: CMTimeScale(round(fps)))
+let instruction = AVMutableVideoCompositionInstruction()
+instruction.timeRange = CMTimeRange(start: .zero, duration: asset.duration)
+let layer = AVMutableVideoCompositionLayerInstruction(assetTrack: srcVideo)
+layer.setTransform(srcVideo.preferredTransform
+                     .concatenating(CGAffineTransform(scaleX: scale, y: scale)), at: .zero)
+instruction.layerInstructions = [layer]
+comp.instructions = [instruction]
 let vOut = AVAssetReaderVideoCompositionOutput(
   videoTracks: [srcVideo],
   videoSettings: [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange])
