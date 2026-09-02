@@ -478,11 +478,23 @@ function buildMessage(from, name, to, copy) {
  */
 async function sendAutoReply(creds, form, record) {
   const from = (process.env.AUTOREPLY_FROM || "").trim();
-  if (!from) return;                                   // unset = the feature is off
-  if (!AUTOREPLY_FORMS.includes(form)) return;
+  // Every exit says why. Silent returns are what made "no email arrived"
+  // impossible to tell apart from "the variable is not set in this
+  // environment" — the log is the only place this path is visible.
+  if (!from) {
+    console.log("[lead] auto-reply skipped: AUTOREPLY_FROM is not set");
+    return;
+  }
+  if (!AUTOREPLY_FORMS.includes(form)) {
+    console.log(`[lead] auto-reply skipped: form "${form}" is not in [${AUTOREPLY_FORMS}]`);
+    return;
+  }
 
   const to = String(record.email || "").trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(to)) return;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(to)) {
+    console.log(`[lead] auto-reply skipped: no usable email address (${JSON.stringify(to)})`);
+    return;
+  }
 
   try {
     const token = await accessToken(creds, GMAIL_SCOPE, from);
@@ -503,6 +515,8 @@ async function sendAutoReply(creds, form, record) {
     if (!res.ok) {
       const detail = await res.text().catch(() => "");
       console.error(`[lead] auto-reply ${res.status}:`, detail.slice(0, 300));
+    } else {
+      console.log(`[lead] auto-reply sent to ${to} as ${from}`);
     }
   } catch (err) {
     console.error("[lead] auto-reply failed:", err.message);
