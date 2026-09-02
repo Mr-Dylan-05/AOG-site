@@ -143,7 +143,25 @@ async function accessToken(creds, scope = SCOPE, subject = "") {
     }),
   });
   const json = await res.json();
-  if (!res.ok) throw new Error(`google auth ${res.status}: ${JSON.stringify(json)}`);
+  if (!res.ok) {
+    // The two failures worth naming, because the raw response does not say
+    // which of them it is and they need different fixes.
+    if (json.error === "unauthorized_client") {
+      throw new Error(
+        `google auth: the service account is not authorised to act as ${subject || "this user"}. ` +
+          "Domain-wide delegation is missing, or was granted for a different scope, " +
+          "or the numeric Unique ID was mistyped. It can also take a few minutes to " +
+          "propagate after being added."
+      );
+    }
+    if (json.error === "invalid_grant" && subject) {
+      throw new Error(
+        `google auth: ${subject} was rejected. The mailbox must exist in this ` +
+          "Workspace domain and the service account key must belong to it."
+      );
+    }
+    throw new Error(`google auth ${res.status}: ${JSON.stringify(json)}`);
+  }
   return json.access_token;
 }
 
