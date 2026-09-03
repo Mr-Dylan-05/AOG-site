@@ -368,3 +368,28 @@
       });
   });
 })();
+
+/**
+ * What they came for.
+ *
+ * Every CTA on the sales page scrolls to the same form, so by the time someone
+ * submits there is nothing left saying which button sent them. A CTA can now
+ * declare its intent, and the form records it — one lead, one row, one extra
+ * column, rather than a second form that would split the same person in two.
+ *
+ * The confirmation email reads it to decide whether it is answering "send me
+ * the curriculum" or "have a chat with me". Anything without a data-intent
+ * leaves it empty, which is the ordinary enquiry.
+ */
+(function () {
+  "use strict";
+
+  document.addEventListener("click", function (e) {
+    var cta = e.target.closest && e.target.closest("[data-intent]");
+    if (!cta) return;
+    var value = (cta.getAttribute("data-intent") || "").trim();
+    if (!value) return;
+    var fields = document.querySelectorAll('form[data-contact-form] [name="interest"]');
+    for (var i = 0; i < fields.length; i++) fields[i].value = value;
+  });
+})();

@@ -36,6 +36,7 @@ var SEND_AS = "info@adongroup.com.au";
 var SENDER_NAME = "Ad On Group";
 var BCC = "adonai@adongroup.com.au";   // "" for none
 var BOOKING = "https://calendly.com/adongroup-info/30min?guests=paul@adongroup.com.au";
+var CURRICULUM = "https://adongroup.com.au/programs/";
 
 /**
  * Nothing submitted before this is ever emailed.
@@ -56,29 +57,44 @@ var MAX_PER_RUN = 40;              // keeps one run well inside the quota
 function buildEmail_(row) {
   var name = firstName_(row.name);
   var hello = name ? "Hi " + name + "," : "Hi,";
-  var lines = [
-    hello,
-    "",
-    "Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
-    "",
-    "If you would rather talk sooner, you can book a time here:",
-    BOOKING,
-    "",
-    "Ad On Group",
-    "(07) 5586 1400"
-  ];
+  var wantsCurriculum = String(row.interest || "").trim() === "curriculum";
+
+  /* Two ways in, two openings. Someone who pressed "Request the full
+     curriculum" asked a question and should get the answer first; someone who
+     pressed "Get in touch" wants a person, and the curriculum is a useful
+     thing to hand them on the way. Both end up with the same two links. */
+  var subject = wantsCurriculum
+    ? "The full AI training curriculum"
+    : "We have got your AI training enquiry";
+
+  var opening = wantsCurriculum
+    ? ["Thanks for asking about the program. Here is the full curriculum:",
+       CURRICULUM,
+       "",
+       "Twenty-four self-paced modules across three months, taking you from your first prompts through to building AI agents that handle whole jobs. Each one is applied to the work you already do.",
+       "",
+       "One of our course facilitators will be in touch shortly. If you would rather talk sooner:"]
+    : ["Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
+       "",
+       "In the meantime, the full curriculum is here:",
+       CURRICULUM,
+       "",
+       "If you would rather talk sooner:"];
+
+  var lines = [hello, ""].concat(opening);
+  if (BOOKING) lines.push(BOOKING);
+  lines = lines.concat(["", "Ad On Group", "(07) 5586 1400"]);
+
   return {
-    subject: "We have got your AI training enquiry",
+    subject: subject,
     body: lines.join("\n"),
-    html: lines
-      .map(function (l) {
-        if (l === "") return "<p style=\"margin:0 0 14px\"></p>";
-        if (l.indexOf("http") === 0) {
-          return '<p style="margin:0 0 14px"><a href="' + l + '" style="color:#1483B5">' + l + "</a></p>";
-        }
-        return '<p style="margin:0 0 14px">' + escapeHtml_(l) + "</p>";
-      })
-      .join("")
+    html: lines.map(function (l) {
+      if (l === "") return "<p style=\"margin:0 0 14px\"></p>";
+      if (l.indexOf("http") === 0) {
+        return '<p style="margin:0 0 14px"><a href="' + l + '" style="color:#1483B5">' + l + "</a></p>";
+      }
+      return '<p style="margin:0 0 14px">' + escapeHtml_(l) + "</p>";
+    }).join("")
   };
 }
 
@@ -162,6 +178,7 @@ function sendPendingReplies() {
     var emailCol = col("email");
     var nameCol = col("name");
     var whenCol = col("submitted_at");
+    var interestCol = col("interest");
     if (emailCol === -1) { Logger.log("No email column"); return; }
 
     var rows = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
@@ -183,7 +200,10 @@ function sendPendingReplies() {
         continue;
       }
 
-      var mail = buildEmail_({ name: nameCol > -1 ? r[nameCol] : "" });
+      var mail = buildEmail_({
+        name: nameCol > -1 ? r[nameCol] : "",
+        interest: interestCol > -1 ? r[interestCol] : ""
+      });
       var options = { name: SENDER_NAME, htmlBody: mail.html };
       if (alias) options.from = alias;
       if (BCC) options.bcc = BCC;

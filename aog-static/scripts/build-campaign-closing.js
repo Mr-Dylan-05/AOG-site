@@ -49,7 +49,7 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
                     <div class="cc-form">
             <form data-contact-form data-form="enquiry" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-            <input type="hidden" name="source" value="/ai-training/">
+            <input type="hidden" name="source" value="/ai-training/"><input type="hidden" name="interest" value="">
             <input type="hidden" name="utm_source" data-utm="utm_source">
             <input type="hidden" name="utm_medium" data-utm="utm_medium">
             <input type="hidden" name="utm_campaign" data-utm="utm_campaign">

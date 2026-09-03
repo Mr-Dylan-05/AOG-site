@@ -66,7 +66,7 @@ const PREFERRED = [
   "message", "ai_goal", "contactPreference",
   "score", "band",
   "current_use", "worry", "motivation", "barrier", "support", "intent",
-  "source", "page",
+  "interest", "source", "page",
   "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
   "fbclid", "landing_page",
 ];
@@ -349,6 +349,7 @@ async function notifyChat(form, record, sheetUrl, failed) {
  *                    UNSET = nothing is sent. That is the switch.
  *   AUTOREPLY_NAME   display name, defaults to "Ad On Group"
  *   BOOKING_URL      optional, the Calendly link to offer in the mail
+ *   CURRICULUM_URL   optional, defaults to the public /programs/ page
  *   AUTOREPLY_BCC    optional, silent copy; defaults to adonai@adongroup.com.au,
  *                    set it to an empty string to send no copy at all
  */
@@ -387,40 +388,54 @@ function firstName(record) {
 }
 
 /**
- * ============ PLACEHOLDER COPY — NOT APPROVED, REPLACE BEFORE ENABLING ======
- * Nothing below has been signed off. It exists so the path can be tested end
- * to end; leaving AUTOREPLY_FROM unset keeps it unsent. Editing this function
- * is the whole job of changing the email.
+ * ============ DRAFT COPY — FOR APPROVAL ====================================
+ * Written to be sent, but not signed off. Editing this one function is the
+ * whole job of changing the email.
  */
 function autoReplyCopy(record) {
-  const hello = `Hi${firstName(record) ? " " + firstName(record) : ""},`;
-  const booking = process.env.BOOKING_URL || "";
+  var hello = "Hi" + (firstName(record) ? " " + firstName(record) : "") + ",";
+  var booking = process.env.BOOKING_URL || "";
+  var curriculum = process.env.CURRICULUM_URL || "https://adongroup.com.au/programs/";
+  var wantsCurriculum = String(record.interest || "").trim() === "curriculum";
 
-  const subject = "We have got your AI training enquiry";
-  const lines = [
-    hello,
-    "",
-    "Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
-    ...(booking ? ["", `If you would rather talk sooner, you can book a time here: ${booking}`] : []),
-    "",
-    "Ad On Group",
-    "(07) 5586 1400",
-  ];
-  const text = lines.join("\n");
-  const html =
-    `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">` +
-    lines
-      .map((l) =>
-        l === ""
-          ? "<p style=\"margin:0 0 14px\"></p>"
-          : `<p style="margin:0 0 14px">${escapeHtml(l).replace(
-              /(https?:\/\/\S+)/,
-              '<a href="$1" style="color:#1483B5">$1</a>'
-            )}</p>`
-      )
-      .join("") +
-    `</div>`;
-  return { subject, text, html };
+  /* Two ways in, two openings. Someone who pressed "Request the full
+     curriculum" asked a question and should get the answer first; someone who
+     pressed "Get in touch" wants a person, and the curriculum is a useful
+     thing to hand them on the way. Both end up with the same two links. */
+  var subject = wantsCurriculum
+    ? "The full AI training curriculum"
+    : "We have got your AI training enquiry";
+
+  var opening = wantsCurriculum
+    ? ["Thanks for asking about the program. Here is the full curriculum:",
+       curriculum,
+       "",
+       "Twenty-four self-paced modules across three months, taking you from your first prompts through to building AI agents that handle whole jobs. Each one is applied to the work you already do.",
+       "",
+       "One of our course facilitators will be in touch shortly. If you would rather talk sooner:"]
+    : ["Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
+       "",
+       "In the meantime, the full curriculum is here:",
+       curriculum,
+       "",
+       "If you would rather talk sooner:"];
+
+  var lines = [hello, ""].concat(opening);
+  if (booking) lines.push(booking);
+  lines = lines.concat(["", "Ad On Group", "(07) 5586 1400"]);
+
+  var text = lines.join("\n");
+  var html =
+    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
+    lines.map(function (l) {
+      if (l === "") return '<p style="margin:0 0 14px"></p>';
+      if (l.indexOf("http") === 0) {
+        return '<p style="margin:0 0 14px"><a href="' + l + '" style="color:#1483B5">' + l + "</a></p>";
+      }
+      return '<p style="margin:0 0 14px">' + escapeHtml(l) + "</p>";
+    }).join("") +
+    "</div>";
+  return { subject: subject, text: text, html: html };
 }
 /* =========================================================================== */
 
