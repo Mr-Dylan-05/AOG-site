@@ -17,7 +17,7 @@
     "//calendly": "Booking link offered on the enquiry thank-you panels. Empty = the button is not rendered at all, the same rule the forms follow. The widget script is only fetched when someone actually clicks, so an unset link costs nothing and a set one costs nothing until it is used.",
     "calendly": "https://calendly.com/adongroup-info/30min?guests=paul@adongroup.com.au",
     "//curriculum": "The full curriculum, offered on the thank-you panel once someone has left their details. Empty = the button is not rendered, the same rule the booking link and the forms follow. Any URL works: an R2 object, a PDF under /assets/, a Drive link.",
-    "curriculum": "",
+    "curriculum": "/programs/",
     "formEndpoint": "https://formspree.io/f/mppaaedl",
     "//formProvider": "'internal' | 'formspree' | 'basin' | 'netlify' | '' — netlify needs no endpoint",
     "//formEndpoint": "The main contact form stays on Formspree, deliberately. Its enquiries are read and replied to in an inbox, which is what Formspree is good at, and it has worked for months. The quiz and the campaign enquiry page (/ai-enquiry/) post to /api/lead instead, because those are campaign leads that belong in sortable columns rather than an inbox.",
