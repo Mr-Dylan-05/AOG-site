@@ -60,7 +60,9 @@ module.exports = function (eleventyConfig) {
     const site = JSON.parse(
       fs.readFileSync(path.join(__dirname, "src", "_data", "site.json"), "utf8")
     );
-    const url = ((site.thirdParty || {}).calendly || "").trim();
+    const tp = site.thirdParty || {};
+    const url = (tp.calendly || "").trim();
+    const curriculum = (tp.curriculum || "").trim();
     const out = path.join(__dirname, "_site");
 
     const walk = (dir, hits = []) => {
@@ -75,8 +77,22 @@ module.exports = function (eleventyConfig) {
 
     let on = 0, off = 0;
     for (const file of walk(out)) {
-      const html = fs.readFileSync(file, "utf8");
-      if (!html.includes("data-calendly")) continue;
+      let html = fs.readFileSync(file, "utf8");
+      const had = html;
+
+      // The curriculum download on the same panel, same rule: a link or no
+      // button at all rather than a button that goes nowhere.
+      if (html.includes("data-curriculum")) {
+        html = curriculum
+          ? html.replace(/data-curriculum hidden style="display:none;/g,
+              `href="${curriculum.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}" data-curriculum style="`)
+          : html.replace(/<a class="vid-noop" data-curriculum[\s\S]*?<\/a>/g, "");
+      }
+
+      if (!html.includes("data-calendly")) {
+        if (html !== had) fs.writeFileSync(file, html);
+        continue;
+      }
       let next;
       if (url) {
         const attr = url.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
@@ -98,6 +114,9 @@ module.exports = function (eleventyConfig) {
       }
       if (next !== html) fs.writeFileSync(file, next);
     }
+    console.log(curriculum
+      ? `[curriculum] download button enabled`
+      : `[curriculum] thirdParty.curriculum not set — button removed`);
     if (on) console.log(`[calendly] booking button enabled on ${on} page(s)`);
     if (off) console.log(`[calendly] thirdParty.calendly not set — button removed from ${off} page(s)`);
   });
