@@ -36,7 +36,6 @@ var SEND_AS = "info@adongroup.com.au";
 var SENDER_NAME = "Ad On Group";
 var BCC = "adonai@adongroup.com.au";   // "" for none
 var BOOKING = "https://calendly.com/adongroup-info/30min?guests=paul@adongroup.com.au";
-var CURRICULUM = "https://adongroup.com.au/programs/";
 
 /**
  * Nothing submitted before this is ever emailed.
@@ -57,36 +56,19 @@ var MAX_PER_RUN = 40;              // keeps one run well inside the quota
 function buildEmail_(row) {
   var name = firstName_(row.name);
   var hello = name ? "Hi " + name + "," : "Hi,";
-  var wantsCurriculum = String(row.interest || "").trim() === "curriculum";
 
-  /* Two ways in, two openings. Someone who pressed "Request the full
-     curriculum" asked a question and should get the answer first; someone who
-     pressed "Get in touch" wants a person, and the curriculum is a useful
-     thing to hand them on the way. Both end up with the same two links. */
-  var subject = wantsCurriculum
-    ? "The full AI training curriculum"
-    : "We have got your AI training enquiry";
-
-  var opening = wantsCurriculum
-    ? ["Thanks for asking about the program. Here is the full curriculum:",
-       CURRICULUM,
-       "",
-       "Twenty-four self-paced modules across three months, taking you from your first prompts through to building AI agents that handle whole jobs. Each one is applied to the work you already do.",
-       "",
-       "One of our course facilitators will be in touch shortly. If you would rather talk sooner:"]
-    : ["Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
-       "",
-       "In the meantime, the full curriculum is here:",
-       CURRICULUM,
-       "",
-       "If you would rather talk sooner:"];
-
-  var lines = [hello, ""].concat(opening);
-  if (BOOKING) lines.push(BOOKING);
+  /* One message, whichever button brought them. The curriculum is handed over
+     on the thank-you panel as a download the moment they submit. */
+  var lines = [
+    hello,
+    "",
+    "Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly."
+  ];
+  if (BOOKING) lines.push("", "If you would rather talk sooner, you can book a time here:", BOOKING);
   lines = lines.concat(["", "Ad On Group", "(07) 5586 1400"]);
 
   return {
-    subject: subject,
+    subject: "We have got your AI training enquiry",
     body: lines.join("\n"),
     html: lines.map(function (l) {
       if (l === "") return "<p style=\"margin:0 0 14px\"></p>";
