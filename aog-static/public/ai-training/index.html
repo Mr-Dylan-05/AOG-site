@@ -1064,8 +1064,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
       iconOn = wrap.querySelector(".vid-on"),
       iconPlay = wrap.querySelector(".vid-play"),
       label = wrap.querySelector(".vid-sound-text");
-  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var autoTried = false;
+  var everPlayed = false;
 
   /* The icons follow the element's real state rather than being set by hand at
      every branch. The previous version assigned them inside the click handler
@@ -1110,21 +1109,28 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
     });
   }
 
-  v.addEventListener("playing", function () { render(false); });
+  v.addEventListener("playing", function () { everPlayed = true; render(false); });
   v.addEventListener("volumechange", function () {
-    if (!wrap.classList.contains("is-blocked")) render(false);
+    if (!v.paused) render(false);
   });
+  v.addEventListener("pause", function () { render(true); });
+  v.addEventListener("ended", function () { render(true); });
 
-  if ("IntersectionObserver" in window && !calm) {
+  /* No autoplay. It waits on the poster until someone asks for it, which is
+     also why the video is never fetched until then — preload="none" and
+     nothing calls play() on its own.
+
+     The observer is kept for one job only: pausing a video that is playing
+     when it scrolls out of view, so the sound does not follow someone down
+     the page. It never starts anything. */
+  render(true);
+  if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
-        if (e.isIntersecting) { autoTried = true; start(false); }
-        else if (autoTried && !v.paused) { v.pause(); }
+        if (!e.isIntersecting && everPlayed && !v.paused) v.pause();
       });
     }, { threshold: 0.25 });
     io.observe(v);
-  } else {
-    render(true);
   }
 
   btn.addEventListener("click", function (e) {
