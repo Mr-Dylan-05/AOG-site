@@ -63,7 +63,7 @@ const input = (o) => `
 const FIELDS = [
   { name: "name", label: "Your name", type: "text", attrs: 'autocomplete="name" autocapitalize="words"' },
   { name: "email", label: "Email", type: "email", attrs: 'autocomplete="email" inputmode="email" spellcheck="false"' },
-  { name: "phone", label: "Phone (optional)", type: "tel", optional: true,
+  { name: "phone", label: "Phone", type: "tel", optional: true,
     attrs: 'autocomplete="tel" inputmode="tel"' },
   {
     name: "ai_goal",
