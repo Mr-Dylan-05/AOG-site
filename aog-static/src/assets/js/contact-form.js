@@ -269,6 +269,21 @@
             window.fbq(pixel.method, pixel.name, { content_name: formKey });
           }
 
+          // The curriculum download belongs to the person who asked for it.
+          // Everyone else gets the panel without it — the interest field is
+          // already carrying which button brought them here.
+          //
+          // style.display rather than the hidden attribute: the button is
+          // inline-flex inline, and an inline declaration beats the UA rule
+          // that [hidden] relies on. That is the same thing that left the
+          // submitted form sitting on screen for weeks.
+          var wanted = form.querySelector('[name="interest"]');
+          var wantedCurriculum = wanted && wanted.value.trim() === "curriculum";
+          var downloads = document.querySelectorAll("[data-curriculum]");
+          for (var d = 0; d < downloads.length; d++) {
+            if (!wantedCurriculum) downloads[d].style.display = "none";
+          }
+
           // A form can name a panel to show in its place. Leaving a filled-in
           // form on screen under a success line reads as though it might not
           // have sent; swapping it for a plain confirmation does not.
