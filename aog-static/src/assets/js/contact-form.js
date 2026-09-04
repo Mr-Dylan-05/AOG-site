@@ -269,21 +269,6 @@
             window.fbq(pixel.method, pixel.name, { content_name: formKey });
           }
 
-          // The curriculum download belongs to the person who asked for it.
-          // Everyone else gets the panel without it — the interest field is
-          // already carrying which button brought them here.
-          //
-          // style.display rather than the hidden attribute: the button is
-          // inline-flex inline, and an inline declaration beats the UA rule
-          // that [hidden] relies on. That is the same thing that left the
-          // submitted form sitting on screen for weeks.
-          var wanted = form.querySelector('[name="interest"]');
-          var wantedCurriculum = wanted && wanted.value.trim() === "curriculum";
-          var downloads = document.querySelectorAll("[data-curriculum]");
-          for (var d = 0; d < downloads.length; d++) {
-            if (!wantedCurriculum) downloads[d].style.display = "none";
-          }
-
           // A form can name a panel to show in its place. Leaving a filled-in
           // form on screen under a success line reads as though it might not
           // have sent; swapping it for a plain confirmation does not.
@@ -400,10 +385,15 @@
   "use strict";
 
   document.addEventListener("click", function (e) {
-    var cta = e.target.closest && e.target.closest("[data-intent]");
+    if (!e.target.closest) return;
+    // Every CTA that reaches the form, not only the ones declaring an intent.
+    // Otherwise the value sticks: press "Request the full curriculum", change
+    // your mind, press "Get in touch", and the lead is still recorded as a
+    // curriculum request. The last button pressed is the honest answer, so a
+    // CTA with no intent clears it.
+    var cta = e.target.closest('a[href="#enquire"], [data-intent]');
     if (!cta) return;
     var value = (cta.getAttribute("data-intent") || "").trim();
-    if (!value) return;
     var fields = document.querySelectorAll('form[data-contact-form] [name="interest"]');
     for (var i = 0; i < fields.length; i++) fields[i].value = value;
   });
