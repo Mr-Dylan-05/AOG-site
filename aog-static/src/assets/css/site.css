@@ -304,3 +304,71 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] {
 .ind .wb-date { display:block; font-family:"JetBrains Mono",ui-monospace,monospace;
   font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--ind-accent); margin-bottom:8px; }
+
+/* ---------- Theme, for the Eleventy-built pages ----------
+   The designed pages in public/ carry their own inline <style>: the webfonts,
+   the gradient ground, the type colour. Pages built from a template get none of
+   that, which is why the industry pages first shipped in a system fallback face
+   on flat white and read as a different site.
+
+   Declaring the faces here rather than per page is safe: the designed pages
+   declare the same family from the same file, and a duplicate @font-face with an
+   identical src is a no-op. */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('/assets/design/fonts/intertight.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/assets/design/fonts/jetbrainsmono-500.woff2') format('woff2');
+}
+
+/* The ground the rest of the site sits on. Scoped to the pages that opt in via
+   bodyClass, so nothing here reaches the designed pages, which set their own. */
+body.ind-page {
+  background:
+    radial-gradient(120% 60% at -2% -8%, rgba(255,168,112,0.22), transparent 50%),
+    radial-gradient(110% 60% at 104% -2%, rgba(47,111,237,0.18), transparent 52%),
+    radial-gradient(85% 38% at 102% 40%, rgba(47,111,237,0.10), transparent 56%),
+    radial-gradient(85% 36% at -2% 70%, rgba(255,168,112,0.12), transparent 56%),
+    radial-gradient(80% 34% at 50% 100%, rgba(45,212,191,0.10), transparent 60%),
+    linear-gradient(180deg, #FBF6F2 0%, #FAFAFE 32%, #F6FAFE 62%, #F2F5FB 100%);
+  background-attachment: fixed;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #0B1220;
+  letter-spacing: -0.011em;
+}
+
+/* Headings are Inter Tight on the designed pages; body copy is Helvetica Neue.
+   Matching that split is most of what makes these read as the same site. */
+.ind h1, .ind h2, .ind h3, .ind .ind-cta, .ind .ind-cta-alt, .ind summary,
+.ind .wb-when b, .ind .stat b {
+  font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, sans-serif;
+}
+/* Cards sat on flat white against a gradient ground and looked stuck on. */
+.ind .ind-card, .ind .ind-note { background: rgba(255,255,255,0.62); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.85); }
+.ind .wb-when { background: rgba(11,18,32,0.06); border-color: rgba(255,255,255,0.85); }
+.ind .wb-when > div { background: rgba(255,255,255,0.72); }
+
+/* The designed pages centre their hero in an 880px column and go left-aligned
+   below it. Matching that is most of what stops these reading as a bolt-on:
+   left-aligned in a 1080px column left a third of the fold empty. */
+.ind > section:first-of-type { text-align: center; max-width: 880px; margin-inline: auto; }
+.ind > section:first-of-type h1 { max-width: 22ch; margin-inline: auto; }
+.ind > section:first-of-type .ind-lede,
+.ind > section:first-of-type .ind-trust { margin-inline: auto; }
+.ind > section:first-of-type .ind-trust { max-width: 62ch; }
+.ind > section:first-of-type .ind-actions { justify-content: center; }
+@media (max-width: 640px) {
+  .ind > section:first-of-type { text-align: left; }
+  .ind > section:first-of-type .ind-actions { justify-content: flex-start; }
+  .ind > section:first-of-type h1 { max-width: none; }
+}

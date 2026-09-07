@@ -34,7 +34,32 @@ function walk(dir, out = []) {
   return out;
 }
 
-const attr = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+/**
+ * The title and description are read straight out of the page, where they are
+ * already HTML-escaped. Escaping them again turns "&amp;" into "&amp;amp;",
+ * which is what a browser then shows to a person — literally, in the share card.
+ * So decode first, then escape exactly once for an attribute.
+ *
+ * "&amp;" is decoded LAST, otherwise "&amp;lt;" would decode twice and become a
+ * real "<".
+ */
+const decode = (s) =>
+  s
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&rsquo;/g, "\u2019")
+    .replace(/&lsquo;/g, "\u2018")
+    .replace(/&ldquo;/g, "\u201c")
+    .replace(/&rdquo;/g, "\u201d")
+    .replace(/&mdash;/g, "\u2014")
+    .replace(/&ndash;/g, "\u2013")
+    .replace(/&hellip;/g, "\u2026")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&");
+
+const attr = (s) => decode(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const has = (html, re) => re.test(html);
 
 const upgradeRobots = [];

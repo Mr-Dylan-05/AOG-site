@@ -8,10 +8,13 @@ pagination:
   # so sitemap.njk — which iterates that collection — listed one session and
   # silently dropped the other five.
   addAllPagesToCollections: true
+bodyClass: "ind-page"
 permalink: "/webinars/{{ session.slug }}/index.html"
 eleventyComputed:
-  title: "{{ session.title }} | Free Webinar | Ad On Group"
-  description: "{{ session.blurb }} Free live webinar, {{ session.pretty }}, {{ session.prettyTime }}. Run by Ad On Group."
+  # `| safe` because these are rendered here and escaped again by base.njk on
+  # output. Without it an apostrophe becomes &amp;#39; in the browser tab.
+  title: "{{ session.title | safe }} | Free Webinar | Ad On Group"
+  description: "{{ session.blurb | safe }} Free live webinar, {{ session.pretty }}, {{ session.prettyTime }}. Run by Ad On Group."
 ---
 {#
   One page per public webinar, generated from _data/webinars.json.
