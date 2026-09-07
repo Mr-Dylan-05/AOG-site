@@ -30,7 +30,44 @@ const CLIENTS = [
   ["A Plus Property Services", "/assets/design/client-aplus-clean.png"],
 ];
 
+/**
+ * What comes with the program after the course ends. Taken from the sales page,
+ * which is the authoritative description — the first version of these pages said
+ * "monthly webinars and a support hour", which undersells two private hours a
+ * month and weekly masterclasses badly.
+ *
+ * This is also the answer to a one-day workshop: a workshop ends, this does not.
+ * So it gets images and its own section rather than a clause in a paragraph.
+ */
+const SUPPORT = [
+  {
+    title: "Your own learning platform",
+    body: "24 interactive modules, self-paced, yours for life. The modules keep growing as AI does, so what your team learned last year does not quietly go out of date.",
+    img: "/assets/campaign/academy-learning-platform.jpg",
+    alt: "The Ad On Group AI learning platform",
+  },
+  {
+    title: "Two private sessions every month",
+    body: "An hour each, one to one with a Claude Certified Associate, spent on your team's actual work rather than a curriculum. This is where the difficult, specific problems get solved.",
+    img: "/assets/campaign/ad-on-group-team-members.jpg",
+    alt: "Ad On Group specialists working with a client team",
+  },
+  {
+    title: "New masterclasses every week",
+    body: "Fresh sessions and podcasts on real business applications, released weekly — because the tools change monthly and a course recorded last year cannot keep up on its own.",
+    img: "/assets/campaign/training-recording-studio.jpg",
+    alt: "Ad On Group recording studio where masterclasses are produced",
+  },
+  {
+    title: "A community of teams doing the same thing",
+    body: "A closed space to ask, share and show what is working, alongside staff from other Australian businesses using AI daily. Most people find the peer answers as useful as ours.",
+    img: "/assets/campaign/community-discussion-space.jpg",
+    alt: "The Ad On Group community discussion space",
+  },
+];
+
 module.exports = () => ({
+  support: SUPPORT,
   clientCount: "14,000",
   since: "2008",
   rating: reviews.profile.rating,

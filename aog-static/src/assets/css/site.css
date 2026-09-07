@@ -415,3 +415,17 @@ body.ind-page {
   .ind .ind-logos { gap:12px 22px; justify-content:flex-start; }
   .ind .ind-logos img { height:24px; }
 }
+
+/* Ongoing support and community — the answer to a one-day workshop, so it is
+   shown rather than described. Image-led cards, two up. */
+/* Two up, not three: four cards in a three-column grid strands one on its own
+   row, and image-led cards want the width anyway. */
+.ind .ind-features { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));
+  gap:20px; margin-top:6px; }
+.ind .ind-feature { margin:0; background:rgba(255,255,255,0.62); backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.85);
+  border-radius:18px; overflow:hidden; min-width:0; }
+.ind .ind-feature img { display:block; width:100%; height:220px; object-fit:cover; }
+.ind .ind-feature figcaption { padding:20px 22px 24px; }
+.ind .ind-feature h3 { margin:0 0 7px; }
+.ind .ind-feature p { margin:0; font-size:15px; line-height:1.6; }

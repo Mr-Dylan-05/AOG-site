@@ -139,10 +139,34 @@ bodyClass: "ind-page"
     <p>
       What we teach is tool-agnostic. Your team learns the thinking, then applies it in
       ChatGPT, Copilot, Gemini or Claude — so the skills survive whichever tool you
-      standardise on next year. <a href="/ongoing-support/">Ongoing support</a> comes with
-      every program: monthly webinars, tool masterclasses, a support hour and an active
-      community, because the tools keep moving after the course ends.
+      standardise on next year.
     </p>
+  </section>
+
+  {# Ongoing support and community, with images. This is the single strongest
+     answer to a one-day workshop — a workshop ends — so it gets its own section
+     rather than a clause, and it is where most of the page's imagery lives. #}
+  <section>
+    <h2>{{ supportHeading or "The part that doesn't stop when the course does" }}</h2>
+    <p>
+      {{ supportLede | safe if supportLede else "Every program includes it. This is the
+      difference between a team that had AI training once and a team that keeps getting
+      better at it while the tools keep changing." }}
+    </p>
+    <div class="ind-features">
+      {% for f in proof.support %}
+      <figure class="ind-feature">
+        <img src="{{ f.img }}" alt="{{ f.alt }}" loading="lazy" width="640" height="380">
+        <figcaption>
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.body | safe }}</p>
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <div class="ind-actions">
+      <a class="ind-cta-alt" href="/ongoing-support/">More on ongoing support</a>
+    </div>
   </section>
 
   {# What actually happens when they click. A CTA that does not say what the next
