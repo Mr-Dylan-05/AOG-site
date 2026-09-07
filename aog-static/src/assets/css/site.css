@@ -372,3 +372,46 @@ body.ind-page {
   .ind > section:first-of-type .ind-actions { justify-content: flex-start; }
   .ind > section:first-of-type h1 { max-width: none; }
 }
+
+/* ---------- Funnel proof elements ----------
+   Added after the first version of these pages shipped with zero images against
+   the campaign page's fifty. Logos, review cards and a numbered outcome list —
+   the things a landing page needs and a brochure doesn't. */
+.ind .ind-logos { display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  gap:14px 30px; margin:34px auto 0; max-width:840px; }
+/* Capped on BOTH axes. Height alone let a wide wordmark render 160px against a
+   square mark at 30px — a 5x spread that reads as broken rather than as a set. */
+.ind .ind-logos img { height:28px; width:auto; max-width:110px; object-fit:contain;
+  opacity:.62; filter:grayscale(1); transition:opacity .2s ease, filter .2s ease; }
+.ind .ind-logos img:hover { opacity:1; filter:none; }
+
+.ind .ind-reviews { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));
+  gap:18px; margin-bottom:18px; }
+.ind .ind-review { margin:0; background:rgba(255,255,255,0.62); backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.85);
+  border-radius:16px; padding:24px 22px; min-width:0; }
+.ind .ind-stars { color:#FBB400; font-size:15px; letter-spacing:2px; margin-bottom:12px; }
+.ind .ind-review blockquote { margin:0 0 14px; font-size:15px; line-height:1.62;
+  color:var(--ind-body); }
+.ind .ind-review figcaption { font-size:14px; font-weight:700; color:var(--ind-ink); }
+
+/* Numbered because the outcome genuinely is a sequence — fluency, then
+   automation, then agents. Numbering anything else would be decoration. */
+.ind .ind-steps { list-style:none; margin:0; padding:0; display:grid; gap:22px; max-width:74ch; }
+.ind .ind-steps li { display:grid; grid-template-columns:auto minmax(0,1fr); gap:18px;
+  align-items:start; }
+.ind .ind-step-n { display:flex; align-items:center; justify-content:center;
+  width:34px; height:34px; border-radius:50%; background:var(--ind-ink); color:#fff;
+  font-family:'Inter Tight','Helvetica Neue',sans-serif; font-size:15px; font-weight:700;
+  font-variant-numeric:tabular-nums; }
+.ind .ind-steps h3 { margin-bottom:5px; }
+.ind .ind-steps p { margin:0; }
+
+.ind .ind-next { border-left-color:var(--ind-accent); }
+.ind .ind-next .ind-actions { margin-top:22px; }
+.ind .ind-trust b { color:var(--ind-ink); font-weight:800; }
+
+@media (max-width:640px){
+  .ind .ind-logos { gap:12px 22px; justify-content:flex-start; }
+  .ind .ind-logos img { height:24px; }
+}

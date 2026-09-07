@@ -5,20 +5,28 @@ bodyClass: "ind-page"
 {#
   Layout for the industry pages — /ai-training-<industry>/.
 
-  These are commercial pages, not articles, so they are deliberately not built on
-  layouts/resource.njk: no byline, no breadcrumb into the resource library, and a
-  call to action rather than "keep reading".
+  These are funnel landing pages, and the first version of them was not. It had
+  no images where the converting campaign page has fifty, led with "40+
+  businesses trained" — a number a competitor founded last year can rival — and
+  volunteered its own limitations in the body copy. Confident is not the same as
+  dishonest: nothing here overstates, but nothing here argues the other side's
+  case either.
 
-  The whole point of an industry page is the part that could not be written for
-  any other industry. So `useCases` and `concern` carry the weight, and the shared
-  program section below is kept short — a page that is 80% boilerplate with the
-  sector's name swapped in is the thin-content pattern these are supposed to avoid.
+  Structure, in the order a cold visitor needs it:
+    hero + proof   who this is for, and why this company
+    pains          the reader recognising their own week
+    use cases      the specific work, sector by sector
+    outcome        what is different on day 91 — the spine of the pitch
+    reviews        people in their position saying it worked
+    authority      the sector's real objection, answered from strength
+    next step      exactly what happens when they click
+    session/local/faq/cross-links
 
   Front matter each page supplies:
-    title, description, permalink, industry, h1, eyebrow, lede,
-    painsHeading, pains: [str], useCasesHeading, useCasesLede,
-    useCases: [{title, body}], concern: {heading, body},
-    faq: [{q, a}], reading: [{url, label}], closer
+    title, description, permalink, industry, h1, eyebrow, lede, clients,
+    painsHeading, pains, useCasesHeading, useCasesLede, useCases,
+    outcomeHeading, outcomeLede, outcomes, concern, nextStep,
+    faq, reading, localAngle, closer
 #}
 <main class="ind">
 
@@ -27,19 +35,24 @@ bodyClass: "ind-page"
     <h1>{{ h1 }}</h1>
     <p class="ind-lede">{{ lede | safe }}</p>
     <div class="ind-actions">
-      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
-      <a class="ind-cta-alt" href="/programs/">See the program</a>
+      {# The audit first. It is the low-friction step for cold traffic, it is
+         already built, and asking for a call first loses the people who are not
+         ready to talk to anyone — which on these pages is most of them. #}
+      <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
+      <a class="ind-cta-alt" href="/ai-enquiry/">Or book a time to talk</a>
     </div>
     <p class="ind-trust">
-      Ad On Group has been Australian-owned since 2008 and is rated 4.8 from 229 Google
-      reviews. Our AI training is delivered by Claude Certified Associates, and 40+
-      Australian businesses have completed the program.
+      <b>Trusted by over {{ proof.clientCount }} Australian businesses.</b>
+      Australian-owned since {{ proof.since }}, rated {{ proof.rating }} from
+      {{ proof.reviewCount }} Google reviews, and delivered by Claude Certified Associates.
     </p>
+    <div class="ind-logos" aria-label="Businesses that work with Ad On Group">
+      {% for c in proof.clients %}
+      <img src="{{ c.src }}" alt="{{ c.name }}" loading="lazy" width="120" height="40">
+      {% endfor %}
+    </div>
   </section>
 
-  {# Sector proof. Deliberately says Ad On Group *works with* these businesses,
-     which is true across the group's services — not that each has completed the
-     AI training, which would be a different and unevidenced claim. #}
   {% if clients %}
   <section>
     <h2>We already work in this sector</h2>
@@ -71,6 +84,41 @@ bodyClass: "ind-page"
   </section>
   {% endif %}
 
+  {# The outcome. Without this the page is a spec sheet: "24 modules over three
+     months" describes what you buy, not what changes. #}
+  {% if outcomes and outcomes.length %}
+  <section>
+    <h2>{{ outcomeHeading or "Where your team is after three months" }}</h2>
+    {% if outcomeLede %}<p>{{ outcomeLede | safe }}</p>{% endif %}
+    <ol class="ind-steps">
+      {% for o in outcomes %}
+      <li>
+        <span class="ind-step-n">{{ loop.index }}</span>
+        <div><h3>{{ o.title }}</h3><p>{{ o.body | safe }}</p></div>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+
+  {% if proof.aiReviews.length %}
+  <section>
+    <h2>What people say after the program</h2>
+    <div class="ind-reviews">
+      {# slice() in Nunjucks splits into N chunks rather than taking N items,
+         which quietly rendered two reviews instead of three. #}
+      {% for r in proof.aiReviews %}{% if loop.index <= 3 %}
+      <figure class="ind-review">
+        <div class="ind-stars" aria-label="{{ r.rating }} out of 5">★★★★★</div>
+        <blockquote>{{ r.text }}</blockquote>
+        <figcaption>{{ r.name }}</figcaption>
+      </figure>
+      {% endif %}{% endfor %}
+    </div>
+    <p class="ind-trust">Rated {{ proof.rating }} from {{ proof.reviewCount }} Google reviews.</p>
+  </section>
+  {% endif %}
+
   {% if concern %}
   <section>
     <div class="ind-note">
@@ -84,20 +132,61 @@ bodyClass: "ind-page"
     <h2>How the training works</h2>
     <p>
       Three months, 24 modules, around two hours a week, self-paced so it fits around
-      {{ industry }} work rather than pulling people off the tools for a day. It runs in
-      three stages: getting fluent with the tools, automating the tasks that repeat, then
-      building AI agents that handle a slice of a job end to end.
+      {{ industry }} work rather than pulling anyone off the job for a day. It runs in three
+      stages: getting fluent with the tools, automating the tasks that repeat, then building
+      AI agents that handle a slice of a job end to end.
     </p>
     <p>
       What we teach is tool-agnostic. Your team learns the thinking, then applies it in
-      ChatGPT, Copilot, Gemini or Claude — so the skills survive whichever tool your
-      practice standardises on next year. <a href="/ongoing-support/">Ongoing support</a>
-      comes with every program: monthly webinars, tool masterclasses, a support hour and
-      an active community, because the tools keep moving after the course ends.
+      ChatGPT, Copilot, Gemini or Claude — so the skills survive whichever tool you
+      standardise on next year. <a href="/ongoing-support/">Ongoing support</a> comes with
+      every program: monthly webinars, tool masterclasses, a support hour and an active
+      community, because the tools keep moving after the course ends.
+    </p>
+  </section>
+
+  {# What actually happens when they click. A CTA that does not say what the next
+     step is asks for a leap of faith at exactly the wrong moment. #}
+  <section>
+    <div class="ind-note ind-next">
+      <h2>{{ nextStepHeading or "What happens when you get in touch" }}</h2>
+      <p>{{ nextStep | safe }}</p>
+      <div class="ind-actions">
+        <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
+        <a class="ind-cta-alt" href="/ai-enquiry/">Book a time to talk</a>
+      </div>
+    </div>
+  </section>
+
+  {% for w in webinarSchedule.upcoming %}{% if w.industry == page.url %}
+  <section>
+    <h2>See how we teach it, first</h2>
+    <p>
+      <a href="{{ w.url }}">{{ w.title }}</a> — {{ w.pretty }}, {{ w.prettyTime }}. Free,
+      online, 45 minutes, open to anyone. {{ w.blurb }}
     </p>
     <div class="ind-actions">
-      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
-      <a class="ind-cta-alt" href="/ai-quiz/">Take the free AI audit</a>
+      <a class="ind-cta-alt" href="{{ w.url }}">Details and registration</a>
+    </div>
+  </section>
+  {% endif %}{% endfor %}
+
+  {# Industry × location. "AI training for accounting firms in Brisbane" is a
+     question almost nobody has written a page for. `localAngle` is a real
+     observation about this sector in these places, not a list of city names. #}
+  <section>
+    <h2>Where we work</h2>
+    <p>
+      We're on the Gold Coast, we work across South East Queensland and Northern NSW, and
+      we have an office in Adelaide. The program runs online and self-paced, so your team
+      gets the same thing wherever they are.
+    </p>
+    {% if localAngle %}<p>{{ localAngle | safe }}</p>{% endif %}
+    <div class="ind-more">
+      {% for l in locations.items %}
+        {% if l.hasPage %}<a href="/ai-training-{{ l.slug }}/">{{ l.name }}</a>
+        {% else %}<span class="ind-place">{{ l.name }}</span>{% endif %}
+      {% endfor %}
     </div>
   </section>
 
@@ -122,51 +211,6 @@ bodyClass: "ind-page"
   </section>
   {% endif %}
 
-  {# The free session paired with this sector. A webinar is the low-commitment
-     entry point for someone who is not ready to talk to anyone yet, and it is
-     also the only thing here that carries a date — which is what makes it worth
-     linking from a page that otherwise never changes. #}
-  {% for w in webinarSchedule.upcoming %}{% if w.industry == page.url %}
-  <section>
-    <h2>There's a free session on this</h2>
-    <p>
-      <a href="{{ w.url }}">{{ w.title }}</a> &mdash; {{ w.pretty }}, {{ w.prettyTime }}.
-      Free, online, 45 minutes, open to anyone. {{ w.blurb }}
-    </p>
-    <div class="ind-actions">
-      <a class="ind-cta-alt" href="{{ w.url }}">Details and registration</a>
-    </div>
-  </section>
-  {% endif %}{% endfor %}
-
-  {# Industry × location. The pairing is the point: "AI training for accounting
-     firms in Brisbane" is a question almost nobody has written a page for, and
-     it is where a page like this can win while the head term stays out of reach.
-
-     `localAngle` is a real observation about that sector in these areas, not a
-     list of city names wearing a sentence — a stuffed list reads as spam to a
-     person and adds nothing for a crawler either. Locations render as plain text
-     until their own page exists (`hasPage`), so nothing here 404s. #}
-  <section>
-    <h2>Where we work</h2>
-    <p>
-      We're based on the Gold Coast and the program runs online and self-paced, so where
-      you are doesn't change what your team gets. Most of our face-to-face work is across
-      South East Queensland and Northern NSW, plus Adelaide, where we have an office.
-    </p>
-    {% if localAngle %}<p>{{ localAngle | safe }}</p>{% endif %}
-    <div class="ind-more">
-      {% for l in locations.items %}
-        {% if l.hasPage %}<a href="/ai-training-{{ l.slug }}/">{{ l.name }}</a>
-        {% else %}<span class="ind-place">{{ l.name }}{% if l.note %} <em>&middot; {{ l.note }}</em>{% endif %}</span>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </section>
-
-  {# Cross-links, driven off _data/industries.json so adding a seventh page needs
-     no edit here and none of the six goes stale. The current page is filtered
-     out rather than rendered as a link to itself. #}
   <section>
     <h2>We train other sectors too</h2>
     <div class="ind-more">
@@ -180,8 +224,8 @@ bodyClass: "ind-page"
     <h2>{{ closerHeading or "Get your team started" }}</h2>
     <p>{{ closer | safe }}</p>
     <div class="ind-actions">
-      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
-      <a class="ind-cta-alt" href="/ad-on-ai-division/">About Ad On AI</a>
+      <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
+      <a class="ind-cta-alt" href="/ai-enquiry/">Book a time to talk</a>
     </div>
   </section>
 
