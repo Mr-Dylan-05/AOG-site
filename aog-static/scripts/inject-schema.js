@@ -470,6 +470,28 @@ const WEBINARS = (() => {
   }
 })();
 
+
+/**
+ * The syllabus, for pages that show it.
+ *
+ * "What does Ad On Group teach?" is the question these pages have to answer
+ * better than anyone, and the answer used to exist only as prose on one page
+ * that search could not reach. The teaches property puts the named techniques and tools —
+ * prompt engineering, Claude Projects, Cowork automations, orchestrator agents
+ * — into the graph as competencies, and and hasPart gives the three months their
+ * own describable structure.
+ *
+ * Gated on the page actually rendering the curriculum, so it travels with the
+ * section rather than with a URL list.
+ */
+const CURRICULUM = (() => {
+  try {
+    return require(path.join(ROOT, "src/_data/curriculum.js"))();
+  } catch {
+    return null;
+  }
+})();
+
 /** URL -> the service that page describes. Names match each page's own title. */
 const SERVICES = {
   "/ad-on-workforce/": "Offshore Staffing",
@@ -905,6 +927,39 @@ for (const p of pages) {
       shown.forEach((r, i) => graph.push(reviewNode(r, i)));
       counts.Review = (counts.Review || 0) + shown.length;
     }
+  }
+
+  // --- Course (pages that publish the syllabus) ---------------------------
+  if (CURRICULUM && /class="ind-months"/.test(p.html)) {
+    graph.push({
+      "@type": "Course",
+      "@id": `${pageUrl}#course`,
+      name: SERVICES[p.url] || "AI Training & Enablement Program",
+      description: p.description || undefined,
+      url: pageUrl,
+      provider: { "@id": ORG_ID },
+      inLanguage: "en-AU",
+      timeRequired: "P3M",
+      educationalCredentialAwarded: "Claude Certified Associate program completion",
+      teaches: CURRICULUM.teaches,
+      numberOfLessons: CURRICULUM.moduleCount,
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "online",
+        courseWorkload: "PT2H",
+        location: { "@type": "VirtualLocation", url: pageUrl },
+      },
+      hasPart: CURRICULUM.months.map((m) => ({
+        "@type": "Course",
+        "@id": `${pageUrl}#month-${m.n}`,
+        name: `Month ${m.n}: ${m.name}`,
+        description: m.body,
+        teaches: m.teaches,
+        provider: { "@id": ORG_ID },
+      })),
+      mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
+    });
+    counts.Course = (counts.Course || 0) + 1;
   }
 
   // --- Webinar ------------------------------------------------------------

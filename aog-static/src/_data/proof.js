@@ -66,8 +66,28 @@ const SUPPORT = [
   },
 ];
 
+/** Who actually delivers it. The sales page has a "meet your Claude Certified
+ *  Associates" section and the industry pages had nothing — no names, no faces,
+ *  no credentials, on pages selling training. Both have their own bio page with
+ *  their certifications marked up, so this links rather than duplicates. */
+const TRAINERS = [
+  {
+    name: "Dylan Bailey",
+    role: "Claude Certified Associate",
+    img: "/assets/design/team-dylan.jpg",
+    url: "/dylan-bailey/",
+  },
+  {
+    name: "Beau Robards",
+    role: "Claude Certified Associate",
+    img: "/assets/design/team-beau.jpg",
+    url: "/beau-robards/",
+  },
+];
+
 module.exports = () => ({
   support: SUPPORT,
+  trainers: TRAINERS,
   clientCount: "14,000",
   since: "2008",
   rating: reviews.profile.rating,

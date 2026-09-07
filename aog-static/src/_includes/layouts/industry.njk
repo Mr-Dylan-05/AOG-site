@@ -143,6 +143,52 @@ bodyClass: "ind-page"
     </p>
   </section>
 
+  {# The curriculum. The single biggest AEO gap on the first version: "what does
+     Ad On Group actually teach" had no answer anywhere search could reach it.
+     Named tools and named techniques, because that is what gets quoted. #}
+  <section>
+    <h2>{{ curriculumHeading or "What your team actually learns" }}</h2>
+    <p>
+      {{ curriculumLede | safe if curriculumLede else "" }}
+      {{ curriculum.moduleCount }} interactive modules over {{ curriculum.duration }},
+      {{ curriculum.weeklyHours }} — full of worked examples, videos and step-by-step
+      instructions, and they keep growing as the tools do.
+    </p>
+    <ol class="ind-months">
+      {% for m in curriculum.months %}
+      <li>
+        <p class="ind-mhead"><b>Month {{ m.n }}</b> {{ m.name }} <i>{{ m.tag }}</i></p>
+        <p>{{ m.body | safe }}</p>
+        <ul class="ind-teaches">
+          {% for t in m.teaches %}<li>{{ t }}</li>{% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ol>
+    <div class="ind-actions">
+      <a class="ind-cta-alt" href="{{ curriculum.pdf }}" download>Download the full curriculum</a>
+    </div>
+  </section>
+
+  {# Who teaches it. Names, faces and credentials, linking to bios that carry the
+     certifications in schema — the E-E-A-T half of the same question. #}
+  <section>
+    <h2>Who teaches it</h2>
+    <p>
+      Delivered by Claude Certified Associates — not generalists who added an AI
+      workshop last year. Ad On Group has been running as an Australian business
+      since {{ proof.since }}.
+    </p>
+    <div class="ind-people">
+      {% for t in proof.trainers %}
+      <a class="ind-person" href="{{ t.url }}">
+        <img src="{{ t.img }}" alt="{{ t.name }}, {{ t.role }}" loading="lazy" width="120" height="120">
+        <span><b>{{ t.name }}</b>{{ t.role }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
   {# Ongoing support and community, with images. This is the single strongest
      answer to a one-day workshop — a workshop ends — so it gets its own section
      rather than a clause, and it is where most of the page's imagery lives. #}

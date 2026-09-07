@@ -429,3 +429,29 @@ body.ind-page {
 .ind .ind-feature figcaption { padding:20px 22px 24px; }
 .ind .ind-feature h3 { margin:0 0 7px; }
 .ind .ind-feature p { margin:0; font-size:15px; line-height:1.6; }
+
+/* Curriculum — named tools and techniques, month by month. The substance an
+   answer engine quotes when asked what this company teaches. */
+.ind .ind-months { list-style:none; margin:26px 0 0; padding:0; display:grid; gap:20px; }
+.ind .ind-months > li { background:rgba(255,255,255,0.62); backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.85);
+  border-radius:18px; padding:24px 26px; }
+.ind .ind-mhead { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px;
+  margin:0 0 10px; font-family:'Inter Tight','Helvetica Neue',sans-serif;
+  font-size:19px; font-weight:800; letter-spacing:-.02em; color:var(--ind-ink); max-width:none; }
+.ind .ind-mhead b { background:var(--ind-ink); color:#fff; font-size:12px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; padding:5px 10px; border-radius:999px; }
+.ind .ind-mhead i { font-style:normal; font-size:14px; font-weight:600; color:var(--ind-accent); }
+.ind .ind-teaches { list-style:none; margin:14px 0 0; padding:0;
+  display:flex; flex-wrap:wrap; gap:8px; }
+.ind .ind-teaches li { font-size:13.5px; font-weight:600; color:#4A5462;
+  background:rgba(11,18,32,0.05); border-radius:999px; padding:6px 13px; }
+
+/* Trainers */
+.ind .ind-people { display:flex; flex-wrap:wrap; gap:18px; margin-top:8px; }
+.ind .ind-person { display:flex; align-items:center; gap:14px; text-decoration:none;
+  background:rgba(255,255,255,0.62); border:1px solid rgba(255,255,255,0.85);
+  border-radius:999px; padding:10px 22px 10px 10px; }
+.ind .ind-person img { width:56px; height:56px; border-radius:50%; object-fit:cover; }
+.ind .ind-person span { display:grid; font-size:14px; color:#5A6473; }
+.ind .ind-person b { font-size:16px; color:var(--ind-ink); font-weight:700; }

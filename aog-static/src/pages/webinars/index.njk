@@ -3,7 +3,7 @@ layout: layouts/base.njk
 bodyClass: "ind-page"
 permalink: "/webinars/index.html"
 title: "Free AI Webinars for Australian Businesses | Ad On Group"
-description: "Free monthly AI webinars for Australian businesses — accounting, healthcare, NDIS, real estate, construction and legal. Online, 45 minutes, open to anyone. Run by Claude Certified Associates."
+description: "Free monthly AI webinars for Australian businesses — accounting, healthcare, NDIS, real estate, construction and legal. Online, 45 minutes, open to anyone. Run by Claude Certified Associates at Ad On Group."
 ---
 <main class="ind">
 
@@ -12,8 +12,8 @@ description: "Free monthly AI webinars for Australian businesses — accounting,
     <h1>Free AI webinars for Australian businesses</h1>
     <p class="ind-lede">
       One session a month, each on a single real problem in a single industry. Free, online,
-      45 minutes, open to anyone &mdash; you don't have to be a client and there's nothing to buy
-      at the end of it.
+      45 minutes, open to anyone — you don't have to be a client, and you'll leave with
+      something you can use that afternoon.
     </p>
     <div class="ind-actions">
       {% if webinarSchedule.upcoming.length %}
@@ -21,12 +21,18 @@ description: "Free monthly AI webinars for Australian businesses — accounting,
       {% else %}
       <a class="ind-cta" href="/ai-enquiry/">Get told about the next one</a>
       {% endif %}
-      <a class="ind-cta-alt" href="/programs/">See the training program</a>
+      <a class="ind-cta-alt" href="/ai-quiz/">Take the free AI audit</a>
     </div>
     <p class="ind-trust">
-      Run by Claude Certified Associates at Ad On Group &mdash; Australian-owned since 2008,
-      rated 4.8 from 229 Google reviews, and 40+ Australian businesses trained.
+      <b>Trusted by over {{ proof.clientCount }} Australian businesses.</b>
+      Australian-owned since {{ proof.since }}, rated {{ proof.rating }} from
+      {{ proof.reviewCount }} Google reviews, and run by Claude Certified Associates.
     </p>
+    <div class="ind-logos" aria-label="Businesses that work with Ad On Group">
+      {% for c in proof.clients %}
+      <img src="{{ c.src }}" alt="{{ c.name }}" loading="lazy" width="120" height="40">
+      {% endfor %}
+    </div>
   </section>
 
   {% if webinarSchedule.upcoming.length %}
@@ -44,10 +50,59 @@ description: "Free monthly AI webinars for Australian businesses — accounting,
   </section>
   {% endif %}
 
+  <section>
+    <h2>What a session is like</h2>
+    <p>
+      Forty-five minutes, one sector, one real problem. We work through actual tasks — the
+      email nobody wants to write, the report that takes an afternoon — and show the workflow
+      end to end rather than talking about what AI can do in principle. Questions at the end,
+      and nobody chases you afterwards for turning up.
+    </p>
+    <ul class="ind-list">
+      <li>Built for non-technical people who do the work daily, not for developers.</li>
+      <li>Worked examples on the kind of documents your team already produces.</li>
+      <li>No product demo, no slides about the future of work.</li>
+      <li>Come with a task you'd like to hand over, leave with a way to do it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Who runs them</h2>
+    <p>
+      Claude Certified Associates at Ad On Group, delivering the same material they teach in
+      our three-month program. Ad On Group has been an Australian business since
+      {{ proof.since }}.
+    </p>
+    <div class="ind-people">
+      {% for t in proof.trainers %}
+      <a class="ind-person" href="{{ t.url }}">
+        <img src="{{ t.img }}" alt="{{ t.name }}, {{ t.role }}" loading="lazy" width="120" height="120">
+        <span><b>{{ t.name }}</b>{{ t.role }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if proof.aiReviews.length %}
+  <section>
+    <h2>What people say after the program</h2>
+    <div class="ind-reviews">
+      {% for r in proof.aiReviews %}{% if loop.index <= 3 %}
+      <figure class="ind-review">
+        <div class="ind-stars" aria-label="{{ r.rating }} out of 5">★★★★★</div>
+        <blockquote>{{ r.text }}</blockquote>
+        <figcaption>{{ r.name }}</figcaption>
+      </figure>
+      {% endif %}{% endfor %}
+    </div>
+    <p class="ind-trust">Rated {{ proof.rating }} from {{ proof.reviewCount }} Google reviews.</p>
+  </section>
+  {% endif %}
+
   {% if webinarSchedule.past.length %}
   <section>
     <h2>Already run</h2>
-    <p>These have been and gone. The pages stay up, but the recordings live in the academy.</p>
+    <p>These have been and gone. The pages stay up, and the recordings live in the academy.</p>
     <div class="ind-more">
       {% for s in webinarSchedule.past %}<a href="{{ s.url }}">{{ s.title }}</a>{% endfor %}
     </div>
@@ -56,25 +111,37 @@ description: "Free monthly AI webinars for Australian businesses — accounting,
 
   <section>
     <div class="ind-note">
-      <h2>Why these are free, and where the catch isn't</h2>
+      <h2>Why they're free</h2>
       <p>
-        We run a paid three-month training program, and these sessions are how people find out
-        whether we're any good before spending money with us. That's the whole model. Nobody
-        will chase you afterwards for turning up.
+        We run a paid three-month training program, and these sessions are how people find
+        out whether we're any good before spending money with us. That's the whole model.
       </p>
       <p>
-        <strong>Recordings go to academy members rather than to the public.</strong> That's not
-        a growth tactic &mdash; it's what our members pay for, and giving it away would be
-        unfair to them. Come to the live one if the topic matters to you.
+        <strong>Recordings go to academy members rather than the public</strong> — it's what
+        our members pay for. Come to the live one if the topic matters to you, and if you
+        want every session plus the full program, that's what
+        <a href="/programs/">the training</a> includes.
       </p>
     </div>
   </section>
 
   <section>
     <h2>Or go straight to your industry</h2>
-    <p>Each session pairs with a program built for that sector's actual work.</p>
+    <p>Each session pairs with a program built around that sector's actual work.</p>
     <div class="ind-more">
       {% for i in industries.items %}<a href="{{ i.url }}">{{ i.label }}</a>{% endfor %}
+    </div>
+  </section>
+
+  <section>
+    <h2>Save your spot</h2>
+    <p>
+      Free, online, 45 minutes, one Tuesday a month. Register for the next session and we'll
+      send the link and a reminder on the morning.
+    </p>
+    <div class="ind-actions">
+      <a class="ind-cta" href="/ai-enquiry/">Register for the next session</a>
+      <a class="ind-cta-alt" href="/ai-quiz/">Take the free AI audit</a>
     </div>
   </section>
 

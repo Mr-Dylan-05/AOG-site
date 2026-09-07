@@ -1,5 +1,6 @@
 ---
 layout: layouts/base.njk
+bodyClass: "ind-page"
 pagination:
   data: webinarSchedule.all
   size: 1
@@ -8,25 +9,24 @@ pagination:
   # so sitemap.njk — which iterates that collection — listed one session and
   # silently dropped the other five.
   addAllPagesToCollections: true
-bodyClass: "ind-page"
 permalink: "/webinars/{{ session.slug }}/index.html"
 eleventyComputed:
   # `| safe` because these are rendered here and escaped again by base.njk on
   # output. Without it an apostrophe becomes &amp;#39; in the browser tab.
   title: "{{ session.title | safe }} | Free Webinar | Ad On Group"
-  description: "{{ session.blurb | safe }} Free live webinar, {{ session.pretty }}, {{ session.prettyTime }}. Run by Ad On Group."
+  description: "{{ session.blurb | safe }} Free live webinar, {{ session.pretty }}, {{ session.prettyTime }}. Run by Claude Certified Associates at Ad On Group."
 ---
 {#
   One page per public webinar, generated from _data/webinars.json.
 
-  These pages are the point of the whole exercise. A three-month program is a
-  private engagement that produces nothing anyone can link to; a public event
-  produces a dated, listable, markup-able artefact every month, which is the
-  mechanism the workshop competitors get for free. This is that mechanism.
+  These pages are the mechanism the workshop competitors get for free: a
+  three-month program is a private engagement that produces nothing anyone can
+  link to, while a public event produces a dated, listable, markup-able artefact
+  every month.
 
-  The recording is never published here. It goes into the members' academy, and
-  the page says so — which makes attending live the reason to show up and the
-  academy the reason to join.
+  The recording is never published here — it goes to the members' academy, which
+  makes attending live the reason to show up and the academy a reason to join.
+  Said as an offer, not as an apology.
 #}
 <main class="ind">
 
@@ -36,26 +36,24 @@ eleventyComputed:
     <p class="ind-lede">{{ session.blurb }}</p>
 
     <div class="wb-when">
-      <div>
-        <span class="wb-label">When</span>
-        <b>{{ session.pretty }}</b>
-        <span>{{ session.prettyTime }}</span>
-      </div>
-      <div>
-        <span class="wb-label">Where</span>
-        <b>Online</b>
-        <span>Link sent on registration</span>
-      </div>
-      <div>
-        <span class="wb-label">Cost</span>
-        <b>Free</b>
-        <span>45 minutes</span>
-      </div>
+      <div><span class="wb-label">When</span><b>{{ session.pretty }}</b><span>{{ session.prettyTime }}</span></div>
+      <div><span class="wb-label">Where</span><b>Online</b><span>Link sent on registration</span></div>
+      <div><span class="wb-label">Cost</span><b>Free</b><span>45 minutes</span></div>
     </div>
 
     <div class="ind-actions">
       <a class="ind-cta" href="/ai-enquiry/">Register for this session</a>
       <a class="ind-cta-alt" href="/webinars/">All upcoming webinars</a>
+    </div>
+    <p class="ind-trust">
+      <b>Trusted by over {{ proof.clientCount }} Australian businesses.</b>
+      Australian-owned since {{ proof.since }}, rated {{ proof.rating }} from
+      {{ proof.reviewCount }} Google reviews, and run by Claude Certified Associates.
+    </p>
+    <div class="ind-logos" aria-label="Businesses that work with Ad On Group">
+      {% for c in proof.clients %}
+      <img src="{{ c.src }}" alt="{{ c.name }}" loading="lazy" width="120" height="40">
+      {% endfor %}
     </div>
   </section>
 
@@ -69,17 +67,42 @@ eleventyComputed:
   {% endif %}
 
   <section>
+    <h2>Who it's for</h2>
+    <p>
+      Non-technical people who do this work daily — owners, managers and the staff actually
+      producing the documents. No coding, no jargon, and not a product demo. Forty-five
+      minutes, worked examples on real tasks, and questions at the end.
+    </p>
+    <p>
+      Come with a task you'd like to hand over and you'll leave with a way to do it. That's
+      the whole point of running these in public rather than behind a paywall.
+    </p>
+  </section>
+
+  <section>
+    <h2>Who's running it</h2>
+    <p>
+      Claude Certified Associates at Ad On Group, who deliver the same material in our
+      three-month program. Not a guest speaker, and not a salesperson with slides.
+    </p>
+    <div class="ind-people">
+      {% for t in proof.trainers %}
+      <a class="ind-person" href="{{ t.url }}">
+        <img src="{{ t.img }}" alt="{{ t.name }}, {{ t.role }}" loading="lazy" width="120" height="120">
+        <span><b>{{ t.name }}</b>{{ t.role }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section>
     <div class="ind-note">
-      <h2>Who it's for, and what it isn't</h2>
+      <h2>About the recording</h2>
       <p>
-        It's for non-technical people who do this work daily &mdash; not for developers, and not
-        a product demo. Forty-five minutes, worked examples, and questions at the end.
-      </p>
-      <p>
-        <strong>The recording goes to our academy members, not to the public.</strong> If you
-        can't make it live, the session isn't kept for you &mdash; so if the topic is the one you
-        need, come to it. Academy access is included with every
-        <a href="/programs/">training program</a>.
+        <strong>Recordings go to our academy members rather than the public.</strong> It's
+        what our members pay for, so we keep it that way — which makes the live session the
+        one to come to. Academy access, and the recording of every session, is included with
+        every <a href="/programs/">training program</a>.
       </p>
     </div>
   </section>
@@ -88,12 +111,19 @@ eleventyComputed:
   <section>
     <h2>Going further than one session</h2>
     <p>
-      A webinar is 45 minutes and it won't change how anyone works on its own &mdash; that's an
-      honest limit of the format rather than a sales line. If this is a real problem in your
-      business rather than a curiosity, the
+      Forty-five minutes gets your team started. The three-month program is what turns it
+      into how they work — {{ curriculum.moduleCount }} modules, two private sessions a
+      month with a Claude Certified Associate, weekly masterclasses, and a community that
+      keeps it current. The
       {% for i in industries.items %}{% if i.url == session.industry %}<a href="{{ i.url }}">{{ i.label | lower }} program</a>{% endif %}{% endfor %}
-      is the version that actually changes what your team does day to day.
+      is the version built around this sector's actual work.
     </p>
+    <div class="ind-actions">
+      {% for i in industries.items %}{% if i.url == session.industry %}
+      <a class="ind-cta-alt" href="{{ i.url }}">See the {{ i.label | lower }} program</a>
+      {% endif %}{% endfor %}
+      <a class="ind-cta-alt" href="{{ curriculum.pdf }}" download>Download the curriculum</a>
+    </div>
   </section>
   {% endif %}
 
@@ -104,6 +134,18 @@ eleventyComputed:
       {% for s in webinarSchedule.all %}{% if s.slug != session.slug %}
       <a href="{{ s.url }}">{{ s.title }}</a>
       {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <section>
+    <h2>Save your spot</h2>
+    <p>
+      Free, online, 45 minutes. Register and we'll send the link, plus a reminder the
+      morning of the session.
+    </p>
+    <div class="ind-actions">
+      <a class="ind-cta" href="/ai-enquiry/">Register for this session</a>
+      <a class="ind-cta-alt" href="/ai-quiz/">Take the free AI audit</a>
     </div>
   </section>
 

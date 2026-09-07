@@ -5,24 +5,26 @@ bodyClass: "ind-page"
 {#
   Layout for the location pages — /ai-training-<location>/.
 
-  Reuses the .ind class family from the industry pages on purpose: they are the
-  same kind of page doing the same job from the other direction, and a second
-  near-identical stylesheet would only be a second thing to keep in sync.
+  Reuses the .ind class family and the same proof, curriculum and support data as
+  the industry pages: same product, same funnel job, approached from the other
+  direction. A second stylesheet and a second copy of the syllabus would only be
+  two more things to keep in step.
 
-  The cross-reference is the point of these pages. Each one names the industries
-  that actually cluster in that area and links to their page; each industry page
-  names all seven areas. Neither has to win "AI training Australia" for the pair
-  to answer "AI training for NDIS providers in Logan".
+  The cross-reference is the point. Each location names the sectors that cluster
+  there and links to their page; each industry page names all seven areas. Neither
+  has to win "AI training Australia" for the pair to answer "AI training for NDIS
+  providers in Logan".
 
-  Honesty rule enforced by the `presence` field: only the Gold Coast (head
-  office) and Adelaide (sales office) are places Ad On Group actually sits. Every
-  other page says plainly that it is a service area reached from the Gold Coast.
-  Implying seven offices would be a lie a prospect can check in one search.
+  On presence: the first version of these pages volunteered "we don't have a
+  Brisbane office and we're not going to pretend otherwise" in the third
+  paragraph, to someone who arrived by searching AI training Brisbane. Being
+  accurate about where we sit does not require arguing against the sale — the
+  `presence` field now states what we cover, and the Gold Coast base is a fact
+  about us rather than an apology.
 
   Front matter each page supplies:
-    title, description, permalink, location, region, h1, eyebrow, lede,
-    presence, contextHeading, context: [str], industriesHere: [{url, why}],
-    deliveryNote, faq: [{q, a}], closer
+    title, description, permalink, location, region, slug, h1, eyebrow, lede,
+    presence, contextHeading, context, industriesHere, faq, nextStep, closer
 #}
 <main class="ind">
 
@@ -31,14 +33,19 @@ bodyClass: "ind-page"
     <h1>{{ h1 }}</h1>
     <p class="ind-lede">{{ lede | safe }}</p>
     <div class="ind-actions">
-      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
-      <a class="ind-cta-alt" href="/programs/">See the program</a>
+      <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
+      <a class="ind-cta-alt" href="/ai-enquiry/">Or book a time to talk</a>
     </div>
     <p class="ind-trust">
-      Ad On Group has been Australian-owned since 2008 and is rated 4.8 from 229 Google
-      reviews. Our AI training is delivered by Claude Certified Associates, and 40+
-      Australian businesses have completed the program.
+      <b>Trusted by over {{ proof.clientCount }} Australian businesses.</b>
+      Australian-owned since {{ proof.since }}, rated {{ proof.rating }} from
+      {{ proof.reviewCount }} Google reviews, and delivered by Claude Certified Associates.
     </p>
+    <div class="ind-logos" aria-label="Businesses that work with Ad On Group">
+      {% for c in proof.clients %}
+      <img src="{{ c.src }}" alt="{{ c.name }}" loading="lazy" width="120" height="40">
+      {% endfor %}
+    </div>
   </section>
 
   {% if context and context.length %}
@@ -48,8 +55,6 @@ bodyClass: "ind-page"
   </section>
   {% endif %}
 
-  {# The cross-reference. Each industry named here links to its own page, and
-     that page names this location back. #}
   {% if industriesHere and industriesHere.length %}
   <section>
     <h2>The sectors we see most in {{ location }}</h2>
@@ -70,21 +75,100 @@ bodyClass: "ind-page"
   </section>
   {% endif %}
 
+  {# The syllabus, same as the industry pages. "What does Ad On Group teach?" has
+     to be answerable from any entry point, not just one. #}
+  <section>
+    <h2>What your team actually learns</h2>
+    <p>
+      {{ curriculum.moduleCount }} interactive modules over {{ curriculum.duration }},
+      {{ curriculum.weeklyHours }} — full of worked examples, videos and step-by-step
+      instructions, and they keep growing as the tools do.
+    </p>
+    <ol class="ind-months">
+      {% for m in curriculum.months %}
+      <li>
+        <p class="ind-mhead"><b>Month {{ m.n }}</b> {{ m.name }} <i>{{ m.tag }}</i></p>
+        <p>{{ m.body | safe }}</p>
+        <ul class="ind-teaches">
+          {% for t in m.teaches %}<li>{{ t }}</li>{% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ol>
+    <div class="ind-actions">
+      <a class="ind-cta-alt" href="{{ curriculum.pdf }}" download>Download the full curriculum</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Who teaches it</h2>
+    <p>
+      Delivered by Claude Certified Associates — not generalists who added an AI workshop
+      last year. Ad On Group has been running as an Australian business since
+      {{ proof.since }}.
+    </p>
+    <div class="ind-people">
+      {% for t in proof.trainers %}
+      <a class="ind-person" href="{{ t.url }}">
+        <img src="{{ t.img }}" alt="{{ t.name }}, {{ t.role }}" loading="lazy" width="120" height="120">
+        <span><b>{{ t.name }}</b>{{ t.role }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section>
+    <h2>The part that doesn't stop when the course does</h2>
+    <p>
+      Every program includes it. This is the difference between a team that had AI training
+      once and a team that keeps getting better at it while the tools keep changing.
+    </p>
+    <div class="ind-features">
+      {% for f in proof.support %}
+      <figure class="ind-feature">
+        <img src="{{ f.img }}" alt="{{ f.alt }}" loading="lazy" width="640" height="380">
+        <figcaption><h3>{{ f.title }}</h3><p>{{ f.body | safe }}</p></figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if proof.aiReviews.length %}
+  <section>
+    <h2>What people say after the program</h2>
+    <div class="ind-reviews">
+      {% for r in proof.aiReviews %}{% if loop.index <= 3 %}
+      <figure class="ind-review">
+        <div class="ind-stars" aria-label="{{ r.rating }} out of 5">★★★★★</div>
+        <blockquote>{{ r.text }}</blockquote>
+        <figcaption>{{ r.name }}</figcaption>
+      </figure>
+      {% endif %}{% endfor %}
+    </div>
+    <p class="ind-trust">Rated {{ proof.rating }} from {{ proof.reviewCount }} Google reviews.</p>
+  </section>
+  {% endif %}
+
   <section>
     <div class="ind-note">
-      <h2>How the training reaches {{ location }}</h2>
+      <h2>How we work with {{ location }}</h2>
       <p>{{ presence | safe }}</p>
       {% if deliveryNote %}<p>{{ deliveryNote | safe }}</p>{% endif %}
       <p>
-        The program itself runs online and self-paced — 24 modules over three months, around
-        two hours a week — so nobody loses a day travelling to a classroom. What we teach is
-        tool-agnostic, and <a href="/ongoing-support/">ongoing support</a> comes with every
-        program: monthly webinars, tool masterclasses, a support hour and an active community.
+        The program runs online and self-paced, so nobody loses a day travelling to a
+        classroom and your team gets exactly what a team down the road from us gets.
       </p>
     </div>
-    <div class="ind-actions">
-      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
-      <a class="ind-cta-alt" href="/ai-quiz/">Take the free AI audit</a>
+  </section>
+
+  <section>
+    <div class="ind-note ind-next">
+      <h2>{{ nextStepHeading or "What happens when you get in touch" }}</h2>
+      <p>{{ nextStep | safe }}</p>
+      <div class="ind-actions">
+        <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
+        <a class="ind-cta-alt" href="/ai-enquiry/">Book a time to talk</a>
+      </div>
     </div>
   </section>
 
@@ -114,8 +198,8 @@ bodyClass: "ind-page"
     <h2>{{ closerHeading or ("Get your " ~ location + " team started") }}</h2>
     <p>{{ closer | safe }}</p>
     <div class="ind-actions">
-      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
-      <a class="ind-cta-alt" href="/ad-on-ai-division/">About Ad On AI</a>
+      <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
+      <a class="ind-cta-alt" href="/ai-enquiry/">Book a time to talk</a>
     </div>
   </section>
 
