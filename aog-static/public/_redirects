@@ -9,9 +9,9 @@
 # ==> Edit aog-static/vercel.json. Mirror the change here only to keep this
 #     file useful if the site ever moves to Netlify or Cloudflare Pages.
 #
-# One rule could NOT be ported: /products/* returned 410 Gone here. Vercel's
-# redirects only emit 3xx, so those spam URLs now return a plain 404. Google
-# still drops them, just more slowly than with a 410.
+# /products/* DOES now return 410 on Vercel, served by api/gone.js via a
+# rewrite. vercel.json redirects can only emit 3xx because a redirect needs a
+# destination, so the 410 comes from a function instead. See api/gone.js.
 # ############################################################################
 
 # Host-level redirects (Netlify / Cloudflare Pages format).

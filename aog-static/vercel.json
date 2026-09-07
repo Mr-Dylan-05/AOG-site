@@ -4,7 +4,20 @@
   "outputDirectory": "_site",
   "framework": null,
   "trailingSlash": true,
-  "rewrites": [{ "source": "/api/lead/", "destination": "/api/lead" }],
+  "rewrites": [
+    {
+      "source": "/api/lead/",
+      "destination": "/api/lead"
+    },
+    {
+      "source": "/products/:path*",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/products",
+      "destination": "/api/gone"
+    }
+  ],
   "redirects": [
     {
       "source": "/contact/",
