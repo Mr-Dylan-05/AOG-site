@@ -713,7 +713,7 @@ const html = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Are You Ready for AI? | Ad On AI</title>
 <meta name="description" content="Six questions, about a minute. Find out where you stand with AI and what to do next.">
-<meta name="robots" content="noindex">
+<link rel="canonical" href="https://adongroup.com.au/ai-quiz/">
 ${ASSETS}
 </head>
 <body>

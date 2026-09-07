@@ -1,0 +1,122 @@
+---
+layout: layouts/base.njk
+bodyClass: "location"
+---
+{#
+  Layout for the location pages — /ai-training-<location>/.
+
+  Reuses the .ind class family from the industry pages on purpose: they are the
+  same kind of page doing the same job from the other direction, and a second
+  near-identical stylesheet would only be a second thing to keep in sync.
+
+  The cross-reference is the point of these pages. Each one names the industries
+  that actually cluster in that area and links to their page; each industry page
+  names all seven areas. Neither has to win "AI training Australia" for the pair
+  to answer "AI training for NDIS providers in Logan".
+
+  Honesty rule enforced by the `presence` field: only the Gold Coast (head
+  office) and Adelaide (sales office) are places Ad On Group actually sits. Every
+  other page says plainly that it is a service area reached from the Gold Coast.
+  Implying seven offices would be a lie a prospect can check in one search.
+
+  Front matter each page supplies:
+    title, description, permalink, location, region, h1, eyebrow, lede,
+    presence, contextHeading, context: [str], industriesHere: [{url, why}],
+    deliveryNote, faq: [{q, a}], closer
+#}
+<main class="ind">
+
+  <section>
+    <p class="ind-eyebrow">{{ eyebrow or ("AI training in " ~ location) }}</p>
+    <h1>{{ h1 }}</h1>
+    <p class="ind-lede">{{ lede | safe }}</p>
+    <div class="ind-actions">
+      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
+      <a class="ind-cta-alt" href="/programs/">See the program</a>
+    </div>
+    <p class="ind-trust">
+      Ad On Group has been Australian-owned since 2008 and is rated 4.8 from 229 Google
+      reviews. Our AI training is delivered by Claude Certified Associates, and 40+
+      Australian businesses have completed the program.
+    </p>
+  </section>
+
+  {% if context and context.length %}
+  <section>
+    <h2>{{ contextHeading or ("Why " ~ location + " businesses are asking") }}</h2>
+    {% for c in context %}<p>{{ c | safe }}</p>{% endfor %}
+  </section>
+  {% endif %}
+
+  {# The cross-reference. Each industry named here links to its own page, and
+     that page names this location back. #}
+  {% if industriesHere and industriesHere.length %}
+  <section>
+    <h2>The sectors we see most in {{ location }}</h2>
+    <p>
+      The program is the same three months wherever you are. What changes is the examples
+      and the workflows, which follow the work your team actually does.
+    </p>
+    <div class="ind-grid">
+      {% for ih in industriesHere %}
+        {% for i in industries.items %}{% if i.url == ih.url %}
+        <article class="ind-card">
+          <h3><a href="{{ i.url }}">{{ i.label }}</a></h3>
+          <p>{{ ih.why | safe }}</p>
+        </article>
+        {% endif %}{% endfor %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section>
+    <div class="ind-note">
+      <h2>How the training reaches {{ location }}</h2>
+      <p>{{ presence | safe }}</p>
+      {% if deliveryNote %}<p>{{ deliveryNote | safe }}</p>{% endif %}
+      <p>
+        The program itself runs online and self-paced — 24 modules over three months, around
+        two hours a week — so nobody loses a day travelling to a classroom. What we teach is
+        tool-agnostic, and <a href="/ongoing-support/">ongoing support</a> comes with every
+        program: monthly webinars, tool masterclasses, a support hour and an active community.
+      </p>
+    </div>
+    <div class="ind-actions">
+      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
+      <a class="ind-cta-alt" href="/ai-quiz/">Take the free AI audit</a>
+    </div>
+  </section>
+
+  {% if faq and faq.length %}
+  <section>
+    <h2>Questions {{ location }} teams ask</h2>
+    {% for item in faq %}
+    <details>
+      <summary>{{ item.q }}</summary>
+      <div><p>{{ item.a | safe }}</p></div>
+    </details>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <section>
+    <h2>We also train teams in</h2>
+    <div class="ind-more">
+      {% for l in locations.items %}{% if l.slug != slug %}
+        {% if l.hasPage %}<a href="/ai-training-{{ l.slug }}/">{{ l.name }}</a>
+        {% else %}<span class="ind-place">{{ l.name }}</span>{% endif %}
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <section>
+    <h2>{{ closerHeading or ("Get your " ~ location + " team started") }}</h2>
+    <p>{{ closer | safe }}</p>
+    <div class="ind-actions">
+      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
+      <a class="ind-cta-alt" href="/ad-on-ai-division/">About Ad On AI</a>
+    </div>
+  </section>
+
+</main>

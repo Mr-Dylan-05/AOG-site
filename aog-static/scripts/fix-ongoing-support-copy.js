@@ -43,6 +43,14 @@ const WORK = [
       ],
       // closing CTA
       ["can be added on top of either program.", "come with either program."],
+      // These sessions are for people on a program. Describing them as "free and
+      // open" reads as a public invitation, which sets up a prospect to turn up
+      // to something they cannot attend — and gives away the members' benefit in
+      // the same breath. The genuinely public series lives at /webinars/.
+      [
+        "Free, online, and open to your team. Recorded and kept if you can’t make it&nbsp;live.",
+        "Included with every program, and recorded into the academy if you can&rsquo;t make it&nbsp;live. Not a client yet? Our <a href=\"/webinars/\" style=\"color:#1BABE5;font-weight:600;text-decoration:none\">free public webinars</a> are open to&nbsp;everyone.",
+      ],
     ],
   },
   {

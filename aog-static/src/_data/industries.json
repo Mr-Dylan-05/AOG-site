@@ -1,0 +1,11 @@
+{
+  "//": "The industry pages, in one place so the pages cross-link to each other and the Ad On AI hub can list them without either going stale. Order is the targeting priority: knowledge-work volume, documentation and compliance burden, SE QLD density, existing training budgets, and how little the large consultancies serve that segment.",
+  "items": [
+    { "url": "/ai-training-accounting/",          "label": "Accounting & bookkeeping",   "blurb": "BAS season, client queries, month-end commentary." },
+    { "url": "/ai-training-disability-services/", "label": "NDIS & disability services", "blurb": "Progress notes, incident reports, plan reviews." },
+    { "url": "/ai-training-real-estate/",         "label": "Real estate",                "blurb": "Listings, buyer follow-up, vendor reports, CMAs." },
+    { "url": "/ai-training-healthcare/",          "label": "Medical & allied health",    "blurb": "Referrals, recalls, patient communication." },
+    { "url": "/ai-training-legal/",               "label": "Law practices",              "blurb": "Drafting, chronologies, client updates." },
+    { "url": "/ai-training-construction/",        "label": "Construction & engineering", "blurb": "Variations, RFIs, safety docs, progress reports." }
+  ]
+}

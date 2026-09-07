@@ -1,0 +1,13 @@
+{
+  "//": "The service areas, in one place so the industry pages and the location pages reference the same list and cannot drift apart. `hasPage` flips to true as each location page is built; until then the name renders as plain text rather than a link, so nothing on the site points at a URL that does not exist yet.",
+  "//order": "Gold Coast first (head office), then by market size. Ipswich and Logan are named on every industry page but are deliberately last to get pages of their own — small search markets where a standalone page would only restate the Brisbane one.",
+  "items": [
+    { "slug": "gold-coast",     "name": "Gold Coast",     "region": "QLD",  "note": "head office",   "hasPage": true },
+    { "slug": "brisbane",       "name": "Brisbane",       "region": "QLD",  "note": "",              "hasPage": true },
+    { "slug": "ipswich",        "name": "Ipswich",        "region": "QLD",  "note": "",              "hasPage": true },
+    { "slug": "logan",          "name": "Logan",          "region": "QLD",  "note": "",              "hasPage": true },
+    { "slug": "sunshine-coast", "name": "Sunshine Coast", "region": "QLD",  "note": "",              "hasPage": true },
+    { "slug": "northern-nsw",   "name": "Northern NSW",   "region": "NSW",  "note": "",              "hasPage": true },
+    { "slug": "adelaide",       "name": "Adelaide",       "region": "SA",   "note": "sales office",  "hasPage": true }
+  ]
+}

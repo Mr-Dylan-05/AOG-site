@@ -1,0 +1,94 @@
+{
+  "//": "The PUBLIC webinar series. Separate from the monthly sessions on /ongoing-support/, which are included with a program and are for clients only. Nothing here reuses academy material: these are their own sessions, and the recordings stay members-only, which is what makes attending live worth doing.",
+  "//dates": "PROPOSED — first Tuesday of each month, 12:30pm AEST. Confirm or change every date and title before committing: these publish as Event structured data, and an event that does not happen is worse than no markup at all. Set `status` to anything other than \"scheduled\" and the session is skipped entirely — no page, no schema.",
+  "//strategy": "One session per industry page, so each is a funnel into the sector page and each sector page has a live event to point at. Topics are deliberately narrower than the client sessions — a public session earns attention by answering one real question, not by surveying a field.",
+  "cadence": "First Tuesday of every month, 12:30pm AEST",
+  "duration": "PT45M",
+  "timezone": "+10:00",
+  "sessions": [
+    {
+      "slug": "ai-for-accounting-practices",
+      "status": "scheduled",
+      "date": "2026-10-06",
+      "time": "12:30",
+      "title": "AI for accounting practices: the first three things to automate",
+      "blurb": "The three tasks in a practice that pay back fastest, and the two that look tempting and aren't. Built for practices under twenty people.",
+      "covers": [
+        "Chasing outstanding records without writing the email each time",
+        "Turning a tax position into something a client will actually read",
+        "Where the client-data line sits, and which tools stay on the right side of it"
+      ],
+      "industry": "/ai-training-accounting/"
+    },
+    {
+      "slug": "ai-and-patient-privacy",
+      "status": "scheduled",
+      "date": "2026-11-03",
+      "time": "12:30",
+      "title": "AI and patient privacy: what a practice can and can't use",
+      "blurb": "The clearest version of the line we can give you: which tasks are safe, which are not, and what has to be true before anything touches patient information.",
+      "covers": [
+        "Why consumer AI tools are not an option for identifiable patient data",
+        "The administrative tasks that are safe to start with this week",
+        "What a practice AI policy needs to say to be worth having"
+      ],
+      "industry": "/ai-training-healthcare/"
+    },
+    {
+      "slug": "ai-for-ndis-providers",
+      "status": "scheduled",
+      "date": "2026-12-01",
+      "time": "12:30",
+      "title": "AI for NDIS providers: less time writing notes, without cutting corners",
+      "blurb": "Documentation is most of the job. This session is about compressing the writing while keeping the record accurate, contemporaneous and attributable to the worker.",
+      "covers": [
+        "Shift notes into proper progress notes, on the day",
+        "Incident reports drafted without facing an empty form after a hard shift",
+        "Where participant privacy and audit defensibility actually bite"
+      ],
+      "industry": "/ai-training-disability-services/"
+    },
+    {
+      "slug": "ai-for-real-estate-agencies",
+      "status": "scheduled",
+      "date": "2027-01-05",
+      "time": "12:30",
+      "title": "AI for real estate: listings, follow-up and vendor reports",
+      "blurb": "The writing load in an agency is relentless and repetitive, which is the easiest kind to compress. Sales and property management both.",
+      "covers": [
+        "Listing copy that sounds like your agency, not like a portal",
+        "Buyer follow-up that doesn't read automated",
+        "The review step that keeps generated copy out of underquoting trouble"
+      ],
+      "industry": "/ai-training-real-estate/"
+    },
+    {
+      "slug": "ai-on-site-for-builders",
+      "status": "scheduled",
+      "date": "2027-02-02",
+      "time": "12:30",
+      "title": "AI on site: turning voice notes into variations and RFIs",
+      "blurb": "For people who are not at a desk. Everything in this session starts from a voice note or three lines typed with one thumb.",
+      "covers": [
+        "The variation written up the same day instead of never",
+        "Finding the clause in a 200-page spec in under a minute",
+        "Why the numbers stay yours and the words don't have to"
+      ],
+      "industry": "/ai-training-construction/"
+    },
+    {
+      "slug": "ai-in-legal-practice",
+      "status": "scheduled",
+      "date": "2027-03-02",
+      "time": "12:30",
+      "title": "AI in legal practice: drafting safely, and the citation trap",
+      "blurb": "Starting with the failure the profession has already read about, then the drafting and summarising work where these tools genuinely earn their place.",
+      "covers": [
+        "Why AI invents case citations, and the verification discipline that stops it",
+        "Chronologies, file notes and client updates — the safe, high-volume wins",
+        "Confidentiality and privilege: what must never be pasted in"
+      ],
+      "industry": "/ai-training-legal/"
+    }
+  ]
+}

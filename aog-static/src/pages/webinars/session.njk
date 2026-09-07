@@ -1,0 +1,107 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: webinarSchedule.all
+  size: 1
+  alias: session
+  # Without this Eleventy puts only the FIRST paginated page into collections.all,
+  # so sitemap.njk — which iterates that collection — listed one session and
+  # silently dropped the other five.
+  addAllPagesToCollections: true
+permalink: "/webinars/{{ session.slug }}/index.html"
+eleventyComputed:
+  title: "{{ session.title }} | Free Webinar | Ad On Group"
+  description: "{{ session.blurb }} Free live webinar, {{ session.pretty }}, {{ session.prettyTime }}. Run by Ad On Group."
+---
+{#
+  One page per public webinar, generated from _data/webinars.json.
+
+  These pages are the point of the whole exercise. A three-month program is a
+  private engagement that produces nothing anyone can link to; a public event
+  produces a dated, listable, markup-able artefact every month, which is the
+  mechanism the workshop competitors get for free. This is that mechanism.
+
+  The recording is never published here. It goes into the members' academy, and
+  the page says so — which makes attending live the reason to show up and the
+  academy the reason to join.
+#}
+<main class="ind">
+
+  <section>
+    <p class="ind-eyebrow">Free live webinar</p>
+    <h1>{{ session.title }}</h1>
+    <p class="ind-lede">{{ session.blurb }}</p>
+
+    <div class="wb-when">
+      <div>
+        <span class="wb-label">When</span>
+        <b>{{ session.pretty }}</b>
+        <span>{{ session.prettyTime }}</span>
+      </div>
+      <div>
+        <span class="wb-label">Where</span>
+        <b>Online</b>
+        <span>Link sent on registration</span>
+      </div>
+      <div>
+        <span class="wb-label">Cost</span>
+        <b>Free</b>
+        <span>45 minutes</span>
+      </div>
+    </div>
+
+    <div class="ind-actions">
+      <a class="ind-cta" href="/ai-enquiry/">Register for this session</a>
+      <a class="ind-cta-alt" href="/webinars/">All upcoming webinars</a>
+    </div>
+  </section>
+
+  {% if session.covers and session.covers.length %}
+  <section>
+    <h2>What we'll cover</h2>
+    <ul class="ind-list">
+      {% for c in session.covers %}<li>{{ c }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section>
+    <div class="ind-note">
+      <h2>Who it's for, and what it isn't</h2>
+      <p>
+        It's for non-technical people who do this work daily &mdash; not for developers, and not
+        a product demo. Forty-five minutes, worked examples, and questions at the end.
+      </p>
+      <p>
+        <strong>The recording goes to our academy members, not to the public.</strong> If you
+        can't make it live, the session isn't kept for you &mdash; so if the topic is the one you
+        need, come to it. Academy access is included with every
+        <a href="/programs/">training program</a>.
+      </p>
+    </div>
+  </section>
+
+  {% if session.industry %}
+  <section>
+    <h2>Going further than one session</h2>
+    <p>
+      A webinar is 45 minutes and it won't change how anyone works on its own &mdash; that's an
+      honest limit of the format rather than a sales line. If this is a real problem in your
+      business rather than a curiosity, the
+      {% for i in industries.items %}{% if i.url == session.industry %}<a href="{{ i.url }}">{{ i.label | lower }} program</a>{% endif %}{% endfor %}
+      is the version that actually changes what your team does day to day.
+    </p>
+  </section>
+  {% endif %}
+
+  <section>
+    <h2>The rest of the series</h2>
+    <p>{{ webinarSchedule.cadence }}. Free, online, and open to anyone.</p>
+    <div class="ind-more">
+      {% for s in webinarSchedule.all %}{% if s.slug != session.slug %}
+      <a href="{{ s.url }}">{{ s.title }}</a>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+</main>

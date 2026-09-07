@@ -137,10 +137,58 @@ const TEAM = [
   },
 ];
 
+/**
+ * Ad On AI, typed as a training provider rather than as one of five divisions.
+ *
+ * The problem this solves: every division was a bare `Organization` with a
+ * one-line description, at exact parity with its siblings. Nothing in the graph
+ * said what *kind* of company Ad On AI is. An answer engine asked for "AI
+ * training companies in Australia" looks for an entity typed as a training
+ * provider; a diversified ProfessionalService that happens to list a division
+ * called "Ad On AI" does not match that shape, which is how the question ends up
+ * answered with the big consultancies by default.
+ *
+ * EducationalOrganization is the specific type for a training provider. The
+ * courses are re-attributed to it below, because a Course whose provider is the
+ * parent strengthens the wrong entity — it says the diversified agency runs
+ * training, not that there is an AI training company here.
+ */
+const AD_ON_AI_ID = `${BASE}/ad-on-ai-division/#division`;
+
+const AD_ON_AI = {
+  "@type": ["Organization", "EducationalOrganization"],
+  "@id": AD_ON_AI_ID,
+  name: "Ad On AI",
+  url: `${BASE}/ad-on-ai-division/`,
+  description:
+    "Ad On AI is Ad On Group's AI training program. Through it, Ad On Group — an Australian-owned company operating since 2008 — trains non-technical staff at Australian businesses to use AI in their everyday work, over three months, delivered by Claude Certified Associates.",
+  parentOrganization: { "@id": ORG_ID },
+  knowsAbout: [
+    "AI training",
+    "AI adoption",
+    "AI enablement",
+    "Prompt engineering",
+    "AI automation",
+    "AI agents",
+    "Generative AI for business",
+  ],
+  areaServed: { "@type": "Country", name: "Australia" },
+};
+
+/** Extra properties merged into a division's node in `subOrganization`. */
+const DIVISION_EXTRAS = { "/ad-on-ai-division/": AD_ON_AI };
+
+/** Pages where Ad On AI is the subject, so the entity travels with them. */
+const AI_PAGES = new Set([
+  "/ad-on-ai-division/", "/programs/", "/bpo-program/", "/ongoing-support/",
+]);
+const isAiPage = (url) =>
+  AI_PAGES.has(url) || url.startsWith("/resources/") || url.startsWith("/ai-training-");
+
 const ORGANIZATION = {
   // Multi-typed: it's an organisation, and it's a service business with a
   // street address — which is what local results key off.
-  "@type": ["Organization", "ProfessionalService"],
+  "@type": ["Organization", "ProfessionalService", "EducationalOrganization"],
   "@id": ORG_ID,
   name: "Ad On Group",
   slogan: "Innovative Solutions From an Innovative Company",
@@ -158,6 +206,7 @@ const ORGANIZATION = {
     url: `${BASE}${url}`,
     description,
     parentOrganization: { "@id": ORG_ID },
+    ...(DIVISION_EXTRAS[url] || {}),
   })),
   hasOfferCatalog: {
     "@type": "OfferCatalog",
@@ -315,6 +364,11 @@ const TOPIC_ENTITIES = {
 const FULL_ORG_PAGES = new Set([
   "/", "/about-us/", "/about/", "/our-company/", "/contact-us/", "/contact/",
   "/history/", "/purpose/", "/people/", "/our-people/", "/offices/", "/our-offices/",
+  // The AI pages too. They are where the training is sold, so they are where the
+  // group needs to arrive in full — trading since 2008, ABN, address, 141 staff,
+  // certified trainers. A course attributed to a thinly described sub-brand
+  // inherits none of that.
+  "/ad-on-ai-division/", "/programs/", "/bpo-program/", "/ongoing-support/",
 ]);
 
 const WEBSITE = {
@@ -325,6 +379,96 @@ const WEBSITE = {
   publisher: { "@id": ORG_ID },
   inLanguage: "en-AU",
 };
+
+
+/**
+ * The service areas, read from the same file the pages render from, so the
+ * visible list and the structured data cannot drift apart.
+ *
+ * Named on the industry pages because "AI training for accounting firms in
+ * Brisbane" is a question with almost no competition, where the head term has
+ * plenty of it. The visible copy makes that claim to a reader; areaServed makes
+ * the same claim to a machine. Australia stays at the head of the list — the
+ * program is delivered online, so narrowing it to seven places would assert
+ * something smaller than the truth.
+ */
+/** slug -> that one area, for the page that is about it. */
+const LOCATION_AREA = (() => {
+  try {
+    const items = JSON.parse(
+      fs.readFileSync(path.join(ROOT, "src/_data/locations.json"), "utf8")
+    ).items;
+    return Object.fromEntries(
+      items.map((l) => [
+        `/ai-training-${l.slug}/`,
+        [
+          { "@type": "Country", name: "Australia" },
+          { "@type": "AdministrativeArea", name: `${l.name}, ${l.region}` },
+        ],
+      ])
+    );
+  } catch {
+    return {};
+  }
+})();
+
+const SERVICE_AREAS = (() => {
+  try {
+    const items = JSON.parse(
+      fs.readFileSync(path.join(ROOT, "src/_data/locations.json"), "utf8")
+    ).items;
+    return [
+      { "@type": "Country", name: "Australia" },
+      ...items.map((l) => ({ "@type": "AdministrativeArea", name: `${l.name}, ${l.region}` })),
+    ];
+  } catch {
+    return [{ "@type": "Country", name: "Australia" }];
+  }
+})();
+
+
+/**
+ * The public webinar series, as Event markup.
+ *
+ * This is the one thing on the site that produces a dated, listable artefact
+ * every month. A three-month program is a private engagement that generates
+ * nothing anyone can link to, which is precisely why newer workshop-based
+ * competitors out-rank a far more credible business: their product is public by
+ * default. These pages are how that gets answered.
+ *
+ * EducationEvent rather than plain Event: it is accurate, Google accepts Event
+ * subtypes for rich results, and it reinforces the same claim the rest of the
+ * graph makes — that this is a training provider.
+ *
+ * A session is only marked up if webinars.json says status "scheduled" and gives
+ * it a date. Event markup for something that is not happening is worse than no
+ * markup, so drafts produce nothing at all.
+ */
+const WEBINARS = (() => {
+  try {
+    const d = JSON.parse(fs.readFileSync(path.join(ROOT, "src/_data/webinars.json"), "utf8"));
+    const tz = d.timezone || "+10:00";
+    const out = {};
+    for (const w of d.sessions || []) {
+      if (w.status !== "scheduled" || !w.date || !w.slug) continue;
+      // Keep both ends in the venue's offset rather than mixing local and UTC:
+      // a start in +10:00 with an end in Z is valid but reads as a mistake.
+      const [hh, mm] = (w.time || "12:30").split(":").map(Number);
+      const endMins = hh * 60 + mm + 45;
+      const pad = (n) => String(n).padStart(2, "0");
+      const endLocal = pad(Math.floor(endMins / 60) % 24) + ":" + pad(endMins % 60);
+      out[`/webinars/${w.slug}/`] = {
+        name: w.title,
+        description: w.blurb,
+        startDate: `${w.date}T${w.time || "12:30"}:00${tz}`,
+        endDate: `${w.date}T${endLocal}:00${tz}`,
+      };
+    }
+    return out;
+  } catch {
+    return {};
+  }
+})();
 
 /** URL -> the service that page describes. Names match each page's own title. */
 const SERVICES = {
@@ -338,6 +482,23 @@ const SERVICES = {
   "/bpo-program/": "BPO AI Program",
   "/bpo-ai-program/": "BPO AI Program",
   "/ongoing-support/": "Ongoing AI Support",
+  // Industry pages. Each is a real service offering, not a landing page for one,
+  // so each gets its own Service node rather than borrowing the program's.
+  "/ai-training-accounting/": "AI Training for Accounting Firms",
+  "/ai-training-disability-services/": "AI Training for NDIS and Disability Service Providers",
+  "/ai-training-real-estate/": "AI Training for Real Estate Agencies",
+  "/ai-training-healthcare/": "AI Training for Medical and Allied Health Practices",
+  "/ai-training-legal/": "AI Training for Law Practices",
+  "/ai-training-construction/": "AI Training for Construction and Engineering Firms",
+  // Location pages. Each names its own area rather than the full list, because
+  // that page is about that place.
+  "/ai-training-gold-coast/": "AI Training in Gold Coast",
+  "/ai-training-brisbane/": "AI Training in Brisbane",
+  "/ai-training-ipswich/": "AI Training in Ipswich",
+  "/ai-training-logan/": "AI Training in Logan",
+  "/ai-training-sunshine-coast/": "AI Training in Sunshine Coast",
+  "/ai-training-northern-nsw/": "AI Training in Northern NSW",
+  "/ai-training-adelaide/": "AI Training in Adelaide",
 };
 
 // Author accounts that are CMS logins rather than people. Attributing a post to
@@ -470,6 +631,54 @@ const titleOf = (u) => {
   return short.length > 0 && short.length <= 40 ? short : null;
 };
 
+// ------------------------------------------------------------------- reviews
+/**
+ * The real Google Business Profile rating, and the individual reviews behind it.
+ *
+ * Marked up only on pages that actually show it. Structured data has to match
+ * what a visitor sees; a rating asserted on a page that never displays one is
+ * how a site gets its markup distrusted across the board. So detection is by
+ * page content rather than a URL list — put the reviews block on another page
+ * and its schema follows it there, with no edit here.
+ */
+const REVIEWS = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(ROOT, "incoming/design/campaign-reviews.json"), "utf8"));
+  } catch {
+    return null;
+  }
+})();
+
+const AGGREGATE_RATING =
+  REVIEWS && REVIEWS.profile
+    ? {
+        "@type": "AggregateRating",
+        ratingValue: REVIEWS.profile.rating,
+        reviewCount: REVIEWS.profile.count,
+        bestRating: 5,
+        worstRating: 1,
+      }
+    : null;
+
+/** A reviewer display name that is plainly a business rather than a person. */
+const BUSINESS_NAME = /\b(pty|ltd|supplies|services|centre|center|clinic|medical|dental|roofing|electrical|engineering|solutions|group)\b/i;
+
+/** Tags, entities and punctuation stripped, so page text and JSON compare alike. */
+const normalise = (s) =>
+  String(s).replace(/<[^>]*>/g, " ").replace(/&[a-z]+;|&#\d+;/gi, " ").replace(/[^a-z0-9]+/gi, " ").toLowerCase().trim();
+
+const reviewNode = (r, i) => ({
+  "@type": "Review",
+  "@id": `${BASE}/#review-${i + 1}`,
+  itemReviewed: { "@id": ORG_ID },
+  author: { "@type": BUSINESS_NAME.test(r.name) ? "Organization" : "Person", name: r.name },
+  reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+  // The source records the month only, so the month is all that gets asserted.
+  // Padding it to a specific day would be inventing a fact.
+  datePublished: r.date,
+  reviewBody: r.text,
+});
+
 // ---------------------------------------------------------------- pass 2: build
 let injected = 0;
 const counts = { WebPage: 0, BreadcrumbList: 0, FAQPage: 0, BlogPosting: 0, Service: 0 };
@@ -480,7 +689,8 @@ for (const p of pages) {
   if (!/<\/head>/i.test(p.html)) continue;
 
   const pageUrl = `${BASE}${p.url}`;
-  const graph = [FULL_ORG_PAGES.has(p.url) ? ORGANIZATION : ORGANIZATION_COMPACT, WEBSITE];
+  const fullOrg = FULL_ORG_PAGES.has(p.url) || p.url.startsWith("/ai-training-");
+  const graph = [fullOrg ? ORGANIZATION : ORGANIZATION_COMPACT, WEBSITE];
 
   const webpage = {
     "@type": PAGE_TYPES[p.url] || "WebPage",
@@ -504,6 +714,12 @@ for (const p of pages) {
 
   graph.push(webpage);
   counts.WebPage++;
+
+  // --- Ad On AI as an entity in its own right -----------------------------
+  if (isAiPage(p.url)) {
+    graph.push(AD_ON_AI);
+    counts.EducationalOrganization = (counts.EducationalOrganization || 0) + 1;
+  }
 
   // --- FAQ ---------------------------------------------------------------
   const pairs = faqPairs(p.html);
@@ -539,7 +755,7 @@ for (const p of pages) {
       author: {
         "@type": "Person",
         name: "Dylan Bailey",
-        jobTitle: "Certified Claude Expert",
+        jobTitle: "Claude Certified Associate",
         url: `${BASE}/dylan-bailey/`,
         worksFor: { "@id": ORG_ID },
       },
@@ -599,7 +815,11 @@ for (const p of pages) {
       name: SERVICES[p.url],
       serviceType: SERVICES[p.url],
       provider: { "@id": ORG_ID },
-      areaServed: { "@type": "Country", name: "Australia" },
+      areaServed:
+        LOCATION_AREA[p.url] ||
+        (p.url.startsWith("/ai-training-")
+          ? SERVICE_AREAS
+          : { "@type": "Country", name: "Australia" }),
       ...(p.description ? { description: p.description } : {}),
       mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
     };
@@ -663,6 +883,61 @@ for (const p of pages) {
       });
       counts.ItemList = (counts.ItemList || 0) + 1;
     }
+  }
+
+  // --- Rating & reviews ---------------------------------------------------
+  // Both are gated on the page visibly carrying them (see REVIEWS above).
+  if (AGGREGATE_RATING && new RegExp(`\\b${REVIEWS.profile.count}\\s+(?:Google\\s+)?reviews\\b`, "i").test(p.html)) {
+    // graph[0] is a shared constant pushed by reference, so clone rather than
+    // mutate — otherwise the rating leaks onto every other page in the run.
+    graph[0] = { ...graph[0], aggregateRating: AGGREGATE_RATING };
+    counts.AggregateRating = (counts.AggregateRating || 0) + 1;
+  }
+  if (REVIEWS && Array.isArray(REVIEWS.reviews)) {
+    // Match on the review body, not the reviewer name: names like "Victoria"
+    // are ordinary words that appear all over the site, and matching those
+    // attaches reviews to pages that never showed one.
+    const pageText = normalise(p.html);
+    const shown = REVIEWS.reviews.filter(
+      (r) => r.name && r.text && pageText.includes(normalise(r.text).slice(0, 60))
+    );
+    if (shown.length >= 2) {
+      shown.forEach((r, i) => graph.push(reviewNode(r, i)));
+      counts.Review = (counts.Review || 0) + shown.length;
+    }
+  }
+
+  // --- Webinar ------------------------------------------------------------
+  const webinar = WEBINARS[p.url];
+  if (webinar) {
+    graph.push({
+      "@type": "EducationEvent",
+      "@id": `${pageUrl}#event`,
+      name: webinar.name,
+      description: webinar.description,
+      startDate: webinar.startDate,
+      endDate: webinar.endDate,
+      eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      inLanguage: "en-AU",
+      isAccessibleForFree: true,
+      location: { "@type": "VirtualLocation", url: pageUrl },
+      organizer: { "@id": ORG_ID },
+      performer: { "@id": ORG_ID },
+      about: { "@id": AD_ON_AI_ID },
+      mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
+      offers: {
+        "@type": "Offer",
+        price: 0,
+        priceCurrency: "AUD",
+        availability: "https://schema.org/InStock",
+        url: pageUrl,
+        category: "Free",
+      },
+    });
+    // about points at Ad On AI, so the sub-entity needs to be in this graph.
+    if (!graph.some((n) => n["@id"] === AD_ON_AI_ID)) graph.push(AD_ON_AI);
+    counts.Event = (counts.Event || 0) + 1;
   }
 
   const json = JSON.stringify({ "@context": "https://schema.org", "@graph": graph }, null, 0)

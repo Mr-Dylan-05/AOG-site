@@ -43,8 +43,8 @@ const META = {
     "Structured AI enablement built for BPO and outsourced teams — a monthly cycle that turns your people into confident, productive AI users in three months.",
   ],
   "about": [
-    "About Us | Certified Claude Experts | Ad On AI",
-    "Meet the team behind Ad On AI — Australian AI trainers and Certified Claude Experts helping SME staff turn AI into real, everyday output.",
+    "About Us | Claude Certified Associates | Ad On AI",
+    "Meet the team behind Ad On AI — Australian AI trainers and Claude Certified Associates helping SME staff turn AI into real, everyday output.",
   ],
   "ad-on-group": [
     "Ad On Group | Australian-Owned Since 2008",

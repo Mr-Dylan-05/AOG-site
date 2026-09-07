@@ -41,6 +41,9 @@ else
   echo "  ⚠  dylan-website not found at $ADONAI_SRC — skipped deployed AI pages"
 fi
 
+# The imported Ad On AI pages arrived canonicalised to the other domain.
+node scripts/fix-cross-domain.js
+
 # Point "Book a call" at the form. The imported Ad On AI pages used mailto,
 # which is a dead end on a phone and never reaches the leads sheet.
 node scripts/fix-cta-links.js
@@ -51,3 +54,13 @@ node scripts/apply-group-footer.js
 # Ongoing Support is a centrepiece of Ad On AI, not an optional add-on.
 # The design export says otherwise; this puts the framing back.
 node scripts/fix-ongoing-support-copy.js
+
+# Ad On AI is the program name; Ad On Group is the entity that should
+# accumulate the search signal. Titles credit the group.
+node scripts/fix-ai-attribution.js
+
+# One name for the Claude certification.
+node scripts/fix-credential-name.js
+
+# List the industry pages on the Ad On AI hub, so they are not an island.
+node scripts/build-industry-links.js

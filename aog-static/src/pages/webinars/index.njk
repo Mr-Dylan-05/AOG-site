@@ -1,0 +1,80 @@
+---
+layout: layouts/base.njk
+permalink: "/webinars/index.html"
+title: "Free AI Webinars for Australian Businesses | Ad On Group"
+description: "Free monthly AI webinars for Australian businesses — accounting, healthcare, NDIS, real estate, construction and legal. Online, 45 minutes, open to anyone. Run by Claude Certified Associates."
+---
+<main class="ind">
+
+  <section>
+    <p class="ind-eyebrow">Free monthly webinars</p>
+    <h1>Free AI webinars for Australian businesses</h1>
+    <p class="ind-lede">
+      One session a month, each on a single real problem in a single industry. Free, online,
+      45 minutes, open to anyone &mdash; you don't have to be a client and there's nothing to buy
+      at the end of it.
+    </p>
+    <div class="ind-actions">
+      {% if webinarSchedule.upcoming.length %}
+      <a class="ind-cta" href="{{ webinarSchedule.upcoming[0].url }}">Next: {{ webinarSchedule.upcoming[0].pretty }}</a>
+      {% else %}
+      <a class="ind-cta" href="/ai-enquiry/">Get told about the next one</a>
+      {% endif %}
+      <a class="ind-cta-alt" href="/programs/">See the training program</a>
+    </div>
+    <p class="ind-trust">
+      Run by Claude Certified Associates at Ad On Group &mdash; Australian-owned since 2008,
+      rated 4.8 from 229 Google reviews, and 40+ Australian businesses trained.
+    </p>
+  </section>
+
+  {% if webinarSchedule.upcoming.length %}
+  <section>
+    <h2>What's coming up</h2>
+    <div class="ind-grid">
+      {% for s in webinarSchedule.upcoming %}
+      <article class="ind-card">
+        <span class="wb-date">{{ s.pretty }} &middot; {{ s.prettyTime }}</span>
+        <h3><a href="{{ s.url }}">{{ s.title }}</a></h3>
+        <p>{{ s.blurb }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if webinarSchedule.past.length %}
+  <section>
+    <h2>Already run</h2>
+    <p>These have been and gone. The pages stay up, but the recordings live in the academy.</p>
+    <div class="ind-more">
+      {% for s in webinarSchedule.past %}<a href="{{ s.url }}">{{ s.title }}</a>{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section>
+    <div class="ind-note">
+      <h2>Why these are free, and where the catch isn't</h2>
+      <p>
+        We run a paid three-month training program, and these sessions are how people find out
+        whether we're any good before spending money with us. That's the whole model. Nobody
+        will chase you afterwards for turning up.
+      </p>
+      <p>
+        <strong>Recordings go to academy members rather than to the public.</strong> That's not
+        a growth tactic &mdash; it's what our members pay for, and giving it away would be
+        unfair to them. Come to the live one if the topic matters to you.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Or go straight to your industry</h2>
+    <p>Each session pairs with a program built for that sector's actual work.</p>
+    <div class="ind-more">
+      {% for i in industries.items %}<a href="{{ i.url }}">{{ i.label }}</a>{% endfor %}
+    </div>
+  </section>
+
+</main>

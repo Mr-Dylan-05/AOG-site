@@ -55,8 +55,8 @@ const BY_HAND = {
     "Why Asking Customers for Feedback Grows Your Business",
   "/turn-customers-into-your-digital-marketing-ninjas-with-google-reviews/":
     "Turn Customers Into Marketers With Google Reviews",
-  "/beau-robards/": "Beau Robards, Certified Claude Expert | Ad On AI",
-  "/dylan-bailey/": "Dylan Bailey, Certified Claude Expert | Ad On AI",
+  "/beau-robards/": "Beau Robards, Claude Certified Associate | Ad On Group",
+  "/dylan-bailey/": "Dylan Bailey, Claude Certified Associate | Ad On Group",
   "/our-culture/": "Our Culture | Ad On Workforce",
 };
 
