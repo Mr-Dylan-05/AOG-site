@@ -57,47 +57,75 @@
   <div style="position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(11,18,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(11,18,32,0.05) 1px, transparent 1px);background-size:4px 4px;-webkit-mask-image:radial-gradient(125% 70% at 50% 2%, #000 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0.12) 64%, transparent 84%);mask-image:radial-gradient(125% 70% at 50% 2%, #000 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0.12) 64%, transparent 84%)"></div>
 
   <!-- ======================= NAV ======================= -->
-  <nav data-aog-header style="position:sticky;top:16px;z-index:50;padding:0 20px">
-    <div class="aog-m-pill" style="max-width:1120px;margin:0 auto;background:rgba(252,251,250,0.70);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.06);border-radius:999px;box-shadow:0 6px 26px -12px rgba(11,18,32,0.14);padding:11px 14px 11px 22px;display:flex;align-items:center;justify-content:space-between">
-      <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B1220">
-        <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px"><img src="/assets/design/adon-logo.png" alt="Ad On Group" style="width:34px;height:34px;object-fit:contain;display:block" width="320" height="320" loading="eager" fetchpriority="high" decoding="async"></span>
-        <span style="font-weight:800;font-size:19px;letter-spacing:-0.02em;line-height:1">Ad On Group</span>
-      </a>
-      <div style="display:flex;align-items:center;gap:22px">
-        <span style="width:1px;height:22px;background:rgba(11,18,32,0.12)"></span>
-        <div style="display:flex;align-items:center;gap:24px;font-size:15px;font-weight:500;color:#3A434F">
-          <div class="nav-prog" style="position:relative">
-            <a href="/about/" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:5px">About<svg viewBox="0 0 12 12" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6px;stroke-linecap:round;stroke-linejoin:round"><path d="M2.5 4.5L6 8L9.5 4.5"></path></svg></a>
-            <div class="nav-menu" style="position:absolute;top:100%;left:-16px;padding-top:12px;z-index:60">
-              <div style="width:220px;background:rgba(252,251,250,0.94);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.08);border-radius:16px;box-shadow:0 18px 44px -18px rgba(11,18,32,0.28);padding:8px">
-                <a href="/history/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h0">History</a>
-                <a href="/purpose/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h1">Purpose</a>
-                <a href="/people/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h2">People</a>
-                <a href="/culture/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h3">Culture</a>
-                <a href="/offices/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h4">Offices</a>
-              </div>
+  <nav data-aog-header style="position:sticky;top:0;z-index:60;background:rgba(252,251,250,0.72);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);border-bottom:1px solid rgba(11,18,32,0.06)">
+      <div class="ch-bar">
+        <a class="ch-logo" href="/" aria-label="Ad On Group">
+          <span class="ch-mark"><img src="/assets/design/adon-logo.png" alt="" width="320" height="320"></span>
+          <span class="ch-word">Ad On Group</span>
+        </a>
+        <button class="ch-toggle" type="button" aria-expanded="false" aria-controls="aog-menu" aria-label="Open menu">
+          <span class="ch-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        </button>
+        <div class="ch-panel" id="aog-menu" hidden>
+          
+            <div class="ch-group">
+              <p class="ch-label">About</p>
+              <a href="/history/">History</a>
+              <a href="/purpose/">Purpose</a>
+              <a href="/people/">People</a>
+              <a href="/culture/">Culture</a>
+              <a href="/offices/">Offices</a>
             </div>
+            <div class="ch-group">
+              <p class="ch-label">Divisions</p>
+              <a href="/ad-on-ai-division/">Ad On AI</a>
+              <a href="/ad-on-workforce-division/">Ad On Workforce</a>
+              <a href="/ad-on-hold/">Ad On Hold</a>
+              <a href="/ad-on-digital/">Ad On Digital</a>
+              <a href="/ad-on-sa/">Ad On SA</a>
+            </div>
+          <div class="ch-actions">
+            <a class="ch-tel" href="tel:+61755861400">(07) 5586 1400</a>
+            <a class="ch-contact" href="/contact-us/">Contact</a>
           </div>
-                    <div class="nav-prog" style="position:relative">
-            <a href="/#divisions" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:5px">Divisions<svg viewBox="0 0 12 12" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6px;stroke-linecap:round;stroke-linejoin:round"><path d="M2.5 4.5L6 8L9.5 4.5"></path></svg></a>
-            <div class="nav-menu" style="position:absolute;top:100%;left:-16px;padding-top:12px;z-index:60">
-              <div style="width:220px;background:rgba(252,251,250,0.94);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(11,18,32,0.08);border-radius:16px;box-shadow:0 18px 44px -18px rgba(11,18,32,0.28);padding:8px">
-                <a href="/ad-on-ai-division/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h5">Ad On AI</a>
-                <a href="/ad-on-workforce-division/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h6">Ad On Workforce</a>
-                <a href="/ad-on-hold/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h7">Ad On Hold</a>
-                <a href="/ad-on-digital/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h8">Ad On Digital</a>
-                <a href="/ad-on-sa/" style="display:block;text-decoration:none;padding:11px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#0B1220;transition:background .18s ease" data-dc="h9">Ad On SA</a>
-              </div>
-            </div>
-        </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;margin-left:20px">
-          <a href="tel:+61755861400" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1BABE5;background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.35);padding:10px 18px;border-radius:14px;transition:background .2s ease, transform .2s ease" data-dc="ha"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"></path></svg>(07) 5586 1400</a>
-          <a href="/contact-us/" style="text-decoration:none;font-size:15px;font-weight:600;color:#fff;background:#0B1220;padding:11px 20px;border-radius:14px;transition:transform .22s ease, box-shadow .22s ease" data-dc="hb">Contact</a>
         </div>
       </div>
-    </div>
-  </nav>
+      <style>
+        .ch-bar{max-width:1268px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:relative}
+        .ch-logo{display:inline-flex;align-items:center;gap:11px;text-decoration:none}
+        .ch-mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:none}
+        .ch-mark img{width:100%;height:100%;object-fit:contain;display:block}
+        .ch-word{font-size:19px;font-weight:800;letter-spacing:-.02em;color:#0B1220;line-height:1;
+          font-family:'Inter Tight','Helvetica Neue',Helvetica,Arial,sans-serif}
+        .ch-toggle{width:46px;height:46px;flex:none;display:inline-flex;align-items:center;justify-content:center;
+          background:transparent;border:1px solid rgba(11,18,32,.18);border-radius:13px;cursor:pointer;padding:0;
+          transition:background .18s ease,border-color .18s ease}
+        .ch-toggle:hover{background:rgba(11,18,32,.05);border-color:rgba(11,18,32,.34)}
+        .ch-toggle:focus-visible{outline:2px solid #1BABE5;outline-offset:3px}
+        .ch-bars{display:flex;flex-direction:column;justify-content:center;gap:4px;width:19px;height:13px}
+        .ch-bars i{display:block;height:1.8px;background:#0B1220;border-radius:2px;transition:transform .22s ease,opacity .18s ease}
+        .ch-panel{position:absolute;top:calc(100% + 12px);right:24px;z-index:70;min-width:270px;
+          background:rgba(252,251,250,.97);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+          border:1px solid rgba(11,18,32,.10);border-radius:18px;padding:20px 22px;
+          box-shadow:0 28px 60px -22px rgba(11,18,32,.28);display:flex;flex-direction:column;gap:18px}
+        .ch-label{margin:0 0 2px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:#1BABE5}
+        .ch-group a{text-decoration:none;color:#0B1220;font-size:15.5px;font-weight:600;line-height:1.25}
+        .ch-group a:hover{color:#1BABE5;text-decoration:underline;text-underline-offset:3px}
+        .ch-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:16px;border-top:1px solid rgba(11,18,32,.12)}
+        .ch-tel{text-decoration:none;color:#5A6473;font-size:14.5px;font-weight:600;white-space:nowrap}
+        .ch-tel:hover{color:#0B1220}
+        .ch-contact{text-decoration:none;background:#0B1220;color:#fff;font-weight:800;font-size:14.5px;
+          padding:10px 18px;border-radius:999px;white-space:nowrap}
+        .ch-contact:hover{background:#18243a}
+        @media(max-width:520px){ .ch-panel{right:24px;left:24px;min-width:0} }
+        .ch-panel[hidden]{display:none}
+        .ch-group{display:flex;flex-direction:column;gap:9px}
+        .ch-toggle[aria-expanded="true"] .ch-bars i:nth-child(1){transform:translateY(5.8px) rotate(45deg)}
+        .ch-toggle[aria-expanded="true"] .ch-bars i:nth-child(2){opacity:0}
+        .ch-toggle[aria-expanded="true"] .ch-bars i:nth-child(3){transform:translateY(-5.8px) rotate(-45deg)}
+        @media(prefers-reduced-motion:reduce){ .ch-toggle,.ch-bars i{transition:none} }
+      </style>
+    </nav>
 
   <header id="top" data-reveal style="max-width:1200px;margin:0 auto;padding:70px 28px 40px">
     <div style="display:grid;grid-template-columns:1fr 1.08fr;gap:56px;align-items:center">
@@ -227,5 +255,32 @@
   </footer>
 
 </div>
-</body>
+<script id="aog-header-js">
+        (function(){
+          var btn = document.querySelector('.ch-toggle');
+          if(!btn) return;
+          var panel = document.getElementById(btn.getAttribute('aria-controls'));
+          if(!panel) return;
+
+          function setOpen(open){
+            panel.hidden = !open;
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+          }
+
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            setOpen(panel.hidden);
+          });
+
+          // Anywhere outside closes it. The panel stops its own clicks so a
+          // stray click inside does not shut it before a link is followed.
+          panel.addEventListener('click', function(e){ e.stopPropagation(); });
+          document.addEventListener('click', function(){ if(!panel.hidden) setOpen(false); });
+
+          document.addEventListener('keydown', function(e){
+            if(e.key === 'Escape' && !panel.hidden){ setOpen(false); btn.focus(); }
+          });
+        })();
+        </script></body>
 </html>

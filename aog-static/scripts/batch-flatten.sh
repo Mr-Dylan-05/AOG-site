@@ -64,3 +64,6 @@ node scripts/fix-credential-name.js
 
 # List the industry pages on the Ad On AI hub, so they are not an island.
 node scripts/build-industry-links.js
+
+# One navigation everywhere: the toggle bar, in the Ad On Group skin.
+node scripts/apply-nav.js
