@@ -124,6 +124,9 @@ for (const [from, to, label] of [
 // is a normal, recognisable treatment.
 for (const [re, to, label] of [
   [/#FBB400/gi, AOG_ACCENT, "review stars -> AOG accent"],
+  // A second acid yellow, one hex off the first and easy to miss on a scan
+  // for the known value. Found by sweeping the whole yellow family instead.
+  [/#F4EF32/gi, AOG_ACCENT, "second acid yellow -> AOG accent"],
   [/#4285F4/gi, AOG_INK, "Google mark -> monochrome"],
   [/#34A853/gi, AOG_INK, "Google mark -> monochrome"],
   [/#FBBC05/gi, AOG_INK, "Google mark -> monochrome"],
