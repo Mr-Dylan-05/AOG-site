@@ -13,6 +13,7 @@
  *   Amber   #FBB400            ->  #1BABE5   in the 3 UI uses only
  *   Stars   #FBBC04            ->  untouched (Google's own review gold)
  *   Inks    6 near-identical navies -> #0B1220
+ *   Serif   Georgia display italic  ->  Inter Tight (the main site has no serif)
  *
  * Two things this is careful about:
  *
@@ -262,6 +263,29 @@ for (const [re, to, label] of [
   const re = /community-discussion-space\.jpg/g;
   const n = (html.match(re) || []).length;
   if (n) { html = html.replace(re, "community-discussion-space-v2.jpg"); bump("community image repointed to v2", n); }
+}
+
+// ------------------------------------------------------------ DISPLAY SERIF
+// Georgia was the page's display serif: "ONGOING SUPPORT." on the how section
+// and the italic accents in the impact line. It is the only family on this page
+// that the main site never renders — the main site's only Georgia is a pair of
+// decorative quote glyphs on the home page, and /ad-on-ai-division/ asks for
+// `ui-serif` (the system serif), never Georgia itself.
+//
+// The italic is KEPT, not dropped. The same page already sets "answered." in
+// Inter Tight italic at 68px, so the accent words were rendering in two
+// different display treatments; pointing them all at Inter Tight settles that
+// rather than introducing something new. Inter Tight's face is cut normal-only,
+// so the slant is synthesised — which is exactly what "answered." has always
+// done here.
+//
+// One substitution covers all four rules: three are `font:` shorthands where the
+// family is the tail, one is a plain font-family. Matching the family pair means
+// the italic, the weight and the clamp() sizing in front of it are untouched.
+{
+  const re = /Georgia\s*,\s*serif/gi;
+  const n = (html.match(re) || []).length;
+  if (n) { html = html.replace(re, AOG_SANS); bump("display serif -> Inter Tight", n); }
 }
 
 if (html === before) {
