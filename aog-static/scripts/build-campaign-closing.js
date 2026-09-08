@@ -123,7 +123,7 @@ const STYLE = `<style id="closing-style">
    deepest at 61. */
 const HEAD_CSS = `<style id="closing-head-style">
         ${DEEP} .cc-head{font-size:clamp(36px,5.2vw,64px)!important;line-height:1.04!important;letter-spacing:-2.5px!important;margin:0!important;color:#fff!important;font-weight:800!important;max-width:none!important}
-        ${DEEP} .cc-head b{color:#F4EF32!important;font-weight:800!important}
+        ${DEEP} .cc-head b{color:#fff!important;font-weight:800!important}
       </style>`;
 
 let html = fs.readFileSync(PAGE, "utf8");
