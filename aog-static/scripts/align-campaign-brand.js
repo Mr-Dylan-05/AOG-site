@@ -75,6 +75,49 @@ for (const [re, to, label] of [
   if (n) { html = html.replace(re, to); bump(label, n); }
 }
 
+// ---------------------------------------------------------- FONT SHORTHAND
+// The first version of this only matched `font-family:`, and missed 21 uses in
+// the `font:` shorthand — font:400 18px/1.65 Manrope!important. That is why the
+// page kept rendering in Manrope no matter how many times this ran.
+//
+// The weight in the shorthand decides the stack: Inter Tight is cut 500-800, so
+// anything under 500 goes to Helvetica Neue rather than being clamped heavier
+// than the design intended.
+{
+  const re = /font:(\d{3})([^;{}]*?)Manrope(\s*,\s*Arial\s*,\s*sans-serif)?/g;
+  let n = 0;
+  html = html.replace(re, (_m, weight, mid) => {
+    n++;
+    const stack = Number(weight) >= 500 ? AOG_SANS : AOG_BODY;
+    return `font:${weight}${mid}${stack}`;
+  });
+  if (n) bump("Manrope in font: shorthand", n);
+}
+
+// -------------------------------------------------------------- MONO SWEEP
+// Same shorthand trap as Manrope: font:700 10px 'DM Mono'. Both family names
+// are only ever font families on this page, so sweeping every occurrence is
+// safer than trying to enumerate the declaration forms they appear in — which
+// is what missed 45 of them across the first three attempts.
+for (const [re, to, label] of [
+  [/'DM Mono'\s*,\s*monospace/gi, AOG_MONO, "DM Mono swept"],
+  [/'DM Mono'/gi, AOG_MONO, "DM Mono swept"],
+  [/\bDM Mono\b/gi, AOG_MONO, "DM Mono swept"],
+  [/'?\bManrope\b'?\s*,\s*Arial\s*,\s*sans-serif/gi, AOG_SANS, "Manrope swept"],
+  [/'?\bManrope\b'?/gi, AOG_SANS, "Manrope swept"],
+]) {
+  const n = (html.match(re) || []).length;
+  if (n) { html = html.replace(re, to); bump(label, n); }
+}
+
+// A stale override from an earlier attempt at this: it forced 16/9 on the
+// community tile, which fixed the crop by shrinking the tile to half the height
+// of its neighbour. Removed rather than left to fight the grid.
+if (html.includes("aog-campaign-media")) {
+  html = html.replace(/<style id="aog-campaign-media">[\s\S]*?<\/style>\s*/i, "");
+  bump("stale aspect override removed", 1);
+}
+
 // Body copy back to Helvetica Neue. Depth 61 to clear the generated file's
 // :root chains, which run to depth 60.
 const ROOT61 = ":root".repeat(61);
@@ -144,27 +187,12 @@ const TINT = "#8ED3F0";        // #1BABE5 lightened, for the offset shadow
 const TINT_SOFT = "#DDF2FB";   // the same hue, for the image frame
 for (const [re, to, label] of [
   [/#9ccce8|#9bcae9|#94c9eb|#a7d6ed|#8ec6ef|#89bdf0|#94cceb|#8ec8ee/gi, TINT, "shadow blue unified"],
-  [/#d8efff|#d9edff|#d9f0ff/gi, TINT_SOFT, "image frame blue unified"],
+  // The tile tint is the "light blue" — it shows through wherever an image
+  // does not fill its card. Unifying the shade did not help; removing it does.
+  [/#d8efff|#d9edff|#d9f0ff|#ddf2fb/gi, "transparent", "tile tint removed"],
 ]) {
   const n = (html.match(re) || []).length;
   if (n) { html = html.replace(re, to); bump(label, n); }
-}
-
-// ------------------------------------------------------------- image framing
-// The community chat sits in a 238x300 portrait tile with object-fit:cover,
-// while the source is 1600x900. That crops a 1.78 landscape into a 0.79
-// portrait — less than half the width survives. Give the tile the image's own
-// ratio so it is shown rather than gutted.
-if (!/\.visual-studio\{aspect-ratio/.test(html)) {
-  const ROOT61b = ":root".repeat(61);
-  html = html.replace(
-    /<\/body>/i,
-    `<style id="aog-campaign-media">
-${ROOT61b} body main .visual-studio{aspect-ratio:16/9!important;height:auto!important}
-${ROOT61b} body main .visual-studio img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 50%!important}
-</style>\n</body>`
-  );
-  bump("community tile given the image's own ratio", 1);
 }
 
 if (html === before) {
