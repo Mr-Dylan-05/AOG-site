@@ -115,12 +115,61 @@ for (const [from, to, label] of [
   if (html.includes(from)) { html = html.split(from).join(to); bump("amber -> AOG accent (" + label + ")", 1); }
 }
 
+// ------------------------------------------------------- NO_YELLOW: all of it
+// The first pass kept the gold review stars, on the argument that a Google
+// review looks gold. Overruled: no yellow anywhere on this page.
+//
+// The Google mark is recoloured whole rather than just its yellow segment.
+// Changing one of four brand colours leaves a mangled logo; a single-tone mark
+// is a normal, recognisable treatment.
+for (const [re, to, label] of [
+  [/#FBB400/gi, AOG_ACCENT, "review stars -> AOG accent"],
+  [/#4285F4/gi, AOG_INK, "Google mark -> monochrome"],
+  [/#34A853/gi, AOG_INK, "Google mark -> monochrome"],
+  [/#FBBC05/gi, AOG_INK, "Google mark -> monochrome"],
+  [/#EA4335/gi, AOG_INK, "Google mark -> monochrome"],
+]) {
+  const n = (html.match(re) || []).length;
+  if (n) { html = html.replace(re, to); bump(label, n); }
+}
+
+// ------------------------------------------------- one light blue, not eight
+// .platform-shot carried a different offset-shadow blue at every breakpoint —
+// eight values for one shadow — and .community-shot framed the same kind of
+// image in a ninth. All become one tint of the AOG accent.
+const TINT = "#8ED3F0";        // #1BABE5 lightened, for the offset shadow
+const TINT_SOFT = "#DDF2FB";   // the same hue, for the image frame
+for (const [re, to, label] of [
+  [/#9ccce8|#9bcae9|#94c9eb|#a7d6ed|#8ec6ef|#89bdf0|#94cceb|#8ec8ee/gi, TINT, "shadow blue unified"],
+  [/#d8efff|#d9edff|#d9f0ff/gi, TINT_SOFT, "image frame blue unified"],
+]) {
+  const n = (html.match(re) || []).length;
+  if (n) { html = html.replace(re, to); bump(label, n); }
+}
+
+// ------------------------------------------------------------- image framing
+// The community chat sits in a 238x300 portrait tile with object-fit:cover,
+// while the source is 1600x900. That crops a 1.78 landscape into a 0.79
+// portrait — less than half the width survives. Give the tile the image's own
+// ratio so it is shown rather than gutted.
+if (!/\.visual-studio\{aspect-ratio/.test(html)) {
+  const ROOT61b = ":root".repeat(61);
+  html = html.replace(
+    /<\/body>/i,
+    `<style id="aog-campaign-media">
+${ROOT61b} body main .visual-studio{aspect-ratio:16/9!important;height:auto!important}
+${ROOT61b} body main .visual-studio img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 50%!important}
+</style>\n</body>`
+  );
+  bump("community tile given the image's own ratio", 1);
+}
+
 if (html === before) {
   console.log("Campaign brand: already aligned.");
 } else {
   fs.writeFileSync(PAGE, html);
   console.log("Campaign brand aligned:");
   Object.entries(counts).forEach(([k, v]) => console.log(`   ${String(v).padStart(3)}  ${k}`));
-  const stars = (html.match(/fill="#FBB400"/g) || []).length;
-  console.log(`   ${String(stars).padStart(3)}  review star fills left gold, as intended`);
+  const gold = (html.match(/#FBB400|#FBBC05|#f2fc3b/gi) || []).length;
+  console.log(`   ${String(gold).padStart(3)}  yellow values left on the page`);
 }
