@@ -61,7 +61,7 @@ const SUPPORT = [
   {
     title: "A community of teams doing the same thing",
     body: "A closed space to ask, share and show what is working, alongside staff from other Australian businesses using AI daily. Most people find the peer answers as useful as ours.",
-    img: "/assets/campaign/community-discussion-space.jpg",
+    img: "/assets/campaign/community-discussion-space-v2.jpg",
     alt: "The Ad On Group community discussion space",
   },
 ];

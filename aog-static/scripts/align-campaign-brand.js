@@ -179,6 +179,53 @@ for (const [re, to, label] of [
   if (n) { html = html.replace(re, to); bump(label, n); }
 }
 
+// -------------------------------------------------------------- EMOJI GLYPH
+// The certification badge's star was a Unicode character, U+273A, not styling —
+// so every colour sweep missed it while it rendered orange on screen. Its CSS
+// colour is forced transparent by an !important rule, and a colour-emoji font
+// paints its own palette regardless of what colour you set.
+//
+// An inline SVG is the only reliable fix: no font, no emoji palette, and it
+// takes the colour it is given.
+{
+  const from = '<span aria-hidden="true">\u273A</span>';
+  const to =
+    '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" ' +
+    'style="display:block;flex:none"><g stroke="' + AOG_ACCENT + '" stroke-width="2.4" ' +
+    'stroke-linecap="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></g></svg>';
+  if (html.includes(from)) { html = html.split(from).join(to); bump("badge star -> SVG in AOG accent", 1); }
+}
+
+// ------------------------------------------------------------ TILE WRAPPERS
+// The actual light blue, found by asking the browser what paints the pixel
+// (elementFromPoint) rather than by grepping hexes: .visual-platform, the
+// wrapper around the academy tile, carries background #cceeff. It was in none
+// of the lists in the three previous attempts at this, which is exactly the
+// problem with enumerating known values.
+//
+// Every hero tile background is swept here by SELECTOR, so a shade nobody
+// listed cannot survive again.
+{
+  const re = /(\.(?:visual-platform|visual-card|visual-photo|visual-chart|visual-studio|platform-shot|community-shot)[^{}]*\{[^}]*?)background:\s*(?:#[0-9a-f]{3,8}|rgba?\([^)]*\))(\s*!important)?/gi;
+  let n = 0;
+  html = html.replace(re, (_m, head, imp) => { n++; return head + "background:transparent" + (imp || ""); });
+  if (n) bump("hero tile backgrounds cleared", n);
+}
+
+// ------------------------------------------------------------ OFFSET BLOCKS
+// THE light blue. It is not a background — it is a zero-blur offset box-shadow,
+// which paints a solid colour rectangle behind the tile. Only .platform-shot
+// has one; the other three hero tiles do not, which is the inconsistency.
+//
+// Matched by PATTERN, not by listing hexes. Enumerating known values is what
+// missed 5 of these (and 45 font references before them) across four attempts:
+// the page carries eleven of these shadows in six different blues.
+{
+  const re = /box-shadow:\s*-?\d+px\s+-?\d+px\s+0(?:px)?\s+#[0-9a-f]{6}(\s*!important)?/gi;
+  const n = (html.match(re) || []).length;
+  if (n) { html = html.replace(re, (_m, imp) => "box-shadow:none" + (imp || "")); bump("hard offset colour blocks removed", n); }
+}
+
 // ------------------------------------------------- one light blue, not eight
 // .platform-shot carried a different offset-shadow blue at every breakpoint —
 // eight values for one shadow — and .community-shot framed the same kind of
@@ -193,6 +240,22 @@ for (const [re, to, label] of [
 ]) {
   const n = (html.match(re) || []).length;
   if (n) { html = html.replace(re, to); bump(label, n); }
+}
+
+// ------------------------------------------------------- COMMUNITY IMAGE v2
+// The community screenshot shipped with 29 rows of white baked in above and
+// below the device, which the hero tile (object-fit:cover, exact vertical fit)
+// showed as white bands. The asset is now cropped to 1600x842, flush to the
+// bezel.
+//
+// The filename carries the version deliberately. Re-cropping under the same
+// name fixes nothing for anyone who already has the old file: browsers cache
+// by URL, and that is exactly why the first two attempts at this looked
+// unchanged in the browser while the bytes on disk were correct.
+{
+  const re = /community-discussion-space\.jpg/g;
+  const n = (html.match(re) || []).length;
+  if (n) { html = html.replace(re, "community-discussion-space-v2.jpg"); bump("community image repointed to v2", n); }
 }
 
 if (html === before) {
