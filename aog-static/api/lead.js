@@ -66,7 +66,7 @@ const PREFERRED = [
   "message", "ai_goal", "contactPreference",
   "score", "band",
   "current_use", "worry", "motivation", "barrier", "support", "intent",
-  "interest", "source", "page",
+  "marketing_consent", "interest", "source", "page",
   "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
   "fbclid", "landing_page",
 ];

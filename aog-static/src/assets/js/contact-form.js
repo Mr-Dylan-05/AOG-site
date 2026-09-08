@@ -211,6 +211,12 @@
       payload.set("form", form.getAttribute("data-form") || "contact");
       payload.set("page", window.location.pathname + window.location.search);
 
+      // An unticked checkbox submits nothing at all, which in a consent column
+      // is indistinguishable from a form that never had the box. Recorded as an
+      // explicit yes or no so the sheet always says which it was.
+      var consent = form.querySelector('[name="marketing_consent"]');
+      if (consent) payload.set("marketing_consent", consent.checked ? "yes" : "no");
+
       // Campaign parameters captured by utm.js when the visitor first arrived,
       // which is normally a different page to this one. Every key is set even
       // when empty so the sheet's columns stay aligned across submissions.
