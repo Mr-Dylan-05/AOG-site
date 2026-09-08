@@ -43,7 +43,13 @@ const pretty = (d) => {
 };
 const esc = (s) => String(s).replace(/&(?![a-zA-Z#0-9]+;)/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-const STAR = `<svg width="13" height="13" viewBox="0 0 24 24" style="display:block"><path fill="#FBB400" d="M12 2l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.3 6.1 20l1.3-6.6L2.5 8.9l6.6-.8z"></path></svg>`;
+/**
+ * Google's own review-star yellow. Deliberately #FBBC04 and not #FBB400 (the
+ * design file's UI amber) or #FBBC05 (the Google logo's yellow): both of those
+ * are swept to other colours by align-campaign-brand.js, so giving the stars a
+ * value nothing else owns is what stops them being recoloured by accident.
+ */
+const STAR = `<svg width="13" height="13" viewBox="0 0 24 24" style="display:block"><path fill="#FBBC04" d="M12 2l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.3 6.1 20l1.3-6.6L2.5 8.9l6.6-.8z"></path></svg>`;
 const GOOGLE = `<svg width="17" height="17" viewBox="0 0 24 24" style="flex:none;opacity:.9" aria-hidden="true"><path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v4h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.2-4.8 3.2-8Z"></path><path fill="#34A853" d="M12 23c2.9 0 5.4-1 7.2-2.7l-3.6-2.7a6.6 6.6 0 0 1-9.8-3.4H2.1v2.8A11 11 0 0 0 12 23Z"></path><path fill="#FBBC05" d="M5.8 14.2a6.5 6.5 0 0 1 0-4.2V7.2H2.1a11 11 0 0 0 0 9.8l3.7-2.8Z"></path><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.1 1.6l3.1-3.1A11 11 0 0 0 2.1 7.2l3.7 2.8A6.6 6.6 0 0 1 12 5.4Z"></path></svg>`;
 
 const card = (r) => `

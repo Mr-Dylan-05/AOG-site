@@ -11,14 +11,17 @@
  *   Type    Manrope + DM Mono  ->  Inter Tight + Helvetica Neue + JetBrains Mono
  *   Yellow  #f2fc3b            ->  #1BABE5   (the AOG accent)
  *   Amber   #FBB400            ->  #1BABE5   in the 3 UI uses only
+ *   Stars   #FBBC04            ->  untouched (Google's own review gold)
  *   Inks    6 near-identical navies -> #0B1220
  *
  * Two things this is careful about:
  *
- *   1. The 30 #FBB400 uses inside the Google review star SVGs are LEFT ALONE.
- *      Those stars are gold because that is what a Google review looks like;
- *      recolouring them would make real reviews look invented. Only the three
- *      interface uses change — the nav button, a focus ring, a heading accent.
+ *   1. The Google review stars stay Google yellow (#FBBC04). They were briefly
+ *      recoloured to the accent under "no yellow anywhere", and that was wrong:
+ *      gold stars are what a Google review looks like, and a blue-starred review
+ *      block reads as invented rather than on-brand. "No yellow" is about the
+ *      page's own palette, not about restyling someone else's UI. Only the three
+ *      interface uses of amber change — nav button, focus ring, heading accent.
  *
  *   2. Body copy maps to Helvetica Neue, not Inter Tight. Inter Tight here is a
  *      variable font cut 500-800, so 400-weight body text would be synthesised
@@ -158,15 +161,18 @@ for (const [from, to, label] of [
   if (html.includes(from)) { html = html.split(from).join(to); bump("amber -> AOG accent (" + label + ")", 1); }
 }
 
-// ------------------------------------------------------- NO_YELLOW: all of it
-// The first pass kept the gold review stars, on the argument that a Google
-// review looks gold. Overruled: no yellow anywhere on this page.
+// -------------------------------------------------- NO_YELLOW: the page's own
+// No yellow in the page's palette. The Google review stars are the exception
+// and keep their #FBBC04 — see note 1 in the header. Nothing below matches that
+// value, which is the point of it being distinct from #FBB400 and #FBBC05.
 //
 // The Google mark is recoloured whole rather than just its yellow segment.
 // Changing one of four brand colours leaves a mangled logo; a single-tone mark
 // is a normal, recognisable treatment.
 for (const [re, to, label] of [
-  [/#FBB400/gi, AOG_ACCENT, "review stars -> AOG accent"],
+  // Any amber the three context-matched rules above did not catch. The stars
+  // are #FBBC04 now, so this no longer reaches them.
+  [/#FBB400/gi, AOG_ACCENT, "stray amber -> AOG accent"],
   // A second acid yellow, one hex off the first and easy to miss on a scan
   // for the known value. Found by sweeping the whole yellow family instead.
   [/#F4EF32/gi, AOG_ACCENT, "second acid yellow -> AOG accent"],
@@ -264,6 +270,8 @@ if (html === before) {
   fs.writeFileSync(PAGE, html);
   console.log("Campaign brand aligned:");
   Object.entries(counts).forEach(([k, v]) => console.log(`   ${String(v).padStart(3)}  ${k}`));
-  const gold = (html.match(/#FBB400|#FBBC05|#f2fc3b/gi) || []).length;
-  console.log(`   ${String(gold).padStart(3)}  yellow values left on the page`);
+  const gold = (html.match(/#FBB400|#FBBC05|#f2fc3b|#F4EF32/gi) || []).length;
+  const stars = (html.match(/#FBBC04/gi) || []).length;
+  console.log(`   ${String(gold).padStart(3)}  stray yellow values left on the page`);
+  console.log(`   ${String(stars).padStart(3)}  Google review stars kept in Google yellow`);
 }
