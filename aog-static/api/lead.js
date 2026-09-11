@@ -56,6 +56,11 @@ const GMAIL_SEND = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const SHEETS = "https://sheets.googleapis.com/v4/spreadsheets";
 
+/* Calendly. The base is overridable so the test harness can point it at a
+   local server and exercise the failure paths for real. */
+const CALENDLY_API = (process.env.CALENDLY_API_BASE || "https://api.calendly.com").replace(/\/$/, "");
+const TZ = "Australia/Brisbane";
+
 /* Column order for a tab's first submission. Anything not listed still gets a
    column, just after these. Ordered the way a person reads a lead: who they
    are, then what they told us, then where they came from. */
@@ -366,7 +371,7 @@ const AUTOREPLY_FORMS = ["enquiry"];
  * The first name from whatever they typed into the name field.
  *
  * People type "jane smith", "SMITH, Jane", "Dr Jane Smith" and " jane ". The
- * greeting has to survive all of it, and fall back to a plain "Hi," rather
+ * greeting has to survive all of it, and fall back to a plain "Hi there," rather
  * than greet someone by a title or an empty string.
  */
 function firstName(record) {
@@ -386,39 +391,341 @@ function firstName(record) {
     : clean;
 }
 
+/* ------------------------------------------------- time, in Brisbane ---- */
+/*
+ * Everything below works in Australia/Brisbane with an explicit timeZone and
+ * never touches the server clock. Vercel runs in UTC, so a Date read locally
+ * is nine or ten hours out and lands on the wrong DAY for anything after 2pm
+ * Brisbane. That is the failure this section exists to prevent.
+ *
+ * Brisbane has never observed daylight saving, so the offset is a constant
+ * +10:00 — but it is derived from Intl rather than written as a number, so
+ * this keeps working if it is ever pointed at a zone that does shift.
+ */
+
+/** Offset of `tz` from UTC at a given instant, in milliseconds. */
+function tzOffsetMs(date, tz) {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: tz, hour12: false,
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", second: "2-digit",
+    })
+      .formatToParts(date)
+      .filter((x) => x.type !== "literal")
+      .map((x) => [x.type, x.value])
+  );
+  // The wall clock in that zone, read as though it were UTC. The gap between
+  // that and the real instant is the offset.
+  const asUTC = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second);
+  return asUTC - Math.floor(date.getTime() / 1000) * 1000;
+}
+
+const DOW = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+
+/** Calendar parts of an instant as they read in Brisbane. */
+function bneParts(date) {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: TZ, hour12: false, weekday: "short",
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit",
+    })
+      .formatToParts(date)
+      .filter((x) => x.type !== "literal")
+      .map((x) => [x.type, x.value])
+  );
+  return {
+    y: +p.year, m: +p.month, d: +p.day,
+    hour: +p.hour % 24, minute: +p.minute,
+    dow: DOW[p.weekday],
+  };
+}
+
+/**
+ * The instant the third business day from `now` ends, in Brisbane.
+ *
+ * Today counts as day zero, so on a Monday the window runs to the end of
+ * Thursday and a slot later the same afternoon still qualifies. Weekends are
+ * skipped rather than counted, which is what makes it three BUSINESS days.
+ */
+function businessDayCutoff(now) {
+  const t = bneParts(now);
+  let y = t.y, m = t.m, d = t.d, counted = 0;
+  while (counted < 3) {
+    const next = new Date(Date.UTC(y, m - 1, d + 1));
+    y = next.getUTCFullYear(); m = next.getUTCMonth() + 1; d = next.getUTCDate();
+    const dow = next.getUTCDay();
+    if (dow !== 0 && dow !== 6) counted++;
+  }
+  // 23:59:59.999 on that date in Brisbane, expressed as a real instant.
+  const wall = Date.UTC(y, m - 1, d, 23, 59, 59, 999);
+  return new Date(wall - tzOffsetMs(new Date(wall), TZ));
+}
+
+/**
+ * The next intake: the first of the month after this one, in Brisbane.
+ *
+ * "Next month" already guarantees it is never today, including on the 1st,
+ * when it rolls to the month after rather than announcing an intake starting
+ * this morning.
+ *
+ * The month is read through bneParts, so on the last day of a month a UTC
+ * server that has already ticked over is not believed. 31 December in Brisbane
+ * is still December here even while the server says January, and the answer
+ * stays 1 January rather than jumping a whole month to 1 February.
+ *
+ * The year is added only when the intake lands in a later one, so December
+ * reads "1 January 2027" and every other month reads "1 October".
+ */
+function nextIntake(now) {
+  const today = bneParts(now);
+  let y = today.y;
+  let m = today.m + 1;
+  if (m > 12) { m = 1; y += 1; }
+  // Built as a bare calendar date and formatted in UTC: it is a date, not an
+  // instant, and re-reading it in a zone would only risk shifting it a day.
+  const month = new Intl.DateTimeFormat("en-AU", { timeZone: "UTC", month: "long" })
+    .format(new Date(Date.UTC(y, m - 1, 1)));
+  return y > today.y ? `1 ${month} ${y}` : `1 ${month}`;
+}
+
+/**
+ * The first returned time that is far enough out, close enough in, and on a
+ * weekday. The list is taken in the order Calendly gave it, which is
+ * chronological, so the first match is also the soonest.
+ *
+ * Deliberately no widening: if nothing in the next three business days works,
+ * the mail offers the whole calendar instead of proposing something a week
+ * out that reads as "we are not very busy".
+ */
+function pickSlot(times, now) {
+  const earliest = now.getTime() + 2 * 60 * 60 * 1000;
+  const latest = businessDayCutoff(now).getTime();
+  for (const t of times || []) {
+    const iso = t && (t.start_time || t.start);
+    if (!iso) continue;
+    if (t.status && t.status !== "available") continue;
+    const at = new Date(iso);
+    if (isNaN(at.getTime())) continue;
+    const ms = at.getTime();
+    if (ms < earliest || ms > latest) continue;
+    const dow = bneParts(at).dow;
+    if (dow === 0 || dow === 6) continue;
+    return at;
+  }
+  return null;
+}
+
+/**
+ * Ask Calendly for the next opening. Returns a Date, or null for every kind
+ * of "no" there is: not configured, timed out, non-200, malformed, empty, or
+ * nothing inside the window.
+ *
+ * Null is not an error here. It is the fallback copy's cue, and the mail goes
+ * out either way. A Calendly problem must never become a no-email problem.
+ */
+async function calendlySlot(now) {
+  const token = (process.env.CALENDLY_TOKEN || "").trim();
+  const eventType = (process.env.CALENDLY_EVENT_TYPE_URI || "").trim();
+  if (!token || !eventType) {
+    console.log("[lead] calendly skipped: CALENDLY_TOKEN or CALENDLY_EVENT_TYPE_URI is not set");
+    return null;
+  }
+
+  // The API rejects a start_time in the past and a range wider than seven
+  // days. Starting at now+2h does both jobs at once: it satisfies the first
+  // rule and it is already the earliest slot we would offer.
+  const start = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+  const end = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const url =
+    `${CALENDLY_API}/event_type_available_times` +
+    `?event_type=${encodeURIComponent(eventType)}` +
+    `&start_time=${encodeURIComponent(start.toISOString())}` +
+    `&end_time=${encodeURIComponent(end.toISOString())}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      // 401 here means the token has expired or was revoked. It is the single
+      // most likely cause of this quietly reverting to the fallback copy, so
+      // the status goes in the log where it can be found.
+      console.error(`[lead] calendly ${res.status}: ${detail.slice(0, 300)}`);
+      return null;
+    }
+    const json = await res.json();
+    const times = json && Array.isArray(json.collection) ? json.collection : null;
+    if (!times) {
+      console.error("[lead] calendly: no collection array in the response");
+      return null;
+    }
+    if (!times.length) {
+      console.log("[lead] calendly: no available times in the next seven days");
+      return null;
+    }
+    const slot = pickSlot(times, now);
+    if (!slot) {
+      console.log(`[lead] calendly: ${times.length} times returned, none inside three business days`);
+      return null;
+    }
+    return slot;
+  } catch (err) {
+    const why = err && err.name === "TimeoutError" ? "timed out after 3s" : (err && err.message) || String(err);
+    console.error(`[lead] calendly lookup failed: ${why}`);
+    return null;
+  }
+}
+
+/**
+ * "Tuesday 15 September, 2:00pm" for the body, "2pm" for the subject.
+ * Assembled from parts because no single locale gives this exact shape.
+ */
+function formatSlot(date) {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-AU", {
+      timeZone: TZ, weekday: "long", day: "numeric", month: "long",
+      hour: "numeric", minute: "2-digit", hour12: true,
+    })
+      .formatToParts(date)
+      .filter((x) => x.type !== "literal")
+      .map((x) => [x.type, x.value])
+  );
+  // "PM", "pm" and "p.m." all appear across locale data versions.
+  const period = String(p.dayPeriod || "").toLowerCase().replace(/[.\s  ]/g, "");
+  return {
+    long: `${p.weekday} ${p.day} ${p.month}, ${p.hour}:${p.minute}${period}`,
+    short: p.minute === "00" ? `${p.hour}${period}` : `${p.hour}:${p.minute}${period}`,
+    weekday: p.weekday,
+  };
+}
+
+/**
+ * The scheduling link, carrying whatever the form already collected so nobody
+ * is asked their own name twice. With a slot, it also lands on that date.
+ *
+ * VERIFY BEFORE RELYING ON THE DATE PARAMETERS: name and email prefill is
+ * long-standing Calendly behaviour, but `month` and `date` are only honoured
+ * on some event types. If they are ignored the visitor still lands on a valid
+ * booking page, just on the current month, so the failure is cosmetic rather
+ * than broken.
+ */
+function bookingUrl(record, slot) {
+  const base = (process.env.CALENDLY_BOOKING_URL || "").trim();
+  if (!base) return "";
+  let url;
+  try {
+    url = new URL(base);
+  } catch (_) {
+    console.error("[lead] CALENDLY_BOOKING_URL is not a valid URL, sending it unchanged");
+    return base;
+  }
+  const name = String(record.name || record.firstName || "").trim();
+  const email = String(record.email || "").trim();
+  if (name) url.searchParams.set("name", name);
+  if (email) url.searchParams.set("email", email);
+  if (slot) {
+    const { y, m, d } = bneParts(slot);
+    const mm = String(m).padStart(2, "0");
+    const dd = String(d).padStart(2, "0");
+    url.searchParams.set("month", `${y}-${mm}`);
+    url.searchParams.set("date", `${y}-${mm}-${dd}`);
+  }
+  return url.toString();                       // URLSearchParams encodes for us
+}
+
+/** Escape, then turn bare URLs into anchors. Used for the HTML part only. */
+function linkify(line) {
+  return String(line)
+    .split(/(https?:\/\/[^\s<>"]+)/g)
+    .map((part, i) =>
+      i % 2
+        ? `<a href="${escapeHtml(part)}" style="color:#1483B5">${escapeHtml(part)}</a>`
+        : escapeHtml(part)
+    )
+    .join("");
+}
+
 /**
  * ============ DRAFT COPY — FOR APPROVAL ====================================
  * Written to be sent, but not signed off. Editing this one function is the
  * whole job of changing the email.
+ *
+ * NOTE (11 Sep 2026): the wording below was supplied as approved copy in the
+ * Calendly brief and is reproduced verbatim. This banner is left standing
+ * because taking it down is a sign-off decision, not a code one.
+ *
+ * Two versions of one message. `slot` present means Calendly answered and had
+ * something inside the window; null means every other outcome. The plain text
+ * and the HTML carry the same words, and the HTML is deliberately plain: no
+ * template, no images, no button graphic, no tracking pixel. It has to read
+ * like a person typed it, and heavy markup lands in Promotions more often.
  */
-function autoReplyCopy(record) {
-  var hello = "Hi" + (firstName(record) ? " " + firstName(record) : "") + ",";
-  var booking = process.env.BOOKING_URL || "";
+function autoReplyCopy(record, slot) {
+  const first = firstName(record);
+  const hello = first ? `Hi ${first},` : "Hi there,";
+  const phone = (process.env.SENDER_PHONE || "").trim() || "(07) 5586 1400";
+  const sender = (process.env.SENDER_NAME || "").trim();
+  const allTimes = bookingUrl(record, null);
+  const fmt = slot ? formatSlot(slot) : null;
 
-  /* One message, whichever button brought them. The curriculum is handed over
-     on the thank-you panel as a download the moment they submit, so it does
-     not need saying twice — and a confirmation that tries to do two jobs ends
-     up reading like neither. */
-  var lines = [
-    hello,
-    "",
-    "Thanks for getting in touch about AI training. One of our course facilitators will be in contact shortly.",
-  ];
-  if (booking) lines.push("", "If you would rather talk sooner, you can book a time here:", booking);
-  lines = lines.concat(["", "Ad On Group", "(07) 5586 1400"]);
+  // Each entry is one paragraph; the inner array is its lines. The plain-text
+  // part keeps those line breaks, which is what makes it look typed rather
+  // than generated. The HTML part reflows them, because a browser should wrap.
+  const paras = [[hello], ["Thanks for getting in touch about AI training."]];
 
-  var text = lines.join("\n");
-  var html =
+  if (fmt) {
+    paras.push([
+      "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
+      `with you. My next opening is ${fmt.long} Brisbane time.`,
+    ]);
+    paras.push([`Book that time: ${bookingUrl(record, slot)}`]);
+    paras.push([`If it doesn't suit, here are the rest: ${allTimes}`]);
+  } else if (allTimes) {
+    paras.push([
+      "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
+      `with you. Grab whichever time suits you here: ${allTimes}`,
+    ]);
+  } else {
+    // No booking URL configured at all. The sentence cannot be sent with a
+    // dangling "here:" and nothing after it, so it keeps its first half and
+    // the phone number below carries the call to action.
+    console.error("[lead] CALENDLY_BOOKING_URL is not set; sending with no booking link");
+    paras.push([
+      "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
+      "with you.",
+    ]);
+  }
+
+  paras.push([
+    "I'll run you through what we actually teach people to do with AI, how the",
+    "private one-on-one support works, and what it costs.",
+  ]);
+  paras.push([`The next intake starts ${nextIntake(new Date())}.`]);
+  paras.push([`If you'd rather just talk now, I'm on ${phone}.`]);
+  paras.push([sender, "Ad On AI, Ad On Group", "Operating since 2008"].filter(Boolean));
+
+  const sig = paras.length - 1;
+  const text = paras.map((p) => p.join("\n")).join("\n\n");
+  const html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
-    lines.map(function (l) {
-      if (l === "") return '<p style="margin:0 0 14px"></p>';
-      if (l.indexOf("http") === 0) {
-        return '<p style="margin:0 0 14px"><a href="' + l + '" style="color:#1483B5">' + l + "</a></p>";
-      }
-      return '<p style="margin:0 0 14px">' + escapeHtml(l) + "</p>";
-    }).join("") +
+    paras
+      .map((p, i) =>
+        `<p style="margin:0 0 14px">${
+          i === sig ? p.map(escapeHtml).join("<br>") : linkify(p.join(" "))
+        }</p>`
+      )
+      .join("") +
     "</div>";
-  return { subject: "We have got your AI training enquiry", text: text, html: html };
+
+  return {
+    subject: fmt ? `Would ${fmt.weekday} at ${fmt.short} suit?` : "A time that suits you",
+    text,
+    html,
+  };
 }
 /* =========================================================================== */
 
@@ -446,9 +753,12 @@ function buildMessage(from, name, to, copy) {
     process.env.AUTOREPLY_BCC !== undefined
       ? process.env.AUTOREPLY_BCC.trim()
       : "adonai@adongroup.com.au";
+  // Replies go to a person, not to the shared sending mailbox.
+  const replyTo = (process.env.AUTOREPLY_REPLY_TO || "").trim();
   return [
     `From: ${encodeHeader(name)} <${from}>`,
     `To: <${to}>`,
+    ...(replyTo ? [`Reply-To: <${replyTo}>`] : []),
     ...(bcc ? [`Bcc: <${bcc}>`] : []),
     `Subject: ${encodeHeader(copy.subject)}`,
     "MIME-Version: 1.0",
@@ -494,10 +804,14 @@ async function sendAutoReply(creds, form, record) {
     return;
   }
 
+  // Looked up before the mail is built, and never allowed to stop it: every
+  // failure inside here returns null, which is simply the fallback copy.
+  const slot = await calendlySlot(new Date());
+
   try {
     const token = await accessToken(creds, GMAIL_SCOPE, from);
     const raw = Buffer.from(
-      buildMessage(from, process.env.AUTOREPLY_NAME || "Ad On Group", to, autoReplyCopy(record))
+      buildMessage(from, process.env.AUTOREPLY_NAME || "Ad On Group", to, autoReplyCopy(record, slot))
     )
       .toString("base64")
       .replace(/\+/g, "-")
@@ -514,7 +828,7 @@ async function sendAutoReply(creds, form, record) {
       const detail = await res.text().catch(() => "");
       console.error(`[lead] auto-reply ${res.status}:`, detail.slice(0, 300));
     } else {
-      console.log(`[lead] auto-reply sent to ${to} as ${from}`);
+      console.log(`[lead] auto-reply sent to ${to} as ${from} (${slot ? "slot offered" : "fallback copy"})`);
     }
   } catch (err) {
     console.error("[lead] auto-reply failed:", err.message);
@@ -522,6 +836,49 @@ async function sendAutoReply(creds, form, record) {
 }
 
 module.exports = async (req, res) => {
+  /*
+   * A way to exercise the confirmation without putting a fake lead through the
+   * live form and into the sheet.
+   *
+   *   GET /api/lead?selftest=<AUTOREPLY_TEST_KEY>&to=you@example.com
+   *   GET /api/lead?selftest=<key>&to=you@example.com&dry=1   renders, sends nothing
+   *
+   * Inert unless AUTOREPLY_TEST_KEY is set, and answers 404 rather than 401 on
+   * a wrong key so the endpoint does not advertise that it exists.
+   */
+  if (req.method === "GET" && req.query && req.query.selftest) {
+    const key = (process.env.AUTOREPLY_TEST_KEY || "").trim();
+    if (!key || String(req.query.selftest) !== key) {
+      return res.status(404).json({ ok: false, error: "Not found" });
+    }
+    const to = String(req.query.to || "").trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(to)) {
+      return res.status(400).json({ ok: false, error: "Pass ?to= a valid email address" });
+    }
+    const rec = {
+      name: String(req.query.name || "Test Person"),
+      email: to,
+      form: "enquiry",
+    };
+    const slot = await calendlySlot(new Date());
+    const copy = autoReplyCopy(rec, slot);
+    if (req.query.dry) {
+      return res.status(200).json({
+        ok: true, dryRun: true, slotFound: Boolean(slot),
+        slotISO: slot ? slot.toISOString() : null,
+        subject: copy.subject, text: copy.text,
+      });
+    }
+    const creds = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+    if (!creds) {
+      return res.status(500).json({ ok: false, error: "GOOGLE_SERVICE_ACCOUNT_JSON is not set" });
+    }
+    await sendAutoReply(JSON.parse(creds), "enquiry", rec);
+    return res.status(200).json({
+      ok: true, sentTo: to, slotFound: Boolean(slot), subject: copy.subject,
+    });
+  }
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ ok: false, error: "Method not allowed" });
@@ -621,4 +978,11 @@ module.exports = async (req, res) => {
     await notifyChat(form, record, "", true);
     return res.status(502).json({ ok: false, error: "Could not record submission" });
   }
+};
+
+/* Exposed for scripts/test-autoreply.js only. Not part of the HTTP contract:
+   nothing outside the test harness should reach in here. */
+module.exports._internals = {
+  autoReplyCopy, calendlySlot, pickSlot, formatSlot, buildMessage,
+  businessDayCutoff, bneParts, bookingUrl, firstName, nextIntake,
 };

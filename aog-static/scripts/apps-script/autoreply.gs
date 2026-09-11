@@ -1,4 +1,26 @@
 /**
+ * ============================ SUPERSEDED ==================================
+ * DO NOT INSTALL THIS ALONGSIDE THE SITE'S OWN SENDER.
+ *
+ * As of 11 Sep 2026 the enquiry confirmation is sent by api/lead.js, which
+ * proposes a specific time from Paul's Calendly. That version is the one that
+ * is maintained; the wording below is the old "a facilitator will be in touch"
+ * draft and has not been updated.
+ *
+ * These two do not know about each other. Both watch the same enquiry, so if
+ * this script is still installed on the leads spreadsheet AND AUTOREPLY_FROM
+ * is set in Vercel, every person who enquires gets TWO emails saying different
+ * things. Its own START_FROM is set to 2026-09-02, which suggests it was
+ * installed and may still be running.
+ *
+ * Before switching the site sender on: open the leads spreadsheet >
+ * Extensions > Apps Script > Triggers, and delete the trigger this file's
+ * install() created. Check the `autoreply_sent` column in the enquiry tab to
+ * see whether it has in fact been sending.
+ * ==========================================================================
+ */
+
+/**
  * autoreply.gs — the enquiry confirmation, sent from the Google Sheet.
  *
  * WHY A TIMER AND NOT onEdit / onChange

@@ -72,6 +72,32 @@
     // One event per page load no matter how many times the handler runs.
     // Double-clicking submit, or a browser replaying the event, must not
     // report two.
+    /**
+     * The first name as the confirmation email will greet them, so the panel
+     * and the mail agree. Same rules as firstName() in api/lead.js: skip a
+     * title, take the first real word, and case "jane" and "JANE" alike.
+     * Returns "" when there is nothing usable; the panel then reads "Thanks."
+     */
+    function greetingName(f) {
+      var field = f.querySelector('[name="firstName"], [name="name"]');
+      var raw = field ? String(field.value || "").trim() : "";
+      if (!raw) return "";
+      if (raw.indexOf(",") > -1) raw = raw.split(",")[1] || raw.split(",")[0];
+      var words = raw.trim().split(/\s+/);
+      var word = "";
+      for (var i = 0; i < words.length; i++) {
+        if (words[i] && !/^(mr|mrs|ms|miss|mx|dr|prof|sir)\.?$/i.test(words[i])) {
+          word = words[i];
+          break;
+        }
+      }
+      if (word.indexOf("@") > -1) return "";
+      word = word.replace(/[^A-Za-z\u00C0-\u024F'-]/g, "");
+      if (!word || word.length > 30) return "";
+      var uniform = word === word.toLowerCase() || word === word.toUpperCase();
+      return uniform ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : word;
+    }
+
     var pixelReported = false;
 
     var status = form.querySelector("[data-form-status]");
@@ -246,6 +272,9 @@
       })
         .then(function (res) {
           if (!res.ok) throw new Error("Bad response");
+          // Read before the reset. The panel is several lines of asynchrony
+          // later, and by then every field is empty.
+          var greetName = greetingName(form);
           form.reset();
           form.querySelectorAll("[data-error]").forEach(function (s) { s.textContent = ""; });
 
@@ -281,6 +310,12 @@
           var panelSel = form.getAttribute("data-success-panel");
           var panel = panelSel && document.querySelector(panelSel);
           if (panel) {
+            // The panel greets them by name. Same tidying as the confirmation
+            // email so the two agree: first word that is not a title, cased the
+            // way "jane" and "JANE" both should be, and nothing at all rather
+            // than a stray space when the name field was left empty.
+            var greet = panel.querySelector("[data-greet-name]");
+            if (greet) greet.textContent = greetName ? " " + greetName : "";
             form.hidden = true;
             panel.hidden = false;
             if (typeof panel.scrollIntoView === "function") {
