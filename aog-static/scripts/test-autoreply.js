@@ -107,6 +107,72 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(I.pickSlot([wed], new Date(fri)), "Wednesday should be inside three business days");
   });
 
+  console.log("\nSpreading, so offers do not stack");
+  const HALF = 30 * 60e3;
+  const fri = new Date("2026-09-11T00:59:00Z");            // Fri 10:59am Brisbane
+  const realDay = ["09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30"];
+  const realTimes = [];
+  for (const d of ["15","16","17"])
+    for (const t of realDay)
+      realTimes.push({ status: "available", start_time: `2026-09-${d}T${t}:00+10:00` });
+
+  ok("the same person always gets the same time", () => {
+    const a = I.pickSlot(realTimes, fri, "dylan@adongroup.com.au");
+    const b = I.pickSlot(realTimes, fri, "dylan@adongroup.com.au");
+    assert.strictEqual(a.getTime(), b.getTime());
+  });
+
+  ok("case and stray whitespace do not change the answer", () => {
+    const a = I.pickSlot(realTimes, fri, "dylan@adongroup.com.au");
+    const b = I.pickSlot(realTimes, fri, "  DYLAN@AdOnGroup.com.au  ");
+    assert.strictEqual(a.getTime(), b.getTime());
+  });
+
+  ok("consecutive enquirers do not stack into one block", () => {
+    // The failure this exists to prevent: everyone offered 9:30, then 10:00,
+    // then 10:30 as each is taken, filling one day as a solid run.
+    const people = ["a@x.com","b@x.com","c@x.com","d@x.com","e@x.com","f@x.com",
+                    "g@x.com","h@x.com","i@x.com","j@x.com","k@x.com","l@x.com"];
+    const picked = people.map((p) => I.pickSlot(realTimes, fri, p));
+    assert.ok(picked.every(Boolean), "everyone should get a slot");
+    const distinctDays = new Set(picked.map((d) => I.bneParts(d).d));
+    const distinctTimes = new Set(picked.map((d) => d.getTime()));
+    assert.ok(distinctDays.size >= 2, `all on one day: ${[...distinctDays]}`);
+    assert.ok(distinctTimes.size >= 6, `only ${distinctTimes.size} distinct times of 12`);
+    // and nobody is pushed outside the promised window
+    const cutoff = I.businessDayCutoff(fri).getTime();
+    picked.forEach((d) => assert.ok(d.getTime() <= cutoff, `${d.toISOString()} is past the cutoff`));
+  });
+
+  ok("spread still respects every window rule", () => {
+    const earliest = fri.getTime() + 2 * 3600e3;
+    for (const p of ["a@x.com","b@x.com","c@x.com","d@x.com","e@x.com","f@x.com"]) {
+      const d = I.pickSlot(realTimes, fri, p);
+      assert.ok(d.getTime() >= earliest, "inside the two-hour guard");
+      const dow = I.bneParts(d).dow;
+      assert.ok(dow !== 0 && dow !== 6, "landed on a weekend");
+    }
+  });
+
+  ok("with no key it is still the soonest", () =>
+    assert.strictEqual(
+      I.pickSlot(realTimes, fri).toISOString(),
+      new Date("2026-09-15T09:30:00+10:00").toISOString()));
+
+  ok("qualifying list is sorted even if the API returns it shuffled", () => {
+    const shuffled = realTimes.slice().reverse();
+    const got = I.qualifyingSlots(shuffled, fri);
+    for (let i = 1; i < got.length; i++)
+      assert.ok(got[i] >= got[i - 1], "not ascending");
+  });
+
+  ok("one open slot is still offered, not spread away", () => {
+    const one = [{ status: "available", start_time: "2026-09-15T09:30:00+10:00" }];
+    const d = I.pickSlot(one, fri, "anyone@x.com");
+    assert.ok(d && d.toISOString() === new Date("2026-09-15T09:30:00+10:00").toISOString());
+  });
+
+
   console.log("\nThe four paths");
   async function copyVia(mode, times) {
     const s = await server(mode, times);
@@ -130,8 +196,8 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   const A = await copyVia("ok", soon());
   ok("1. slot found  -> subject proposes a day and time", () => {
     assert.ok(A.slot, "expected a slot");
-    assert.match(A.copy.subject, /^Would \w+ at \d/);
-    assert.ok(A.copy.text.includes("My next opening is"), "missing the opening line");
+    assert.match(A.copy.subject, /^AI training: would \w+ at \d/);
+    assert.ok(A.copy.text.includes("I've got"), "missing the offer line");
     assert.ok(A.copy.text.includes("Book that time:"), "missing the deep link");
     assert.ok(A.copy.text.includes("here are the rest:"), "missing the all-times link");
   });
@@ -139,21 +205,21 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   const B = await copyVia("ok", []);
   ok("2. no slot     -> fallback subject and wording", () => {
     assert.strictEqual(B.slot, null);
-    assert.strictEqual(B.copy.subject, "A time that suits you");
+    assert.strictEqual(B.copy.subject, "AI training: a time that suits you");
     assert.ok(B.copy.text.includes("Grab whichever time suits you here:"), "missing fallback line");
-    assert.ok(!B.copy.text.includes("My next opening"), "slot copy leaked into the fallback");
+    assert.ok(!B.copy.text.includes("I've got"), "slot copy leaked into the fallback");
   });
 
   const C = await copyVia("hang");
   ok("3. unreachable -> timeout falls through to fallback", () => {
     assert.strictEqual(C.slot, null);
-    assert.strictEqual(C.copy.subject, "A time that suits you");
+    assert.strictEqual(C.copy.subject, "AI training: a time that suits you");
   });
 
   const D = await copyVia("401");
   ok("4. bad token   -> 401 falls through to fallback", () => {
     assert.strictEqual(D.slot, null);
-    assert.strictEqual(D.copy.subject, "A time that suits you");
+    assert.strictEqual(D.copy.subject, "AI training: a time that suits you");
   });
 
   const E = await copyVia("garbage");
@@ -237,6 +303,26 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     for (const c of [A.copy, B.copy]) {
       assert.ok(!/fifteen minutes|Nothing gets sold/.test(c.text), "old wording still present");
     }
+  });
+
+  ok("both subjects lead with AI training, for a cold inbox", () => {
+    for (const [label, c] of [["slot", A.copy], ["fallback", B.copy]]) {
+      assert.ok(c.subject.startsWith("AI training"), `${label}: ${c.subject}`);
+      // it has to survive a truncated inbox list, so it goes first, not last
+      assert.ok(c.subject.indexOf("AI training") === 0, `${label}: not leading`);
+    }
+  });
+
+  ok("says Gold Coast time, never Brisbane", () => {
+    assert.ok(A.copy.text.includes("Gold Coast time free."), "label missing");
+    for (const c of [A.copy, B.copy])
+      assert.ok(!/Brisbane/.test(c.text), "Brisbane leaked into the copy");
+  });
+
+  ok("but the times are still computed in Australia/Brisbane", () => {
+    // Same zone, different name: 23:00Z is already the next day on the coast.
+    assert.strictEqual(I.formatSlot(new Date("2026-09-15T23:00:00Z")).long,
+      "Wednesday 16 September, 9:00am");
   });
 
   console.log("\nCopy rules");

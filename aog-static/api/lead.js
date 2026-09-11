@@ -59,6 +59,11 @@ const SHEETS = "https://sheets.googleapis.com/v4/spreadsheets";
 /* Calendly. The base is overridable so the test harness can point it at a
    local server and exercise the failure paths for real. */
 const CALENDLY_API = (process.env.CALENDLY_API_BASE || "https://api.calendly.com").replace(/\/$/, "");
+/* The IANA zone. It stays Australia/Brisbane because that IS the Gold Coast's
+   zone: there is no Australia/Gold_Coast, and south-east Queensland has never
+   observed daylight saving. The email says "Gold Coast time" because that is
+   where the office is; the two are the same instant and must not be
+   "corrected" to match each other. */
 const TZ = "Australia/Brisbane";
 
 /* Column order for a tab's first submission. Anything not listed still gets a
@@ -491,17 +496,27 @@ function nextIntake(now) {
 }
 
 /**
- * The first returned time that is far enough out, close enough in, and on a
- * weekday. The list is taken in the order Calendly gave it, which is
- * chronological, so the first match is also the soonest.
+ * Two stable 32-bit numbers from a string. The same enquirer always hashes to
+ * the same pair, so someone who enquires twice is offered the same time rather
+ * than being bounced to a different one.
+ */
+function spreadKey(key) {
+  const d = crypto.createHash("sha256").update(String(key).trim().toLowerCase()).digest();
+  return [d.readUInt32BE(0), d.readUInt32BE(4)];
+}
+
+/**
+ * Every returned time that is far enough out, close enough in, and on a
+ * weekday, in the order Calendly gave them.
  *
  * Deliberately no widening: if nothing in the next three business days works,
  * the mail offers the whole calendar instead of proposing something a week
  * out that reads as "we are not very busy".
  */
-function pickSlot(times, now) {
+function qualifyingSlots(times, now) {
   const earliest = now.getTime() + 2 * 60 * 60 * 1000;
   const latest = businessDayCutoff(now).getTime();
+  const out = [];
   for (const t of times || []) {
     const iso = t && (t.start_time || t.start);
     if (!iso) continue;
@@ -512,9 +527,56 @@ function pickSlot(times, now) {
     if (ms < earliest || ms > latest) continue;
     const dow = bneParts(at).dow;
     if (dow === 0 || dow === 6) continue;
-    return at;
+    out.push(at);
   }
-  return null;
+  // Calendly returns ascending, but that is a promise about someone else's
+  // API rather than something this code enforces. Sorting makes "soonest"
+  // true locally and costs nothing on a list this size.
+  out.sort((a, b) => a - b);
+  return out;
+}
+
+/**
+ * Which of the open times to offer.
+ *
+ * WHY NOT SIMPLY THE SOONEST
+ * Every enquirer would be sent the same one. Four enquiries in a morning
+ * become four offers of Tuesday 9:30, and as each is taken the next person is
+ * pushed to 10:00, then 10:30, and the day fills as one solid block with
+ * nothing either side of it.
+ *
+ * WHAT IT DOES INSTEAD
+ * The open times are bucketed by day and by morning or afternoon, and the
+ * enquirer's own email address picks a bucket and then a time inside it. Two
+ * people enquiring a minute apart land in different halves of different days;
+ * one person enquiring twice gets the same answer both times, because the
+ * address is the only input. There is no stored state and nothing to keep in
+ * step, which matters in a function that starts cold on every request.
+ *
+ * With no key it falls back to the soonest, which is what the tests for the
+ * window rules assert and what a caller with no address should get.
+ */
+function pickSlot(times, now, key) {
+  const open = qualifyingSlots(times, now);
+  if (!open.length) return null;
+  if (!key) return open[0];
+
+  const buckets = new Map();
+  for (const at of open) {
+    const p = bneParts(at);
+    const half = p.hour < 12 ? "am" : "pm";
+    const id = `${p.y}-${p.m}-${p.d}-${half}`;
+    if (!buckets.has(id)) buckets.set(id, []);
+    buckets.get(id).push(at);
+  }
+
+  // Insertion order is chronological because `open` is sorted, so bucket 0 is
+  // always the soonest half-day and the spread stays inside the three-day
+  // window by construction.
+  const list = Array.from(buckets.values());
+  const [a, b] = spreadKey(key);
+  const bucket = list[a % list.length];
+  return bucket[b % bucket.length];
 }
 
 /**
@@ -525,7 +587,7 @@ function pickSlot(times, now) {
  * Null is not an error here. It is the fallback copy's cue, and the mail goes
  * out either way. A Calendly problem must never become a no-email problem.
  */
-async function calendlySlot(now) {
+async function calendlySlot(now, key) {
   const token = (process.env.CALENDLY_TOKEN || "").trim();
   const eventType = (process.env.CALENDLY_EVENT_TYPE_URI || "").trim();
   if (!token || !eventType) {
@@ -567,7 +629,7 @@ async function calendlySlot(now) {
       console.log("[lead] calendly: no available times in the next seven days");
       return null;
     }
-    const slot = pickSlot(times, now);
+    const slot = pickSlot(times, now, key);
     if (!slot) {
       console.log(`[lead] calendly: ${times.length} times returned, none inside three business days`);
       return null;
@@ -680,7 +742,7 @@ function autoReplyCopy(record, slot) {
   if (fmt) {
     paras.push([
       "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
-      `with you. My next opening is ${fmt.long} Brisbane time.`,
+      `with you. I've got ${fmt.long} Gold Coast time free.`,
     ]);
     paras.push([`Book that time: ${bookingUrl(record, slot)}`]);
     paras.push([`If it doesn't suit, here are the rest: ${allTimes}`]);
@@ -721,8 +783,14 @@ function autoReplyCopy(record, slot) {
       .join("") +
     "</div>";
 
+  // "AI training" leads the subject because this lands on a cold audience: an
+  // enquiry is often someone's first contact, and a bare "Would Tuesday at 2pm
+  // suit?" from a name they do not know reads like a misdirected email. The
+  // recognisable thing goes first, where it survives truncation in a list.
   return {
-    subject: fmt ? `Would ${fmt.weekday} at ${fmt.short} suit?` : "A time that suits you",
+    subject: fmt
+      ? `AI training: would ${fmt.weekday} at ${fmt.short} suit?`
+      : "AI training: a time that suits you",
     text,
     html,
   };
@@ -806,7 +874,7 @@ async function sendAutoReply(creds, form, record) {
 
   // Looked up before the mail is built, and never allowed to stop it: every
   // failure inside here returns null, which is simply the fallback copy.
-  const slot = await calendlySlot(new Date());
+  const slot = await calendlySlot(new Date(), to);
 
   try {
     const token = await accessToken(creds, GMAIL_SCOPE, from);
@@ -860,7 +928,7 @@ module.exports = async (req, res) => {
       email: to,
       form: "enquiry",
     };
-    const slot = await calendlySlot(new Date());
+    const slot = await calendlySlot(new Date(), to);
     const copy = autoReplyCopy(rec, slot);
     if (req.query.dry) {
       return res.status(200).json({
@@ -984,5 +1052,5 @@ module.exports = async (req, res) => {
    nothing outside the test harness should reach in here. */
 module.exports._internals = {
   autoReplyCopy, calendlySlot, pickSlot, formatSlot, buildMessage,
-  businessDayCutoff, bneParts, bookingUrl, firstName, nextIntake,
+  businessDayCutoff, bneParts, bookingUrl, firstName, nextIntake, qualifyingSlots,
 };
