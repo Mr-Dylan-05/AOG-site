@@ -44,7 +44,15 @@ p, li, figcaption, blockquote { text-wrap: pretty; }
 @media (max-width: 767px) {
 
   /* --- 1. nothing may force the page sideways -------------------------- */
-  html, body { max-width: 100% !important; overflow-x: hidden !important; }
+  /* The clip belongs on <html> alone. overflow-x on <body> looks like a
+     harmless second line of defence, but there is no such thing as one clipped
+     axis: the spec computes the other axis to `auto`, so a body carrying
+     overflow-x:hidden becomes a scroll container in y as well. Every
+     position:sticky inside it then resolves against that container, which
+     never scrolls, and silently stops sticking. <html> is the viewport and
+     already clips the page; body only needs to not be wider than it. */
+  html, body { max-width: 100% !important; }
+  html { overflow-x: hidden !important; }
 
   /* --- 2. stack multi-column grids ------------------------------------- */
   /* Any inline grid becomes a single column. At 375px there is no useful
