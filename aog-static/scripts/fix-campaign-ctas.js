@@ -2,10 +2,14 @@
 /**
  * fix-campaign-ctas.js — button and card wording on /ai-training/.
  *
- * The two dark buttons said "BOOK NOW", which promises a booking. They go to
- * /ai-enquiry/, a four-field form that asks for a name, an email, a phone
- * number and what you want to achieve with AI. Nothing is scheduled, so
- * "GET IN TOUCH" is what actually happens next.
+ * The two dark buttons said "BOOK NOW", which promises a booking. Nothing is
+ * scheduled by them: they scroll to the enquiry form at the foot of the page.
+ *
+ * They read "GET IN TOUCH" for a while, which was accurate but asks the
+ * visitor to do the giving. "GET MORE INFO" says what they get back, and it is
+ * now the label on every CTA on the page — the curriculum card's included — so
+ * that whichever one someone presses, the form they land on is the one they
+ * were promised.
  *
  * The label is literal uppercase in the markup, not text-transform, so it is
  * swapped as written.
@@ -27,7 +31,7 @@ const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 
 /** Button labels: [what the export ships, what it should say] */
-const LABELS = [["BOOK NOW", "GET IN TOUCH"]];
+const LABELS = [["BOOK NOW", "GET MORE INFO"], ["GET IN TOUCH", "GET MORE INFO"]];
 
 /**
  * Card headings, same shape. "2 One-on-One Sessions Monthly" sat under a card

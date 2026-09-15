@@ -14,11 +14,26 @@
  *   carrying that marker as already canonical and leaves it alone; without it
  *   the next run of that script would put the full pill straight back.
  *
- *   It is no longer sticky. The wordmark is white because the hero is almost
- *   black at the top (rgb(1,6,15)), but the sections below it are white. A
+ *   It is not sticky on a desktop. The wordmark is white because the hero is
+ *   almost black at the top (#020916), but the sections below it are white. A
  *   sticky white logo would disappear the moment you scrolled past the hero.
  *   Static means it scrolls away with the hero, which is what the reference
  *   does and what a landing page wants anyway.
+ *
+ *   Below 860px it does stick, and carries a Book a call button. A phone
+ *   screen makes the page very long, and the enquiry form is at the foot of
+ *   it; the six in-page CTAs are only useful to someone who keeps scrolling.
+ *   Sticking costs the legibility the static header was protecting, so the bar
+ *   takes a fill at the hero's own top colour: invisible against the hero at
+ *   rest, and dark enough to hold a white wordmark over the white sections
+ *   below. No scroll listener, no class toggling, nothing to get out of step.
+ *
+ *   The button follows the same rule as every other booking button on the
+ *   site: it ships hidden with the URL unset, .eleventy.js writes the Calendly
+ *   link into it at build time, and if thirdParty.calendly is empty the button
+ *   is removed rather than rendered pointing at nothing. Its click is handled
+ *   by contact-form.js, which fetches the widget on first use and deliberately
+ *   reports no conversion — a booking is an extra, not a second Lead.
  *
  * The mark keeps its Ad On Group cyan, which reads cleanly on the dark hero;
  * only the wordmark needs to turn white. adon-logo-footer.png is the white
@@ -81,15 +96,20 @@ const group = ([label, links]) => `
               ${links.map(([t, h]) => `<a href="${h}">${t}</a>`).join("\n              ")}
             </div>`;
 
-const HEADER = `<nav data-aog-header data-campaign-header style="position:relative;z-index:60;background:transparent">
+const BOOK = `<button class="ch-book" type="button" data-calendly hidden style="display:none;font:inherit;font-size:14px;font-weight:800;letter-spacing:-.01em;color:#fff;background:#1BABE5;border:none;padding:0 15px;height:44px;border-radius:999px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Book a call</button>`;
+
+const HEADER = `<nav data-aog-header data-campaign-header>
       <div class="ch-bar">
         <a class="ch-logo" href="/" aria-label="Ad On Group">
           <span class="ch-mark"><img src="/assets/design/adon-logo.png" alt="" width="320" height="320"></span>
           <span class="ch-word">Ad On Group</span>
         </a>
-        <button class="ch-toggle" type="button" aria-expanded="false" aria-controls="campaign-menu" aria-label="Open menu">
-          <span class="ch-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-        </button>
+        <div class="ch-right">
+          ${BOOK}
+          <button class="ch-toggle" type="button" aria-expanded="false" aria-controls="campaign-menu" aria-label="Open menu">
+            <span class="ch-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+        </div>
         <div class="ch-panel" id="campaign-menu" hidden>
           ${MENU.map(group).join("")}
           <div class="ch-actions">
@@ -99,7 +119,9 @@ const HEADER = `<nav data-aog-header data-campaign-header style="position:relati
         </div>
       </div>
       <style>
+        nav[data-campaign-header]{position:relative;z-index:60;background:transparent}
         .ch-bar{max-width:1268px;margin:0 auto;padding:30px 24px 0;display:flex;align-items:center;justify-content:space-between;position:relative}
+        .ch-right{display:flex;align-items:center;gap:10px}
         .ch-logo{display:inline-flex;align-items:center;gap:11px;text-decoration:none}
         .ch-mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:none}
         .ch-mark img{width:100%;height:100%;object-fit:contain;display:block}
@@ -132,8 +154,34 @@ const HEADER = `<nav data-aog-header data-campaign-header style="position:relati
           padding:10px 18px;border-radius:999px;white-space:nowrap}
         .ch-contact:hover{filter:brightness(1.06)}
 
+        /* The booking button is a phone-only affordance, and it is the reason
+           the bar sticks. On a desktop the form is a scroll away and the page
+           has six CTAs pointing at it; on a phone that is a long way down, so
+           one tap to a booking stays on screen the whole way.
+
+           display is set here rather than inline because the inline style is
+           what the build writes the Calendly URL into, and a display there
+           would outrank this rule. */
+        .ch-book{display:none}
+        .ch-book:hover{filter:brightness(1.05)}
+        .ch-book:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+        @media(max-width:860px){
+          /* Sticky from the top, not on a scroll listener. At rest the bar is
+             the hero's own top colour so there is no seam to see; once the
+             white sections scroll under it, that same fill is what keeps the
+             white wordmark legible. */
+          nav[data-campaign-header]{position:sticky;top:0;background:rgba(2,9,22,.92);
+            -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+          .ch-bar{padding:14px 24px}
+          .ch-book{display:inline-flex}
+        }
+
         @media(max-width:520px){
           .ch-panel{right:24px;left:24px;min-width:0}
+        }
+        @media(max-width:380px){
+          .ch-word{display:none}
         }
         @media(prefers-reduced-motion:reduce){
           .ch-toggle,.ch-bars i{transition:none}

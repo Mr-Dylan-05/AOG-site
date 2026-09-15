@@ -21,14 +21,17 @@
  * the page's yellow on the button, the same colour as the hero CTA so the page
  * opens and closes on the same note.
  *
- * The closing copy is adapted from lines already on the site rather than
- * written fresh:
- *   /ai-quiz/   "Talk to one of our AI Training Facilitators and we will help
- *                you work out your best AI learning path." The opening half is
- *                kept; the tail was changed on request to "how to get ahead
- *                with AI", which ties it back to the headline above it and the
- *                hero at the top instead of naming a learning path.
- *   hero        "Get ahead with it."
+ * There is no line of copy between the heading and the form. It used to carry
+ * "Talk to one of our course facilitators", adapted from /ai-quiz/, and that
+ * was dropped on request: by this point in the page the reader has had the
+ * whole argument, and a sentence restating it only puts distance between the
+ * heading and the fields. The gap it was providing moved onto .cc-form as an
+ * explicit margin, so removing it did not close the section up.
+ *
+ * The form asks for a name, an email and an optional phone number. It used to
+ * ask what they wanted to use AI for as well; that field is gone, because a
+ * free-text box is the slowest thing on a form and the answer is the first
+ * thing the call covers anyway.
  *
  * Idempotent: rebuilds both blocks from the original section every run.
  *
@@ -45,7 +48,6 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
         <div class="cc-inner">
           <p class="cc-eyebrow">Get started</p>
           <h2 class="cc-head">Ready to start your <b>AI training journey?</b></h2>
-          <p class="cc-copy">Talk to one of our course facilitators.</p>
                     <div class="cc-form">
             <form data-contact-form data-form="enquiry" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
@@ -57,7 +59,6 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
             <label style="display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">Your name</span><input type="text" name="name" required autocomplete="name" autocapitalize="words" style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box"><span data-error style="font-size:13px;color:#C2410C"></span></label>
             <label style="display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">Email</span><input type="email" name="email" required autocomplete="email" inputmode="email" spellcheck="false" style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box"><span data-error style="font-size:13px;color:#C2410C"></span></label>
             <label style="display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">Phone (optional)</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" style="font:inherit;font-size:16px;padding:15px 16px;min-height:52px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box"><span data-error style="font-size:13px;color:#C2410C"></span></label>
-            <label style="display:flex;flex-direction:column;gap:5px"><span style="font-size:14px;font-weight:700;letter-spacing:-0.01em;color:#0B1220">What would you like to use AI for? (optional)</span><textarea name="ai_goal" rows="4" placeholder="For example: cut down admin time, get quotes out faster, or help the team write better." style="font:inherit;font-size:16px;line-height:1.5;padding:14px 15px;border-radius:12px;border:1.5px solid rgba(11,18,32,0.16);background:#fff;color:#0B1220;outline:none;width:100%;box-sizing:border-box;resize:vertical"></textarea><span data-error style="font-size:13px;color:#C2410C"></span></label>
             <button type="submit" style="font:inherit;font-size:17px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:16px 26px;min-height:54px;border-radius:14px;cursor:pointer;width:100%;box-shadow:0 14px 26px -12px rgba(27,171,229,0.65)">Send my enquiry &rarr;</button>
             <p data-form-status class="form-status" role="status" aria-live="polite" style="font-size:14px;margin:0"></p>
             <div class="or-rule"><span>or</span></div><button type="button" class="book-inline" data-calendly hidden style="display:none;font:inherit;font-size:16px;font-weight:700;color:#1BABE5;background:#fff;border:1.5px solid rgba(27,171,229,.5);padding:15px 22px;min-height:54px;border-radius:14px;cursor:pointer;width:100%"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>Book a time with our team</button><label style="display:flex;align-items:flex-start;gap:9px;margin:6px 0 0;cursor:pointer"><input type="checkbox" name="marketing_consent" value="yes" checked style="flex:none;width:16px;height:16px;margin:6px 0 0;accent-color:#1BABE5;cursor:pointer"><span style="font-size:12.5px;line-height:1.5;color:#8A93A1">OPTIONAL: By ticking this box, you agree to receive AI training tips and resources to help your team work smarter from Ad On AI &mdash; you can unsubscribe at any time.</span></label><p style="font-size:12.5px;line-height:1.5;color:#8A93A1;margin:2px 0 0">No obligation. We never share your details.</p>
@@ -67,7 +68,7 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
         </div>
       </section>`;
 
-const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire">GET IN TOUCH &rarr;</a></div>`;
+const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire">GET MORE INFO &rarr;</a></div>`;
 
 const DEEP = "html" + ":root".repeat(64) + " body main";
 
@@ -98,7 +99,7 @@ const STYLE = `<style id="closing-style">
         .faq-cta{background:#fff;text-align:center;padding:0 24px 84px}
         .faq-cta .dark-button{margin-top:0}
         @media(max-width:640px){.faq-cta{padding:0 24px 56px}}
-        .cc-form{max-width:460px;margin:26px auto 0;padding:22px 22px 20px;background:#fff;
+        .cc-form{max-width:460px;margin:34px auto 0;padding:22px 22px 20px;background:#fff;
           border-radius:16px;text-align:left;box-shadow:0 18px 40px -24px rgba(0,0,0,.4)}
         .book-inline{display:flex;align-items:center;justify-content:center;gap:9px}.book-inline:hover{background:#f2fafe!important;border-color:rgba(27,171,229,.8)!important}.or-rule{display:flex;align-items:center;gap:12px;margin:4px 0 2px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8A93A1}.or-rule:before,.or-rule:after{content:"";flex:1;height:1px;background:rgba(11,18,32,.14)}
         .cc-form .form-status--ok{color:#166534}
@@ -114,7 +115,7 @@ const STYLE = `<style id="closing-style">
           ${DEEP} .cta--compact .cta-stats{gap:18px!important;margin-top:30px!important}
           .cc-inner{padding:76px 24px 84px}
           .cc-copy{font-size:16px;margin-bottom:32px}
-          .cc-form{margin-top:22px;padding:18px 16px 16px}
+          .cc-form{margin-top:26px;padding:18px 16px 16px}
         }
       </style>`;
 
