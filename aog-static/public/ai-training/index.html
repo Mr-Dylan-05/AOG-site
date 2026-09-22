@@ -1164,7 +1164,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
         });
       })();
       </script><style id="glass-man-watermark">
-/* The glass man, sitting very faintly behind the page's white sections.
+/* The glass man, sitting very faintly behind two of the page's white sections.
 
    It is a background layer rather than an element on purpose: a background
    cannot be clicked by accident, is not announced by a screen reader, adds
@@ -1178,14 +1178,23 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
    --wm-veil is the single dial for how faint it is: lower it to bring the mark
    forward, raise it to push it further back.
 
-   The !important is not decoration. Three of these sections are also styled by
-   rules like `html:root:root:...:root body main .faq{background:none #fff
-   !important}` - the background *shorthand*, which resets background-image to
-   none, flagged important. Without a flag of its own the mark silently never
-   paints on #how, #inclusions or #faq. The ID selectors here outrank those on
-   specificity, so the flag is enough, and the white they set still applies
-   because only the image is overridden here. */
-#challenge,#how,#inclusions,#reviews,#faq{
+   It ran on five sections once - #challenge, #how, #inclusions, #reviews and
+   #faq - and read as wallpaper rather than as a motif, because the first three
+   are consecutive: you met the same mark three sections running, and varying
+   how far down each one it sat was never going to fix that. Twice is a motif.
+   One sits near the top and one about two thirds down, the programme block
+   between them is clean, and #faq is left bare so nothing decorative sits
+   alongside the enquiry form.
+
+   The !important is not decoration, and it is kept even though neither section
+   left here needs it: .impact and .campaign-reviews set a plain background:#fff
+   that an ID selector already outranks on specificity. The sections that were
+   dropped do not - .how, .program and .faq set the background *shorthand*
+   flagged important, from `html:root:root:...:root body main` selectors, and
+   the shorthand resets background-image to none. Move this mark onto one of
+   those without a flag of its own and it silently never paints. The flag stays
+   as the only warning that trap leaves behind. */
+#challenge,#reviews{
   --wm-veil:.94;
   --wm-w:620px;
   background-image:
@@ -1195,29 +1204,23 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
   background-size:auto,var(--wm-w) auto!important;
 }
 
-/* Every mark is anchored to the right edge rather than alternating sides. The
+/* Both marks are anchored to the right edge rather than alternating sides. The
    figure occupies the left ~60% of the asset and the sparkles its top right
    corner, so anchoring right and bleeding past that edge is what keeps the
    head and shoulders - the recognisable part - on the page; anchoring left
    showed a stray sparkle and nothing else. These sections are also mostly
    filled with opaque cards, which is why the mark is run large: only the slice
-   crossing the gutter and the padding band above or below ever shows. What
-   varies is how far down each section it sits, which is enough to stop five of
-   them reading as wallpaper. */
-#challenge {background-position:0 0,right -210px top -90px!important}
-#how       {background-position:0 0,right -170px bottom -150px!important}
-#inclusions{background-position:0 0,right -210px top 60px!important}
-#reviews   {background-position:0 0,right -190px bottom -80px!important}
-#faq       {background-position:0 0,right -210px top 90px!important}
+   crossing the gutter and the padding band above or below ever shows. The
+   first sits high in its section and the second low, so across the scroll the
+   two never line up with each other. */
+#challenge{background-position:0 0,right -210px top -90px!important}
+#reviews  {background-position:0 0,right -190px bottom -80px!important}
 
 /* On a narrow screen the content column runs the full width, so the mark is
    smaller and tucked further past the edge to stay out from behind the text. */
 @media(max-width:860px){
-  #challenge,#how,#inclusions,#reviews,#faq{--wm-w:330px}
-  #challenge {background-position:0 0,right -120px top -30px!important}
-  #how       {background-position:0 0,right -110px bottom -70px!important}
-  #inclusions{background-position:0 0,right -120px top 40px!important}
-  #reviews   {background-position:0 0,right -110px bottom -40px!important}
-  #faq       {background-position:0 0,right -120px top 50px!important}
+  #challenge,#reviews{--wm-w:330px}
+  #challenge{background-position:0 0,right -120px top -30px!important}
+  #reviews  {background-position:0 0,right -110px bottom -40px!important}
 }
 </style></body></html>
