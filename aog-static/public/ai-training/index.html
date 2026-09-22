@@ -1163,4 +1163,61 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
           if(e.key === 'Escape' && !panel.hidden){ setOpen(false); btn.focus(); }
         });
       })();
-      </script></body></html>
+      </script><style id="glass-man-watermark">
+/* The glass man, sitting very faintly behind the page's white sections.
+
+   It is a background layer rather than an element on purpose: a background
+   cannot be clicked by accident, is not announced by a screen reader, adds
+   nothing to the DOM, and - unlike an absolutely positioned image - can never
+   push the layout around or pull a horizontal scrollbar onto the page when it
+   bleeds past an edge. Backgrounds clip; elements do not.
+
+   Two layers are stacked. The mark is underneath; a flat sheet of white sits
+   on top of it. Because these sections are already white, 94% white over the
+   mark lands in the same place as opacity .06 would, and the alpha in
+   --wm-veil is the single dial for how faint it is: lower it to bring the mark
+   forward, raise it to push it further back.
+
+   The !important is not decoration. Three of these sections are also styled by
+   rules like `html:root:root:...:root body main .faq{background:none #fff
+   !important}` - the background *shorthand*, which resets background-image to
+   none, flagged important. Without a flag of its own the mark silently never
+   paints on #how, #inclusions or #faq. The ID selectors here outrank those on
+   specificity, so the flag is enough, and the white they set still applies
+   because only the image is overridden here. */
+#challenge,#how,#inclusions,#reviews,#faq{
+  --wm-veil:.94;
+  --wm-w:620px;
+  background-image:
+    linear-gradient(rgba(255,255,255,var(--wm-veil)),rgba(255,255,255,var(--wm-veil))),
+    url("/assets/campaign/glass-man.webp")!important;
+  background-repeat:no-repeat,no-repeat!important;
+  background-size:auto,var(--wm-w) auto!important;
+}
+
+/* Every mark is anchored to the right edge rather than alternating sides. The
+   figure occupies the left ~60% of the asset and the sparkles its top right
+   corner, so anchoring right and bleeding past that edge is what keeps the
+   head and shoulders - the recognisable part - on the page; anchoring left
+   showed a stray sparkle and nothing else. These sections are also mostly
+   filled with opaque cards, which is why the mark is run large: only the slice
+   crossing the gutter and the padding band above or below ever shows. What
+   varies is how far down each section it sits, which is enough to stop five of
+   them reading as wallpaper. */
+#challenge {background-position:0 0,right -210px top -90px!important}
+#how       {background-position:0 0,right -170px bottom -150px!important}
+#inclusions{background-position:0 0,right -210px top 60px!important}
+#reviews   {background-position:0 0,right -190px bottom -80px!important}
+#faq       {background-position:0 0,right -210px top 90px!important}
+
+/* On a narrow screen the content column runs the full width, so the mark is
+   smaller and tucked further past the edge to stay out from behind the text. */
+@media(max-width:860px){
+  #challenge,#how,#inclusions,#reviews,#faq{--wm-w:330px}
+  #challenge {background-position:0 0,right -120px top -30px!important}
+  #how       {background-position:0 0,right -110px bottom -70px!important}
+  #inclusions{background-position:0 0,right -120px top 40px!important}
+  #reviews   {background-position:0 0,right -110px bottom -40px!important}
+  #faq       {background-position:0 0,right -120px top 50px!important}
+}
+</style></body></html>
