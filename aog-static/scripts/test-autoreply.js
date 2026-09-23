@@ -19,7 +19,7 @@ process.env.CALENDLY_BOOKING_URL = BOOK;
 process.env.CALENDLY_EVENT_TYPE_URI = "https://api.calendly.com/event_types/TEST";
 process.env.SENDER_NAME = "Paul Harding";
 process.env.SENDER_PHONE = "(07) 5586 1400";
-process.env.AUTOREPLY_REPLY_TO = "paul@adongroup.com.au";
+process.env.AUTOREPLY_REPLY_TO = "paul.harding@adongroup.com.au";
 
 let pass = 0, fail = 0;
 const ok = (name, fn) => {
@@ -229,10 +229,15 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
 
   console.log("\nHeaders, on both paths");
   for (const [label, c] of [["slot", A], ["fallback", B]]) {
-    ok(`${label}: Bcc to adonai@ and Reply-To to Paul`, () => {
+    ok(`${label}: Bcc to adonai@ and paul.harding@, Reply-To to Paul`, () => {
       const raw = c.J.buildMessage("info@adongroup.com.au", "Ad On Group", "jane@example.com", c.copy);
-      assert.ok(raw.includes("Bcc: <adonai@adongroup.com.au>"), "Bcc missing");
-      assert.ok(raw.includes("Reply-To: <paul@adongroup.com.au>"), "Reply-To missing");
+      // One header, two addresses, each in its own brackets. `Bcc: <a, b>` is
+      // a single malformed address, not a list, and Gmail rejects it.
+      assert.ok(
+        raw.includes("Bcc: <adonai@adongroup.com.au>, <paul.harding@adongroup.com.au>"),
+        "Bcc is not a well-formed two-address list"
+      );
+      assert.ok(raw.includes("Reply-To: <paul.harding@adongroup.com.au>"), "Reply-To missing");
       assert.ok(raw.includes("multipart/alternative"), "not multipart");
       assert.ok(raw.includes("text/plain"), "no plain-text part");
     });
@@ -387,6 +392,26 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(!c.text.includes("here it is again:"), "left a dangling link sentence");
     assert.ok(!/https?:\/\//.test(c.text), "a URL survived with no base configured");
     assert.ok(c.text.includes("Hope to speak soon."), "dropped more than the link paragraph");
+  });
+
+  console.log("\nBcc list");
+  ok("AUTOREPLY_BCC overrides the default outright, and splits on commas", () => {
+    const saved = process.env.AUTOREPLY_BCC;
+    process.env.AUTOREPLY_BCC = " one@x.com ,two@y.com,  ";
+    const raw = A.J.buildMessage("info@adongroup.com.au", "Ad On Group", "j@e.com", A.copy);
+    if (saved === undefined) delete process.env.AUTOREPLY_BCC;
+    else process.env.AUTOREPLY_BCC = saved;
+    assert.ok(raw.includes("Bcc: <one@x.com>, <two@y.com>"), "did not trim, split or drop the empty");
+    assert.ok(!raw.includes("adonai@"), "the default leaked in alongside the override");
+  });
+
+  ok("AUTOREPLY_BCC set empty sends no copy at all", () => {
+    const saved = process.env.AUTOREPLY_BCC;
+    process.env.AUTOREPLY_BCC = "";
+    const raw = A.J.buildMessage("info@adongroup.com.au", "Ad On Group", "j@e.com", A.copy);
+    if (saved === undefined) delete process.env.AUTOREPLY_BCC;
+    else process.env.AUTOREPLY_BCC = saved;
+    assert.ok(!/^Bcc:/m.test(raw), "a Bcc header survived an empty setting");
   });
 
   console.log(`\n${pass} passed, ${fail} failed\n`);

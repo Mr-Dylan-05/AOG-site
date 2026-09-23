@@ -57,7 +57,7 @@ var MARKER = "autoreply_sent";     // column this script creates and stamps
 var SEND_AS = "info@adongroup.com.au";
 var SENDER_NAME = "Ad On Group";
 var BCC = "adonai@adongroup.com.au";   // "" for none
-var BOOKING = "https://calendly.com/adongroup-info/30min?guests=paul@adongroup.com.au";
+var BOOKING = "https://calendly.com/adongroup-info/30min?guests=paul.harding@adongroup.com.au";
 
 /**
  * Nothing submitted before this is ever emailed.

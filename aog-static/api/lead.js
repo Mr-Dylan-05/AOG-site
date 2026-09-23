@@ -359,8 +359,21 @@ async function notifyChat(form, record, sheetUrl, failed) {
  *                    UNSET = nothing is sent. That is the switch.
  *   AUTOREPLY_NAME   display name, defaults to "Ad On Group"
  *   BOOKING_URL      optional, the Calendly link to offer in the mail
- *   AUTOREPLY_BCC    optional, silent copy; defaults to adonai@adongroup.com.au,
- *                    set it to an empty string to send no copy at all
+ *   AUTOREPLY_BCC    optional, silent copy. Defaults to adonai@adongroup.com.au
+ *                    and paul.harding@adongroup.com.au. Comma-separate to send
+ *                    to several; set it to an empty string for no copy at all.
+ *                    NOTE this default only applies when the variable is UNSET.
+ *                    Set it in Vercel and the value there wins outright — the
+ *                    addresses above are not merged into it.
+ *   AUTOREPLY_REPLY_TO
+ *                    where replies go, e.g. paul.harding@adongroup.com.au.
+ *                    There is deliberately no default: unset sends no Reply-To
+ *                    at all and replies land back in AUTOREPLY_FROM, which is
+ *                    a shared mailbox but at least a live one. It lives only
+ *                    in Vercel, so grepping this repo for the address that
+ *                    receives replies will not find it — that is how
+ *                    paul@adongroup.com.au went on being used here after the
+ *                    mailbox stopped working. Changing it is a Vercel job.
  */
 
 /* Which forms get a confirmation.
@@ -813,17 +826,27 @@ function buildMessage(from, name, to, copy) {
   // reply from info@ and nothing else. Gmail honours a Bcc header on a raw
   // message: it delivers to the address and strips the header on the way out.
   // Set AUTOREPLY_BCC to "" to turn it off; unset falls back to the default.
-  const bcc =
+  //
+  // Several addresses are allowed, separated by commas. Each one is wrapped in
+  // its own angle brackets below: `Bcc: <a>, <b>` is a list, while the
+  // `Bcc: <a, b>` this used to build is one malformed address that Gmail
+  // rejects outright — which is why a second recipient could not simply be
+  // appended to the variable.
+  const bcc = (
     process.env.AUTOREPLY_BCC !== undefined
-      ? process.env.AUTOREPLY_BCC.trim()
-      : "adonai@adongroup.com.au";
+      ? process.env.AUTOREPLY_BCC
+      : "adonai@adongroup.com.au, paul.harding@adongroup.com.au"
+  )
+    .split(",")
+    .map((a) => a.trim())
+    .filter(Boolean);
   // Replies go to a person, not to the shared sending mailbox.
   const replyTo = (process.env.AUTOREPLY_REPLY_TO || "").trim();
   return [
     `From: ${encodeHeader(name)} <${from}>`,
     `To: <${to}>`,
     ...(replyTo ? [`Reply-To: <${replyTo}>`] : []),
-    ...(bcc ? [`Bcc: <${bcc}>`] : []),
+    ...(bcc.length ? [`Bcc: ${bcc.map((a) => `<${a}>`).join(", ")}`] : []),
     `Subject: ${encodeHeader(copy.subject)}`,
     "MIME-Version: 1.0",
     `Content-Type: multipart/alternative; boundary="${boundary}"`,
