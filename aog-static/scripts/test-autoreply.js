@@ -193,39 +193,39 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     return [{ status: "available", start_time: d.toISOString() }];
   };
 
+  // The copy no longer branches on the slot, so all four paths must produce
+  // the same message. That is the point of these four: not that each renders,
+  // but that a slot cannot leak back into the wording.
+  const SUBJECT = "Thinking about AI Training, Jane?";
+
   const A = await copyVia("ok", soon());
-  ok("1. slot found  -> subject proposes a day and time", () => {
+  ok("1. slot found  -> the slot is looked up and ignored", () => {
     assert.ok(A.slot, "expected a slot");
-    assert.match(A.copy.subject, /^AI training: would \w+ at \d/);
-    assert.ok(A.copy.text.includes("I've got"), "missing the offer line");
-    assert.ok(A.copy.text.includes("Book that time:"), "missing the deep link");
-    assert.ok(A.copy.text.includes("here are the rest:"), "missing the all-times link");
+    assert.strictEqual(A.copy.subject, SUBJECT);
+    assert.ok(A.copy.text.includes("Sometimes the Calendly link gets missed"), "missing the link line");
+    assert.ok(A.copy.text.includes(BOOK), "missing the booking URL");
+    assert.ok(!/I've got|Book that time:|here are the rest:/.test(A.copy.text),
+      "the old slot offer is still being written");
   });
 
   const B = await copyVia("ok", []);
-  ok("2. no slot     -> fallback subject and wording", () => {
+  ok("2. no slot     -> byte-identical copy", () => {
     assert.strictEqual(B.slot, null);
-    assert.strictEqual(B.copy.subject, "AI training: a time that suits you");
-    assert.ok(B.copy.text.includes("Grab whichever time suits you here:"), "missing fallback line");
-    assert.ok(!B.copy.text.includes("I've got"), "slot copy leaked into the fallback");
+    assert.strictEqual(B.copy.subject, SUBJECT);
+    assert.strictEqual(B.copy.text, A.copy.text, "a slot changed the wording");
   });
 
   const C = await copyVia("hang");
-  ok("3. unreachable -> timeout falls through to fallback", () => {
+  ok("3. unreachable -> timeout changes nothing", () => {
     assert.strictEqual(C.slot, null);
-    assert.strictEqual(C.copy.subject, "AI training: a time that suits you");
+    assert.strictEqual(C.copy.text, A.copy.text);
   });
 
   const D = await copyVia("401");
-  ok("4. bad token   -> 401 falls through to fallback", () => {
+  ok("4. bad token   -> 401 changes nothing", () => {
     assert.strictEqual(D.slot, null);
-    assert.strictEqual(D.copy.subject, "AI training: a time that suits you");
+    assert.strictEqual(D.copy.text, A.copy.text);
   });
-
-  const E = await copyVia("garbage");
-  ok("   malformed body also falls through", () => assert.strictEqual(E.slot, null));
-  const F = await copyVia("500");
-  ok("   500 also falls through", () => assert.strictEqual(F.slot, null));
 
   console.log("\nHeaders, on both paths");
   for (const [label, c] of [["slot", A], ["fallback", B]]) {
@@ -283,19 +283,15 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     }
   });
 
-  console.log("\nThe intake paragraph");
-  ok("stands alone on its own line in both versions", () => {
+  console.log("\nParagraphs the new copy dropped");
+  // nextIntake() and formatSlot() are still exported and still unit-tested
+  // above, but nothing in the mail calls them now. If either sentence comes
+  // back into the copy it should be a decision, not a merge artefact.
+  ok("no intake date, no phone number, no 'I'll run you through'", () => {
     for (const [label, c] of [["slot", A.copy], ["fallback", B.copy]]) {
-      const lines = c.text.split("\n");
-      const at = lines.findIndex((l) => /^The next intake starts /.test(l));
-      assert.ok(at > -1, `${label}: paragraph missing`);
-      assert.match(lines[at], /^The next intake starts \d+ [A-Z][a-z]+( \d{4})?\.$/, `${label}: ${lines[at]}`);
-      assert.strictEqual(lines[at - 1], "", `${label}: not preceded by a blank line`);
-      // and it follows the paragraph it is meant to follow
-      const runThrough = lines.findIndex((l) => l.startsWith("I'll run you through"));
-      assert.ok(runThrough > -1 && runThrough < at, `${label}: not after the "I'll run you through" paragraph`);
-      assert.strictEqual(lines[at - 2], "private one-on-one support works, and what it costs.",
-        `${label}: something sits between them`);
+      assert.ok(!/The next intake starts /.test(c.text), `${label}: intake line is back`);
+      assert.ok(!/I'll run you through/.test(c.text), `${label}: run-through line is back`);
+      assert.ok(!/5586 1400/.test(c.text), `${label}: phone number is back`);
     }
   });
 
@@ -305,16 +301,21 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     }
   });
 
-  ok("both subjects lead with AI training, for a cold inbox", () => {
+  ok("the subject is the same question on every path, and names them", () => {
     for (const [label, c] of [["slot", A.copy], ["fallback", B.copy]]) {
-      assert.ok(c.subject.startsWith("AI training"), `${label}: ${c.subject}`);
-      // it has to survive a truncated inbox list, so it goes first, not last
-      assert.ok(c.subject.indexOf("AI training") === 0, `${label}: not leading`);
+      assert.strictEqual(c.subject, SUBJECT, `${label}: ${c.subject}`);
+      assert.ok(c.subject.includes("Jane"), `${label}: first name missing`);
     }
   });
 
-  ok("says Gold Coast time, never Brisbane", () => {
-    assert.ok(A.copy.text.includes("Gold Coast time free."), "label missing");
+  ok("no first name leaves no dangling comma in the subject", () => {
+    const c = A.J.autoReplyCopy({ email: "x@y.com" }, null);
+    assert.strictEqual(c.subject, "Thinking about AI Training?");
+  });
+
+  ok("never says Brisbane", () => {
+    // The copy no longer names a timezone at all, because it no longer names a
+    // time. The rule is kept because Calendly renders the zone itself.
     for (const c of [A.copy, B.copy])
       assert.ok(!/Brisbane/.test(c.text), "Brisbane leaked into the copy");
   });
@@ -330,8 +331,11 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   ok("no em-dashes", () => both.forEach((c) => {
     assert.ok(!c.text.includes("—") && !c.subject.includes("—"), `em-dash in: ${c.subject}`);
   }));
-  ok('never says "course", "modules" or "community"', () => both.forEach((c) => {
-    const m = c.text.match(/\b(course|modules?|community)\b/i);
+  // "course" was on this list until 23 Sep 2026. The supplied copy calls the
+  // people on the call "course coordinators", so the word is now deliberate
+  // and the rule covers only the other two.
+  ok('never says "modules" or "community"', () => both.forEach((c) => {
+    const m = c.text.match(/\b(modules?|community)\b/i);
     assert.ok(!m, `found "${m && m[0]}"`);
   }));
   ok("no price, no attachment, no postscript", () => both.forEach((c) => {
@@ -347,32 +351,42 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const c = A.J.autoReplyCopy({ email: "x@y.com" }, null);
     assert.ok(c.text.startsWith("Hi there,"), c.text.slice(0, 20));
   });
-  ok("signature carries the sender, division and 2008", () => {
-    assert.ok(A.copy.text.includes("Paul Harding"), "no sender name");
-    assert.ok(A.copy.text.includes("Ad On AI, Ad On Group"), "no division line");
-    assert.ok(A.copy.text.includes("Operating since 2008"), "no since line");
+  ok("signature is the coordinator and the division, on two lines", () => {
+    const lines = A.copy.text.trimEnd().split("\n");
+    assert.strictEqual(lines[lines.length - 2], "Course Coordinator", "no coordinator line");
+    assert.strictEqual(lines[lines.length - 1], "Ad On AI | Ad On Group", "no division line");
+    assert.ok(!/Operating since 2008|Ad On AI, Ad On Group/.test(A.copy.text), "old signature survives");
+    // the signature block keeps its line break in the HTML part
+    assert.ok(A.copy.html.includes("Course Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
   });
 
   console.log("\nPrefill");
-  ok("deep link carries name, email and the slot date", () => {
-    const u = new URL(A.copy.text.match(/Book that time: (\S+)/)[1]);
-    assert.strictEqual(u.searchParams.get("email"), "jane@example.com");
-    assert.strictEqual(u.searchParams.get("name"), "jane smith");
-    assert.ok(u.searchParams.get("date"), "no date parameter");
+  const linkFrom = (c) => new URL(c.text.match(/(https:\/\/\S+)/)[1]);
+
+  ok("the booking link carries name and email, and no slot date", () => {
+    for (const [label, c] of [["slot", A.copy], ["fallback", B.copy]]) {
+      const u = linkFrom(c);
+      assert.strictEqual(u.searchParams.get("email"), "jane@example.com", label);
+      assert.strictEqual(u.searchParams.get("name"), "jane smith", label);
+      assert.strictEqual(u.searchParams.get("date"), null, `${label}: a slot date leaked in`);
+    }
   });
-  ok("fallback link still carries name and email", () => {
-    const u = new URL(B.copy.text.match(/suits you here: (\S+)/)[1]);
-    assert.strictEqual(u.searchParams.get("email"), "jane@example.com");
-    assert.strictEqual(u.searchParams.get("name"), "jane smith");
-    assert.strictEqual(u.searchParams.get("date"), null);
+
+  ok("the link sits on its own line, under the sentence", () => {
+    const lines = A.copy.text.split("\n");
+    const at = lines.findIndex((l) => l.startsWith("https://"));
+    assert.ok(at > 0, "link is not on its own line");
+    assert.strictEqual(lines[at - 1], "Sometimes the Calendly link gets missed, so here it is again:");
   });
-  ok("no booking url configured still sends a coherent email", () => {
+
+  ok("no booking url configured drops the paragraph rather than dangling it", () => {
     const saved = process.env.CALENDLY_BOOKING_URL;
     delete process.env.CALENDLY_BOOKING_URL;
     const c = A.J.autoReplyCopy({ name: "Jane", email: "j@e.com" }, null);
     process.env.CALENDLY_BOOKING_URL = saved;
-    assert.ok(!c.text.includes("here:"), "left a dangling link sentence");
-    assert.ok(c.text.includes("(07) 5586 1400"), "lost the phone fallback");
+    assert.ok(!c.text.includes("here it is again:"), "left a dangling link sentence");
+    assert.ok(!/https?:\/\//.test(c.text), "a URL survived with no base configured");
+    assert.ok(c.text.includes("Hope to speak soon."), "dropped more than the link paragraph");
   });
 
   console.log(`\n${pass} passed, ${fail} failed\n`);

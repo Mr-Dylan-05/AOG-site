@@ -716,59 +716,56 @@ function linkify(line) {
  * Written to be sent, but not signed off. Editing this one function is the
  * whole job of changing the email.
  *
- * NOTE (11 Sep 2026): the wording below was supplied as approved copy in the
- * Calendly brief and is reproduced verbatim. This banner is left standing
- * because taking it down is a sign-off decision, not a code one.
+ * NOTE (23 Sep 2026): replaced verbatim with newly supplied copy. This is now
+ * a nudge rather than a welcome. It still goes out the moment the form is
+ * submitted, which is deliberate and was confirmed rather than overlooked:
+ * by the time anyone reads it they have already been shown the booking button
+ * on the thank-you panel and not used it, and "here it is again" refers to
+ * that button, not to an earlier email.
  *
- * Two versions of one message. `slot` present means Calendly answered and had
- * something inside the window; null means every other outcome. The plain text
- * and the HTML carry the same words, and the HTML is deliberately plain: no
- * template, no images, no button graphic, no tracking pixel. It has to read
- * like a person typed it, and heavy markup lands in Promotions more often.
+ * `slot` is still accepted and is now ignored. The copy no longer proposes a
+ * specific time, so there is one version of this message where there used to
+ * be two. The availability lookup in sendAutoReply still runs and no longer
+ * changes a word of what is sent.
+ *
+ * The plain text and the HTML carry the same words, and the HTML is
+ * deliberately plain: no template, no images, no button graphic, no tracking
+ * pixel. It has to read like a person typed it, and heavy markup lands in
+ * Promotions more often.
  */
 function autoReplyCopy(record, slot) {
   const first = firstName(record);
   const hello = first ? `Hi ${first},` : "Hi there,";
-  const phone = (process.env.SENDER_PHONE || "").trim() || "(07) 5586 1400";
-  const sender = (process.env.SENDER_NAME || "").trim();
-  const allTimes = bookingUrl(record, null);
-  const fmt = slot ? formatSlot(slot) : null;
+  const booking = bookingUrl(record, null);
 
   // Each entry is one paragraph; the inner array is its lines. The plain-text
   // part keeps those line breaks, which is what makes it look typed rather
   // than generated. The HTML part reflows them, because a browser should wrap.
-  const paras = [[hello], ["Thanks for getting in touch about AI training."]];
+  const paras = [[hello]];
+  paras.push([
+    "Just checking in, you recently requested a call with us about our Ad On AI",
+    "Training, but it looks like you haven't selected a time yet.",
+  ]);
 
-  if (fmt) {
-    paras.push([
-      "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
-      `with you. I've got ${fmt.long} Gold Coast time free.`,
-    ]);
-    paras.push([`Book that time: ${bookingUrl(record, slot)}`]);
-    paras.push([`If it doesn't suit, here are the rest: ${allTimes}`]);
-  } else if (allTimes) {
-    paras.push([
-      "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
-      `with you. Grab whichever time suits you here: ${allTimes}`,
-    ]);
+  if (booking) {
+    paras.push(["Sometimes the Calendly link gets missed, so here it is again:", booking]);
   } else {
-    // No booking URL configured at all. The sentence cannot be sent with a
-    // dangling "here:" and nothing after it, so it keeps its first half and
-    // the phone number below carries the call to action.
+    // No booking URL configured at all. "here it is again:" cannot be sent
+    // with nothing under it, so the paragraph goes rather than dangles.
     console.error("[lead] CALENDLY_BOOKING_URL is not set; sending with no booking link");
-    paras.push([
-      "I run the AI side of Ad On Group, and I'm the one who'll talk it through",
-      "with you.",
-    ]);
   }
 
   paras.push([
-    "I'll run you through what we actually teach people to do with AI, how the",
-    "private one-on-one support works, and what it costs.",
+    "It's a quick chat with one of our course coordinators to understand where",
+    "you're at with AI, what you want to achieve and whether the Ad On AI",
+    "program is the right fit.",
   ]);
-  paras.push([`The next intake starts ${nextIntake(new Date())}.`]);
-  paras.push([`If you'd rather just talk now, I'm on ${phone}.`]);
-  paras.push([sender, "Ad On AI, Ad On Group", "Operating since 2008"].filter(Boolean));
+  paras.push([
+    "We're keeping the number of new students we take on manageable so we can",
+    "provide proper one on one support.",
+  ]);
+  paras.push(["Hope to speak soon."]);
+  paras.push(["Course Coordinator", "Ad On AI | Ad On Group"]);
 
   const sig = paras.length - 1;
   const text = paras.map((p) => p.join("\n")).join("\n\n");
@@ -783,14 +780,13 @@ function autoReplyCopy(record, slot) {
       .join("") +
     "</div>";
 
-  // "AI training" leads the subject because this lands on a cold audience: an
-  // enquiry is often someone's first contact, and a bare "Would Tuesday at 2pm
-  // suit?" from a name they do not know reads like a misdirected email. The
-  // recognisable thing goes first, where it survives truncation in a list.
+  // The first name carries the subject: on a cold audience it is the one thing
+  // that marks this out from a bulk send. Without one the comma would dangle,
+  // so the question stands on its own instead.
   return {
-    subject: fmt
-      ? `AI training: would ${fmt.weekday} at ${fmt.short} suit?`
-      : "AI training: a time that suits you",
+    subject: first
+      ? `Thinking about AI Training, ${first}?`
+      : "Thinking about AI Training?",
     text,
     html,
   };
@@ -896,7 +892,11 @@ async function sendAutoReply(creds, form, record) {
       const detail = await res.text().catch(() => "");
       console.error(`[lead] auto-reply ${res.status}:`, detail.slice(0, 300));
     } else {
-      console.log(`[lead] auto-reply sent to ${to} as ${from} (${slot ? "slot offered" : "fallback copy"})`);
+      // The slot no longer picks between two versions of the copy, so this
+      // says what was found rather than what was offered. It is still worth
+      // logging: a long run of "none" is the first sign the Calendly token
+      // has lapsed, and nothing else on this path would notice.
+      console.log(`[lead] auto-reply sent to ${to} as ${from} (calendly slot: ${slot ? "found" : "none"})`);
     }
   } catch (err) {
     console.error("[lead] auto-reply failed:", err.message);
