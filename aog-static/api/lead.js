@@ -736,6 +736,13 @@ function linkify(line) {
  * who submits the enquiry form, including the people who only wanted to get in
  * touch and never went near the curriculum; that was raised and accepted.
  *
+ * One exception, same day: the opening line was "Just checking you were able
+ * to download the AI Training course curriculum you requested?", which is
+ * only true for people who pressed "Request the full curriculum". It now
+ * introduces the curriculum and links it instead, so it is right for everyone
+ * and the director's "There's a lot in there..." still has something to refer
+ * back to.
+ *
  * `slot` is still accepted and is now ignored. The copy no longer proposes a
  * specific time, so there is one version of this message where there used to
  * be two. The availability lookup in sendAutoReply still runs and no longer
@@ -746,6 +753,11 @@ function linkify(line) {
  * pixel. It has to read like a person typed it, and heavy markup lands in
  * Promotions more often.
  */
+/* The same PDF as the thank-you panel's download button (thirdParty.curriculum
+   in src/_data/site.json). Absolute, because an email has no page to be
+   relative to. If the PDF moves, both need changing. */
+const CURRICULUM_URL = "https://adongroup.com.au/assets/ai-training-curriculum.pdf";
+
 function autoReplyCopy(record, slot) {
   const first = firstName(record);
   const hello = first ? `Hi ${first},` : "Hi there,";
@@ -756,8 +768,9 @@ function autoReplyCopy(record, slot) {
   // than generated. The HTML part reflows them, because a browser should wrap.
   const paras = [[hello]];
   paras.push([
-    "Just checking you were able to download the AI Training course curriculum",
-    "you requested?",
+    "Thanks for getting in touch about AI Training. If you haven't grabbed it",
+    "already, here's the full course curriculum:",
+    CURRICULUM_URL,
   ]);
   paras.push([
     "There's a lot in there, but the curriculum is really only part of what makes",

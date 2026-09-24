@@ -369,8 +369,33 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(A.copy.html.includes("Paul Harding<br>Course Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
   });
 
+  console.log("\nOpening line");
+  ok("does not assume they asked for the curriculum", () => {
+    for (const c of [A.copy, B.copy]) {
+      assert.ok(!/you requested|Just checking you were able/.test(c.text), "the old assumption is back");
+      assert.ok(c.text.includes("Thanks for getting in touch about AI Training."), "opener missing");
+    }
+  });
+  ok("links the curriculum PDF on its own line, before the booking link", () => {
+    const lines = A.copy.text.split("\n");
+    const pdf = lines.indexOf("https://adongroup.com.au/assets/ai-training-curriculum.pdf");
+    const cal = lines.findIndex((l) => l.startsWith("https://calendly.com"));
+    assert.ok(pdf > 0, "curriculum link missing or not on its own line");
+    assert.strictEqual(lines[pdf - 1], "already, here's the full course curriculum:");
+    assert.ok(cal > pdf, "curriculum should come before the booking link");
+    assert.ok(A.copy.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'), "not a link in the HTML part");
+  });
+  ok("curriculum link survives even with no booking URL configured", () => {
+    const saved = process.env.CALENDLY_BOOKING_URL;
+    delete process.env.CALENDLY_BOOKING_URL;
+    const c = A.J.autoReplyCopy({ name: "Jane", email: "j@e.com" }, null);
+    process.env.CALENDLY_BOOKING_URL = saved;
+    assert.ok(c.text.includes("ai-training-curriculum.pdf"));
+  });
+
   console.log("\nPrefill");
-  const linkFrom = (c) => new URL(c.text.match(/(https:\/\/\S+)/)[1]);
+  // The Calendly link specifically: the curriculum PDF is linked above it.
+  const linkFrom = (c) => new URL(c.text.match(/(https:\/\/calendly\.com\S+)/)[1]);
 
   ok("the booking link carries name and email, and no slot date", () => {
     for (const [label, c] of [["slot", A.copy], ["fallback", B.copy]]) {
@@ -383,7 +408,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
 
   ok("the link sits on its own line, under the sentence", () => {
     const lines = A.copy.text.split("\n");
-    const at = lines.findIndex((l) => l.startsWith("https://"));
+    const at = lines.findIndex((l) => l.startsWith("https://calendly.com"));
     assert.ok(at > 0, "link is not on its own line");
     assert.strictEqual(lines[at - 1], "If you'd like to talk through how it works, you can book a quick call here:");
   });
@@ -394,7 +419,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const c = A.J.autoReplyCopy({ name: "Jane", email: "j@e.com" }, null);
     process.env.CALENDLY_BOOKING_URL = saved;
     assert.ok(!c.text.includes("book a quick call here:"), "left a dangling link sentence");
-    assert.ok(!/https?:\/\//.test(c.text), "a URL survived with no base configured");
+    assert.ok(!/calendly\.com/.test(c.text), "a booking URL survived with no base configured");
     assert.ok(c.text.includes("I'm happy to answer any questions."), "dropped more than the link paragraph");
   });
 
