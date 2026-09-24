@@ -302,6 +302,17 @@
           if (!pixelReported && pixel && typeof window.fbq === "function") {
             pixelReported = true;
             window.fbq(pixel.method, pixel.name, { content_name: formKey });
+            // Remembered for the rest of the visit, so a booking made after
+            // this (the thank-you panel offers one) does not report the same
+            // person a second time. See the booking block at the end of this
+            // file. Wrapped because this runs before the panel is revealed:
+            // nothing here may throw.
+            if (pixel.name === "Lead") {
+              try {
+                window.__aogLeadReported = true;
+                window.sessionStorage.setItem("aog_lead_reported", "1");
+              } catch (_) { /* private browsing: the in-page flag still holds */ }
+            }
           }
 
           // A form can name a panel to show in its place. Leaving a filled-in
@@ -344,10 +355,12 @@
 /**
  * The booking option on the thank-you panel.
  *
- * Deliberately not a conversion. The Lead has already been reported by the
- * submission that revealed this panel; firing anything here would count the
- * same person twice and teach Meta to optimise for people who click a second
- * button. Booking is an extra, not the goal.
+ * CLICKING is deliberately not a conversion: opening the popup and closing it
+ * again is curiosity, and reporting it would teach Meta to find people who
+ * click buttons. A COMPLETED booking is — see the listener at the bottom of
+ * this block — on /ai-training/ only, and only if this visit has not already
+ * reported a Lead through the enquiry form. Enquire-then-book is one person,
+ * one Lead. Book-without-enquiring used to be zero; it is now one.
  *
  * The widget is fetched on the first click rather than on page load. Most
  * visitors never reach the thank-you panel, and of those who do most will not
@@ -407,6 +420,88 @@
         button.innerHTML = label;
         window.open(url, "_blank", "noopener");
       });
+  });
+
+  /* A completed booking on /ai-training/ counts as a Lead, same as sending
+     the enquiry, because the live campaign is optimised on Lead and a person
+     who books a call without filling in the form is the best lead there is.
+
+     Calendly's popup is an iframe, and it tells the page what happens inside
+     it by postMessage. calendly.event_scheduled is sent once, when the time
+     is confirmed — not when the popup opens, not when a slot is picked.
+
+     Every completed booking also goes to the sheet, in its own "booking"
+     tab, carrying the same attribution an enquiry does. That is separate
+     from the Lead: the sheet is a record of what happened, so it gets every
+     booking; the pixel is what Meta optimises on, so it is the only one of
+     the two that must avoid counting a person twice.
+
+     Gated like this, each of which returns without doing anything:
+       - the message must come from https://calendly.com, so nothing else on
+         the page (or another frame) can manufacture a conversion or a row;
+       - the page must be /ai-training/. /ai-enquiry/ carries the same
+         buttons and deliberately reports nothing extra;
+       - for the Lead only: none may already have gone out this visit (the
+         enquiry form records it), so enquire-then-book is counted once.
+
+     Not covered: if Calendly's script is blocked, the button falls back to
+     opening a new tab (above), which cannot message this page, so that
+     booking is not reported. The enquiry path is unaffected either way. */
+  var path = window.location.pathname.replace(/index\.html$/, "").replace(/\/*$/, "/");
+  if (path !== "/ai-training/") return;
+
+  function leadAlreadyReported() {
+    if (window.__aogLeadReported) return true;
+    try {
+      return window.sessionStorage.getItem("aog_lead_reported") === "1";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // Calendly's message is { event: { uri }, invitee: { uri } } and nothing
+  // more, so this sends the two ids and the server looks the person up (see
+  // resolveBooking in api/lead.js). Once per invitee, in case Calendly repeats
+  // itself. Fire and forget, and it cannot throw: the booking is already safe
+  // in Calendly whatever happens here, and the Lead below must still go out.
+  var recorded = {};
+  function recordBooking(payload) {
+    try {
+      var invitee = payload && payload.invitee && payload.invitee.uri;
+      if (!invitee || recorded[invitee]) return;
+      recorded[invitee] = true;
+      var body = new URLSearchParams();
+      body.set("form", "booking");
+      body.set("calendly_invitee", invitee);
+      body.set("calendly_event", (payload.event && payload.event.uri) || "");
+      body.set("source", window.location.pathname);
+      body.set("page", window.location.pathname);
+      var a = typeof window.aogAttribution === "function" ? window.aogAttribution() : {};
+      Object.keys(a).forEach(function (k) { body.set(k, a[k]); });
+      // keepalive: people close the tab the moment Calendly says "confirmed",
+      // and the row still has to arrive.
+      fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: body.toString(),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (_) { /* never in the way of the Lead below */ }
+  }
+
+  window.addEventListener("message", function (e) {
+    if (e.origin !== "https://calendly.com") return;
+    if (!e.data || e.data.event !== "calendly.event_scheduled") return;
+    recordBooking(e.data.payload);
+    if (leadAlreadyReported()) return;
+    if (typeof window.fbq !== "function") return;
+    try {
+      window.__aogLeadReported = true;
+      window.sessionStorage.setItem("aog_lead_reported", "1");
+    } catch (_) { /* the in-page flag still holds */ }
+    // content_name tells the two apart in Events Manager without making them
+    // different conversions: both are Lead, one says enquiry, one booking.
+    window.fbq("track", "Lead", { content_name: "booking" });
   });
 })();
 

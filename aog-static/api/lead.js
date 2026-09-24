@@ -84,12 +84,14 @@ const PREFERRED = [
 /* What goes on the Chat card, in the order a person reads a lead. Everything
    else stays in the sheet: the card is a nudge to act, not the record. */
 const CARD_FIELDS = [
-  "name", "firstName", "lastName", "email", "phone", "company", "role",
-  "job_title", "industry", "website", "message", "ai_goal", "intent",
+  "name", "firstName", "lastName", "email", "phone", "booked_for", "company", "role",
+  "job_title", "industry", "website", "message", "booking_answers", "ai_goal", "intent",
   "contactPreference", "band", "score",
 ];
 
 const CARD_LABELS = {
+  booked_for: "Call booked for",
+  booking_answers: "Their answers in Calendly",
   ai_goal: "What they want from AI",
   contactPreference: "Prefers",
   job_title: "Job title",
@@ -111,6 +113,7 @@ const CARD_ICONS = {
   email: "EMAIL", phone: "PHONE", company: "STORE", website: "BOOKMARK",
   message: "DESCRIPTION", ai_goal: "DESCRIPTION",
   band: "STAR", score: "STAR",
+  booked_for: "CLOCK",
 };
 
 /* Where the team reading the notification is, so the timestamp on the card is
@@ -943,6 +946,87 @@ async function sendAutoReply(creds, form, record) {
   }
 }
 
+/**
+ * A booking made in the Calendly popup on /ai-training/, turned into a row.
+ *
+ * When a booking completes, Calendly tells the page exactly two things — the
+ * URIs of the scheduled event and of the invitee — and nothing about who they
+ * are. The name, email and time are therefore looked up here, with the same
+ * CALENDLY_TOKEN the slot lookup already uses.
+ *
+ * Returns "reject" only when there is no well-formed invitee URI: that is what
+ * stops form=booking being a way to write arbitrary rows. Every other failure
+ * (no token, timeout, Calendly down, a 404) KEEPS the row with a note saying
+ * what went wrong, because a real booking must never vanish from the sheet
+ * over a lookup. A forged but well-formed URI therefore still makes a row —
+ * no worse than a forged enquiry, which the form has always allowed.
+ *
+ * Only the PATH of the URI is used, and it is always fetched from CALENDLY_API.
+ * The browser never chooses which host this function talks to.
+ */
+const INVITEE_URI = /^https:\/\/api\.calendly\.com(\/scheduled_events\/[A-Za-z0-9-]{1,64}\/invitees\/[A-Za-z0-9-]{1,64})$/;
+const EVENT_URI = /^https:\/\/api\.calendly\.com(\/scheduled_events\/[A-Za-z0-9-]{1,64})$/;
+
+async function resolveBooking(record) {
+  // Nothing the browser says about who this is is trusted. It all comes from
+  // Calendly, or the row says it could not be fetched.
+  for (const k of ["name", "firstName", "lastName", "email", "phone", "message"]) delete record[k];
+
+  const m = INVITEE_URI.exec(String(record.calendly_invitee || ""));
+  if (!m) return "reject";
+
+  const note = (why) => {
+    console.error(`[lead] booking lookup: ${why}`);
+    record.message =
+      `Booked through Calendly, but the name and email could not be fetched (${why}). ` +
+      "The booking itself is safe in Calendly; the invitee id is in this row.";
+    return "keep";
+  };
+  const token = (process.env.CALENDLY_TOKEN || "").trim();
+  if (!token) return note("CALENDLY_TOKEN is not set");
+
+  const get = (path) =>
+    fetch(`${CALENDLY_API}${path}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      signal: AbortSignal.timeout(3000),
+    });
+
+  let invitee;
+  try {
+    const res = await get(m[1]);
+    if (!res.ok) return note(`Calendly answered ${res.status}`);
+    invitee = ((await res.json()) || {}).resource;
+  } catch (err) {
+    return note(err && err.name === "TimeoutError" ? "Calendly timed out" : "Calendly could not be reached");
+  }
+  if (!invitee || !invitee.email) return note("Calendly's answer had no email in it");
+
+  const named = invitee.name || [invitee.first_name, invitee.last_name].filter(Boolean).join(" ");
+  record.name = String(named || "").slice(0, 200);
+  record.email = String(invitee.email).slice(0, 200);
+  if (invitee.text_reminder_number) record.phone = String(invitee.text_reminder_number).slice(0, 50);
+  const qa = Array.isArray(invitee.questions_and_answers) ? invitee.questions_and_answers : [];
+  if (qa.length) {
+    record.booking_answers = qa
+      .filter((x) => x && x.answer)
+      .map((x) => `${x.question}: ${x.answer}`)
+      .join(" | ")
+      .slice(0, 2000);
+  }
+
+  // When the call is. The one lookup allowed to fail silently: the row is
+  // already worth having without it.
+  const ev = EVENT_URI.exec(String(invitee.event || record.calendly_event || ""));
+  if (ev) {
+    try {
+      const res = await get(ev[1]);
+      const start = res.ok ? (((await res.json()) || {}).resource || {}).start_time : null;
+      if (start) record.booked_for = formatSlot(new Date(start)).long;
+    } catch (_) { /* booked_for stays empty */ }
+  }
+  return "keep";
+}
+
 module.exports = async (req, res) => {
   /*
    * A way to exercise the confirmation without putting a fake lead through the
@@ -1025,6 +1109,13 @@ module.exports = async (req, res) => {
     record.page = String(req.headers.referer || "").slice(0, 300);
   }
 
+  // A Calendly booking arrives as two ids with no name or email. They are
+  // looked up here, before the guard below would reject the row as empty.
+  // Every other form skips this line entirely.
+  if (form === "booking" && (await resolveBooking(record)) === "reject") {
+    return res.status(400).json({ ok: false, error: "Not a Calendly booking" });
+  }
+
   // Something has to be in it. Guards against an empty probe creating rows.
   if (!record.email && !record.name && !record.message) {
     return res.status(400).json({ ok: false, error: "Nothing to record" });
@@ -1093,4 +1184,5 @@ module.exports = async (req, res) => {
 module.exports._internals = {
   autoReplyCopy, calendlySlot, pickSlot, formatSlot, buildMessage,
   businessDayCutoff, bneParts, bookingUrl, firstName, nextIntake, qualifyingSlots,
+  resolveBooking,
 };
