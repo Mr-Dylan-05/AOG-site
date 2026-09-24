@@ -339,11 +339,11 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   ok("no em-dashes", () => both.forEach((c) => {
     assert.ok(!c.text.includes("—") && !c.subject.includes("—"), `em-dash in: ${c.subject}`);
   }));
-  // "course" was on this list until 23 Sep 2026. The supplied copy calls the
-  // people on the call "course coordinators", so the word is now deliberate
-  // and the rule covers only the other two.
-  ok('never says "modules" or "community"', () => both.forEach((c) => {
-    const m = c.text.match(/\b(modules?|community)\b/i);
+  // "course" came off this list for two days while the director's copy used
+  // it, and went back on 24 Sep 2026: it is a program, never a course, and
+  // the signature now says Program Coordinator to match.
+  ok('never says "course", "modules" or "community"', () => both.forEach((c) => {
+    const m = c.text.match(/\b(courses?|modules?|community)\b/i);
     assert.ok(!m, `found "${m && m[0]}"`);
   }));
   ok("no price, no attachment, no postscript", () => both.forEach((c) => {
@@ -362,11 +362,11 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   ok("signature is Paul, his role and the division, on three lines", () => {
     const lines = A.copy.text.trimEnd().split("\n");
     assert.strictEqual(lines[lines.length - 3], "Paul Harding", "no name line");
-    assert.strictEqual(lines[lines.length - 2], "Course Coordinator", "no coordinator line");
+    assert.strictEqual(lines[lines.length - 2], "Program Coordinator", "no coordinator line");
     assert.strictEqual(lines[lines.length - 1], "Ad On AI | Ad On Group", "no division line");
     assert.ok(!/Operating since 2008|Ad On AI, Ad On Group/.test(A.copy.text), "old signature survives");
     // the signature block keeps its line break in the HTML part
-    assert.ok(A.copy.html.includes("Paul Harding<br>Course Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
+    assert.ok(A.copy.html.includes("Paul Harding<br>Program Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
   });
 
   console.log("\nOpening line");
@@ -381,7 +381,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const pdf = lines.indexOf("https://adongroup.com.au/assets/ai-training-curriculum.pdf");
     const cal = lines.findIndex((l) => l.startsWith("https://calendly.com"));
     assert.ok(pdf > 0, "curriculum link missing or not on its own line");
-    assert.strictEqual(lines[pdf - 1], "already, here's the full course curriculum:");
+    assert.strictEqual(lines[pdf - 1], "already, here's the full program curriculum:");
     assert.ok(cal > pdf, "curriculum should come before the booking link");
     assert.ok(A.copy.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'), "not a link in the HTML part");
   });

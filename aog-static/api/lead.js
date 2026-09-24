@@ -769,7 +769,7 @@ function autoReplyCopy(record, slot) {
   const paras = [[hello]];
   paras.push([
     "Thanks for getting in touch about AI Training. If you haven't grabbed it",
-    "already, here's the full course curriculum:",
+    "already, here's the full program curriculum:",
     CURRICULUM_URL,
   ]);
   paras.push([
@@ -798,7 +798,7 @@ function autoReplyCopy(record, slot) {
   }
 
   paras.push(["I'm happy to answer any questions."]);
-  paras.push(["Paul Harding", "Course Coordinator", "Ad On AI | Ad On Group"]);
+  paras.push(["Paul Harding", "Program Coordinator", "Ad On AI | Ad On Group"]);
 
   const sig = paras.length - 1;
   const text = paras.map((p) => p.join("\n")).join("\n\n");
