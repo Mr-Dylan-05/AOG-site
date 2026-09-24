@@ -764,7 +764,7 @@ function autoReplyCopy(record, slot) {
     "the program different.",
   ]);
   paras.push([
-    "We don't believe AI training should be watch a course, get a certificate and",
+    "We don't believe AI training should be watch a video, get a certificate and",
     "good luck.",
   ]);
   paras.push([
