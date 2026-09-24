@@ -202,7 +202,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   ok("1. slot found  -> the slot is looked up and ignored", () => {
     assert.ok(A.slot, "expected a slot");
     assert.strictEqual(A.copy.subject, SUBJECT);
-    assert.ok(A.copy.text.includes("Sometimes the Calendly link gets missed"), "missing the link line");
+    assert.ok(A.copy.text.includes("you can book a quick call here:"), "missing the booking line");
     assert.ok(A.copy.text.includes(BOOK), "missing the booking URL");
     assert.ok(!/I've got|Book that time:|here are the rest:/.test(A.copy.text),
       "the old slot offer is still being written");
@@ -229,7 +229,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
 
   console.log("\nHeaders, on both paths");
   for (const [label, c] of [["slot", A], ["fallback", B]]) {
-    ok(`${label}: Bcc to adonai@ and paul.harding@, Reply-To to Paul`, () => {
+    ok(`${label}: Bcc to adonai@ and paul.harding@, Reply-To to Paul and info@`, () => {
       const raw = c.J.buildMessage("info@adongroup.com.au", "Ad On Group", "jane@example.com", c.copy);
       // One header, two addresses, each in its own brackets. `Bcc: <a, b>` is
       // a single malformed address, not a list, and Gmail rejects it.
@@ -237,7 +237,10 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
         raw.includes("Bcc: <adonai@adongroup.com.au>, <paul.harding@adongroup.com.au>"),
         "Bcc is not a well-formed two-address list"
       );
-      assert.ok(raw.includes("Reply-To: <paul.harding@adongroup.com.au>"), "Reply-To missing");
+      assert.ok(
+        raw.includes("Reply-To: <paul.harding@adongroup.com.au>, <info@adongroup.com.au>"),
+        "Reply-To is not Paul plus the sending mailbox"
+      );
       assert.ok(raw.includes("multipart/alternative"), "not multipart");
       assert.ok(raw.includes("text/plain"), "no plain-text part");
     });
@@ -356,13 +359,14 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const c = A.J.autoReplyCopy({ email: "x@y.com" }, null);
     assert.ok(c.text.startsWith("Hi there,"), c.text.slice(0, 20));
   });
-  ok("signature is the coordinator and the division, on two lines", () => {
+  ok("signature is Paul, his role and the division, on three lines", () => {
     const lines = A.copy.text.trimEnd().split("\n");
+    assert.strictEqual(lines[lines.length - 3], "Paul Harding", "no name line");
     assert.strictEqual(lines[lines.length - 2], "Course Coordinator", "no coordinator line");
     assert.strictEqual(lines[lines.length - 1], "Ad On AI | Ad On Group", "no division line");
     assert.ok(!/Operating since 2008|Ad On AI, Ad On Group/.test(A.copy.text), "old signature survives");
     // the signature block keeps its line break in the HTML part
-    assert.ok(A.copy.html.includes("Course Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
+    assert.ok(A.copy.html.includes("Paul Harding<br>Course Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
   });
 
   console.log("\nPrefill");
@@ -381,7 +385,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const lines = A.copy.text.split("\n");
     const at = lines.findIndex((l) => l.startsWith("https://"));
     assert.ok(at > 0, "link is not on its own line");
-    assert.strictEqual(lines[at - 1], "Sometimes the Calendly link gets missed, so here it is again:");
+    assert.strictEqual(lines[at - 1], "If you'd like to talk through how it works, you can book a quick call here:");
   });
 
   ok("no booking url configured drops the paragraph rather than dangling it", () => {
@@ -389,9 +393,9 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     delete process.env.CALENDLY_BOOKING_URL;
     const c = A.J.autoReplyCopy({ name: "Jane", email: "j@e.com" }, null);
     process.env.CALENDLY_BOOKING_URL = saved;
-    assert.ok(!c.text.includes("here it is again:"), "left a dangling link sentence");
+    assert.ok(!c.text.includes("book a quick call here:"), "left a dangling link sentence");
     assert.ok(!/https?:\/\//.test(c.text), "a URL survived with no base configured");
-    assert.ok(c.text.includes("Hope to speak soon."), "dropped more than the link paragraph");
+    assert.ok(c.text.includes("I'm happy to answer any questions."), "dropped more than the link paragraph");
   });
 
   console.log("\nBcc list");
@@ -413,6 +417,28 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     else process.env.AUTOREPLY_BCC = saved;
     assert.ok(!/^Bcc:/m.test(raw), "a Bcc header survived an empty setting");
   });
+
+  console.log("\nReply-To list");
+  const withReplyTo = (value) => {
+    const saved = process.env.AUTOREPLY_REPLY_TO;
+    if (value === undefined) delete process.env.AUTOREPLY_REPLY_TO;
+    else process.env.AUTOREPLY_REPLY_TO = value;
+    const raw = A.J.buildMessage("info@adongroup.com.au", "Ad On Group", "j@e.com", A.copy);
+    if (saved === undefined) delete process.env.AUTOREPLY_REPLY_TO;
+    else process.env.AUTOREPLY_REPLY_TO = saved;
+    return (raw.match(/^Reply-To: .*$/m) || [""])[0];
+  };
+  ok("unset: defaults to Paul, and the sending mailbox is added", () =>
+    assert.strictEqual(withReplyTo(undefined),
+      "Reply-To: <paul.harding@adongroup.com.au>, <info@adongroup.com.au>"));
+  ok("set to someone else: theirs replaces the default, info@ still added", () =>
+    assert.strictEqual(withReplyTo("a@x.com, b@y.com"),
+      "Reply-To: <a@x.com>, <b@y.com>, <info@adongroup.com.au>"));
+  ok("already includes the sending mailbox: not listed twice", () =>
+    assert.strictEqual(withReplyTo("paul.harding@adongroup.com.au, INFO@adongroup.com.au"),
+      "Reply-To: <paul.harding@adongroup.com.au>, <INFO@adongroup.com.au>"));
+  ok("set empty: replies go to the sending mailbox alone", () =>
+    assert.strictEqual(withReplyTo(""), "Reply-To: <info@adongroup.com.au>"));
 
   console.log(`\n${pass} passed, ${fail} failed\n`);
   process.exit(fail ? 1 : 0);

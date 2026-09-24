@@ -366,14 +366,13 @@ async function notifyChat(form, record, sheetUrl, failed) {
  *                    Set it in Vercel and the value there wins outright — the
  *                    addresses above are not merged into it.
  *   AUTOREPLY_REPLY_TO
- *                    where replies go, e.g. paul.harding@adongroup.com.au.
- *                    There is deliberately no default: unset sends no Reply-To
- *                    at all and replies land back in AUTOREPLY_FROM, which is
- *                    a shared mailbox but at least a live one. It lives only
- *                    in Vercel, so grepping this repo for the address that
- *                    receives replies will not find it — that is how
- *                    paul@adongroup.com.au went on being used here after the
- *                    mailbox stopped working. Changing it is a Vercel job.
+ *                    where replies go. Defaults to paul.harding@adongroup.com.au;
+ *                    comma-separate for several. AUTOREPLY_FROM is ALWAYS added
+ *                    to the list on top of whatever is set here, so replies
+ *                    reach the shared mailbox as well as the person. Set in
+ *                    Vercel, the value there replaces the default (the From
+ *                    mailbox is still added). This is where the defunct
+ *                    paul@adongroup.com.au lived, invisible to a repo grep.
  */
 
 /* Which forms get a confirmation.
@@ -729,12 +728,10 @@ function linkify(line) {
  * Written to be sent, but not signed off. Editing this one function is the
  * whole job of changing the email.
  *
- * NOTE (23 Sep 2026): replaced verbatim with newly supplied copy. This is now
- * a nudge rather than a welcome. It still goes out the moment the form is
- * submitted, which is deliberate and was confirmed rather than overlooked:
- * by the time anyone reads it they have already been shown the booking button
- * on the thank-you panel and not used it, and "here it is again" refers to
- * that button, not to an earlier email.
+ * NOTE (24 Sep 2026): replaced verbatim with copy written by a director. The
+ * wording is fixed — do not edit it without their sign-off. It goes to everyone
+ * who submits the enquiry form, including the people who only wanted to get in
+ * touch and never went near the curriculum; that was raised and accepted.
  *
  * `slot` is still accepted and is now ignored. The copy no longer proposes a
  * specific time, so there is one version of this message where there used to
@@ -756,29 +753,36 @@ function autoReplyCopy(record, slot) {
   // than generated. The HTML part reflows them, because a browser should wrap.
   const paras = [[hello]];
   paras.push([
-    "Just checking in, you recently requested a call with us about our Ad On AI",
-    "Training, but it looks like you haven't selected a time yet.",
+    "Just checking you were able to download the AI Training course curriculum",
+    "you requested?",
+  ]);
+  paras.push([
+    "There's a lot in there, but the curriculum is really only part of what makes",
+    "the program different.",
+  ]);
+  paras.push([
+    "We don't believe AI training should be watch a course, get a certificate and",
+    "good luck.",
+  ]);
+  paras.push([
+    "The Ad On AI Training program is self-paced, but you also get 2 hours of",
+    "one-on-one support and mentorship every month to help you actually apply",
+    "what you're learning.",
   ]);
 
   if (booking) {
-    paras.push(["Sometimes the Calendly link gets missed, so here it is again:", booking]);
+    paras.push([
+      "If you'd like to talk through how it works, you can book a quick call here:",
+      booking,
+    ]);
   } else {
-    // No booking URL configured at all. "here it is again:" cannot be sent
-    // with nothing under it, so the paragraph goes rather than dangles.
+    // No booking URL configured at all. "book a quick call here:" cannot be
+    // sent with nothing under it, so the paragraph goes rather than dangles.
     console.error("[lead] CALENDLY_BOOKING_URL is not set; sending with no booking link");
   }
 
-  paras.push([
-    "It's a quick chat with one of our course coordinators to understand where",
-    "you're at with AI, what you want to achieve and whether the Ad On AI",
-    "program is the right fit.",
-  ]);
-  paras.push([
-    "We're keeping the number of new students we take on manageable so we can",
-    "provide proper one on one support.",
-  ]);
-  paras.push(["Hope to speak soon."]);
-  paras.push(["Course Coordinator", "Ad On AI | Ad On Group"]);
+  paras.push(["I'm happy to answer any questions."]);
+  paras.push(["Paul Harding", "Course Coordinator", "Ad On AI | Ad On Group"]);
 
   const sig = paras.length - 1;
   const text = paras.map((p) => p.join("\n")).join("\n\n");
@@ -840,12 +844,25 @@ function buildMessage(from, name, to, copy) {
     .split(",")
     .map((a) => a.trim())
     .filter(Boolean);
-  // Replies go to a person, not to the shared sending mailbox.
-  const replyTo = (process.env.AUTOREPLY_REPLY_TO || "").trim();
+  // Replies go to a person AND to the shared sending mailbox. A list, parsed
+  // the same way as the Bcc for the same reason: `Reply-To: <a, b>` is one
+  // malformed address. The From mailbox is always added, whatever
+  // AUTOREPLY_REPLY_TO says, so a reply can never land only in an inbox that
+  // has stopped working — which is what happened while this pointed at the
+  // defunct paul@ alone.
+  const replyTo = (
+    process.env.AUTOREPLY_REPLY_TO !== undefined
+      ? process.env.AUTOREPLY_REPLY_TO
+      : "paul.harding@adongroup.com.au"
+  )
+    .split(",")
+    .map((a) => a.trim())
+    .filter(Boolean);
+  if (!replyTo.some((a) => a.toLowerCase() === from.toLowerCase())) replyTo.push(from);
   return [
     `From: ${encodeHeader(name)} <${from}>`,
     `To: <${to}>`,
-    ...(replyTo ? [`Reply-To: <${replyTo}>`] : []),
+    ...(replyTo.length ? [`Reply-To: ${replyTo.map((a) => `<${a}>`).join(", ")}`] : []),
     ...(bcc.length ? [`Bcc: ${bcc.map((a) => `<${a}>`).join(", ")}`] : []),
     `Subject: ${encodeHeader(copy.subject)}`,
     "MIME-Version: 1.0",
