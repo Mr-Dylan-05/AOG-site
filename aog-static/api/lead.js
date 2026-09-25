@@ -384,8 +384,13 @@ async function notifyChat(form, record, sheetUrl, failed) {
    training — so the mail can talk about AI training and be right every time.
    The quiz is deliberately out: answering six questions to see your own
    result is not an enquiry, and "we have got your enquiry" would be wrong.
-   The contact, partner and referral forms are not AI training at all. */
-const AUTOREPLY_FORMS = ["enquiry"];
+   The contact, partner and referral forms are not AI training at all.
+
+   "booking" is a Calendly booking made from the popup on /ai-training/ (see
+   resolveBooking). It gets its own email, bookingReplyCopy, confirming the
+   call — including for people who enquired first and then booked, by
+   decision. It only goes out when Calendly gave us their email address. */
+const AUTOREPLY_FORMS = ["enquiry", "booking"];
 
 /**
  * The first name from whatever they typed into the name field.
@@ -753,6 +758,68 @@ function linkify(line) {
  * pixel. It has to read like a person typed it, and heavy markup lands in
  * Promotions more often.
  */
+/**
+ * The email for someone who has just booked a call through the popup on
+ * /ai-training/. Calendly sends its own confirmation with the calendar invite,
+ * reschedule and cancel links; this is the human one alongside it, so it
+ * deliberately repeats none of Calendly's logistics.
+ *
+ * record.booked_for is the call time, already in Gold Coast time (see
+ * resolveBooking). If Calendly's event lookup failed it is empty, and the
+ * sentence falls back to pointing at Calendly's invite rather than inventing
+ * a time. Same plain rendering as autoReplyCopy, for the same reasons.
+ */
+function bookingReplyCopy(record) {
+  const first = firstName(record);
+  const hello = first ? `Hi ${first},` : "Hi there,";
+  const when = String(record.booked_for || "").trim();
+
+  const paras = [[hello]];
+  paras.push(
+    when
+      ? [
+          `Thanks for booking a call. You're locked in for ${when} (Gold Coast time).`,
+          "Calendly will send the calendar invite separately.",
+        ]
+      : [
+          "Thanks for booking a call. Calendly will send the calendar invite with",
+          "the time and details separately.",
+        ]
+  );
+  paras.push([
+    "It's a relaxed chat to understand where you're at with AI, what you want to",
+    "achieve, and whether the Ad On AI program is the right fit.",
+  ]);
+  paras.push([
+    "If you'd like a look beforehand, here's the full program curriculum:",
+    CURRICULUM_URL,
+  ]);
+  paras.push(["If anything comes up before then, just reply to this email."]);
+  paras.push(["Paul Harding", "Program Coordinator", "Ad On AI | Ad On Group"]);
+
+  const sig = paras.length - 1;
+  const text = paras.map((p) => p.join("\n")).join("\n\n");
+  const html =
+    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
+    paras
+      .map((p, i) =>
+        `<p style="margin:0 0 14px">${
+          i === sig ? p.map(escapeHtml).join("<br>") : linkify(p.join(" "))
+        }</p>`
+      )
+      .join("") +
+    "</div>";
+
+  // "AI Training" is in the subject for the same reason as the enquiry email:
+  // it is what makes this recognisable in an inbox. Without a first name the
+  // comma would dangle, so it stands on its own instead.
+  return {
+    subject: first ? `Your AI Training call is booked, ${first}` : "Your AI Training call is booked",
+    text,
+    html,
+  };
+}
+
 /* The same PDF as the thank-you panel's download button (thirdParty.curriculum
    in src/_data/site.json). Absolute, because an email has no page to be
    relative to. If the PDF moves, both need changing. */
@@ -926,12 +993,14 @@ async function sendAutoReply(creds, form, record) {
 
   // Looked up before the mail is built, and never allowed to stop it: every
   // failure inside here returns null, which is simply the fallback copy.
-  const slot = await calendlySlot(new Date(), to);
+  // Not for a booking: it already has its time, so there is nothing to look up.
+  const slot = form === "booking" ? null : await calendlySlot(new Date(), to);
 
   try {
     const token = await accessToken(creds, GMAIL_SCOPE, from);
     const raw = Buffer.from(
-      buildMessage(from, process.env.AUTOREPLY_NAME || "Ad On Group", to, autoReplyCopy(record, slot))
+      buildMessage(from, process.env.AUTOREPLY_NAME || "Ad On Group", to,
+        form === "booking" ? bookingReplyCopy(record) : autoReplyCopy(record, slot))
     )
       .toString("base64")
       .replace(/\+/g, "-")
@@ -1197,5 +1266,5 @@ module.exports = async (req, res) => {
 module.exports._internals = {
   autoReplyCopy, calendlySlot, pickSlot, formatSlot, buildMessage,
   businessDayCutoff, bneParts, bookingUrl, firstName, nextIntake, qualifyingSlots,
-  resolveBooking,
+  resolveBooking, bookingReplyCopy,
 };

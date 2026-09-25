@@ -393,6 +393,33 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(c.text.includes("ai-training-curriculum.pdf"));
   });
 
+  console.log("\nBooking email");
+  const booked = (r) => A.J.bookingReplyCopy(r);
+  ok("subject mentions AI Training and names them; body names the time", () => {
+    const c = booked({ name: "jane smith", email: "j@e.com", booked_for: "Tuesday 29 September, 2:00pm" });
+    assert.strictEqual(c.subject, "Your AI Training call is booked, Jane");
+    assert.ok(c.text.startsWith("Hi Jane,"));
+    assert.ok(c.text.includes("You're locked in for Tuesday 29 September, 2:00pm (Gold Coast time)."));
+  });
+  ok("no first name: no dangling comma", () => {
+    const c = booked({ email: "x@y.com", booked_for: "Tuesday 29 September, 2:00pm" });
+    assert.strictEqual(c.subject, "Your AI Training call is booked");
+    assert.ok(c.text.startsWith("Hi there,"));
+  });
+  ok("no booked time: points to Calendly's invite, invents nothing", () => {
+    const c = booked({ name: "Jane", email: "j@e.com" });
+    assert.ok(!c.text.includes("locked in"), "claimed a time it does not have");
+    assert.ok(c.text.includes("Calendly will send the calendar invite with"));
+  });
+  ok("curriculum linked, Paul's signature, none of the enquiry email's wording", () => {
+    const c = booked({ name: "Jane", email: "j@e.com", booked_for: "Tuesday 29 September, 2:00pm" });
+    assert.ok(c.text.includes("https://adongroup.com.au/assets/ai-training-curriculum.pdf"));
+    assert.ok(c.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'));
+    assert.ok(c.text.trimEnd().endsWith("Paul Harding\nProgram Coordinator\nAd On AI | Ad On Group"));
+    assert.ok(!/book a quick call here|Thinking about AI Training/.test(c.text + c.subject), "enquiry copy leaked in");
+    assert.ok(!/\b(courses?|modules?|community)\b/i.test(c.text), "banned word");
+  });
+
   console.log("\nPrefill");
   // The Calendly link specifically: the curriculum PDF is linked above it.
   const linkFrom = (c) => new URL(c.text.match(/(https:\/\/calendly\.com\S+)/)[1]);
