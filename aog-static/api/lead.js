@@ -737,8 +737,8 @@ function linkify(line) {
  * whole job of changing the email.
  *
  * NOTE (28 Sep 2026): replaced with new copy, written in Paul's voice. It
- * introduces him, offers a call (the "Book a time with me" link), invites a
- * plain reply instead, and links the curriculum. Replies reach Paul and info@
+ * introduces him, offers a call ("Book a call" is itself the link, since
+ * 29 Sep), invites a plain reply instead, and links the curriculum. Replies reach Paul and info@
  * (see buildMessage), which is what "just reply here" relies on.
  *
  * `slot` is still accepted and is now ignored. The copy no longer proposes a
@@ -826,8 +826,10 @@ function autoReplyCopy(record, slot) {
   // Each entry is one paragraph; the inner array is its lines. The plain-text
   // part keeps those line breaks, which is what makes it look typed rather
   // than generated. The HTML part reflows them, because a browser should wrap.
-  // A { text, href } line is a named link: "text" linked in the HTML, and
-  // "text: href" in the plain text, where links cannot have names.
+  // A { text, html } line says different things in the two parts. That is
+  // how "Book a call" becomes the link itself in the HTML: plain text cannot
+  // link words, so there the sentence stays as written and the URL follows on
+  // its own line. An empty text or html leaves that line out of that part.
   const paras = [[hello]];
   paras.push([
     "Thanks for getting in touch about AI training. I'm Paul, and I look after",
@@ -836,9 +838,14 @@ function autoReplyCopy(record, slot) {
 
   if (booking) {
     paras.push([
-      "Book a call and I'll take you through how it works, what it costs and",
+      {
+        text: "Book a call and I'll take you through how it works, what it costs and",
+        html:
+          `<a href="${escapeHtml(booking)}" style="color:#1483B5">Book a call</a>` +
+          escapeHtml(" and I'll take you through how it works, what it costs and"),
+      },
       "whether it suits your situation.",
-      { text: "Book a time with me", href: booking },
+      { text: booking, html: "" },
     ]);
     paras.push(["Or just reply here and tell me what you're after."]);
   } else {
@@ -859,18 +866,15 @@ function autoReplyCopy(record, slot) {
   paras.push(["Paul Harding", "Ad On AI | Ad On Group"]);
 
   const sig = paras.length - 1;
-  const asText = (l) => (typeof l === "string" ? l : `${l.text}: ${l.href}`);
-  const asHtml = (l) =>
-    typeof l === "string"
-      ? linkify(l)
-      : `<a href="${escapeHtml(l.href)}" style="color:#1483B5">${escapeHtml(l.text)}</a>`;
-  const text = paras.map((p) => p.map(asText).join("\n")).join("\n\n");
+  const asText = (l) => (typeof l === "string" ? l : l.text);
+  const asHtml = (l) => (typeof l === "string" ? linkify(l) : l.html);
+  const text = paras.map((p) => p.map(asText).filter(Boolean).join("\n")).join("\n\n");
   const html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
     paras
       .map((p, i) =>
         `<p style="margin:0 0 14px">${
-          i === sig ? p.map(escapeHtml).join("<br>") : p.map(asHtml).join(" ")
+          i === sig ? p.map(escapeHtml).join("<br>") : p.map(asHtml).filter(Boolean).join(" ")
         }</p>`
       )
       .join("") +

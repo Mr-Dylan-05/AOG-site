@@ -202,7 +202,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   ok("1. slot found  -> the slot is looked up and ignored", () => {
     assert.ok(A.slot, "expected a slot");
     assert.strictEqual(A.copy.subject, SUBJECT);
-    assert.ok(A.copy.text.includes("Book a time with me: https://calendly.com"), "missing the booking line");
+    assert.ok(A.copy.text.includes("whether it suits your situation.\nhttps://calendly.com"), "missing the booking link");
     assert.ok(A.copy.text.includes(BOOK), "missing the booking URL");
     assert.ok(!/I've got|Book that time:|here are the rest:/.test(A.copy.text),
       "the old slot offer is still being written");
@@ -377,7 +377,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   ok("links the curriculum PDF on its own line, after the booking link", () => {
     const lines = A.copy.text.split("\n");
     const pdf = lines.indexOf("https://adongroup.com.au/assets/ai-training-curriculum.pdf");
-    const cal = lines.findIndex((l) => l.startsWith("Book a time with me: https://calendly.com"));
+    const cal = lines.findIndex((l) => l.startsWith("https://calendly.com"));
     assert.ok(pdf > 0, "curriculum link missing or not on its own line");
     assert.strictEqual(lines[pdf - 1], "Here's the full program curriculum if you haven't grabbed it already:");
     assert.ok(cal > 0 && cal < pdf, "the booking link should come before the curriculum");
@@ -414,7 +414,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(c.text.includes("https://adongroup.com.au/assets/ai-training-curriculum.pdf"));
     assert.ok(c.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'));
     assert.ok(c.text.trimEnd().endsWith("Paul Harding\nProgram Coordinator\nAd On AI | Ad On Group"));
-    assert.ok(!/Book a time with me|I'm Paul, and I look after|Your AI training enquiry/.test(c.text + c.subject), "enquiry copy leaked in");
+    assert.ok(!/I'll take you through how it works|I'm Paul, and I look after|Your AI training enquiry/.test(c.text + c.subject), "enquiry copy leaked in");
     assert.ok(!/\b(courses?|modules?|community)\b/i.test(c.text), "banned word");
   });
 
@@ -431,12 +431,14 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     }
   });
 
-  ok("'Book a time with me' is a named link in HTML and 'text: url' in plain text", () => {
+  ok("'Book a call' is itself the link in HTML; plain text gives the URL on its own line", () => {
     const lines = A.copy.text.split("\n");
-    const at = lines.findIndex((l) => l.startsWith("Book a time with me: https://calendly.com"));
-    assert.ok(at > 0, "plain-text booking line missing");
+    const at = lines.findIndex((l) => l.startsWith("https://calendly.com"));
+    assert.ok(at > 0, "plain-text booking URL missing");
     assert.strictEqual(lines[at - 1], "whether it suits your situation.");
-    assert.ok(/<a href="https:\/\/calendly\.com[^"]*"[^>]*>Book a time with me<\/a>/.test(A.copy.html), "not a named link in the HTML part");
+    assert.strictEqual(lines[at - 2], "Book a call and I'll take you through how it works, what it costs and");
+    assert.ok(/<a href="https:\/\/calendly\.com[^"]*"[^>]*>Book a call<\/a> and I'll take you through/.test(A.copy.html), "'Book a call' is not the link in the HTML part");
+    assert.ok(!/Book a time with me/.test(A.copy.text + A.copy.html), "the old link text is back");
     assert.ok(!/>https:\/\/calendly\.com/.test(A.copy.html), "the raw Calendly URL is showing in the HTML");
   });
 
