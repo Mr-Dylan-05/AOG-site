@@ -736,17 +736,10 @@ function linkify(line) {
  * Written to be sent, but not signed off. Editing this one function is the
  * whole job of changing the email.
  *
- * NOTE (24 Sep 2026): replaced verbatim with copy written by a director. The
- * wording is fixed — do not edit it without their sign-off. It goes to everyone
- * who submits the enquiry form, including the people who only wanted to get in
- * touch and never went near the curriculum; that was raised and accepted.
- *
- * One exception, same day: the opening line was "Just checking you were able
- * to download the AI Training course curriculum you requested?", which is
- * only true for people who pressed "Request the full curriculum". It now
- * introduces the curriculum and links it instead, so it is right for everyone
- * and the director's "There's a lot in there..." still has something to refer
- * back to.
+ * NOTE (28 Sep 2026): replaced with new copy, written in Paul's voice. It
+ * introduces him, offers a call (the "Book a time with me" link), invites a
+ * plain reply instead, and links the curriculum. Replies reach Paul and info@
+ * (see buildMessage), which is what "just reply here" relies on.
  *
  * `slot` is still accepted and is now ignored. The copy no longer proposes a
  * specific time, so there is one version of this message where there used to
@@ -833,63 +826,57 @@ function autoReplyCopy(record, slot) {
   // Each entry is one paragraph; the inner array is its lines. The plain-text
   // part keeps those line breaks, which is what makes it look typed rather
   // than generated. The HTML part reflows them, because a browser should wrap.
+  // A { text, href } line is a named link: "text" linked in the HTML, and
+  // "text: href" in the plain text, where links cannot have names.
   const paras = [[hello]];
   paras.push([
-    "Thanks for getting in touch about AI Training. If you haven't grabbed it",
-    "already, here's the full program curriculum:",
-    CURRICULUM_URL,
-  ]);
-  paras.push([
-    "There's a lot in there, but the curriculum is really only part of what makes",
-    "the program different.",
-  ]);
-  paras.push([
-    "We don't believe AI training should be watch a video, get a certificate and",
-    "good luck.",
-  ]);
-  paras.push([
-    "The Ad On AI Training program is self-paced, but you also get 2 hours of",
-    "one-on-one support and mentorship every month to help you actually apply",
-    "what you're learning.",
+    "Thanks for getting in touch about AI training. I'm Paul, and I look after",
+    "AI training at Ad On Group.",
   ]);
 
   if (booking) {
     paras.push([
-      "If you'd like to talk through how it works, you can book a quick call here:",
-      booking,
+      "Book a call and I'll take you through how it works, what it costs and",
+      "whether it suits your situation.",
+      { text: "Book a time with me", href: booking },
     ]);
+    paras.push(["Or just reply here and tell me what you're after."]);
   } else {
-    // No booking URL configured at all. "book a quick call here:" cannot be
-    // sent with nothing under it, so the paragraph goes rather than dangles.
+    // No booking URL configured at all. "Book a call" cannot be sent without
+    // anywhere to book, so the reply becomes the only way in, and the "Or"
+    // that depended on the booking line goes with it.
     console.error("[lead] CALENDLY_BOOKING_URL is not set; sending with no booking link");
+    paras.push([
+      "Just reply here and tell me what you're after, and I'll take you through",
+      "how it works, what it costs and whether it suits your situation.",
+    ]);
   }
 
-  paras.push(["I'm happy to answer any questions."]);
-  paras.push(["Paul Harding", "Program Coordinator", "Ad On AI | Ad On Group"]);
+  paras.push([
+    "Here's the full program curriculum if you haven't grabbed it already:",
+    CURRICULUM_URL,
+  ]);
+  paras.push(["Paul Harding", "Ad On AI | Ad On Group"]);
 
   const sig = paras.length - 1;
-  const text = paras.map((p) => p.join("\n")).join("\n\n");
+  const asText = (l) => (typeof l === "string" ? l : `${l.text}: ${l.href}`);
+  const asHtml = (l) =>
+    typeof l === "string"
+      ? linkify(l)
+      : `<a href="${escapeHtml(l.href)}" style="color:#1483B5">${escapeHtml(l.text)}</a>`;
+  const text = paras.map((p) => p.map(asText).join("\n")).join("\n\n");
   const html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
     paras
       .map((p, i) =>
         `<p style="margin:0 0 14px">${
-          i === sig ? p.map(escapeHtml).join("<br>") : linkify(p.join(" "))
+          i === sig ? p.map(escapeHtml).join("<br>") : p.map(asHtml).join(" ")
         }</p>`
       )
       .join("") +
     "</div>";
 
-  // The first name carries the subject: on a cold audience it is the one thing
-  // that marks this out from a bulk send. Without one the comma would dangle,
-  // so the question stands on its own instead.
-  return {
-    subject: first
-      ? `Thinking about AI Training, ${first}?`
-      : "Thinking about AI Training?",
-    text,
-    html,
-  };
+  return { subject: "Your AI training enquiry", text, html };
 }
 /* =========================================================================== */
 

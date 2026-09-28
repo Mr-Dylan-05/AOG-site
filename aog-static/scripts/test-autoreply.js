@@ -196,13 +196,13 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   // The copy no longer branches on the slot, so all four paths must produce
   // the same message. That is the point of these four: not that each renders,
   // but that a slot cannot leak back into the wording.
-  const SUBJECT = "Thinking about AI Training, Jane?";
+  const SUBJECT = "Your AI training enquiry";
 
   const A = await copyVia("ok", soon());
   ok("1. slot found  -> the slot is looked up and ignored", () => {
     assert.ok(A.slot, "expected a slot");
     assert.strictEqual(A.copy.subject, SUBJECT);
-    assert.ok(A.copy.text.includes("you can book a quick call here:"), "missing the booking line");
+    assert.ok(A.copy.text.includes("Book a time with me: https://calendly.com"), "missing the booking line");
     assert.ok(A.copy.text.includes(BOOK), "missing the booking URL");
     assert.ok(!/I've got|Book that time:|here are the rest:/.test(A.copy.text),
       "the old slot offer is still being written");
@@ -309,16 +309,15 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     }
   });
 
-  ok("the subject is the same question on every path, and names them", () => {
+  ok("the subject is the same on every path", () => {
     for (const [label, c] of [["slot", A.copy], ["fallback", B.copy]]) {
       assert.strictEqual(c.subject, SUBJECT, `${label}: ${c.subject}`);
-      assert.ok(c.subject.includes("Jane"), `${label}: first name missing`);
     }
   });
 
-  ok("no first name leaves no dangling comma in the subject", () => {
+  ok("no first name: the subject is unchanged (it never uses the name)", () => {
     const c = A.J.autoReplyCopy({ email: "x@y.com" }, null);
-    assert.strictEqual(c.subject, "Thinking about AI Training?");
+    assert.strictEqual(c.subject, SUBJECT);
   });
 
   ok("never says Brisbane", () => {
@@ -341,7 +340,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   }));
   // "course" came off this list for two days while the director's copy used
   // it, and went back on 24 Sep 2026: it is a program, never a course, and
-  // the signature now says Program Coordinator to match.
+  // the booking email's signature says Program Coordinator to match.
   ok('never says "course", "modules" or "community"', () => both.forEach((c) => {
     const m = c.text.match(/\b(courses?|modules?|community)\b/i);
     assert.ok(!m, `found "${m && m[0]}"`);
@@ -359,30 +358,29 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const c = A.J.autoReplyCopy({ email: "x@y.com" }, null);
     assert.ok(c.text.startsWith("Hi there,"), c.text.slice(0, 20));
   });
-  ok("signature is Paul, his role and the division, on three lines", () => {
+  ok("signature is Paul and the division, on two lines", () => {
     const lines = A.copy.text.trimEnd().split("\n");
-    assert.strictEqual(lines[lines.length - 3], "Paul Harding", "no name line");
-    assert.strictEqual(lines[lines.length - 2], "Program Coordinator", "no coordinator line");
+    assert.strictEqual(lines[lines.length - 2], "Paul Harding", "no name line");
     assert.strictEqual(lines[lines.length - 1], "Ad On AI | Ad On Group", "no division line");
-    assert.ok(!/Operating since 2008|Ad On AI, Ad On Group/.test(A.copy.text), "old signature survives");
+    assert.ok(!/Operating since 2008|Ad On AI, Ad On Group|Program Coordinator/.test(A.copy.text), "old signature survives");
     // the signature block keeps its line break in the HTML part
-    assert.ok(A.copy.html.includes("Paul Harding<br>Program Coordinator<br>Ad On AI | Ad On Group"), "signature reflowed");
+    assert.ok(A.copy.html.includes("Paul Harding<br>Ad On AI | Ad On Group"), "signature reflowed");
   });
 
   console.log("\nOpening line");
   ok("does not assume they asked for the curriculum", () => {
     for (const c of [A.copy, B.copy]) {
       assert.ok(!/you requested|Just checking you were able/.test(c.text), "the old assumption is back");
-      assert.ok(c.text.includes("Thanks for getting in touch about AI Training."), "opener missing");
+      assert.ok(c.text.includes("Thanks for getting in touch about AI training. I'm Paul, and I look after"), "opener missing");
     }
   });
-  ok("links the curriculum PDF on its own line, before the booking link", () => {
+  ok("links the curriculum PDF on its own line, after the booking link", () => {
     const lines = A.copy.text.split("\n");
     const pdf = lines.indexOf("https://adongroup.com.au/assets/ai-training-curriculum.pdf");
-    const cal = lines.findIndex((l) => l.startsWith("https://calendly.com"));
+    const cal = lines.findIndex((l) => l.startsWith("Book a time with me: https://calendly.com"));
     assert.ok(pdf > 0, "curriculum link missing or not on its own line");
-    assert.strictEqual(lines[pdf - 1], "already, here's the full program curriculum:");
-    assert.ok(cal > pdf, "curriculum should come before the booking link");
+    assert.strictEqual(lines[pdf - 1], "Here's the full program curriculum if you haven't grabbed it already:");
+    assert.ok(cal > 0 && cal < pdf, "the booking link should come before the curriculum");
     assert.ok(A.copy.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'), "not a link in the HTML part");
   });
   ok("curriculum link survives even with no booking URL configured", () => {
@@ -416,7 +414,7 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(c.text.includes("https://adongroup.com.au/assets/ai-training-curriculum.pdf"));
     assert.ok(c.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'));
     assert.ok(c.text.trimEnd().endsWith("Paul Harding\nProgram Coordinator\nAd On AI | Ad On Group"));
-    assert.ok(!/book a quick call here|Thinking about AI Training/.test(c.text + c.subject), "enquiry copy leaked in");
+    assert.ok(!/Book a time with me|I'm Paul, and I look after|Your AI training enquiry/.test(c.text + c.subject), "enquiry copy leaked in");
     assert.ok(!/\b(courses?|modules?|community)\b/i.test(c.text), "banned word");
   });
 
@@ -433,11 +431,13 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     }
   });
 
-  ok("the link sits on its own line, under the sentence", () => {
+  ok("'Book a time with me' is a named link in HTML and 'text: url' in plain text", () => {
     const lines = A.copy.text.split("\n");
-    const at = lines.findIndex((l) => l.startsWith("https://calendly.com"));
-    assert.ok(at > 0, "link is not on its own line");
-    assert.strictEqual(lines[at - 1], "If you'd like to talk through how it works, you can book a quick call here:");
+    const at = lines.findIndex((l) => l.startsWith("Book a time with me: https://calendly.com"));
+    assert.ok(at > 0, "plain-text booking line missing");
+    assert.strictEqual(lines[at - 1], "whether it suits your situation.");
+    assert.ok(/<a href="https:\/\/calendly\.com[^"]*"[^>]*>Book a time with me<\/a>/.test(A.copy.html), "not a named link in the HTML part");
+    assert.ok(!/>https:\/\/calendly\.com/.test(A.copy.html), "the raw Calendly URL is showing in the HTML");
   });
 
   ok("no booking url configured drops the paragraph rather than dangling it", () => {
@@ -445,9 +445,10 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     delete process.env.CALENDLY_BOOKING_URL;
     const c = A.J.autoReplyCopy({ name: "Jane", email: "j@e.com" }, null);
     process.env.CALENDLY_BOOKING_URL = saved;
-    assert.ok(!c.text.includes("book a quick call here:"), "left a dangling link sentence");
+    assert.ok(!/Book a call|Book a time with me|Or just reply/.test(c.text), "left a dangling booking sentence");
     assert.ok(!/calendly\.com/.test(c.text), "a booking URL survived with no base configured");
-    assert.ok(c.text.includes("I'm happy to answer any questions."), "dropped more than the link paragraph");
+    assert.ok(c.text.includes("Just reply here and tell me what you're after"), "no way left to get in touch");
+    assert.ok(c.text.includes("ai-training-curriculum.pdf"), "dropped more than the booking paragraph");
   });
 
   console.log("\nBcc list");
