@@ -544,7 +544,32 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
       </style><style id="closing-head-style">
         html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root body main .cc-head{font-size:clamp(36px,5.2vw,64px)!important;line-height:1.04!important;letter-spacing:-2.5px!important;margin:0!important;color:#fff!important;font-weight:800!important;max-width:none!important}
         html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root body main .cc-head b{color:#fff!important;font-weight:800!important}
-      </style></head><body><main><nav data-aog-header data-campaign-header>
+      </style><script id="ms-clarity">
+/* Microsoft Clarity: anonymised session recordings and scroll/click heatmaps
+   for the campaign landing page, to see whether ad visitors reach the form.
+
+   On this page only, on purpose. It is where the paid traffic lands, and
+   every other page on the site stays exactly as it was.
+
+   Production hostname only, the same guard the Meta pixel uses, so local
+   previews and Vercel preview URLs never record sessions into the project.
+
+   Async and non-blocking: it downloads alongside everything else and cannot
+   hold up the page. If it is blocked or fails, the page is unaffected and
+   that visit simply is not recorded. The enquiry form carries
+   data-clarity-mask so nothing typed into it is ever captured, whatever the
+   masking setting in the Clarity dashboard. Project: yp4k4433ma. */
+(function () {
+  var h = location.hostname;
+  if (h !== "adongroup.com.au" && h !== "www.adongroup.com.au") return;
+  (function (c, l, a, r, i, t, y) {
+    c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+    t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+    y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+  })(window, document, "clarity", "script", "yp4k4433ma");
+})();
+</script>
+</head><body><main><nav data-aog-header data-campaign-header>
       <div class="ch-bar">
         <a class="ch-logo" href="/" aria-label="Ad On Group">
           <span class="ch-mark"><img src="/assets/design/adon-logo.png" alt="" width="320" height="320"></span>
@@ -934,7 +959,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
           <p class="cc-eyebrow">Get started</p>
           <h2 class="cc-head">Ready to start your <b>AI training journey?</b></h2>
                     <div class="cc-form">
-            <form data-contact-form data-form="enquiry" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
+            <form data-contact-form data-form="enquiry" data-clarity-mask="true" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
             <input type="hidden" name="source" value="/ai-training/"><input type="hidden" name="interest" value="">
             <input type="hidden" name="utm_source" data-utm="utm_source">
