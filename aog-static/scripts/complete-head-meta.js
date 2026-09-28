@@ -77,7 +77,7 @@ function assetVersion(rel) {
 const formJsVersion = assetVersion("assets/js/contact-form.js");
 
 let canonical = 0, og = 0, tw = 0, ogImage = 0, mobileCss = 0, ga = 0, tawk = 0, navJs = 0, formJs = 0, robots = 0, touched = 0;
-let pixel = 0, utmJs = 0;
+let pixel = 0, utmJs = 0, icons = 0;
 
 for (const file of walk(SITE)) {
   const html = fs.readFileSync(file, "utf8");
@@ -106,6 +106,23 @@ for (const file of walk(SITE)) {
   if (!html.includes("/assets/css/mobile.css")) {
     add.push(`<link rel="stylesheet" href="/assets/css/mobile.css">`);
     mobileCss++;
+  }
+
+  // Site icon, on every page. Google only shows a favicon in search results
+  // when the homepage declares one with <link rel="icon">; a /favicon.ico
+  // sitting at the root is not enough. The old WordPress site declared one
+  // automatically, this rebuild never did, and once Google re-checked it
+  // replaced our icon in search results with a generic globe.
+  // favicon.ico holds 16, 32 and 48px (Google wants a multiple of 48); the
+  // 180px apple-touch-icon covers phone home screens. A page that already
+  // declares its own icon is left alone.
+  if (!has(html, /<link[^>]+rel=["'](?:shortcut )?icon["']/i)) {
+    add.push(
+      `<link rel="icon" href="/favicon.ico" sizes="any">`,
+      `<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">`,
+      `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`
+    );
+    icons++;
   }
 
   // Snippet limits. Without an explicit directive Google truncates to a
@@ -258,6 +275,7 @@ console.log(`  open graph added  : ${og}`);
 console.log(`  twitter card added: ${tw}`);
 console.log(`  og:image defaulted: ${ogImage}`);
 console.log(`  mobile.css linked : ${mobileCss}`);
+console.log(`  site icon added   : ${icons}`);
 console.log(`  analytics injected: ${ga}`);
 console.log(`  chat injected     : ${tawk}`);
 console.log(`  mobile nav js     : ${navJs}`);

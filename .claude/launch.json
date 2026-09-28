@@ -4,8 +4,23 @@
     {
       "name": "aog-static",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8099", "--directory", "aog-static/_site"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8099",
+        "--directory",
+        "aog-static/_site"
+      ],
       "port": 8099,
+      "autoPort": false
+    },
+    {
+      "name": "atkinsons-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "/private/tmp/claude-501/-Users-dylanbailey-Documents-GitHub-AOG-site/fe5e06eb-6917-44d9-8cdb-6015ae414613/scratchpad/serve.py"
+      ],
+      "port": 8090,
       "autoPort": false
     }
   ]
