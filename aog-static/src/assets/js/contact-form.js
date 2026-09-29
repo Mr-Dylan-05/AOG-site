@@ -100,6 +100,16 @@
 
     var pixelReported = false;
 
+    // A form that opens Calendly on success starts fetching Calendly's script
+    // the first time someone clicks into it, so the popup arrives with the
+    // thank-you panel rather than a beat after it. Nothing is fetched for
+    // visitors who never touch the form.
+    if (form.hasAttribute("data-book-after-submit")) {
+      form.addEventListener("focusin", function () {
+        if (window.aogCalendly) window.aogCalendly.preload();
+      }, { once: true });
+    }
+
     var status = form.querySelector("[data-form-status]");
     var button = form.querySelector('button[type="submit"]');
     var buttonText = button ? button.innerHTML : "";
@@ -281,6 +291,17 @@
           // Read before the reset. The panel is several lines of asynchrony
           // later, and by then every field is empty.
           var greetName = greetingName(form);
+          // Also read before the reset: a form marked data-book-after-submit
+          // hands these to the Calendly popup it opens once this succeeds.
+          var bookPrefill = null;
+          if (form.hasAttribute("data-book-after-submit")) {
+            var nameField = form.querySelector('[name="name"]');
+            var emailField = form.querySelector('[name="email"]');
+            bookPrefill = {
+              name: nameField ? nameField.value.trim() : "",
+              email: emailField ? emailField.value.trim() : "",
+            };
+          }
           form.reset();
           form.querySelectorAll("[data-error]").forEach(function (s) { s.textContent = ""; });
 
@@ -337,6 +358,24 @@
             panel.hidden = false;
             if (typeof panel.scrollIntoView === "function") {
               panel.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            // A form marked data-book-after-submit opens the Calendly booking
+            // popup by itself, 2 seconds after the enquiry is saved (long
+            // enough to read the thank-you), filled in with what they just
+            // typed. The link comes from the form's own "Book a time" button,
+            // or failing that any booking button on the page; the build
+            // writes it into those, so with no Calendly link configured
+            // nothing opens. Last on purpose, and wrapped: the row, the Lead
+            // and the panel are all done by now, and nothing here may undo
+            // any of them.
+            if (bookPrefill) {
+              try {
+                var bookSource = form.querySelector("[data-calendly]") || document.querySelector("[data-calendly]");
+                var bookUrl = bookSource && bookSource.getAttribute("data-calendly");
+                if (bookUrl && window.aogCalendly) {
+                  setTimeout(function () { window.aogCalendly.open(bookUrl, bookPrefill); }, 2000);
+                }
+              } catch (_) { /* the enquiry is already in; they'll get the call */ }
             }
             return;
           }
@@ -400,6 +439,37 @@
     });
     return pending;
   }
+
+  /* For the form code above: a form marked data-book-after-submit opens the
+     popup itself once the enquiry is saved. Unlike a click there is no
+     new-tab fallback if Calendly's script is blocked: it is not a tap, so a
+     browser would block the tab anyway. The enquiry is already saved by then
+     and the team calls them regardless. Both calls swallow their own
+     failures. */
+  window.aogCalendly = {
+    preload: function () {
+      loadWidget().catch(function () {});
+    },
+    open: function (url, prefill) {
+      prefill = prefill || {};
+      // Name and email go in the link as well as in Calendly's prefill option.
+      // The option is delivered to the popup by message after it loads; the
+      // link parameters are what the enquiry email's booking link already
+      // relies on, so they are the proven path. Same values either way.
+      var withDetails = url;
+      try {
+        var u = new URL(url);
+        if (prefill.name) u.searchParams.set("name", prefill.name);
+        if (prefill.email) u.searchParams.set("email", prefill.email);
+        withDetails = u.toString();
+      } catch (_) { /* an unparseable link still opens, just not pre-filled */ }
+      return loadWidget()
+        .then(function () {
+          if (window.Calendly) window.Calendly.initPopupWidget({ url: withDetails, prefill: prefill });
+        })
+        .catch(function () {});
+    },
+  };
 
   document.addEventListener("click", function (e) {
     var button = e.target.closest && e.target.closest("[data-calendly]");

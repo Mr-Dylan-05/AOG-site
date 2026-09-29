@@ -50,7 +50,7 @@ const block = `${START}
 <div class="aog-bcw" data-aog-book-call data-state="pill" data-calendar-url="${safeCalendarUrl}">
   <button class="aog-bcw__pill aog-bcw__layer" type="button" data-bcw-pill aria-haspopup="dialog" aria-controls="aog-book-call-card">
     <span class="aog-bcw__pill-avatar" aria-hidden="true">
-      <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="" width="36" height="36"></span>
+      <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="" width="50" height="50"></span>
       <span class="aog-bcw__online"></span>
     </span>
     <span>Book a call</span>
@@ -62,7 +62,7 @@ const block = `${START}
     </button>
     <div class="aog-bcw__person">
       <span class="aog-bcw__person-avatar">
-        <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="Paul Harding from Ad On Group" width="56" height="56"></span>
+        <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="Paul Harding from Ad On Group" width="78" height="78"></span>
         <span class="aog-bcw__online" aria-hidden="true"></span>
       </span>
       <span class="aog-bcw__person-copy">
@@ -109,25 +109,25 @@ const block = `${START}
     line-height:1.35;
   }
   .aog-bcw [hidden]{display:none!important}
-  .aog-bcw button,.aog-bcw a{font:inherit}
+  .aog-bcw :where(button,a){font:inherit}
   .aog-bcw__layer:not([hidden]){animation:aog-bcw-in 240ms cubic-bezier(.22,1,.36,1) both}
   .aog-bcw__layer.is-leaving{animation:aog-bcw-out 160ms cubic-bezier(.4,0,1,1) both}
   @keyframes aog-bcw-in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
   @keyframes aog-bcw-out{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(8px) scale(.985)}}
   .aog-bcw__pill{
-    min-width:154px;
-    min-height:48px;
+    min-width:216px;
+    min-height:67px;
     margin:0;
-    padding:6px 17px 6px 7px;
+    padding:8px 24px 8px 10px;
     border:1px solid rgba(23,38,50,.08);
     border-radius:999px;
     background:#fff;
     color:#172632;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:14px;
     cursor:pointer;
-    font-size:15px;
+    font-size:22px;
     font-weight:750;
     letter-spacing:-.01em;
     box-shadow:0 16px 48px rgba(16,38,54,.22),0 3px 12px rgba(16,38,54,.12);
@@ -135,16 +135,17 @@ const block = `${START}
   }
   .aog-bcw__pill:hover{transform:translateY(-1px);box-shadow:0 19px 54px rgba(16,38,54,.26),0 4px 14px rgba(16,38,54,.13)}
   .aog-bcw__pill:focus-visible,.aog-bcw__close:focus-visible,.aog-bcw__cta:focus-visible,.aog-bcw__error a:focus-visible{outline:3px solid rgba(27,171,229,.42);outline-offset:3px}
-  .aog-bcw__pill-avatar{position:relative;display:block;flex:0 0 36px;width:36px;height:36px}
+  .aog-bcw__pill-avatar{position:relative;display:block;flex:0 0 50px;width:50px;height:50px}
   .aog-bcw__avatar-crop{position:absolute;inset:0;display:block;overflow:hidden;border-radius:50%;background:#e8edf0}
   .aog-bcw__avatar-crop img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center}
-  .aog-bcw__online{position:absolute;right:-1px;bottom:0;width:11px;height:11px;border:2px solid #fff;border-radius:50%;background:#2ac769;box-shadow:0 0 0 1px rgba(18,104,51,.08)}
+  .aog-bcw__online{position:absolute;right:-1px;bottom:0;width:15px;height:15px;border:2px solid #fff;border-radius:50%;background:#2ac769;box-shadow:0 0 0 1px rgba(18,104,51,.08)}
   .aog-bcw__card{
     position:relative;
-    width:372px;
-    padding:22px;
+    width:520px;
+    max-width:calc(100vw - 40px);
+    padding:30px;
     border:1px solid rgba(23,38,50,.08);
-    border-radius:22px;
+    border-radius:28px;
     background:#fff;
     box-shadow:0 24px 70px rgba(16,38,54,.25),0 4px 18px rgba(16,38,54,.11);
   }
@@ -163,20 +164,21 @@ const block = `${START}
     justify-content:center;
     cursor:pointer;
   }
-  .aog-bcw__card>.aog-bcw__close{position:absolute;right:10px;top:10px}
+  .aog-bcw__card>.aog-bcw__close{position:absolute;right:14px;top:14px;width:56px;height:56px;min-height:56px}
+  .aog-bcw__card>.aog-bcw__close svg{width:28px;height:28px}
   .aog-bcw__close:hover{background:#f1f5f7;color:#172632}
   .aog-bcw__close svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:1.8}
-  .aog-bcw__person{display:flex;align-items:center;gap:13px;padding-right:37px}
-  .aog-bcw__person-avatar{position:relative;display:block;flex:0 0 56px;width:56px;height:56px}
-  .aog-bcw__person-avatar .aog-bcw__online{right:0;bottom:1px;width:13px;height:13px}
+  .aog-bcw__person{display:flex;align-items:center;gap:18px;padding-right:52px}
+  .aog-bcw__person-avatar{position:relative;display:block;flex:0 0 78px;width:78px;height:78px}
+  .aog-bcw__person-avatar .aog-bcw__online{right:0;bottom:1px;width:18px;height:18px}
   .aog-bcw__person-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
-  .aog-bcw__title{display:block;color:#172632;font-size:19px;font-weight:800;line-height:1.18;letter-spacing:-.025em}
-  .aog-bcw__body{margin:17px 0;color:#53636e;font-size:15px;line-height:1.52}
+  .aog-bcw__title{display:block;color:#172632;font-size:27px;font-weight:800;line-height:1.18;letter-spacing:-.025em}
+  .aog-bcw__body{margin:24px 0;color:#53636e;font-size:21px;line-height:1.52}
   .aog-bcw__cta{
     width:100%;
-    min-height:56px;
-    padding:12px 20px;
-    border-radius:16px;
+    min-height:78px;
+    padding:17px 28px;
+    border-radius:22px;
     background:#172632;
     color:#fff!important;
     display:flex;
@@ -184,7 +186,7 @@ const block = `${START}
     justify-content:center;
     text-align:center;
     text-decoration:none!important;
-    font-size:17px;
+    font-size:22px;
     font-weight:800;
     line-height:1.2;
     transition:transform 150ms ease,background 150ms ease;
@@ -222,10 +224,10 @@ const block = `${START}
   @media(max-width:860px){body.aog-bcw-enabled .ch-book{display:none!important}}
   @media(max-width:680px){
     .aog-bcw{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}
-    .aog-bcw__card{width:calc(100vw - 24px);padding:18px;border-radius:18px}
-    .aog-bcw__title{font-size:17px}
-    .aog-bcw__body{margin:15px 0;font-size:14px}
-    .aog-bcw__cta{min-height:52px;border-radius:14px;font-size:16px}
+    .aog-bcw__card{width:calc(100vw - 24px);max-width:none;padding:25px;border-radius:24px}
+    .aog-bcw__title{font-size:24px}
+    .aog-bcw__body{margin:21px 0;font-size:20px}
+    .aog-bcw__cta{min-height:72px;border-radius:20px;font-size:22px}
   }
   @media(max-width:680px),(max-height:600px){
     .aog-bcw__schedule{position:fixed;inset:0;width:100vw;height:100dvh;min-height:0;max-height:none;border:0;border-radius:0;box-shadow:none}
@@ -233,7 +235,7 @@ const block = `${START}
     .aog-bcw__schedule-close{top:max(17px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right))}
     .aog-bcw__schedule-body{padding-bottom:env(safe-area-inset-bottom)}
   }
-  @media(max-width:360px){.aog-bcw__card{padding:16px}.aog-bcw__person{gap:10px}.aog-bcw__person-avatar{width:50px;height:50px;flex-basis:50px}.aog-bcw__body{line-height:1.45}}
+  @media(max-width:360px){.aog-bcw__card{padding:22px}.aog-bcw__person{gap:14px}.aog-bcw__person-avatar{width:70px;height:70px;flex-basis:70px}.aog-bcw__body{line-height:1.45}}
   @media(prefers-reduced-motion:reduce){
     .aog-bcw__layer:not([hidden]),.aog-bcw__layer.is-leaving,.aog-bcw__loading:before{animation-duration:.01ms!important;animation-iteration-count:1!important}
     .aog-bcw__pill,.aog-bcw__cta{transition:none!important}
@@ -431,6 +433,12 @@ const block = `${START}
     storageSet(keys.dismissed,"1");
     if(current!=="pill")dismiss(false);
   },true);
+  document.addEventListener("submit",function(e){
+    if(!e.target||!e.target.hasAttribute||!e.target.hasAttribute("data-book-after-submit"))return;
+    window.clearTimeout(autoTimer);
+    storageSet(keys.dismissed,"1");
+    if(current!=="pill")dismiss(false);
+  },true);
   if(sheetQuery){
     var onLayoutChange=function(){syncModal()};
     if(typeof sheetQuery.addEventListener==="function")sheetQuery.addEventListener("change",onLayoutChange);
@@ -452,7 +460,7 @@ const block = `${START}
       if(current!=="pill")return;
       storageSet(keys.auto,"1");
       showCard("auto",false);
-    },12000);
+    },8000);
   }
 })();
 </script>
