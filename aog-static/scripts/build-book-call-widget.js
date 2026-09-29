@@ -50,7 +50,7 @@ const block = `${START}
 <div class="aog-bcw" data-aog-book-call data-state="pill" data-calendar-url="${safeCalendarUrl}">
   <button class="aog-bcw__pill aog-bcw__layer" type="button" data-bcw-pill aria-haspopup="dialog" aria-controls="aog-book-call-card">
     <span class="aog-bcw__pill-avatar" aria-hidden="true">
-      <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="" width="36" height="36"></span>
+      <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="" width="41" height="41"></span>
       <span class="aog-bcw__online"></span>
     </span>
     <span>Book a call</span>
@@ -62,7 +62,7 @@ const block = `${START}
     </button>
     <div class="aog-bcw__person">
       <span class="aog-bcw__person-avatar">
-        <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="Paul Harding from Ad On Group" width="56" height="56"></span>
+        <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="Paul Harding from Ad On Group" width="64" height="64"></span>
         <span class="aog-bcw__online" aria-hidden="true"></span>
       </span>
       <span class="aog-bcw__person-copy">
@@ -110,22 +110,26 @@ const block = `${START}
   }
   .aog-bcw [hidden]{display:none!important}
   .aog-bcw button,.aog-bcw a{font:inherit}
+  /* The reset above outranks the .aog-bcw__pill and .aog-bcw__cta rules, so their own
+     font-size and font-weight never apply and both render at 16px regular. The size is
+     set here, a step more specific; the weight is left as it renders. */
+  .aog-bcw .aog-bcw__pill,.aog-bcw .aog-bcw__cta{font-size:18.5px}
   .aog-bcw__layer:not([hidden]){animation:aog-bcw-in 240ms cubic-bezier(.22,1,.36,1) both}
   .aog-bcw__layer.is-leaving{animation:aog-bcw-out 160ms cubic-bezier(.4,0,1,1) both}
   @keyframes aog-bcw-in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
   @keyframes aog-bcw-out{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(8px) scale(.985)}}
   .aog-bcw__pill{
-    min-width:154px;
-    min-height:48px;
+    min-width:177px;
+    min-height:55px;
     margin:0;
-    padding:6px 17px 6px 7px;
+    padding:7px 20px 7px 8px;
     border:1px solid rgba(23,38,50,.08);
     border-radius:999px;
     background:#fff;
     color:#172632;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:12px;
     cursor:pointer;
     font-size:15px;
     font-weight:750;
@@ -135,16 +139,16 @@ const block = `${START}
   }
   .aog-bcw__pill:hover{transform:translateY(-1px);box-shadow:0 19px 54px rgba(16,38,54,.26),0 4px 14px rgba(16,38,54,.13)}
   .aog-bcw__pill:focus-visible,.aog-bcw__close:focus-visible,.aog-bcw__cta:focus-visible,.aog-bcw__error a:focus-visible{outline:3px solid rgba(27,171,229,.42);outline-offset:3px}
-  .aog-bcw__pill-avatar{position:relative;display:block;flex:0 0 36px;width:36px;height:36px}
+  .aog-bcw__pill-avatar{position:relative;display:block;flex:0 0 41px;width:41px;height:41px}
   .aog-bcw__avatar-crop{position:absolute;inset:0;display:block;overflow:hidden;border-radius:50%;background:#e8edf0}
   .aog-bcw__avatar-crop img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center}
-  .aog-bcw__online{position:absolute;right:-1px;bottom:0;width:11px;height:11px;border:2px solid #fff;border-radius:50%;background:#2ac769;box-shadow:0 0 0 1px rgba(18,104,51,.08)}
+  .aog-bcw__online{position:absolute;right:-1px;bottom:0;width:13px;height:13px;border:2px solid #fff;border-radius:50%;background:#2ac769;box-shadow:0 0 0 1px rgba(18,104,51,.08)}
   .aog-bcw__card{
     position:relative;
-    width:372px;
-    padding:22px;
+    width:428px;
+    padding:25px;
     border:1px solid rgba(23,38,50,.08);
-    border-radius:22px;
+    border-radius:25px;
     background:#fff;
     box-shadow:0 24px 70px rgba(16,38,54,.25),0 4px 18px rgba(16,38,54,.11);
   }
@@ -163,20 +167,21 @@ const block = `${START}
     justify-content:center;
     cursor:pointer;
   }
-  .aog-bcw__card>.aog-bcw__close{position:absolute;right:10px;top:10px}
+  .aog-bcw__card>.aog-bcw__close{position:absolute;right:11px;top:11px;width:50px;height:50px;min-height:50px}
+  .aog-bcw__card>.aog-bcw__close svg{width:24px;height:24px}
   .aog-bcw__close:hover{background:#f1f5f7;color:#172632}
   .aog-bcw__close svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:1.8}
-  .aog-bcw__person{display:flex;align-items:center;gap:13px;padding-right:37px}
-  .aog-bcw__person-avatar{position:relative;display:block;flex:0 0 56px;width:56px;height:56px}
-  .aog-bcw__person-avatar .aog-bcw__online{right:0;bottom:1px;width:13px;height:13px}
+  .aog-bcw__person{display:flex;align-items:center;gap:15px;padding-right:43px}
+  .aog-bcw__person-avatar{position:relative;display:block;flex:0 0 64px;width:64px;height:64px}
+  .aog-bcw__person-avatar .aog-bcw__online{right:0;bottom:1px;width:15px;height:15px}
   .aog-bcw__person-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
-  .aog-bcw__title{display:block;color:#172632;font-size:19px;font-weight:800;line-height:1.18;letter-spacing:-.025em}
-  .aog-bcw__body{margin:17px 0;color:#53636e;font-size:15px;line-height:1.52}
+  .aog-bcw__title{display:block;color:#172632;font-size:22px;font-weight:800;line-height:1.18;letter-spacing:-.025em}
+  .aog-bcw__body{margin:20px 0;color:#53636e;font-size:17px;line-height:1.52}
   .aog-bcw__cta{
     width:100%;
-    min-height:56px;
-    padding:12px 20px;
-    border-radius:16px;
+    min-height:64px;
+    padding:14px 23px;
+    border-radius:18px;
     background:#172632;
     color:#fff!important;
     display:flex;
@@ -222,10 +227,10 @@ const block = `${START}
   @media(max-width:860px){body.aog-bcw-enabled .ch-book{display:none!important}}
   @media(max-width:680px){
     .aog-bcw{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}
-    .aog-bcw__card{width:calc(100vw - 24px);padding:18px;border-radius:18px}
-    .aog-bcw__title{font-size:17px}
-    .aog-bcw__body{margin:15px 0;font-size:14px}
-    .aog-bcw__cta{min-height:52px;border-radius:14px;font-size:16px}
+    .aog-bcw__card{width:calc(100vw - 24px);padding:21px;border-radius:21px}
+    .aog-bcw__title{font-size:19.5px}
+    .aog-bcw__body{margin:17px 0;font-size:16px}
+    .aog-bcw__cta{min-height:60px;border-radius:16px;font-size:16px}
   }
   @media(max-width:680px),(max-height:600px){
     .aog-bcw__schedule{position:fixed;inset:0;width:100vw;height:100dvh;min-height:0;max-height:none;border:0;border-radius:0;box-shadow:none}
@@ -233,7 +238,7 @@ const block = `${START}
     .aog-bcw__schedule-close{top:max(17px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right))}
     .aog-bcw__schedule-body{padding-bottom:env(safe-area-inset-bottom)}
   }
-  @media(max-width:360px){.aog-bcw__card{padding:16px}.aog-bcw__person{gap:10px}.aog-bcw__person-avatar{width:50px;height:50px;flex-basis:50px}.aog-bcw__body{line-height:1.45}}
+  @media(max-width:360px){.aog-bcw__card{padding:18px}.aog-bcw__person{gap:12px}.aog-bcw__person-avatar{width:57px;height:57px;flex-basis:57px}.aog-bcw__body{line-height:1.45}}
   @media(prefers-reduced-motion:reduce){
     .aog-bcw__layer:not([hidden]),.aog-bcw__layer.is-leaving,.aog-bcw__loading:before{animation-duration:.01ms!important;animation-iteration-count:1!important}
     .aog-bcw__pill,.aog-bcw__cta{transition:none!important}
