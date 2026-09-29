@@ -894,6 +894,9 @@ function autoReplyCopy(record, slot) {
     "Here's the full program curriculum if you haven't grabbed it already:",
     CURRICULUM_URL,
   ]);
+  // The form requires a phone number (since 29 Sep), so this is a promise the
+  // team can always keep.
+  paras.push(["We'll give you a ring to talk through it."]);
   const asText = (l) => (typeof l === "string" ? l : l.text);
   const asHtml = (l) => (typeof l === "string" ? linkify(l) : l.html);
   const text =

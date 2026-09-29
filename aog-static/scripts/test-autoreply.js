@@ -392,6 +392,12 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(cal > 0 && cal < pdf, "the booking link should come before the curriculum");
     assert.ok(A.copy.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'), "not a link in the HTML part");
   });
+  ok("after the curriculum: we'll give you a ring, then the signature", () => {
+    const t = A.copy.text;
+    const pdf = t.indexOf("ai-training-curriculum.pdf"), ring = t.indexOf("\n\nWe'll give you a ring to talk through it.\n\n"), sig = t.indexOf("\nPaul Harding\nAI Enablement");
+    assert.ok(pdf > -1 && ring > pdf && sig > ring, "ring line missing or out of order");
+    assert.ok(A.copy.html.includes(">We'll give you a ring to talk through it.</p>"), "ring line missing from the HTML part");
+  });
   ok("curriculum link survives even with no booking URL configured", () => {
     const saved = process.env.CALENDLY_BOOKING_URL;
     delete process.env.CALENDLY_BOOKING_URL;
