@@ -1449,7 +1449,12 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
   .aog-bcw__error a{margin-top:7px;padding:12px 18px;border-radius:12px;background:#172632;color:#fff!important;font-size:15px;font-weight:800;text-decoration:none!important}
   @media(max-width:860px){body.aog-bcw-enabled .ch-book{display:none!important}}
   @media(max-width:680px){
-    .aog-bcw{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}
+    .aog-bcw{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));transition:background-color 200ms ease}
+    /* On a phone the card opens in the middle of the screen over a dimmed page, not in
+       the corner. Keyed off data-state, which only changes once the outgoing layer has
+       finished animating, so the card fades out in place before the pill comes back. */
+    .aog-bcw[data-state="card"]{inset:0;display:flex;align-items:center;justify-content:center;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:rgba(11,18,32,.5)}
+    .aog-bcw[data-state="card"]:has(>.aog-bcw__card.is-leaving){background:rgba(11,18,32,0)}
     .aog-bcw__card{width:calc(100vw - 24px);padding:21px;border-radius:21px}
     .aog-bcw__title{font-size:19.5px}
     .aog-bcw__body{margin:17px 0;font-size:16px}
@@ -1464,7 +1469,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
   @media(max-width:360px){.aog-bcw__card{padding:18px}.aog-bcw__person{gap:12px}.aog-bcw__person-avatar{width:57px;height:57px;flex-basis:57px}.aog-bcw__body{line-height:1.45}}
   @media(prefers-reduced-motion:reduce){
     .aog-bcw__layer:not([hidden]),.aog-bcw__layer.is-leaving,.aog-bcw__loading:before{animation-duration:.01ms!important;animation-iteration-count:1!important}
-    .aog-bcw__pill,.aog-bcw__cta{transition:none!important}
+    .aog-bcw,.aog-bcw__pill,.aog-bcw__cta{transition:none!important}
   }
 </style>
 
@@ -1641,6 +1646,8 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
 
   pill.addEventListener("click",function(){showCard("pill",true)});
   root.querySelectorAll("[data-bcw-close]").forEach(function(button){button.addEventListener("click",function(){dismiss(true)})});
+  // On a phone the open card sits over a dimmed page; a tap on the dimmed area closes it.
+  root.addEventListener("click",function(e){if(e.target===root&&current==="card")dismiss(false)});
   openLink.addEventListener("click",function(e){
     window.clearTimeout(autoTimer);
     if(isModified(e))return;
