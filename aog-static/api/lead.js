@@ -738,8 +738,8 @@ function linkify(line) {
  *
  * NOTE (28 Sep 2026): replaced with new copy, written in Paul's voice. It
  * introduces him, offers a call ("Book a call" is itself the link, since
- * 29 Sep), invites a plain reply instead, and links the curriculum. Replies reach Paul and info@
- * (see buildMessage), which is what "just reply here" relies on.
+ * 29 Sep) and links the curriculum. The "Or just reply here" line was taken
+ * out on 29 Sep. Replies still reach Paul and info@ (see buildMessage).
  *
  * `slot` is still accepted and is now ignored. The copy no longer proposes a
  * specific time, so there is one version of this message where there used to
@@ -847,11 +847,9 @@ function autoReplyCopy(record, slot) {
       "whether it suits your situation.",
       { text: booking, html: "" },
     ]);
-    paras.push(["Or just reply here and tell me what you're after."]);
   } else {
     // No booking URL configured at all. "Book a call" cannot be sent without
-    // anywhere to book, so the reply becomes the only way in, and the "Or"
-    // that depended on the booking line goes with it.
+    // anywhere to book, so a plain reply becomes the way in instead.
     console.error("[lead] CALENDLY_BOOKING_URL is not set; sending with no booking link");
     paras.push([
       "Just reply here and tell me what you're after, and I'll take you through",
