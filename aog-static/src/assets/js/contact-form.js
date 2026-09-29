@@ -171,6 +171,12 @@
           ok = field.checked;
         } else if (field.type === "email") {
           ok = field.value.trim() !== "" && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(field.value.trim());
+        } else if (field.type === "tel") {
+          // "Required" alone would accept "77". At least 8 digits, ignoring
+          // spaces, +, brackets and dashes: every real Australian landline
+          // (8 digits even without the area code), mobile and international
+          // number passes, and a number nobody could call does not.
+          ok = field.value.replace(/\D/g, "").length >= 8;
         } else {
           ok = field.value.trim() !== "";
         }
