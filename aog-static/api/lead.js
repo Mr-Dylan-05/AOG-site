@@ -749,7 +749,8 @@ function linkify(line) {
  * The plain text and the HTML carry the same words, and the HTML is
  * deliberately plain: no template, no images, no button graphic, no tracking
  * pixel. It has to read like a person typed it, and heavy markup lands in
- * Promotions more often.
+ * Promotions more often. The one exception, since 29 Sep, is Paul's real
+ * signature at the bottom (SIGNATURE_HTML), which is his signature image.
  */
 /**
  * The email for someone who has just booked a call through the popup on
@@ -788,19 +789,12 @@ function bookingReplyCopy(record) {
     CURRICULUM_URL,
   ]);
   paras.push(["If anything comes up before then, just reply to this email."]);
-  paras.push(["Paul Harding", "Program Coordinator", "Ad On AI | Ad On Group"]);
 
-  const sig = paras.length - 1;
-  const text = paras.map((p) => p.join("\n")).join("\n\n");
+  const text = paras.map((p) => p.join("\n")).join("\n\n") + "\n\n" + SIGNATURE_TEXT;
   const html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
-    paras
-      .map((p, i) =>
-        `<p style="margin:0 0 14px">${
-          i === sig ? p.map(escapeHtml).join("<br>") : linkify(p.join(" "))
-        }</p>`
-      )
-      .join("") +
+    paras.map((p) => `<p style="margin:0 0 14px">${linkify(p.join(" "))}</p>`).join("") +
+    SIGNATURE_HTML +
     "</div>";
 
   // "AI Training" is in the subject for the same reason as the enquiry email:
@@ -817,6 +811,45 @@ function bookingReplyCopy(record) {
    in src/_data/site.json). Absolute, because an email has no page to be
    relative to. If the PDF moves, both need changing. */
 const CURRICULUM_URL = "https://adongroup.com.au/assets/ai-training-curriculum.pdf";
+
+/* Paul's real email signature, on both emails (the enquiry reply and the
+   booking confirmation) so they always match. It is his actual signature
+   image, served unchanged from public/assets/email/signature.png, so it must
+   stay published at that address for emails already sent to keep showing it.
+
+   This is the one deliberate exception to these emails being plain (see the
+   note above autoReplyCopy): an image in an automated email nudges some
+   inboxes towards Promotions, and some apps hide images until the reader
+   allows them. The alt text carries the details for exactly that case, and
+   the plain-text part spells the whole signature out.
+
+   The file is 2x (1342x402) for sharp screens and shown at 600px wide.
+   width/height attributes are what Outlook honours; max-width:100% and
+   height:auto let it shrink on a phone instead of widening the email. */
+const EMAIL_ASSETS = "https://adongroup.com.au/assets/email";
+const SIGNATURE_DISCLAIMER =
+  "This email, its contents and any attachments are strictly confidential. They must " +
+  "not be used, distributed, copied or read by any person other than the addressee. " +
+  "Unauthorised use, disclosure, copying or reliance on the contents of and attachments " +
+  "to this email by anyone other than the addressee may be unlawful. If you have " +
+  "received this email and attachments in error, please contact us at Ad on Group " +
+  "immediately to facilitate its return.";
+const SIGNATURE_TEXT = [
+  "Paul Harding",
+  "AI Enablement",
+  "07 5586 1400 · www.adongroup.com.au",
+  "Ad On Group · Certified Claude Experts",
+  "",
+  "Divisions · Ad On AI · Ad On Workforce · Ad On Digital · Ad On Hold",
+  "",
+  SIGNATURE_DISCLAIMER,
+].join("\n");
+const SIGNATURE_HTML =
+  '<div style="margin:22px 0 0">' +
+  `<img src="${EMAIL_ASSETS}/signature.png" width="600" height="180" ` +
+  'alt="Paul Harding, AI Enablement, Ad On Group (Certified Claude Experts). 07 5586 1400, www.adongroup.com.au" ' +
+  'style="display:block;width:100%;max-width:600px;height:auto;border:0">' +
+  "</div>";
 
 function autoReplyCopy(record, slot) {
   const first = firstName(record);
@@ -861,21 +894,14 @@ function autoReplyCopy(record, slot) {
     "Here's the full program curriculum if you haven't grabbed it already:",
     CURRICULUM_URL,
   ]);
-  paras.push(["Paul Harding", "Ad On AI | Ad On Group"]);
-
-  const sig = paras.length - 1;
   const asText = (l) => (typeof l === "string" ? l : l.text);
   const asHtml = (l) => (typeof l === "string" ? linkify(l) : l.html);
-  const text = paras.map((p) => p.map(asText).filter(Boolean).join("\n")).join("\n\n");
+  const text =
+    paras.map((p) => p.map(asText).filter(Boolean).join("\n")).join("\n\n") + "\n\n" + SIGNATURE_TEXT;
   const html =
     '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0B1220">' +
-    paras
-      .map((p, i) =>
-        `<p style="margin:0 0 14px">${
-          i === sig ? p.map(escapeHtml).join("<br>") : p.map(asHtml).filter(Boolean).join(" ")
-        }</p>`
-      )
-      .join("") +
+    paras.map((p) => `<p style="margin:0 0 14px">${p.map(asHtml).filter(Boolean).join(" ")}</p>`).join("") +
+    SIGNATURE_HTML +
     "</div>";
 
   return { subject: "Your AI training enquiry", text, html };

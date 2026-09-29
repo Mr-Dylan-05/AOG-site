@@ -340,16 +340,27 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
   }));
   // "course" came off this list for two days while the director's copy used
   // it, and went back on 24 Sep 2026: it is a program, never a course, and
-  // the booking email's signature says Program Coordinator to match.
+  // Paul's signature (since 29 Sep) says AI Enablement.
   ok('never says "course", "modules" or "community"', () => both.forEach((c) => {
     const m = c.text.match(/\b(courses?|modules?|community)\b/i);
     assert.ok(!m, `found "${m && m[0]}"`);
   }));
-  ok("no price, no attachment, no postscript", () => both.forEach((c) => {
-    assert.ok(!/\$|\bP\.?S\.?\b|attach/i.test(c.text), "found price, PS or attachment");
+  // The body is what has to read like a person typed it. Paul's signature is
+  // the one deliberate exception: it is an image, and its confidentiality
+  // notice mentions attachments, so these two rules check the body only.
+  const bodyText = (c) => c.text.split("\nPaul Harding\nAI Enablement")[0];
+  const bodyHtml = (c) => c.html.split('<div style="margin:22px 0 0">')[0];
+  ok("no price, no attachment, no postscript (body)", () => both.forEach((c) => {
+    assert.ok(!/\$|\bP\.?S\.?\b|attach/i.test(bodyText(c)), "found price, PS or attachment");
   }));
-  ok("html carries no images, buttons or tracking pixels", () => both.forEach((c) => {
-    assert.ok(!/<img|background-color|<table|<button/i.test(c.html), "html is not plain");
+  ok("body html carries no images, buttons or tracking pixels", () => both.forEach((c) => {
+    assert.ok(!/<img|background-color|<table|<button/i.test(bodyHtml(c)), "html is not plain");
+  }));
+  ok("the only image is Paul's signature, with alt text", () => both.forEach((c) => {
+    const imgs = c.html.match(/<img\b[^>]*>/g) || [];
+    assert.strictEqual(imgs.length, 1, `expected 1 image, found ${imgs.length}`);
+    assert.ok(/src="https:\/\/adongroup\.com\.au\/assets\/email\/signature\.png"/.test(imgs[0]), imgs[0]);
+    assert.ok(/alt="Paul Harding, AI Enablement[^"]*07 5586 1400[^"]*"/.test(imgs[0]), "alt text missing the details");
   }));
   ok("greeting uses the first name, tidied", () => {
     assert.ok(A.copy.text.startsWith("Hi Jane,"), A.copy.text.slice(0, 20));
@@ -358,13 +369,11 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const c = A.J.autoReplyCopy({ email: "x@y.com" }, null);
     assert.ok(c.text.startsWith("Hi there,"), c.text.slice(0, 20));
   });
-  ok("signature is Paul and the division, on two lines", () => {
-    const lines = A.copy.text.trimEnd().split("\n");
-    assert.strictEqual(lines[lines.length - 2], "Paul Harding", "no name line");
-    assert.strictEqual(lines[lines.length - 1], "Ad On AI | Ad On Group", "no division line");
-    assert.ok(!/Operating since 2008|Ad On AI, Ad On Group|Program Coordinator/.test(A.copy.text), "old signature survives");
-    // the signature block keeps its line break in the HTML part
-    assert.ok(A.copy.html.includes("Paul Harding<br>Ad On AI | Ad On Group"), "signature reflowed");
+  ok("plain text ends with Paul's full signature, including the notice", () => {
+    assert.ok(A.copy.text.includes("\n\nPaul Harding\nAI Enablement\n07 5586 1400 · www.adongroup.com.au"), "no signature block");
+    assert.ok(A.copy.text.includes("Divisions · Ad On AI · Ad On Workforce · Ad On Digital · Ad On Hold"), "no divisions line");
+    assert.ok(A.copy.text.trimEnd().endsWith("immediately to facilitate its return."), "notice is not last");
+    assert.ok(!/Operating since 2008|Ad On AI, Ad On Group|Program Coordinator|\nAd On AI \| Ad On Group$/m.test(A.copy.text), "old signature survives");
   });
 
   console.log("\nOpening line");
@@ -413,7 +422,8 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     const c = booked({ name: "Jane", email: "j@e.com", booked_for: "Tuesday 29 September, 2:00pm" });
     assert.ok(c.text.includes("https://adongroup.com.au/assets/ai-training-curriculum.pdf"));
     assert.ok(c.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'));
-    assert.ok(c.text.trimEnd().endsWith("Paul Harding\nProgram Coordinator\nAd On AI | Ad On Group"));
+    assert.ok(c.text.includes("\n\nPaul Harding\nAI Enablement\n") && c.text.trimEnd().endsWith("facilitate its return."), "booking email lacks the signature");
+    assert.ok(c.html.includes("/assets/email/signature.png"), "booking email lacks the signature image");
     assert.ok(!/I'll take you through how it works|I'm Paul, and I look after|Your AI training enquiry/.test(c.text + c.subject), "enquiry copy leaked in");
     assert.ok(!/\b(courses?|modules?|community)\b/i.test(c.text), "banned word");
   });
