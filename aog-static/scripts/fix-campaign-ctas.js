@@ -5,8 +5,8 @@
  * The two dark buttons said "BOOK NOW", which promises a booking. Nothing is
  * scheduled by them: they scroll to the enquiry form at the foot of the page.
  *
- * They read "GET IN TOUCH", then "GET MORE INFO" for a while, and are back on
- * "GET IN TOUCH" (September 2026). The curriculum card keeps its own "Get more
+ * They have gone between "GET IN TOUCH" and "GET MORE INFO" a few times and now
+ * read "GET MORE INFO" (30 September 2026). The curriculum card keeps its own "Get more
  * info" button: build-curriculum-block.js writes it, in mixed case, so the
  * uppercase match here never touches it.
  *
@@ -30,7 +30,7 @@ const ROOT = path.join(__dirname, "..");
 const PAGE = path.join(ROOT, "public", "ai-training", "index.html");
 
 /** Button labels: [what the export ships, what it should say] */
-const LABELS = [["BOOK NOW", "GET IN TOUCH"], ["GET MORE INFO", "GET IN TOUCH"]];
+const LABELS = [["BOOK NOW", "GET MORE INFO"], ["GET IN TOUCH", "GET MORE INFO"]];
 
 /**
  * Card headings, same shape. "2 One-on-One Sessions Monthly" sat under a card

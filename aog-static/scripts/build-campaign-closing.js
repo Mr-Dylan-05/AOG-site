@@ -73,7 +73,7 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
         </div>
       </section>`;
 
-const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire">GET IN TOUCH &rarr;</a></div>`;
+const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire">GET MORE INFO &rarr;</a></div>`;
 
 const DEEP = "html" + ":root".repeat(64) + " body main";
 
