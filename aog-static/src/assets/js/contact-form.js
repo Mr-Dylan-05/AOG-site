@@ -402,6 +402,9 @@
   }
 
   document.addEventListener("click", function (e) {
+    // Already handled: on /ai-training/ the booking widget opens its own
+    // pre-loaded scheduler for every booking button and marks the click done.
+    if (e.defaultPrevented) return;
     var button = e.target.closest && e.target.closest("[data-calendly]");
     if (!button) return;
     var url = button.getAttribute("data-calendly");

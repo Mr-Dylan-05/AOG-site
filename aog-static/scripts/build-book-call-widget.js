@@ -109,6 +109,9 @@ const block = `${START}
     line-height:1.35;
   }
   .aog-bcw [hidden]{display:none!important}
+  /* A pre-loaded scheduler waits off screen at full size rather than display:none, so
+     Calendly lays out while nobody is looking and opening it is only a matter of showing it. */
+  .aog-bcw .aog-bcw__schedule.is-warm[hidden]{display:flex!important;position:fixed!important;left:-10000px!important;top:0!important;visibility:hidden!important;pointer-events:none!important;animation:none!important}
   .aog-bcw button,.aog-bcw a{font:inherit}
   /* The reset above outranks the .aog-bcw__pill and .aog-bcw__cta rules, so their own
      font-size and font-weight never apply and both render at 16px regular. The size is
@@ -214,7 +217,7 @@ const block = `${START}
   .aog-bcw__schedule-subtitle{color:#6c7982;font-size:12px;font-weight:550}
   .aog-bcw__schedule-close{position:absolute;right:8px;top:17px}
   .aog-bcw__schedule-body{position:relative;min-height:0;flex:1;background:#fff}
-  .aog-bcw__loading{position:absolute;z-index:2;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;color:#61707a;font-size:14px;font-weight:650;text-align:center}
+  .aog-bcw__loading{position:absolute;z-index:2;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;padding:24px;color:#61707a;font-size:14px;font-weight:650;text-align:center}
   .aog-bcw__loading:before{content:"";width:18px;height:18px;margin-right:10px;border:2px solid #d8e0e5;border-top-color:#1babe5;border-radius:50%;animation:aog-bcw-spin .75s linear infinite}
   @keyframes aog-bcw-spin{to{transform:rotate(360deg)}}
   .aog-bcw__calendar{position:absolute;z-index:1;inset:0;overflow:hidden;background:#fff}
@@ -272,7 +275,6 @@ const block = `${START}
   var current="pill";
   var transitionTimer=0;
   var autoTimer=0;
-  var calendarToken=0;
   var mainHadInert=false;
   var previousOverflow="";
   var sheetLocked=false;
@@ -338,8 +340,6 @@ const block = `${START}
     if(current==="pill")return;
     storageSet(keys.dismissed,"1");
     window.clearTimeout(autoTimer);
-    calendarToken+=1;
-    if(calendar)calendar.innerHTML="";
     track("dismissed");
     changeState("pill",{focus:returnFocus?pill:null});
   }
@@ -373,38 +373,58 @@ const block = `${START}
     try{
       var url=new URL(calendarUrl,window.location.href);
       url.searchParams.set("hide_gdpr_banner","1");
+      url.searchParams.set("hide_landing_page_details","1");
+      url.searchParams.set("hide_event_type_details","1");
       url.searchParams.set("primary_color","1babe5");
-      if(layout()==="sheet")url.searchParams.set("hide_event_type_details","1");
       return url.toString();
     }catch(_){return calendarUrl}
   }
   function preload(){ensurePreconnect();loadCalendly().catch(function(){})}
+  /* The calendar is built once, off screen, and kept: opening the scheduler then
+     only has to show it. It starts building when someone shows interest (the
+     invitation card appears, they near the enquiry form, or a finger or pointer
+     lands on a booking button), never on page load, never before the page has
+     finished loading, and not at all on a data saver or 2G, where it waits for
+     the tap as before. */
+  var mounting=null,calendarReady=false;
+  function lightConnection(){var c=navigator.connection;return Boolean(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||"")))}
+  function mountCalendar(){
+    if(mounting)return mounting;
+    schedule.classList.add("is-warm");
+    ensurePreconnect();
+    mounting=loadCalendly().then(function(api){api.initInlineWidget({url:calendlyUrl(),parentElement:calendar})});
+    mounting.catch(function(){mounting=null});
+    return mounting;
+  }
+  function warm(reason){
+    if(mounting||lightConnection())return;
+    if(document.readyState!=="complete"){window.addEventListener("load",function(){warm(reason)},{once:true});return}
+    var go=function(){if(mounting)return;mountCalendar().catch(function(){});track("prewarmed",{trigger:reason})};
+    if(reason!=="press"&&"requestIdleCallback" in window)window.requestIdleCallback(go,{timeout:2000});else go();
+  }
   function showCard(trigger,focus){
     lastTrigger=trigger||"pill";
     setBookedCopy();
     preload();
+    warm("card");
     track("opened",{trigger:lastTrigger});
     changeState("card",{focus:focus?card.querySelector("[data-bcw-close]"):null});
   }
-  function openScheduler(){
-    lastTrigger="cta";
-    calendarToken+=1;
-    var token=calendarToken;
-    loading.hidden=false;
+  function openScheduler(trigger){
+    lastTrigger=trigger||"cta";
     error.hidden=true;
-    calendar.innerHTML="";
-    track("scheduler_opened",{trigger:"cta"});
+    loading.hidden=calendarReady;
+    track("scheduler_opened",{trigger:lastTrigger,ready:calendarReady?"yes":"no"});
+    var building=mountCalendar();
     changeState("schedule",{focus:schedule.querySelector("[data-bcw-close]"),after:function(){
-      loadCalendly().then(function(api){
-        if(token!==calendarToken||current!=="schedule")return;
-        api.initInlineWidget({url:calendlyUrl(),parentElement:calendar});
-        loading.hidden=true;
-      }).catch(function(){
-        if(token!==calendarToken||current!=="schedule")return;
+      building.then(null,function(){
+        if(current!=="schedule")return;
         loading.hidden=true;
         error.hidden=false;
-        track("load_failed",{trigger:"cta"});
+        track("load_failed",{trigger:lastTrigger});
       });
+      /* the loader stays until Calendly says it has drawn, with a ceiling */
+      if(!calendarReady)window.setTimeout(function(){loading.hidden=true},10000);
     }});
   }
   function trapFocus(e){
@@ -435,14 +455,30 @@ const block = `${START}
     if(e.key==="Escape"&&current!=="pill"){e.preventDefault();dismiss(true);return}
     trapFocus(e);
   });
+  /* Every other booking button on the page (header, form, thank-you panel) opens
+     this same scheduler, so they all get the pre-loaded calendar. Marking the
+     click handled is what tells contact-form.js not to open its own popup. */
   document.addEventListener("click",function(e){
     if(!e.target.closest)return;
     var other=e.target.closest("[data-calendly]");
-    if(!other||root.contains(other))return;
+    if(!other||root.contains(other)||isModified(e))return;
+    e.preventDefault();
     window.clearTimeout(autoTimer);
     storageSet(keys.dismissed,"1");
-    if(current!=="pill")dismiss(false);
+    openScheduler(other.classList.contains("book-inline")?"form":"button");
   },true);
+  ["pointerdown","mouseover","touchstart"].forEach(function(type){
+    document.addEventListener(type,function(e){
+      if(!mounting&&e.target.closest&&e.target.closest("[data-calendly],[data-bcw-open],[data-bcw-pill]"))warm("press");
+    },{capture:true,passive:true});
+  });
+  var enquire=document.getElementById("enquire");
+  if(enquire&&"IntersectionObserver" in window){
+    var near=new IntersectionObserver(function(entries){
+      if(entries.some(function(x){return x.isIntersecting})){near.disconnect();warm("form")}
+    },{rootMargin:"600px 0px"});
+    near.observe(enquire);
+  }
   if(sheetQuery){
     var onLayoutChange=function(){syncModal()};
     if(typeof sheetQuery.addEventListener==="function")sheetQuery.addEventListener("change",onLayoutChange);
@@ -450,7 +486,10 @@ const block = `${START}
   }
   window.addEventListener("message",function(e){
     if(e.origin!=="https://calendly.com"||!e.data||typeof e.data.event!=="string")return;
-    if((e.data.event==="calendly.profile_page_viewed"||e.data.event==="calendly.event_type_viewed")&&!trackedLoaded){trackedLoaded=true;track("loaded")}
+    if(e.data.event==="calendly.profile_page_viewed"||e.data.event==="calendly.event_type_viewed"){
+      calendarReady=true;loading.hidden=true;
+      if(!trackedLoaded){trackedLoaded=true;track("loaded")}
+    }
     if(e.data.event==="calendly.date_and_time_selected")track("time_selected");
     if(e.data.event==="calendly.event_scheduled"){
       storageSet(keys.booked,"1");
