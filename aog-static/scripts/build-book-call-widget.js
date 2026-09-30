@@ -69,7 +69,7 @@ const block = `${START}
         <span class="aog-bcw__title" id="aog-book-call-title" data-bcw-card-title>Speak with one of our AI training facilitators</span>
       </span>
     </div>
-    <p class="aog-bcw__body" data-bcw-card-body>See where practical AI could save your team time.</p>
+    <p class="aog-bcw__body" data-bcw-card-body>Find out how you can get ahead with our AI Training and ongoing support.</p>
     <a class="aog-bcw__cta" data-bcw-open href="${safeCalendarUrl}" target="_blank" rel="noopener">Book a discovery call</a>
   </section>
 
