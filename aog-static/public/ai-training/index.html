@@ -953,7 +953,47 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
           .cr-grid{grid-template-columns:minmax(0,1fr);gap:14px}
           .cr-grid>.cr-card,.cr-grid>.cr-card:nth-child(4):nth-last-child(2){grid-column:1/-1}
         }
+        /* On a phone the reviews run as a continuous strip, like the client logos, instead of
+           a stack six cards tall. The script below copies the cards into two identical sets
+           side by side and the strip slides left by exactly one set, so the loop has no seam.
+           Only once that strip exists is the grid hidden: without JavaScript, or with reduced
+           motion asked for, the stacked cards stay. Holding a finger on it pauses it. */
+        .cr-marquee{display:none}
+        @keyframes cr-ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+        @media(max-width:860px) and (prefers-reduced-motion:no-preference){
+          .campaign-reviews.has-marquee .cr-grid{display:none}
+          .campaign-reviews .cr-marquee{display:block;overflow:hidden;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+          .cr-marquee-track{display:flex;width:max-content;animation:cr-ticker 75s linear infinite}
+          .cr-marquee.is-held .cr-marquee-track{animation-play-state:paused}
+          .cr-set{display:flex;align-items:stretch;gap:14px;padding-right:14px}
+          .cr-set>.cr-card{flex:none;width:min(300px,80vw)}
+          /* The page reveals each card as it scrolls into view; a card arriving from the side
+             of a moving strip should simply be there. */
+          .cr-marquee .cr-card.rv{opacity:1!important;transform:none!important}
+        }
       </style>
+      <script>
+      (function(){
+        var section=document.querySelector(".campaign-reviews"), grid=section&&section.querySelector(".cr-grid");
+        if(!grid)return;
+        var cards=[].slice.call(grid.children).filter(function(el){return el.classList.contains("cr-card")});
+        if(cards.length<2)return;
+        var marquee=document.createElement("div"), track=document.createElement("div");
+        marquee.className="cr-marquee"; track.className="cr-marquee-track";
+        for(var n=0;n<2;n++){
+          var set=document.createElement("div"); set.className="cr-set";
+          if(n)set.setAttribute("aria-hidden","true");        // the second set is only there to close the loop
+          cards.forEach(function(c){set.appendChild(c.cloneNode(true))});
+          track.appendChild(set);
+        }
+        marquee.appendChild(track);
+        grid.parentNode.insertBefore(marquee,grid.nextSibling);
+        section.classList.add("has-marquee");
+        function hold(on){return function(){marquee.classList.toggle("is-held",on)}}
+        marquee.addEventListener("pointerdown",hold(true));
+        ["pointerup","pointercancel","pointerleave"].forEach(function(t){marquee.addEventListener(t,hold(false))});
+      })();
+      </script>
     </section><div class="rev-cta"><a class="dark-button" href="#enquire">GET MORE INFO &rarr;</a></div><section class="faq" id="faq"><div><p class="overline dark">FAQs</p><h2>Questions, <i>answered.</i></h2></div><div><div class="faq-item"><button><b>How long does the training take?</b><span>−</span></button><p><i>It&#x27;s up to you, but on average modules take around an hour to complete, so in total most people take 24 hours but it&#x27;s generally spread over a few months, though it can be completed much quicker if you have no time constraints.</i></p></div><div class="faq-item"><button><b>What&#x27;s the benefit of being trained and mentored by Claude Certified Associates?</b><span>+</span></button><p data-faq="campaign-answer"><i>Certification means current, official credentials rather than yesterday&#x27;s prompt tricks. Our associates are a small, hands-on team who rolled AI out across our own business first, so you are learning from people who have done it rather than people who have read about it. You also get them directly, in your two one-on-one sessions every month.</i></p></div><div class="faq-item" data-faq="campaign"><button><b>How does the ongoing monthly support membership work?</b><span>+</span></button><p><i>You have access to a closed community of other learners, for questions and sharing, access to our Certified Claude experts for your two one-on-one support sessions, weekly masterclasses and podcasts.</i></p></div><div class="faq-item" data-faq="campaign"><button><b>Does the course only cover using Claude?</b><span>+</span></button><p><i>The course covers AI use generally, but Claude is a focus given that it&#x27;s the most popular AI platform for business use. The principles remain transferable across most of the AI platforms.</i></p></div></div></section><div class="faq-cta"><a class="dark-button" href="#enquire">GET MORE INFO &rarr;</a></div><section class="campaign-close" id="enquire" aria-label="Get in touch">
         <div class="cc-inner">
           <p class="cc-eyebrow">Get started</p>
