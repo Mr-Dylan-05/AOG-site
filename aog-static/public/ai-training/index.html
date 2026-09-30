@@ -921,7 +921,65 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
 .community-shot .lm{border-radius:15px;box-shadow:0 18px 40px rgba(10,31,74,.16)}
 @keyframes lm-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @media(prefers-reduced-motion:no-preference){.hero-shot{animation:lm-float 6s ease-in-out infinite}}
-</style><noscript><style>.lm{display:none!important}</style></noscript></head><body><main><nav data-aog-header data-campaign-header>
+</style><noscript><style>.lm{display:none!important}</style></noscript><style id="page-motion-style">
+/* Page motion on /ai-training/: fast count-ups, hero touches, the curriculum
+   line, the team strip on phones and the booking button's glow. All of it is
+   off for anyone who has asked for reduced motion; the JS below also stays out
+   of the way then, so the page is exactly as it was for them. */
+.pm-count{display:inline-block;text-align:right;font-variant-numeric:tabular-nums}
+/* one light sweep across "Get ahead with it." shortly after load; the class is
+   added then removed by the script, so the headline paints white as normal */
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  #top h1 b.pm-sweep{background:linear-gradient(100deg,#fff 0%,#fff 38%,#9fd3ff 50%,#fff 62%,#fff 100%);background-size:260% 100%;background-position:100% 0;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:pm-sweep 1.2s ease-in-out forwards}
+}
+@keyframes pm-sweep{from{background-position:100% 0}to{background-position:0 0}}
+#top .certification-badge,.why-cert{position:relative;overflow:hidden}
+#top .certification-badge:after,.why-cert:after{content:"";position:absolute;top:0;bottom:0;left:-70%;width:45%;transform:skewX(-20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);pointer-events:none}
+.pm-arrow{display:inline-block}
+@keyframes pm-shine{0%{left:-70%}30%,100%{left:130%}}
+@keyframes pm-nudge{0%,55%,100%{transform:none}65%{transform:translateX(6px)}75%{transform:none}85%{transform:translateX(3px)}}
+@keyframes pm-glow{0%,55%,100%{box-shadow:0 14px 26px -12px rgba(27,171,229,.65),0 0 0 0 rgba(27,171,229,0)}
+  72%{box-shadow:0 14px 26px -12px rgba(27,171,229,.65),0 0 0 7px rgba(27,171,229,.28)}
+  92%{box-shadow:0 14px 26px -12px rgba(27,171,229,.65),0 0 0 14px rgba(27,171,229,0)}}
+@keyframes pm-pop{0%{transform:scale(.3) rotate(-40deg);opacity:0}100%{transform:none;opacity:1}}
+@media(prefers-reduced-motion:no-preference){
+  #top .certification-badge:after{animation:pm-shine 4.5s ease-in-out 1.5s infinite}
+  .pm-arrow{animation:pm-nudge 2.8s ease-in-out 1s infinite}
+  .why-cert:after{animation:pm-shine 4.2s ease-in-out infinite}
+  .why-people li:nth-child(2) .why-cert:after,.why-set li:nth-child(2) .why-cert:after{animation-delay:.2s}
+  .why-people li:nth-child(3) .why-cert:after,.why-set li:nth-child(3) .why-cert:after{animation-delay:.4s}
+  .why-people li:nth-child(4) .why-cert:after,.why-set li:nth-child(4) .why-cert:after{animation-delay:.6s}
+  .why-people li:nth-child(5) .why-cert:after,.why-set li:nth-child(5) .why-cert:after{animation-delay:.8s}
+  .why-people li:nth-child(6) .why-cert:after,.why-set li:nth-child(6) .why-cert:after{animation-delay:1s}
+  .why-people li:nth-child(7) .why-cert:after,.why-set li:nth-child(7) .why-cert:after{animation-delay:1.2s}
+  .book-inline{animation:pm-glow 3.2s ease-in-out 1s infinite}
+  .pm-pop{animation:pm-pop .55s cubic-bezier(.3,1.7,.5,1) both}
+}
+/* the curriculum card's three topics joined by a line, drawn Topic 1 -> 3 */
+.cur-months{position:relative}
+.cur-months .cur-month{position:relative;padding-left:20px}   /* outranks .program li's padding reset */
+.cur-months:before{content:"";position:absolute;left:3px;top:8px;bottom:12px;width:2px;border-radius:1px;background:linear-gradient(180deg,#2867e8,rgba(40,103,232,.25));transform-origin:top center}
+.cur-month:before{content:"";position:absolute;left:0;top:6px;width:8px;height:8px;border-radius:50%;background:#2867e8;box-shadow:0 0 0 3px rgba(40,103,232,.16)}
+.cur-months.pm-pre:before{transform:scaleY(0)}
+.cur-months.pm-pre .cur-month:before{transform:scale(0)}
+.cur-months.pm-go:before{transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.cur-months.pm-go .cur-month:before{transition:transform .35s cubic-bezier(.3,1.7,.5,1)}
+.cur-months.pm-go .cur-month:nth-child(2):before{transition-delay:.3s}
+.cur-months.pm-go .cur-month:nth-child(3):before{transition-delay:.6s}
+/* the team as a fast strip on a phone, the same way the reviews run */
+.why-marquee{display:none}
+@keyframes why-ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:640px) and (prefers-reduced-motion:no-preference){
+  .campaign-why.has-marquee .why-people{display:none}
+  .campaign-why .why-marquee{display:block;overflow:hidden;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:4px 0}
+  .why-track{display:flex;width:max-content;animation:why-ticker 12s linear infinite}
+  .why-marquee.is-held .why-track{animation-play-state:paused}
+  .why-set{display:flex;gap:18px;margin:0;padding:0 18px 0 0;list-style:none}
+  .why-set li{flex:none;width:104px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;margin:0;padding:0;border:0}
+}
+</style></head><body><main><nav data-aog-header data-campaign-header>
       <div class="ch-bar">
         <a class="ch-logo" href="/" aria-label="Ad On Group">
           <span class="ch-mark"><img src="/assets/design/adon-logo.png" alt="" width="320" height="320"></span>
@@ -1026,7 +1084,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
           .ch-toggle,.ch-bars i{transition:none}
         }
       </style>
-    </nav><section class="hero" id="top"><div class="hero-layout"><div class="hero-copy"><div><h1>Don’t get left<br/>behind by AI.<br/><b>Get ahead with it.</b></h1></div><div class="hero-side"><p>Practical AI training and support for people and businesses who want to work smarter, stay relevant and seize what’s next.</p><div class="hero-action"><a class="yellow-button" href="#enquire">GET MORE INFO →</a><div class="certification-badge"><img src="/assets/design/logo-claude.svg" alt="" aria-hidden="true" width="15" height="15" style="flex:none;width:15px;height:15px;object-fit:contain;display:block"><b>Claude Certified<br/>Associates</b></div></div></div></div><figure class="hero-shot"><div class="lm lmA" data-lm="library" data-threshold="0.1" data-w="1895" data-h="949" style="aspect-ratio:1895/949" role="img" aria-label="The Ad On AI learning platform, showing the Month 1 library of training modules">
+    </nav><section class="hero" id="top"><div class="hero-layout"><div class="hero-copy"><div><h1>Don’t get left<br/>behind by AI.<br/><b>Get ahead with it.</b></h1></div><div class="hero-side"><p>Practical AI training and support for people and businesses who want to work smarter, stay relevant and seize what’s next.</p><div class="hero-action"><a class="yellow-button" href="#enquire"><span>GET MORE INFO <span class="pm-arrow">→</span></span></a><div class="certification-badge"><img src="/assets/design/logo-claude.svg" alt="" aria-hidden="true" width="15" height="15" style="flex:none;width:15px;height:15px;object-fit:contain;display:block"><b>Claude Certified<br/>Associates</b></div></div></div></div><figure class="hero-shot"><div class="lm lmA" data-lm="library" data-threshold="0.1" data-w="1895" data-h="949" style="aspect-ratio:1895/949" role="img" aria-label="The Ad On AI learning platform, showing the Month 1 library of training modules">
         <div class="lm-stage">
           <div class="ab lmA-main"></div>
           <div class="ab lmA-side">
@@ -1625,7 +1683,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
         @media(max-width:860px) and (prefers-reduced-motion:no-preference){
           .campaign-reviews.has-marquee .cr-grid{display:none}
           .campaign-reviews .cr-marquee{display:block;overflow:hidden;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-          .cr-marquee-track{display:flex;width:max-content;animation:cr-ticker 75s linear infinite}
+          .cr-marquee-track{display:flex;width:max-content;animation:cr-ticker 37.5s linear infinite}
           .cr-marquee.is-held .cr-marquee-track{animation-play-state:paused}
           .cr-set{display:flex;align-items:stretch;gap:14px;padding-right:14px}
           .cr-set>.cr-card{flex:none;width:min(300px,80vw)}
@@ -1975,7 +2033,94 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
   #challenge{background-position:0 0,right -120px top -30px!important}
   #reviews  {background-position:0 0,right -110px bottom -40px!important}
 }
-</style><svg width="0" height="0" style="position:absolute" aria-hidden="true">
+</style><script id="page-motion-js">
+/* Page motion on /ai-training/ (styles in #page-motion-style). Runs before
+   the reveal-on-scroll script, so the team strip is built before that script
+   looks for cards to fade in. Does nothing at all under reduced motion. */
+(function(){
+  "use strict";
+  if ((window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || !('IntersectionObserver' in window)) return;
+  var FAST = 650;   /* every count-up finishes in about two thirds of a second */
+
+  function once(el, ratio, fn){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { io.disconnect(); fn(); } });
+    }, { threshold: ratio });
+    io.observe(el);
+  }
+  function countUp(el, to, fmt){
+    var t0 = null;
+    setTimeout(function(){ el.textContent = fmt(to); }, FAST + 150);   /* always lands on the real number */
+    (function step(t){
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / FAST); k = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(to * k));
+      if (k < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+  var withCommas = function(n){ return n.toLocaleString('en-AU'); };
+
+  /* 1. "14,000" counts up wherever the page says it */
+  ['.trusted > span', '#reviews h2', '.why-points'].forEach(function(sel){
+    var root = document.querySelector(sel); if (!root) return;
+    var walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), node;
+    while ((node = walk.nextNode())) {
+      var at = node.nodeValue.indexOf('14,000'); if (at < 0) continue;
+      var rest = node.splitText(at); rest.splitText(6);
+      var span = document.createElement('span'); span.className = 'pm-count'; span.textContent = '14,000';
+      rest.parentNode.replaceChild(span, rest);
+      once(span, 0.8, function(){ span.style.minWidth = span.getBoundingClientRect().width + 'px'; countUp(span, 14000, withCommas); });
+      break;
+    }
+  });
+
+  /* 4. one sweep of light across "Get ahead with it." once the page has loaded */
+  addEventListener('load', function(){
+    setTimeout(function(){
+      var b = document.querySelector('#top h1 b'); if (!b) return;
+      var done = function(){ b.classList.remove('pm-sweep'); };
+      b.addEventListener('animationend', done, { once: true });
+      setTimeout(done, 1600);   /* in case animationend never arrives */
+      b.classList.add('pm-sweep');
+    }, 500);
+  });
+
+  /* 5. the "What's included" numbers, and the line through the three topics */
+  [].slice.call(document.querySelectorAll('.program-cards article > strong')).forEach(function(n){
+    var v = n.textContent.trim();
+    if (/^\d+$/.test(v)) once(n, 0.6, function(){ countUp(n, +v, String); });
+    else once(n, 0.6, function(){ n.classList.add('pm-pop'); });
+  });
+  var topics = document.querySelector('.cur-months');
+  if (topics) { topics.classList.add('pm-pre'); once(topics, 0.35, function(){ topics.classList.add('pm-go'); topics.classList.remove('pm-pre'); }); }
+
+  /* 7. on a phone the team runs as a strip: two identical sets side by side,
+     the track slides left by one set, and the grid is hidden only once the
+     strip exists. Holding a finger on it pauses it. */
+  var people = document.querySelector('.why-people');
+  if (people) {
+    var strip = document.createElement('div'), track = document.createElement('div');
+    strip.className = 'why-marquee'; track.className = 'why-track';
+    for (var i = 0; i < 2; i++) {
+      var set = document.createElement('ul'); set.className = 'why-set';
+      if (i) set.setAttribute('aria-hidden', 'true');
+      [].slice.call(people.children).forEach(function(li){
+        var c = li.cloneNode(true);
+        [].slice.call(c.querySelectorAll('img[loading="lazy"]')).forEach(function(img){ img.loading = 'eager'; });
+        set.appendChild(c);
+      });
+      track.appendChild(set);
+    }
+    strip.appendChild(track);
+    people.parentNode.insertBefore(strip, people.nextSibling);
+    people.closest('.campaign-why').classList.add('has-marquee');
+    var hold = function(on){ return function(){ strip.classList.toggle('is-held', on); }; };
+    strip.addEventListener('pointerdown', hold(true));
+    ['pointerup','pointercancel','pointerleave'].forEach(function(t){ strip.addEventListener(t, hold(false)); });
+  }
+})();
+</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4Z"/></symbol>
   <symbol id="i-library" viewBox="0 0 24 24"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></symbol>
