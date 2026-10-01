@@ -1067,6 +1067,31 @@ async function sendAutoReply(creds, form, record) {
 const INVITEE_URI = /^https:\/\/api\.calendly\.com(\/scheduled_events\/[A-Za-z0-9-]{1,64}\/invitees\/[A-Za-z0-9-]{1,64})$/;
 const EVENT_URI = /^https:\/\/api\.calendly\.com(\/scheduled_events\/[A-Za-z0-9-]{1,64})$/;
 
+/**
+ * The phone number and the remaining answers from a Calendly invitee.
+ *
+ * The booking form asks for a number twice: the event's own "Phone Number"
+ * question (required), and Calendly's optional "Send text messages to" field,
+ * which only exists because text reminders are on. The answer to the question
+ * is the contact number, so it is the one that fills Phone; the text-reminder
+ * number is the fallback for when the question is missing or unanswered.
+ * Whatever is shown as Phone is not repeated under "Their answers in
+ * Calendly", and a text-reminder number that differs from it is kept there,
+ * so a second number is never lost.
+ */
+function bookingContact(invitee) {
+  const qa = Array.isArray(invitee.questions_and_answers) ? invitee.questions_and_answers : [];
+  const digits = (v) => String(v || "").replace(/\D/g, "");
+  // The same number written two ways (+61 4.. and 04..) shares its last 9 digits.
+  const same = (a, b) => digits(a).length >= 8 && digits(a).slice(-9) === digits(b).slice(-9);
+  const asked = qa.find((x) => x && x.answer && /phone|mobile/i.test(String(x.question || "")) && digits(x.answer).length >= 8);
+  const sms = invitee.text_reminder_number ? String(invitee.text_reminder_number) : "";
+  const phone = asked ? String(asked.answer) : sms;
+  const answers = qa.filter((x) => x && x.answer && x !== asked).map((x) => `${x.question}: ${x.answer}`);
+  if (sms && asked && !same(sms, asked.answer)) answers.push(`Text reminders to: ${sms}`);
+  return { phone, answers };
+}
+
 async function resolveBooking(record) {
   // Nothing the browser says about who this is is trusted. It all comes from
   // Calendly, or the row says it could not be fetched.
@@ -1104,15 +1129,9 @@ async function resolveBooking(record) {
   const named = invitee.name || [invitee.first_name, invitee.last_name].filter(Boolean).join(" ");
   record.name = String(named || "").slice(0, 200);
   record.email = String(invitee.email).slice(0, 200);
-  if (invitee.text_reminder_number) record.phone = String(invitee.text_reminder_number).slice(0, 50);
-  const qa = Array.isArray(invitee.questions_and_answers) ? invitee.questions_and_answers : [];
-  if (qa.length) {
-    record.booking_answers = qa
-      .filter((x) => x && x.answer)
-      .map((x) => `${x.question}: ${x.answer}`)
-      .join(" | ")
-      .slice(0, 2000);
-  }
+  const contact = bookingContact(invitee);
+  if (contact.phone) record.phone = contact.phone.slice(0, 50);
+  if (contact.answers.length) record.booking_answers = contact.answers.join(" | ").slice(0, 2000);
 
   // When the call is. The one lookup allowed to fail silently: the row is
   // already worth having without it.
