@@ -30,16 +30,6 @@
       "permanent": true
     },
     {
-      "source": "/terms/",
-      "destination": "/terms-and-conditions/",
-      "permanent": true
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms-and-conditions/",
-      "permanent": true
-    },
-    {
       "source": "/wp-content/uploads/:path*",
       "destination": "/assets/media/:path*",
       "permanent": true

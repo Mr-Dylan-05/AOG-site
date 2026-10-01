@@ -14,6 +14,13 @@
         {% endfor %}
       </ul>
     </nav>
+    <nav class="site-footer__nav" aria-label="Social">
+      <ul>
+        {% for url in site.social %}
+        <li><a href="{{ url }}" target="_blank" rel="noopener">{% if "facebook" in url %}Facebook{% elif "linkedin" in url %}LinkedIn{% elif "instagram" in url %}Instagram{% else %}{{ url }}{% endif %}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
   </div>
   <div class="site-footer__legal">
     <p>&copy; {% year %} {{ site.name }}. All rights reserved.</p>
