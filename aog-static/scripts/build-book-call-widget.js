@@ -503,7 +503,7 @@ const block = `${START}
       if(current!=="pill")return;
       storageSet(keys.auto,"1");
       showCard("auto",false);
-    },12000);
+    },15000);
   }
 })();
 </script>
