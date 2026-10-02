@@ -1719,7 +1719,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
           <p class="cc-eyebrow">Get started</p>
           <h2 class="cc-head">Ready to start your <b>AI training journey?</b></h2>
                     <div class="cc-form">
-            <form data-contact-form data-form="enquiry" data-clarity-mask="true" data-success-panel="#enquire-thanks" onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
+            <form data-contact-form data-form="enquiry" data-clarity-mask="true" data-success-panel="#enquire-thanks" data-book-after-submit onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
             <input type="hidden" name="source" value="/ai-training/"><input type="hidden" name="interest" value="">
             <input type="hidden" name="utm_source" data-utm="utm_source">
@@ -1738,7 +1738,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
             /* Send stays an outline until someone starts filling in the form, then turns solid. */
             (function(){var f=document.querySelector('form[data-form="enquiry"]');if(!f)return;function sync(){var typed=["name","email","phone"].some(function(n){var i=f.querySelector('[name="'+n+'"]');return i&&i.value.trim()!==""});f.classList.toggle("is-typed",typed)}f.addEventListener("input",sync);f.addEventListener("change",sync)})();
             </script>
-            <div id="enquire-thanks" hidden style="text-align:center;padding:10px 4px"><span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:rgba(27,171,229,0.12)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><div style="font-size:21px;font-weight:800;letter-spacing:-0.025em;color:#0B1220;margin:15px 0 0">Thanks<span data-greet-name></span>.</div><p style="font-size:15.5px;line-height:1.6;color:#5A6473;margin:10px 0 0">Keep an eye on your inbox, our team will reach out in the next few minutes.</p><button type="button" data-calendly hidden style="display:none;font:inherit;font-size:15px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:13px 24px;min-height:48px;border-radius:12px;cursor:pointer;margin:16px 0 0">Book a time &rarr;</button><a class="vid-noop" data-curriculum hidden style="display:none;font:inherit;font-size:15px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:13px 24px;min-height:48px;border-radius:12px;cursor:pointer;margin:10px 0 0;text-decoration:none;display:inline-flex;align-items:center;justify-content:center" download>Download the curriculum &rarr;</a></div>
+            <div id="enquire-thanks" hidden style="text-align:center;padding:10px 4px"><span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:rgba(27,171,229,0.12)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><div style="font-size:21px;font-weight:800;letter-spacing:-0.025em;color:#0B1220;margin:15px 0 0">Thanks<span data-greet-name></span>.</div><p style="font-size:15.5px;line-height:1.6;color:#5A6473;margin:10px 0 0">Our team will give you a call shortly. We&rsquo;ve sent the curriculum to your email, or you can book a call now.</p><button type="button" data-calendly hidden style="display:none;font:inherit;font-size:15px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:13px 24px;min-height:48px;border-radius:12px;cursor:pointer;margin:16px 0 0">Book a call now &rarr;</button><a class="vid-noop" data-curriculum hidden style="display:none;font:inherit;font-size:15px;font-weight:700;color:#fff;background:#1BABE5;border:none;padding:13px 24px;min-height:48px;border-radius:12px;cursor:pointer;margin:10px 0 0;text-decoration:none;display:inline-flex;align-items:center;justify-content:center" download>Download the curriculum &rarr;</a></div>
           </div>
         </div>
       </section><footer style="display:block;padding:0;font-size:16px;color:#0B1220;border-top:1px solid rgba(11,18,32,0.08);background:#FBFBFA">
@@ -2826,15 +2826,41 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
      lands on a booking button), never on page load, never before the page has
      finished loading, and not at all on a data saver or 2G, where it waits for
      the tap as before. */
-  var mounting=null,calendarReady=false;
+  var mounting=null,calendarReady=false,shownSincePrepare=false;
   function lightConnection(){var c=navigator.connection;return Boolean(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||"")))}
-  function mountCalendar(){
-    if(mounting)return mounting;
+  function mountCalendar(prefill){
+    if(mounting&&!prefill)return mounting;
     schedule.classList.add("is-warm");
     ensurePreconnect();
-    mounting=loadCalendly().then(function(api){api.initInlineWidget({url:calendlyUrl(),parentElement:calendar})});
+    if(prefill)calendarReady=false;
+    mounting=loadCalendly().then(function(api){
+      calendar.innerHTML="";
+      /* Details go in the booking link itself (name, email, a1 for the first
+         question): the embed script's own prefill option is ignored. */
+      var url=calendlyUrl();
+      if(prefill){try{var u=new URL(url);Object.keys(prefill).forEach(function(k){if(prefill[k])u.searchParams.set(k,prefill[k])});url=u.toString()}catch(_){}}
+      api.initInlineWidget({url:url,parentElement:calendar});
+    });
     mounting.catch(function(){mounting=null});
     return mounting;
+  }
+  /* Straight after an enquiry, contact-form.js hands over what they just typed.
+     The calendar is rebuilt with it filled in while they read the thank-you
+     message, so when it opens they only have to pick a time. The phone goes
+     to the event's first question, "Phone Number", in international form. */
+  function auPhone(value){
+    var d=String(value||"").replace(/[^\d+]/g,"");
+    if(/^0\d{9}$/.test(d))return "+61"+d.slice(1);
+    if(/^61\d{9}$/.test(d))return "+"+d;
+    return /^\+\d{8,15}$/.test(d)?d:"";
+  }
+  function prepareFor(details){
+    details=details||{};
+    window.clearTimeout(autoTimer);
+    storageSet(keys.dismissed,"1");
+    if(current==="schedule")return;
+    shownSincePrepare=false;
+    mountCalendar({name:String(details.name||""),email:String(details.email||""),a1:auPhone(details.phone)}).catch(function(){});
   }
   function warm(reason){
     if(mounting||lightConnection())return;
@@ -2852,6 +2878,7 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
   }
   function openScheduler(trigger){
     lastTrigger=trigger||"cta";
+    shownSincePrepare=true;
     error.hidden=true;
     loading.hidden=calendarReady;
     track("scheduler_opened",{trigger:lastTrigger,ready:calendarReady?"yes":"no"});
@@ -2895,6 +2922,10 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
     if(e.key==="Escape"&&current!=="pill"){e.preventDefault();dismiss(true);return}
     trapFocus(e);
   });
+  window.aogBookCall={
+    prepare:prepareFor,
+    open:function(trigger){if(!shownSincePrepare&&storageGet(keys.booked)!=="1")openScheduler(trigger||"enquiry")}
+  };
   /* Every other booking button on the page (header, form, thank-you panel) opens
      this same scheduler, so they all get the pre-loaded calendar. Marking the
      click handled is what tells contact-form.js not to open its own popup. */

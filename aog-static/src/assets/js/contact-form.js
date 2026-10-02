@@ -281,6 +281,17 @@
           // Read before the reset. The panel is several lines of asynchrony
           // later, and by then every field is empty.
           var greetName = greetingName(form);
+          // A form marked data-book-after-submit opens the booking calendar a few
+          // seconds after the thank-you panel, with what they just typed filled
+          // in so they are not asked for it twice. Read now, before the reset.
+          var bookWith = null;
+          if (form.hasAttribute("data-book-after-submit")) {
+            var typed = function (n) {
+              var f = form.querySelector('[name="' + n + '"]');
+              return f ? String(f.value || "").trim() : "";
+            };
+            bookWith = { name: typed("name"), email: typed("email"), phone: typed("phone") };
+          }
           form.reset();
           form.querySelectorAll("[data-error]").forEach(function (s) { s.textContent = ""; });
 
@@ -337,6 +348,14 @@
             panel.hidden = false;
             if (typeof panel.scrollIntoView === "function") {
               panel.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            // Only where the page has the booking widget (/ai-training/). If
+            // anything here fails, the panel's own button still books.
+            if (bookWith && window.aogBookCall) {
+              try {
+                window.aogBookCall.prepare(bookWith);
+                setTimeout(function () { window.aogBookCall.open("enquiry"); }, 5000);
+              } catch (_) { /* the panel stays as it is */ }
             }
             return;
           }

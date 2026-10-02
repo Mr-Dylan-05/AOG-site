@@ -386,15 +386,41 @@ const block = `${START}
      lands on a booking button), never on page load, never before the page has
      finished loading, and not at all on a data saver or 2G, where it waits for
      the tap as before. */
-  var mounting=null,calendarReady=false;
+  var mounting=null,calendarReady=false,shownSincePrepare=false;
   function lightConnection(){var c=navigator.connection;return Boolean(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||"")))}
-  function mountCalendar(){
-    if(mounting)return mounting;
+  function mountCalendar(prefill){
+    if(mounting&&!prefill)return mounting;
     schedule.classList.add("is-warm");
     ensurePreconnect();
-    mounting=loadCalendly().then(function(api){api.initInlineWidget({url:calendlyUrl(),parentElement:calendar})});
+    if(prefill)calendarReady=false;
+    mounting=loadCalendly().then(function(api){
+      calendar.innerHTML="";
+      /* Details go in the booking link itself (name, email, a1 for the first
+         question): the embed script's own prefill option is ignored. */
+      var url=calendlyUrl();
+      if(prefill){try{var u=new URL(url);Object.keys(prefill).forEach(function(k){if(prefill[k])u.searchParams.set(k,prefill[k])});url=u.toString()}catch(_){}}
+      api.initInlineWidget({url:url,parentElement:calendar});
+    });
     mounting.catch(function(){mounting=null});
     return mounting;
+  }
+  /* Straight after an enquiry, contact-form.js hands over what they just typed.
+     The calendar is rebuilt with it filled in while they read the thank-you
+     message, so when it opens they only have to pick a time. The phone goes
+     to the event's first question, "Phone Number", in international form. */
+  function auPhone(value){
+    var d=String(value||"").replace(/[^\\d+]/g,"");
+    if(/^0\\d{9}$/.test(d))return "+61"+d.slice(1);
+    if(/^61\\d{9}$/.test(d))return "+"+d;
+    return /^\\+\\d{8,15}$/.test(d)?d:"";
+  }
+  function prepareFor(details){
+    details=details||{};
+    window.clearTimeout(autoTimer);
+    storageSet(keys.dismissed,"1");
+    if(current==="schedule")return;
+    shownSincePrepare=false;
+    mountCalendar({name:String(details.name||""),email:String(details.email||""),a1:auPhone(details.phone)}).catch(function(){});
   }
   function warm(reason){
     if(mounting||lightConnection())return;
@@ -412,6 +438,7 @@ const block = `${START}
   }
   function openScheduler(trigger){
     lastTrigger=trigger||"cta";
+    shownSincePrepare=true;
     error.hidden=true;
     loading.hidden=calendarReady;
     track("scheduler_opened",{trigger:lastTrigger,ready:calendarReady?"yes":"no"});
@@ -455,6 +482,10 @@ const block = `${START}
     if(e.key==="Escape"&&current!=="pill"){e.preventDefault();dismiss(true);return}
     trapFocus(e);
   });
+  window.aogBookCall={
+    prepare:prepareFor,
+    open:function(trigger){if(!shownSincePrepare&&storageGet(keys.booked)!=="1")openScheduler(trigger||"enquiry")}
+  };
   /* Every other booking button on the page (header, form, thank-you panel) opens
      this same scheduler, so they all get the pre-loaded calendar. Marking the
      click handled is what tells contact-form.js not to open its own popup. */
