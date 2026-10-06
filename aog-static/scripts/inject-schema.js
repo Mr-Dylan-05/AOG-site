@@ -949,10 +949,10 @@ for (const p of pages) {
         courseWorkload: "PT2H",
         location: { "@type": "VirtualLocation", url: pageUrl },
       },
-      hasPart: CURRICULUM.months.map((m) => ({
+      hasPart: CURRICULUM.topics.map((m) => ({
         "@type": "Course",
         "@id": `${pageUrl}#month-${m.n}`,
-        name: `Month ${m.n}: ${m.name}`,
+        name: `Topic ${m.n}: ${m.name}`,
         description: m.body,
         teaches: m.teaches,
         provider: { "@id": ORG_ID },

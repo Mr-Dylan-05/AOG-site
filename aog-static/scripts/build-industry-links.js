@@ -40,7 +40,7 @@ const card = (i) => `
 const BLOCK = `<section class="aog-industries" style="max-width:1160px;margin:0 auto;padding:28px 28px 72px">
       <span style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.16em;color:#1BABE5;text-transform:uppercase"><span style="width:22px;height:1.5px;background:#1BABE5"></span>By industry</span>
       <h2 style="font-size:clamp(24px,3vw,38px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;margin:14px 0 10px">Built around the work your sector actually&nbsp;does.</h2>
-      <p style="font-size:16px;line-height:1.65;color:#4A5462;margin:0 0 26px;max-width:60ch">The program is the same three months. The examples, the workflows and the questions we answer are not &mdash; a progress note and a listing description are different problems.</p>
+      <p style="font-size:16px;line-height:1.65;color:#4A5462;margin:0 0 26px;max-width:60ch">The program is the same for every sector. The examples, the workflows and the questions we answer are not &mdash; a progress note and a listing description are different problems.</p>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px">${items.map(card).join("")}
       </div>
       <p style="font-size:16px;line-height:1.65;color:#4A5462;margin:26px 0 0;max-width:60ch">Not ready to talk to anyone yet? We run a <a href="/webinars/" style="color:#1BABE5;font-weight:600;text-decoration:none">free webinar every month</a>, one sector at a time &mdash; online, 45 minutes, open to&nbsp;anyone.</p>

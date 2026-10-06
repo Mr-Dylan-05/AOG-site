@@ -11,7 +11,7 @@
  * `teaches` is the flat competency list, used for the Course schema's `teaches`
  * property so the syllabus is machine-readable as well as on the page.
  */
-const MONTHS = [
+const TOPICS = [
   {
     n: 1,
     name: "Foundations",
@@ -56,9 +56,7 @@ const MONTHS = [
 
 module.exports = () => ({
   moduleCount: 24,
-  duration: "three months",
-  weeklyHours: "around two hours a week",
-  months: MONTHS,
-  teaches: MONTHS.flatMap((m) => m.teaches),
+  topics: TOPICS,
+  teaches: TOPICS.flatMap((m) => m.teaches),
   pdf: "/assets/ai-training-curriculum.pdf",
 });

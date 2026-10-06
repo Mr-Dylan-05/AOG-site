@@ -28,11 +28,11 @@ const DRY = process.argv.includes("--dry");
 const META = {
   "ad-on-ai-division": [
     "Ad On AI | AI Training &amp; Enablement for Australian Teams",
-    "A 3-month AI training program that gets your non-technical team using AI on real work — building reusable prompts, automations and agents. Book a call.",
+    "A self-paced AI training program that gets your non-technical team using AI on real work — building reusable prompts, automations and agents. Book a call.",
   ],
   "programs": [
     "AI Training &amp; Enablement Program | Ad On AI",
-    "Our flagship 3-month AI Training &amp; Enablement program takes non-technical staff from their first prompts to deployed AI agents. Self-paced and hands-on.",
+    "Our flagship AI Training &amp; Enablement program takes non-technical staff from their first prompts to deployed AI agents. Self-paced and hands-on.",
   ],
   "ongoing-support": [
     "Ongoing AI Support, Webinars &amp; Masterclasses | Ad On AI",

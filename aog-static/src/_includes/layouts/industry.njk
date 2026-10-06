@@ -88,7 +88,7 @@ bodyClass: "ind-page"
      months" describes what you buy, not what changes. #}
   {% if outcomes and outcomes.length %}
   <section>
-    <h2>{{ outcomeHeading or "Where your team is after three months" }}</h2>
+    <h2>{{ outcomeHeading or "What changes for your team" }}</h2>
     {% if outcomeLede %}<p>{{ outcomeLede | safe }}</p>{% endif %}
     <ol class="ind-steps">
       {% for o in outcomes %}
@@ -131,7 +131,7 @@ bodyClass: "ind-page"
   <section>
     <h2>How the training works</h2>
     <p>
-      Three months, 24 modules, around two hours a week, self-paced so it fits around
+      24 modules, all self-paced, so it fits around
       {{ industry }} work rather than pulling anyone off the job for a day. It runs in three
       stages: getting fluent with the tools, automating the tasks that repeat, then building
       AI agents that handle a slice of a job end to end.
@@ -150,14 +150,13 @@ bodyClass: "ind-page"
     <h2>{{ curriculumHeading or "What your team actually learns" }}</h2>
     <p>
       {{ curriculumLede | safe if curriculumLede else "" }}
-      {{ curriculum.moduleCount }} interactive modules over {{ curriculum.duration }},
-      {{ curriculum.weeklyHours }} — full of worked examples, videos and step-by-step
+      {{ curriculum.moduleCount }} interactive modules, all at your own pace — full of worked examples, videos and step-by-step
       instructions, and they keep growing as the tools do.
     </p>
     <ol class="ind-months">
-      {% for m in curriculum.months %}
+      {% for m in curriculum.topics %}
       <li>
-        <p class="ind-mhead"><b>Month {{ m.n }}</b> {{ m.name }} <i>{{ m.tag }}</i></p>
+        <p class="ind-mhead"><b>Topic {{ m.n }}</b> {{ m.name }} <i>{{ m.tag }}</i></p>
         <p>{{ m.body | safe }}</p>
         <ul class="ind-teaches">
           {% for t in m.teaches %}<li>{{ t }}</li>{% endfor %}

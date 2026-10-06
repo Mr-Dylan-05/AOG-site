@@ -59,7 +59,7 @@ bodyClass: "ind-page"
   <section>
     <h2>The sectors we see most in {{ location }}</h2>
     <p>
-      The program is the same three months wherever you are. What changes is the examples
+      The program is the same wherever you are. What changes is the examples
       and the workflows, which follow the work your team actually does.
     </p>
     <div class="ind-grid">
@@ -80,14 +80,13 @@ bodyClass: "ind-page"
   <section>
     <h2>What your team actually learns</h2>
     <p>
-      {{ curriculum.moduleCount }} interactive modules over {{ curriculum.duration }},
-      {{ curriculum.weeklyHours }} — full of worked examples, videos and step-by-step
+      {{ curriculum.moduleCount }} interactive modules, all at your own pace — full of worked examples, videos and step-by-step
       instructions, and they keep growing as the tools do.
     </p>
     <ol class="ind-months">
-      {% for m in curriculum.months %}
+      {% for m in curriculum.topics %}
       <li>
-        <p class="ind-mhead"><b>Month {{ m.n }}</b> {{ m.name }} <i>{{ m.tag }}</i></p>
+        <p class="ind-mhead"><b>Topic {{ m.n }}</b> {{ m.name }} <i>{{ m.tag }}</i></p>
         <p>{{ m.body | safe }}</p>
         <ul class="ind-teaches">
           {% for t in m.teaches %}<li>{{ t }}</li>{% endfor %}
