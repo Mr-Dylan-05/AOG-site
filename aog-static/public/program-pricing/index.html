@@ -23,7 +23,7 @@
   .eyebrow { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.16em; color:#1BABE5; text-transform:uppercase; }
   .glass { background:rgba(255,255,255,0.62); backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%); border:1px solid rgba(255,255,255,0.85); box-shadow:0 16px 40px -22px rgba(11,18,32,0.24), inset 0 1px 0 rgba(255,255,255,0.7); border-radius:20px; }
   .sec { max-width:1120px; margin:0 auto; padding:56px 28px; }
-  .pp-price { display:grid; grid-template-columns:1.15fr 1fr; gap:22px; align-items:start; }
+  .pp-price { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:stretch; }
   .pp-4 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
   .pp-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
   .pp-stats { display:grid; grid-template-columns:repeat(5,1fr); gap:0; }
@@ -153,13 +153,15 @@
         </div>
       </div>
 
-      <div class="glass" style="padding:28px 28px 30px">
-        <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:32px;letter-spacing:-0.03em;color:#0B1220;line-height:1">$100 / mo</span></div>
-        <div style="font-size:13.5px;color:#5A6473;margin:6px 0 20px">per person · post-program · stay current as AI keeps moving</div>
-        <div style="display:flex;flex-direction:column;gap:13px;border-top:1px solid rgba(11,18,32,0.08);padding-top:18px">
-          <div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;margin-top:7px;border-radius:50%;background:#1BABE5"></span><span style="font-size:14.5px;line-height:1.5;color:#39424E">1 hour of direct support per month from our AI specialists for queries and complex workflows</span></div>
-          <div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;margin-top:7px;border-radius:50%;background:#1BABE5"></span><span style="font-size:14.5px;line-height:1.5;color:#39424E">A monthly webinar covering the latest AI trends, product releases and skills</span></div>
-          <div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;margin-top:7px;border-radius:50%;background:#1BABE5"></span><span style="font-size:14.5px;line-height:1.5;color:#39424E">Community membership — weekly business-application podcasts and a monthly newsletter</span></div>
+      <div class="glass" style="padding:30px 30px 32px;position:relative;overflow:hidden;border:1px solid rgba(47,111,237,0.35);box-shadow:0 24px 60px -30px rgba(47,111,237,0.4), inset 0 1px 0 rgba(255,255,255,0.7)">
+        <div style="position:absolute;inset:0;z-index:-1;background:radial-gradient(120% 80% at 100% 0%, rgba(47,111,237,0.10), transparent 60%)"></div>
+        <div class="eyebrow" style="color:#8A93A1">Ongoing</div>
+        <div style="display:flex;align-items:baseline;gap:10px;margin:10px 0 2px"><span style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(44px,6vw,58px);letter-spacing:-0.04em;color:#1BABE5;line-height:1">$200</span><span style="font-family:'Inter Tight',sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.02em;color:#5A6473;line-height:1">/ mo</span></div>
+        <div style="font-size:15px;color:#5A6473;margin-bottom:22px">per person · stay current as AI keeps moving</div>
+        <div style="display:flex;flex-direction:column;gap:13px;border-top:1px solid rgba(11,18,32,0.08);padding-top:20px">
+          <div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:none;width:20px;height:20px;margin-top:1px;border-radius:50%;background:rgba(47,111,237,0.12);display:inline-flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"></path></svg></span><span style="font-size:15.5px;line-height:1.45;color:#0B1220;font-weight:500">2 hours of direct support per month from our AI specialists for queries and complex workflows</span></div>
+          <div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:none;width:20px;height:20px;margin-top:1px;border-radius:50%;background:rgba(47,111,237,0.12);display:inline-flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"></path></svg></span><span style="font-size:15.5px;line-height:1.45;color:#0B1220;font-weight:500">A monthly webinar covering the latest AI trends, product releases and skills</span></div>
+          <div style="display:flex;gap:11px;align-items:flex-start"><span style="flex:none;width:20px;height:20px;margin-top:1px;border-radius:50%;background:rgba(47,111,237,0.12);display:inline-flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"></path></svg></span><span style="font-size:15.5px;line-height:1.45;color:#0B1220;font-weight:500">Community membership — weekly business-application podcasts and a monthly newsletter</span></div>
         </div>
       </div>
     </div>
@@ -184,7 +186,7 @@
     <div class="glass pp-stats" style="padding:26px 12px">
       <div style="text-align:center;padding:6px 10px"><div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;color:#1BABE5;line-height:1">3</div><div style="font-size:13px;color:#5A6473;margin-top:6px">core topics</div></div>
       <div style="text-align:center;padding:6px 10px"><div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;color:#1BABE5;line-height:1">24</div><div style="font-size:13px;color:#5A6473;margin-top:6px">modules, all at your own pace</div></div>
-      <div style="text-align:center;padding:6px 10px"><div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;color:#1BABE5;line-height:1">1</div><div style="font-size:13px;color:#5A6473;margin-top:6px">hour of direct support per learner</div></div>
+      <div style="text-align:center;padding:6px 10px"><div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;color:#1BABE5;line-height:1">2</div><div style="font-size:13px;color:#5A6473;margin-top:6px">hours of direct support per learner/month</div></div>
       <div style="text-align:center;padding:6px 10px"><div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;color:#1BABE5;line-height:1">∞</div><div style="font-size:13px;color:#5A6473;margin-top:6px">lifetime community access</div></div>
       <div style="text-align:center;padding:6px 10px"><div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;color:#1BABE5;line-height:1">∞</div><div style="font-size:13px;color:#5A6473;margin-top:6px">lifetime academy access</div></div>
     </div>
