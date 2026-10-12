@@ -271,6 +271,18 @@ function chatMessage(form, record, sheetUrl, failed) {
     });
   }
 
+  const suspect = Boolean(record.spam_check);
+  if (suspect) {
+    widgets.push({
+      decoratedText: {
+        topLabel: "Possible spam",
+        text: "The hidden anti-spam field was filled. Bots do that, but so can autofill, " +
+          "so check it before writing it off. No confirmation email was sent.",
+        wrapText: true,
+      },
+    });
+  }
+
   const sections = [{ widgets }];
   if (sheetUrl && !failed) {
     sections.push({
@@ -294,7 +306,7 @@ function chatMessage(form, record, sheetUrl, failed) {
     // say who and which form on its own.
     text: failed
       ? `${mention}\u26a0\ufe0f ${form} lead from ${who} could NOT be saved to the sheet`
-      : `${mention}New ${form} lead: ${who}`,
+      : `${mention}New ${form} lead${suspect ? " (possible spam)" : ""}: ${who}`,
     cardsV2: [{
       cardId: "lead",
       card: {
@@ -1209,9 +1221,14 @@ module.exports = async (req, res) => {
     return res.status(400).json({ ok: false, error: "No form data" });
   }
 
-  // Honeypot. A bot fills every field it finds, so anything here means it is
-  // not a person. Answer 200 so the bot believes it succeeded and moves on.
-  if (String(body._gotcha || "").trim()) return res.status(200).json({ ok: true });
+  // Honeypot. A bot fills every field it finds, so anything here suggests it is
+  // not a person — but only suggests. Autofill can fill a hidden field too, and
+  // this used to answer 200 and drop the submission: the person saw the thank-
+  // you panel, the page reported a Lead to Meta, and nothing reached the sheet
+  // or Chat. A lead that cannot be seen cannot be called. So it is now kept and
+  // flagged instead: the row and the Chat card say "possible spam", and only
+  // the confirmation email is held back.
+  const honeypot = String(body._gotcha || "").trim();
 
   const form = String(body.form || body["data-form"] || "contact")
     .replace(/[^a-z0-9_-]/gi, "")
@@ -1226,6 +1243,10 @@ module.exports = async (req, res) => {
   }
   if (!record.page) {
     record.page = String(req.headers.referer || "").slice(0, 300);
+  }
+  if (honeypot) {
+    record.spam_check = `Hidden anti-spam field was filled: ${JSON.stringify(honeypot.slice(0, 100))}`;
+    console.log("[lead] honeypot filled, kept and flagged:", record.spam_check);
   }
 
   // A Calendly booking arrives as two ids with no name or email. They are
@@ -1285,7 +1306,10 @@ module.exports = async (req, res) => {
       `https://docs.google.com/spreadsheets/d/${sheetId}/edit` +
       (gid == null ? "" : `#gid=${gid}`);
     await notifyChat(form, record, sheetUrl, false);
-    await sendAutoReply(creds, form, record);
+    // A flagged row might be a bot, and mailing whatever address a bot typed
+    // costs sender reputation. The team sees the row and can reply by hand.
+    if (record.spam_check) console.log("[lead] auto-reply skipped: flagged as possible spam");
+    else await sendAutoReply(creds, form, record);
 
     return res.status(200).json({ ok: true });
   } catch (err) {
