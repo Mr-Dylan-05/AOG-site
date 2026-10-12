@@ -277,7 +277,7 @@ function chatMessage(form, record, sheetUrl, failed) {
       decoratedText: {
         topLabel: "Possible spam",
         text: "The hidden anti-spam field was filled. Bots do that, but so can autofill, " +
-          "so check it before writing it off. No confirmation email was sent.",
+          "so check it before writing it off. The confirmation email was still sent.",
         wrapText: true,
       },
     });
@@ -1226,8 +1226,8 @@ module.exports = async (req, res) => {
   // this used to answer 200 and drop the submission: the person saw the thank-
   // you panel, the page reported a Lead to Meta, and nothing reached the sheet
   // or Chat. A lead that cannot be seen cannot be called. So it is now kept and
-  // flagged instead: the row and the Chat card say "possible spam", and only
-  // the confirmation email is held back.
+  // flagged instead: the row and the Chat card say "possible spam", and the
+  // confirmation email goes out as normal.
   const honeypot = String(body._gotcha || "").trim();
 
   const form = String(body.form || body["data-form"] || "contact")
@@ -1306,10 +1306,10 @@ module.exports = async (req, res) => {
       `https://docs.google.com/spreadsheets/d/${sheetId}/edit` +
       (gid == null ? "" : `#gid=${gid}`);
     await notifyChat(form, record, sheetUrl, false);
-    // A flagged row might be a bot, and mailing whatever address a bot typed
-    // costs sender reputation. The team sees the row and can reply by hand.
-    if (record.spam_check) console.log("[lead] auto-reply skipped: flagged as possible spam");
-    else await sendAutoReply(creds, form, record);
+    // Flagged rows get the confirmation too. Real people trip the hidden field
+    // (autofill fills it), and one booked a call the day this flag went live;
+    // holding back their email to guard against bots cost more than it saved.
+    await sendAutoReply(creds, form, record);
 
     return res.status(200).json({ ok: true });
   } catch (err) {
