@@ -50,7 +50,7 @@ const block = `${START}
 <div class="aog-bcw" data-aog-book-call data-state="pill" data-calendar-url="${safeCalendarUrl}">
   <button class="aog-bcw__pill aog-bcw__layer" type="button" data-bcw-pill aria-haspopup="dialog" aria-controls="aog-book-call-card">
     <span class="aog-bcw__pill-avatar" aria-hidden="true">
-      <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="" width="41" height="41"></span>
+      <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul-256.jpg" alt="" width="41" height="41"></span>
       <span class="aog-bcw__online"></span>
     </span>
     <span>Book a call</span>
@@ -62,7 +62,7 @@ const block = `${START}
     </button>
     <div class="aog-bcw__person">
       <span class="aog-bcw__person-avatar">
-        <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="Paul Harding from Ad On Group" width="64" height="64"></span>
+        <span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul-256.jpg" alt="Paul Harding from Ad On Group" width="64" height="64"></span>
         <span class="aog-bcw__online" aria-hidden="true"></span>
       </span>
       <span class="aog-bcw__person-copy">
@@ -75,7 +75,7 @@ const block = `${START}
 
   <section class="aog-bcw__schedule aog-bcw__layer" id="aog-book-call-schedule" data-bcw-schedule role="dialog" aria-modal="false" aria-labelledby="aog-book-call-schedule-title" hidden>
     <header class="aog-bcw__schedule-head">
-      <span class="aog-bcw__schedule-avatar" aria-hidden="true"><span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul.png" alt="" width="40" height="40"></span></span>
+      <span class="aog-bcw__schedule-avatar" aria-hidden="true"><span class="aog-bcw__avatar-crop"><img src="/assets/design/team-paul-256.jpg" alt="" width="40" height="40"></span></span>
       <span class="aog-bcw__schedule-copy">
         <span class="aog-bcw__schedule-title" id="aog-book-call-schedule-title">Book your discovery call</span>
         <span class="aog-bcw__schedule-subtitle">Pick a time that works for you</span>
@@ -550,6 +550,15 @@ const block = `${START}
       storageSet(keys.auto,"1");
       showCard("auto",false);
     },12000);
+  }
+  /* A booking button tapped before this script had run (it sits at the end of a
+     large page) is held by the small script in the page head instead of jumping
+     to #enquire. Open the calendar for it now. */
+  if(window.__aogBookPending){
+    window.__aogBookPending=false;
+    window.clearTimeout(autoTimer);
+    storageSet(keys.dismissed,"1");
+    openScheduler("early");
   }
 })();
 </script>
