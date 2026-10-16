@@ -97,6 +97,14 @@ const block = `${START}
 </div>
 
 <style id="aog-book-call-widget-styles">
+  /* On a phone the scheduler covers the screen, so nothing behind it needs to
+     be drawn or animated. iPhone Safari was crashing ("A problem occurred with
+     this webpage") while people typed into Calendly on top of a page still
+     running dozens of animations and blurs; hiding and pausing the page gives
+     Calendly the memory to itself. visibility, not display, so the page keeps
+     its layout and the scroll position is unchanged when the sheet closes. */
+  body.aog-bcw-sheet-open>:not(.aog-bcw){visibility:hidden!important}
+  body.aog-bcw-sheet-open>:not(.aog-bcw),body.aog-bcw-sheet-open>:not(.aog-bcw) *{animation-play-state:paused!important}
   .aog-bcw,
   .aog-bcw *{box-sizing:border-box}
   .aog-bcw{
@@ -278,6 +286,7 @@ const block = `${START}
   var mainHadInert=false;
   var previousOverflow="";
   var sheetLocked=false;
+  var pausedAnims=[];
   var lastTrigger="direct";
   var trackedLoaded=false;
   var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -310,11 +319,17 @@ const block = `${START}
       document.body.classList.add("aog-bcw-sheet-open");
       document.body.style.overflow="hidden";
       if(main){mainHadInert=main.hasAttribute("inert");main.setAttribute("inert","")}
+      try{Array.prototype.forEach.call(document.querySelectorAll("video"),function(v){if(!v.paused)v.pause()})}catch(_){}
+      /* The page restates its animations with very high specificity, so the CSS
+         pause above cannot always win; pause them directly as well, and resume
+         exactly those on close. The scheduler itself is not touched. */
+      try{pausedAnims=document.getAnimations().filter(function(a){var t=a.effect&&a.effect.target;return a.playState==="running"&&!(t&&root.contains(t))});pausedAnims.forEach(function(a){a.pause()})}catch(_){pausedAnims=[]}
     }else if(!isSheet&&sheetLocked){
       sheetLocked=false;
       document.body.classList.remove("aog-bcw-sheet-open");
       document.body.style.overflow=previousOverflow;
       if(main&&!mainHadInert)main.removeAttribute("inert");
+      pausedAnims.forEach(function(a){try{a.play()}catch(_){}});pausedAnims=[];
     }
   }
   function changeState(next,options){
