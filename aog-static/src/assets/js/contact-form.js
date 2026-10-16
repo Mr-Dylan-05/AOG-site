@@ -508,7 +508,10 @@
       Object.keys(a).forEach(function (k) { body.set(k, a[k]); });
       // keepalive: people close the tab the moment Calendly says "confirmed",
       // and the row still has to arrive.
-      fetch("/api/lead", {
+      // Straight to /api/lead/ : the site adds trailing slashes, so "/api/lead"
+      // answers with a redirect first, and a keepalive request sent as the tab
+      // closes is safest with no redirect to follow.
+      fetch("/api/lead/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: body.toString(),

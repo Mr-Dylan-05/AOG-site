@@ -71,7 +71,7 @@ f = f.replace(/<input type="radio" name="contactpref"/g, () => {
 // form service supports ignoring a named field.
 f = f.replace(
   /<button type="submit"/,
-  '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">\n        <button type="submit"'
+  '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">\n        <button type="submit"'
 );
 
 html = html.replace(form[0], f);

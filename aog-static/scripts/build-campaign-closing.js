@@ -49,8 +49,15 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
           <p class="cc-eyebrow">Get started</p>
           <h2 class="cc-head">Ready to start your <b>AI training journey?</b></h2>
                     <div class="cc-form">
+            <style id="enquiry-off">
+              /* Enquiry form switched off (16 Oct 2026): bookings only. The form
+                 stays in the page because its script also reports bookings to
+                 Meta and the sheet; only its fields are hidden, and the booking
+                 button inside it stays. Delete this rule to bring the form back. */
+              #enquire form[data-contact-form]>:not(.book-inline){display:none!important}
+            </style>
             <form data-contact-form data-form="enquiry" data-clarity-mask="true" data-success-panel="#enquire-thanks" data-book-after-submit onsubmit="return false" style="display:flex;flex-direction:column;gap:10px">
-            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
             <input type="hidden" name="source" value="/ai-training/"><input type="hidden" name="interest" value="">
             <input type="hidden" name="utm_source" data-utm="utm_source">
             <input type="hidden" name="utm_medium" data-utm="utm_medium">
@@ -73,7 +80,7 @@ const CLOSE = `<section class="campaign-close" id="enquire" aria-label="Get in t
         </div>
       </section>`;
 
-const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire">GET MORE INFO &rarr;</a></div>`;
+const FAQ_CTA = `<div class="faq-cta"><a class="dark-button" href="#enquire" data-calendly>GET MORE INFO &rarr;</a></div>`;
 
 const DEEP = "html" + ":root".repeat(64) + " body main";
 

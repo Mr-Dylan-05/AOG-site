@@ -89,7 +89,7 @@ const field = (label, input, hint) =>
   }<span data-error style="font-size:12.5px;color:#C2410C"></span></label>`;
 
 const HONEYPOT =
-  '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">';
+  '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">';
 
 const submitBtn = (text) =>
   `<button type="submit" style="font:inherit;font-size:15px;font-weight:700;color:#fff;background:#0B1220;border:none;padding:14px 26px;border-radius:14px;cursor:pointer;align-self:flex-start;transition:transform .2s ease, box-shadow .2s ease">${text} &rarr;</button>`;

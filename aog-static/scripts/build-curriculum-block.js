@@ -70,7 +70,7 @@ const esc = (s) =>
 const CARD_FROM =
   "<article><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p></article>";
 
-const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you&rsquo;ll learn</p><ol class="cur-months"><li class="cur-month"><p class="cur-mhead"><b>Topic 1</b>Foundations<i>get fluent</i></p><p class="cur-mout">Learning <em>advanced prompt engineering</em> and <em>context management</em> techniques. <em>Claude Projects</em> that hold everything about your business so you stop re-explaining it. Get AI to work across your documents, images and screenshots. Building your first <em>AI-powered workflow</em>, end to end.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 2</b>Automating Your Tasks<i>get your time back</i></p><p class="cur-mout">Teaching AI your job. <em>Custom Claude skills</em> built around how you actually work, and a <em>meta skill</em> that writes the next ones. <em>Claude Cowork automations</em> and <em>Claude in Chrome browser automations</em> across the tools you already use, scheduled to run without you.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 3</b>Agentic AI<i>go autonomous</i></p><p class="cur-mout">Handing whole jobs over to AI. Building <em>autonomous AI agents</em> that carry out complete processes on their own &mdash; deciding what to do next, working across your tools, running start to finish without you &mdash; then an <em>orchestrator AI agent</em> that directs them all as one system. Effectively, your own <em>virtual employees</em>.</p></li></ol><a class="dark-button cur-cta" href="#enquire">Get more info &rarr;</a></div></article>`;
+const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you&rsquo;ll learn</p><ol class="cur-months"><li class="cur-month"><p class="cur-mhead"><b>Topic 1</b>Foundations<i>get fluent</i></p><p class="cur-mout">Learning <em>advanced prompt engineering</em> and <em>context management</em> techniques. <em>Claude Projects</em> that hold everything about your business so you stop re-explaining it. Get AI to work across your documents, images and screenshots. Building your first <em>AI-powered workflow</em>, end to end.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 2</b>Automating Your Tasks<i>get your time back</i></p><p class="cur-mout">Teaching AI your job. <em>Custom Claude skills</em> built around how you actually work, and a <em>meta skill</em> that writes the next ones. <em>Claude Cowork automations</em> and <em>Claude in Chrome browser automations</em> across the tools you already use, scheduled to run without you.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 3</b>Agentic AI<i>go autonomous</i></p><p class="cur-mout">Handing whole jobs over to AI. Building <em>autonomous AI agents</em> that carry out complete processes on their own &mdash; deciding what to do next, working across your tools, running start to finish without you &mdash; then an <em>orchestrator AI agent</em> that directs them all as one system. Effectively, your own <em>virtual employees</em>.</p></li></ol><div class="cur-ctas"><a class="dark-button cur-cta" href="#enquire" data-calendly>Get more info &rarr;</a><a class="dark-button cur-pdf" id="cur-pdf" href="/assets/ai-training-curriculum.pdf" download>See the full curriculum &rarr;</a></div></div></article>`;
 
 const STYLE = `<style id="cur-style">
         .cur-card .cur-learn{margin-top:20px;padding-top:18px;border-top:1px solid rgba(11,24,48,.10)}
@@ -99,6 +99,15 @@ const STYLE = `<style id="cur-style">
 
 
 
+
+        /* Two buttons under the topics: the booking calendar, and the PDF for
+           anyone who wants to read the curriculum first. The second is an
+           outline so the calendar stays the main action, and flips to white
+           with the rest of the card on :hover. */
+        .cur-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px}
+        .cur-ctas>a{margin-top:0!important}
+        #cur-pdf{background:transparent!important;color:#0b1631!important;box-shadow:inset 0 0 0 1.5px #0b1631!important}
+        .cur-card:hover #cur-pdf{color:#fff!important;box-shadow:inset 0 0 0 1.5px #fff!important}
         .cur-more{display:inline-flex;align-items:center;gap:7px;margin:14px 0 0;font-size:14px;font-weight:700;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:2px;line-height:1.2}
         .cur-more span{transition:transform .18s ease}
         .cur-more:hover span{transform:translateX(3px)}
