@@ -287,6 +287,7 @@ const block = `${START}
   var previousOverflow="";
   var sheetLocked=false;
   var pausedAnims=[];
+  var lockY=0,lockStyles=null;
   var lastTrigger="direct";
   var trackedLoaded=false;
   var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -318,6 +319,14 @@ const block = `${START}
       previousOverflow=document.body.style.overflow;
       document.body.classList.add("aog-bcw-sheet-open");
       document.body.style.overflow="hidden";
+      /* iPhone Safari ignores overflow:hidden for the page, and when someone taps
+         into Calendly's form it scrolls the page underneath to "show" the field,
+         often all the way down to #enquire. Pin the page where it is instead,
+         and put it back exactly there when the sheet closes. */
+      lockY=window.pageYOffset||document.documentElement.scrollTop||0;
+      var bs=document.body.style;
+      lockStyles={position:bs.position,top:bs.top,left:bs.left,right:bs.right,width:bs.width};
+      bs.position="fixed";bs.top=(-lockY)+"px";bs.left="0";bs.right="0";bs.width="100%";
       if(main){mainHadInert=main.hasAttribute("inert");main.setAttribute("inert","")}
       try{Array.prototype.forEach.call(document.querySelectorAll("video"),function(v){if(!v.paused)v.pause()})}catch(_){}
       /* The page restates its animations with very high specificity, so the CSS
@@ -328,6 +337,13 @@ const block = `${START}
       sheetLocked=false;
       document.body.classList.remove("aog-bcw-sheet-open");
       document.body.style.overflow=previousOverflow;
+      if(lockStyles){
+        var us=document.body.style;
+        us.position=lockStyles.position;us.top=lockStyles.top;us.left=lockStyles.left;us.right=lockStyles.right;us.width=lockStyles.width;
+        lockStyles=null;
+        var de=document.documentElement,sb=de.style.scrollBehavior;
+        de.style.scrollBehavior="auto";window.scrollTo(0,lockY);de.style.scrollBehavior=sb;
+      }
       if(main&&!mainHadInert)main.removeAttribute("inert");
       pausedAnims.forEach(function(a){try{a.play()}catch(_){}});pausedAnims=[];
     }
