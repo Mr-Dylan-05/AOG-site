@@ -20,7 +20,7 @@ const fs = require("fs");
 const path = require("path");
 
 /** Standing exclusion: the paid landing page is not ours to edit. */
-const EXCLUDED = ["public/ai-training/"];
+const EXCLUDED = ["public/ai-training/", "public/offshore-staff/"];
 
 const RENAMES = [
   [/Certified Claude Experts/g, "Claude Certified Associates"],

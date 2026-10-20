@@ -30,7 +30,7 @@ const DRY = process.argv.includes("--dry");
 const NAV = navMarkup("aog");
 
 /** The campaign page keeps its own skin and is not ours to restyle here. */
-const SKIP = ["public/ai-training/index.html"];
+const SKIP = ["public/ai-training/index.html", "public/offshore-staff/index.html"];
 
 const files = [];
 (function walk(dir) {
