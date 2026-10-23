@@ -1,0 +1,122 @@
+[
+ {
+  "slug": "onshore-template-m1-mod1",
+  "title": "AI Basics, Uses and Rules",
+  "description": "Learn what AI is, how it works, and the rules for using it safely."
+ },
+ {
+  "slug": "onshore-template-m1-mod2",
+  "title": "Context Engineering & Mini-Workflows",
+  "description": "Learn how to load context and run reusable mini-workflows for your weekly tasks."
+ },
+ {
+  "slug": "onshore-template-m1-mod3",
+  "title": "Metaprompting & Honesty Guardrails",
+  "description": "Get Claude to write your best prompts, and catch AI mistakes before you trust them."
+ },
+ {
+  "slug": "onshore-template-m1-mod4",
+  "title": "Persistent Memory & Context",
+  "description": "Build memory and context so your work gets better every time you use it."
+ },
+ {
+  "slug": "onshore-template-m1-mod5",
+  "title": "Connect Claude to Your Tools",
+  "description": "Link Gmail, Calendar and Drive to Claude, and watch it act inside them."
+ },
+ {
+  "slug": "onshore-template-m1-mod6",
+  "title": "Plan Your First AI Workflow",
+  "description": "Find the connectors built for your role, then map your first real workflow."
+ },
+ {
+  "slug": "onshore-template-m1-mod7",
+  "title": "Build the Workflow",
+  "description": "Turn your plan into a working, multi-step AI workflow for a real task."
+ },
+ {
+  "slug": "onshore-template-m1-mod8",
+  "title": "Make Your Workflow Reliable",
+  "description": "Test your workflow so it gets the same good result every single time."
+ },
+ {
+  "slug": "onshore-template-m2-mod9",
+  "title": "Intro to Claude Skills",
+  "description": "Find, install and run ready-made skills instead of writing prompts from scratch."
+ },
+ {
+  "slug": "onshore-template-m2-mod10",
+  "title": "Build Your Own Skills",
+  "description": "Turn a task you repeat into a skill Claude can run on demand."
+ },
+ {
+  "slug": "onshore-template-m2-mod11",
+  "title": "Your AI Toolkit",
+  "description": "Choose the right extra AI tools for your role and connect them to Claude."
+ },
+ {
+  "slug": "onshore-template-m2-mod12",
+  "title": "How Automation Actually Works",
+  "description": "Learn the line between AI helping you and work running on its own."
+ },
+ {
+  "slug": "onshore-template-m2-mod13",
+  "title": "Your First Hands-Free Job",
+  "description": "Hand Claude Cowork a real job, walk away, and come back to it finished."
+ },
+ {
+  "slug": "onshore-template-m2-mod14",
+  "title": "Get Cowork to Do More",
+  "description": "Brief the outcome, not the steps, and let Cowork handle your inbox for you."
+ },
+ {
+  "slug": "onshore-template-m2-mod15",
+  "title": "Make Cowork Run Itself",
+  "description": "Put a whole week of jobs on a schedule that runs without you."
+ },
+ {
+  "slug": "onshore-template-m2-mod16",
+  "title": "Claude in Chrome & Safety",
+  "description": "Get Claude working your browser safely, then lock in the toolkit you've built."
+ },
+ {
+  "slug": "onshore-template-m3-mod1",
+  "title": "Do You Need an Agent?",
+  "description": "Learn what an AI agent really is, and whether your task justifies one."
+ },
+ {
+  "slug": "onshore-template-m3-mod2",
+  "title": "Write Your Agent's Instructions",
+  "description": "Design your agent in full — its goal, tools, rules and reports."
+ },
+ {
+  "slug": "onshore-template-m3-mod3",
+  "title": "Set Up Your Workshop",
+  "description": "Get your accounts, tools and keys ready before you start building."
+ },
+ {
+  "slug": "onshore-template-m3-mod4",
+  "title": "Build and Launch Your Agent",
+  "description": "Connect your tools, build the agent, test it, then set it live."
+ },
+ {
+  "slug": "onshore-template-m3-mod5",
+  "title": "Improve Your Agent's Performance",
+  "description": "Review your agent's work like a manager, then upgrade it with evidence."
+ },
+ {
+  "slug": "onshore-template-m3-mod6",
+  "title": "Harden It, Build a Second",
+  "description": "Make your first agent safe to leave alone, then build a second."
+ },
+ {
+  "slug": "onshore-template-m3-mod7",
+  "title": "Build a Team of Agents",
+  "description": "Add a third agent, then hand the managing to a lead agent."
+ },
+ {
+  "slug": "onshore-template-m3-mod8",
+  "title": "Your Operation, and the Proof",
+  "description": "Tidy your agents into one operation and build a dashboard to prove it."
+ }
+]
