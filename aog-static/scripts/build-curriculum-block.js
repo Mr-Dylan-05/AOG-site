@@ -41,6 +41,10 @@
  * everything here is namespaced and brings its own scoped styles, the same way
  * build-campaign-reviews.js does.
  *
+ * The card now leads with the 3 topics rather than the 24-module count, in the
+ * same plain wording as the curriculum PDF and /programs/ (simplified on request
+ * to make the program look less daunting before the call).
+ *
  * Idempotent: strips its own previous output before injecting.
  *
  * Usage:  node scripts/build-curriculum-block.js
@@ -70,29 +74,29 @@ const esc = (s) =>
 const CARD_FROM =
   "<article><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p></article>";
 
-const CARD_TO = `<article class="cur-card"><strong>24</strong><h3>Interactive Modules</h3><p>Full of examples, videos, step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you&rsquo;ll learn</p><ol class="cur-months"><li class="cur-month"><p class="cur-mhead"><b>Topic 1</b>Foundations<i>get fluent</i></p><p class="cur-mout">Learning <em>advanced prompt engineering</em> and <em>context management</em> techniques. <em>Claude Projects</em> that hold everything about your business so you stop re-explaining it. Get AI to work across your documents, images and screenshots. Building your first <em>AI-powered workflow</em>, end to end.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 2</b>Automating Your Tasks<i>get your time back</i></p><p class="cur-mout">Teaching AI your job. <em>Custom Claude skills</em> built around how you actually work, and a <em>meta skill</em> that writes the next ones. <em>Claude Cowork automations</em> and <em>Claude in Chrome browser automations</em> across the tools you already use, scheduled to run without you.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 3</b>Agentic AI<i>go autonomous</i></p><p class="cur-mout">Handing whole jobs over to AI. Building <em>autonomous AI agents</em> that carry out complete processes on their own &mdash; deciding what to do next, working across your tools, running start to finish without you &mdash; then an <em>orchestrator AI agent</em> that directs them all as one system. Effectively, your own <em>virtual employees</em>.</p></li></ol><div class="cur-ctas"><a class="dark-button cur-cta" href="#enquire" data-calendly>Get more info &rarr;</a><a class="dark-button cur-pdf" id="cur-pdf" href="/assets/ai-training-curriculum.pdf" download>See the full curriculum &rarr;</a></div></div></article>`;
+const CARD_TO = `<article class="cur-card"><strong>3</strong><h3>Main Topics</h3><p>Self-paced, full of examples, videos and step-by-step instructions.</p><div class="cur-learn"><p class="cur-label">What you&rsquo;ll learn</p><ol class="cur-months"><li class="cur-month"><p class="cur-mhead"><b>Topic 1</b>The essential skills<i>get fluent</i></p><p class="cur-mout"><em>Use AI properly:</em> give it clear instructions, check its work, connect it to your email, calendar and files, and set it up so it already knows your business.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 2</b>Automation<i>get your time back</i></p><p class="cur-mout"><em>Hand over the jobs you repeat every week.</em> Turn them into skills AI runs on demand, then put them on a schedule.</p></li><li class="cur-month"><p class="cur-mhead"><b>Topic 3</b>AI agents<i>go autonomous</i></p><p class="cur-mout"><em>Let AI handle whole jobs.</em> Plan an agent, build it, launch it, then add more and put a lead agent in charge.</p></li></ol><div class="cur-ctas"><a class="dark-button cur-cta" href="#enquire" data-calendly>Get more info &rarr;</a><a class="dark-button cur-pdf" id="cur-pdf" href="/assets/ai-training-curriculum.pdf" download>See the full curriculum &rarr;</a></div></div></article>`;
 
 const STYLE = `<style id="cur-style">
         .cur-card .cur-learn{margin-top:20px;padding-top:18px;border-top:1px solid rgba(11,24,48,.10)}
-        .cur-label{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:#2867e8;margin:0 0 14px;font-weight:700}
+        .cur-label{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:#2867e8;margin:0 0 14px;font-weight:700}
         .cur-topics{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px}
         /* The page styles every <li> with a top rule and 13px of vertical
            padding, which made each of these 65px tall. The rules are for its
            own long-form lists, not an eight-item label grid. */
         .cur-topics li{display:flex!important;gap:9px;align-items:baseline;font-size:14.5px;line-height:1.4;color:#27313f;min-width:0;padding:0!important;border:0!important;margin:0!important}
-        .cur-topics li span{flex:none;font-family:'DM Mono',monospace;font-size:11px;color:#a2abb7}
+        .cur-topics li span{flex:none;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:#a2abb7}
         .cur-foot{font-size:12.5px;line-height:1.5;color:#8a93a1;margin:16px 0 0}
         /* Topics, not module names. The 24 titles are the thing people enquire
            for; what sells here is what they walk away holding. */
         .cur-months{list-style:none;margin:0;padding:0;display:grid;gap:14px}
         .cur-month{display:block}
         .cur-mhead{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:0 0 4px}
-        .cur-mhead b{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;
+        .cur-mhead b{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.14em;
           text-transform:uppercase;font-weight:700;color:#2867e8}
         .cur-mhead i{font-style:normal;font-size:12px;color:#8a93a1}
-        .cur-mhead{font-size:14.5px;font-weight:700;color:#0b1830;letter-spacing:-.01em}
+        .cur-mhead{font-size:14.5px;font-weight:700;color:#0B1220;letter-spacing:-.01em}
         .cur-mout{margin:0;font-size:13.5px;line-height:1.5;color:#4a5462}
-        .cur-foot b{color:#0b1830;font-weight:800}
+        .cur-foot b{color:#0B1220;font-weight:800}
 
         .cur-mout em{font-style:normal;font-weight:700;color:#2867e8}html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card .cur-mout em{color:#2867e8!important}html:root:root:root:root:root:root:root:root:root:root body main .program-cards .cur-card:hover .cur-mout em{color:#a9ccff!important}
 
