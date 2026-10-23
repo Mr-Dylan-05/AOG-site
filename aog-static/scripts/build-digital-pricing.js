@@ -350,6 +350,12 @@ const write = (dir, html) => {
   fs.writeFileSync(path.join(out, "index.html"), html);
 };
 
+// The parser and the card pieces are shared with build-digital-products.js,
+// which builds the public product pages from the same copy. Required from
+// there, this file writes nothing.
+module.exports = { PAGES, model, list, priceBox, esc, BLUE, INK, GREY };
+if (require.main !== module) return;
+
 const MODELS = PAGES.map(model);
 
 // --------------------------------------------------------------- subpages
