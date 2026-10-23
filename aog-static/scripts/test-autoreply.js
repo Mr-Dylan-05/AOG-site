@@ -424,10 +424,10 @@ const HOUR = 3600e3, DAY = 24 * HOUR;
     assert.ok(!c.text.includes("locked in"), "claimed a time it does not have");
     assert.ok(c.text.includes("Calendly will send the calendar invite with"));
   });
-  ok("curriculum linked, Paul's signature, none of the enquiry email's wording", () => {
+  ok("no curriculum link, says it is covered on the call, Paul's signature, none of the enquiry email's wording", () => {
     const c = booked({ name: "Jane", email: "j@e.com", booked_for: "Tuesday 29 September, 2:00pm" });
-    assert.ok(c.text.includes("https://adongroup.com.au/assets/ai-training-curriculum.pdf"));
-    assert.ok(c.html.includes('href="https://adongroup.com.au/assets/ai-training-curriculum.pdf"'));
+    assert.ok(!c.text.includes("ai-training-curriculum.pdf") && !c.html.includes("ai-training-curriculum.pdf"), "curriculum link still in the booking email");
+    assert.ok(c.text.includes("We'll also run\nthrough the program curriculum with you on the call."), "missing the curriculum-on-the-call line");
     assert.ok(c.text.includes("\n\nPaul Harding\nAI Enablement\n") && c.text.trimEnd().endsWith("facilitate its return."), "booking email lacks the signature");
     assert.ok(c.html.includes("/assets/email/signature.png"), "booking email lacks the signature image");
     assert.ok(!/I'll take you through how it works|I'm Paul, and I look after|Your AI training enquiry/.test(c.text + c.subject), "enquiry copy leaked in");

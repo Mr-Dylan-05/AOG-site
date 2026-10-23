@@ -794,12 +794,11 @@ function bookingReplyCopy(record) {
   );
   paras.push([
     "It's a relaxed chat to understand where you're at with AI, what you want to",
-    "achieve, and whether the Ad On AI program is the right fit.",
+    "achieve, and whether the Ad On AI program is the right fit. We'll also run",
+    "through the program curriculum with you on the call.",
   ]);
-  paras.push([
-    "If you'd like a look beforehand, here's the full program curriculum:",
-    CURRICULUM_URL,
-  ]);
+  // No curriculum link here (removed 23 Oct 2026): the curriculum is walked
+  // through on the call itself. The enquiry email still links the PDF.
   paras.push(["If anything comes up before then, just reply to this email."]);
 
   const text = paras.map((p) => p.join("\n")).join("\n\n") + "\n\n" + SIGNATURE_TEXT;
