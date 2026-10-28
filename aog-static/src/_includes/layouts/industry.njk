@@ -35,11 +35,7 @@ bodyClass: "ind-page"
     <h1>{{ h1 }}</h1>
     <p class="ind-lede">{{ lede | safe }}</p>
     <div class="ind-actions">
-      {# The audit first. It is the low-friction step for cold traffic, it is
-         already built, and asking for a call first loses the people who are not
-         ready to talk to anyone — which on these pages is most of them. #}
-      <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
-      <a class="ind-cta-alt" href="/ai-enquiry/">Or book a time to talk</a>
+      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
     </div>
     <p class="ind-trust">
       <b>Trusted by over {{ proof.clientCount }} Australian businesses.</b>
@@ -221,8 +217,7 @@ bodyClass: "ind-page"
       <h2>{{ nextStepHeading or "What happens when you get in touch" }}</h2>
       <p>{{ nextStep | safe }}</p>
       <div class="ind-actions">
-        <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
-        <a class="ind-cta-alt" href="/ai-enquiry/">Book a time to talk</a>
+        <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
       </div>
     </div>
   </section>
@@ -293,8 +288,7 @@ bodyClass: "ind-page"
     <h2>{{ closerHeading or "Get your team started" }}</h2>
     <p>{{ closer | safe }}</p>
     <div class="ind-actions">
-      <a class="ind-cta" href="/ai-quiz/">Get your free AI audit</a>
-      <a class="ind-cta-alt" href="/ai-enquiry/">Book a time to talk</a>
+      <a class="ind-cta" href="/ai-enquiry/">Book a time to talk</a>
     </div>
   </section>
 

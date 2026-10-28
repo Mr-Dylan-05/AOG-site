@@ -95,3 +95,11 @@
 /home-2025-copy/          /                 301
 /website-examples/        /ad-on-digital/   301
 /contact/*   /contact-us/   301
+
+# --- Hidden pages (mirrors vercel.json) --------------------------------------
+# Temporarily hidden, not deleted: the pages are still in public/ so they can
+# come back by removing these lines (and the vercel.json entries).
+/ai-quiz/                    /ai-training/       302
+/ai-quiz                     /ai-training/       302
+/ai-enablement-specialist/   /ad-on-workforce/   302
+/ai-enablement-specialist    /ad-on-workforce/   302

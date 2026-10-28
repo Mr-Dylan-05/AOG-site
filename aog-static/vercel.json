@@ -841,13 +841,33 @@
     },
     {
       "source": "/package/ai-enablement-specialist/",
-      "destination": "/ai-enablement-specialist/",
+      "destination": "/ad-on-workforce/",
       "permanent": true
     },
     {
       "source": "/package/ai-enablement-specialist",
-      "destination": "/ai-enablement-specialist/",
+      "destination": "/ad-on-workforce/",
       "permanent": true
+    },
+    {
+      "source": "/ai-enablement-specialist/",
+      "destination": "/ad-on-workforce/",
+      "permanent": false
+    },
+    {
+      "source": "/ai-enablement-specialist",
+      "destination": "/ad-on-workforce/",
+      "permanent": false
+    },
+    {
+      "source": "/ai-quiz/",
+      "destination": "/ai-training/",
+      "permanent": false
+    },
+    {
+      "source": "/ai-quiz",
+      "destination": "/ai-training/",
+      "permanent": false
     },
     {
       "source": "/__trashed/",
