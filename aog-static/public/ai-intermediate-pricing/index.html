@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Intermediate — Pricing | Ad On Group</title>
+<meta name="description" content="Pricing for AI Intermediate, the six-module Ad On AI training program.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1BABE5">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/intertight.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/design/fonts/jetbrainsmono-500.woff2" crossorigin>
+<style>@font-face{font-family:'Inter Tight';font-style:normal;font-weight:500 800;font-display:swap;src:url('/assets/design/fonts/intertight.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/assets/design/fonts/jetbrainsmono-500.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}</style>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: radial-gradient(120% 60% at -2% -8%, rgba(255,168,112,0.20), transparent 50%), radial-gradient(110% 60% at 104% -2%, rgba(47,111,237,0.16), transparent 52%), radial-gradient(85% 38% at 102% 40%, rgba(47,111,237,0.10), transparent 56%), radial-gradient(80% 34% at 50% 100%, rgba(45,212,191,0.10), transparent 60%), linear-gradient(180deg, #FBF6F2 0%, #FAFAFE 32%, #F6FAFE 62%, #F2F5FB 100%); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #0B1220; letter-spacing: -0.011em; min-height: 100vh; }
+  h1, h2, h3 { font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, sans-serif; letter-spacing: -0.03em; font-weight: 800; }
+  a { color: #1BABE5; } a:hover { color: #1B54C4; }
+  .eyebrow { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.16em; color:#1BABE5; text-transform:uppercase; }
+  .glass { background:rgba(255,255,255,0.62); backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%); border:1px solid rgba(255,255,255,0.85); box-shadow:0 16px 40px -22px rgba(11,18,32,0.24), inset 0 1px 0 rgba(255,255,255,0.7); border-radius:20px; }
+  .sec { max-width:1120px; margin:0 auto; padding:56px 28px; }
+  .pp-price { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:stretch; }
+  .pp-4 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .pp-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .pp-guar { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .pp-card { padding:30px 30px 28px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  .pp-feat { border:1px solid rgba(47,111,237,0.35); box-shadow:0 24px 60px -30px rgba(47,111,237,0.4), inset 0 1px 0 rgba(255,255,255,0.7); }
+  .pp-bg { position:absolute; inset:0; z-index:-1; background:radial-gradient(120% 80% at 100% 0%, rgba(47,111,237,0.10), transparent 60%); }
+  .pp-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .pp-badge { font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#fff; background:#1BABE5; padding:4px 10px; border-radius:999px; }
+  .pp-name { font-size:24px; line-height:1.15; letter-spacing:-0.025em; margin:12px 0 8px; color:#0B1220; }
+  .pp-for { font-size:15px; line-height:1.55; color:#5A6473; margin:0 0 22px; }
+  .pp-lab, .pp-plus { font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:#8A93A1; }
+  .pp-plus { margin-top:22px; padding-top:20px; border-top:1px solid rgba(11,18,32,0.08); }
+  .pp-plus span { color:#1BABE5; font-size:15px; margin-right:4px; }
+  .pp-amt { display:flex; align-items:baseline; gap:8px; margin:8px 0 2px; }
+  .pp-amt span { font-family:'Inter Tight',sans-serif; font-weight:800; font-size:clamp(40px,5vw,52px); letter-spacing:-0.04em; color:#1BABE5; line-height:1; }
+  .pp-amt small { font-family:'Inter Tight',sans-serif; font-weight:700; font-size:20px; letter-spacing:-0.02em; color:#5A6473; }
+  .pp-per { font-size:14px; color:#5A6473; margin-bottom:16px; }
+  .pp-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
+  .pp-list li { position:relative; padding-left:31px; font-size:15px; line-height:1.45; color:#0B1220; font-weight:500; }
+  .pp-list li::before { content:""; position:absolute; left:0; top:0; width:20px; height:20px; border-radius:50%; background:rgba(47,111,237,0.12) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231BABE5' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.2 4.2L19 7'/%3E%3C/svg%3E") center/11px no-repeat; }
+  .pp-tools { margin-top:auto; padding-top:22px; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .pp-tools b { font-size:12.5px; color:#7C8696; font-weight:600; margin-right:2px; }
+  .pp-tools span { font-size:12.5px; font-weight:600; color:#0B1220; background:rgba(255,255,255,0.7); border:1px solid rgba(11,18,32,0.08); border-radius:999px; padding:5px 11px; }
+  .pp-more { display:inline-block; margin-top:20px; font-size:14px; font-weight:700; text-decoration:none; }
+  .pp-cmp { padding:8px 26px; }
+  .pp-row { display:grid; grid-template-columns:1.1fr 1fr 1fr; gap:18px; padding:14px 0; border-bottom:1px solid rgba(11,18,32,0.07); font-size:15px; line-height:1.45; color:#0B1220; }
+  .pp-row:last-child { border-bottom:0; }
+  .pp-row > span:first-child { color:#5A6473; font-weight:600; }
+  .pp-rh > span { font-family:'Inter Tight',sans-serif; font-weight:800; font-size:17px; letter-spacing:-0.02em; color:#0B1220 !important; }
+  .pp-rm > span:first-child { font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:#1BABE5; padding-top:10px; }
+  .pp-no { color:#A0A8B4; }
+  .pp-track { font-family:'Inter Tight',sans-serif; font-weight:800; font-size:18px; letter-spacing:-0.02em; color:#0B1220; margin:0 0 14px; }
+  .pp-track span { color:#7C8696; font-weight:600; }
+  .pp-price > div > .pp-guar { grid-template-columns:1fr 1fr; }
+  .pp-g { padding:14px 16px; display:flex; align-items:center; gap:12px; border-radius:14px; }
+  .pp-g b { flex:none; min-width:38px; font-family:'Inter Tight',sans-serif; font-weight:800; font-size:17px; color:#1BABE5; }
+  .pp-g span { font-size:14px; color:#0B1220; font-weight:500; line-height:1.35; }
+  .pp-gm { grid-column:1/-1; border-left:3px solid #1BABE5; }
+  .pp-m { padding:24px; }
+  .pp-m h3 { font-size:19px; margin:10px 0 6px; letter-spacing:-0.02em; color:#0B1220; }
+  .pp-m p { font-size:14.5px; line-height:1.55; color:#5A6473; margin:0; }
+  .pp-faq { display:grid; grid-template-columns:1fr 1fr; gap:14px 40px; }
+  .aoa-faq{ border-bottom:1px solid rgba(11,18,32,0.1); }
+  .aoa-faq>summary{ list-style:none; cursor:pointer; padding:16px 0; display:flex; align-items:center; justify-content:space-between; gap:16px; font-family:'Inter Tight',sans-serif; font-weight:700; font-size:16.5px; letter-spacing:-0.02em; color:#0B1220; }
+  .aoa-faq>summary::-webkit-details-marker{ display:none; }
+  .aoa-faq>summary svg{ flex:none; transition:transform .22s ease; color:#1BABE5; }
+  .aoa-faq[open]>summary svg{ transform:rotate(45deg); }
+  .aoa-faq>div{ padding:0 0 18px; font-size:15px; line-height:1.62; color:#5A6473; }
+  @media (max-width: 860px){ .pp-price,.pp-4,.pp-3,.pp-faq{ grid-template-columns:1fr; } .pp-guar{ grid-template-columns:1fr 1fr; } .pp-row{ grid-template-columns:1fr 1fr 1fr; gap:10px; font-size:13.5px; } .pp-cmp{ padding:6px 16px; } }
+</style>
+<style>
+  .nav-prog { position: relative; }
+  .nav-menu { opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity .18s ease, transform .18s ease; }
+  .nav-prog:hover .nav-menu, .nav-menu:hover { opacity: 1; pointer-events: auto; transform: none; }
+</style>
+<style>
+  .ai-h2 { font-size:clamp(26px,3.4vw,42px); line-height:1.06; letter-spacing:-0.035em; font-weight:800; margin:14px 0 0; color:#0B1220; }
+  .ai-sub { font-size:17px; line-height:1.6; color:#5A6473; margin:16px 0 30px; max-width:660px; }
+  .ai-h1 { font-size:clamp(38px,6vw,68px); line-height:1.0; letter-spacing:-0.045em; font-weight:800; margin:16px 0 0; color:#0B1220; max-width:860px; }
+  .ai-h1 span { color:#1BABE5; }
+  .ai-lede { font-size:18px; line-height:1.6; color:#5A6473; margin:22px 0 0; max-width:680px; }
+  .ai-pill { display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; color:#0B1220; background:rgba(255,255,255,0.7); border:1px solid rgba(11,18,32,0.1); border-radius:999px; padding:6px 13px 6px 9px; margin-bottom:18px; }
+  .ai-pill img { width:16px; height:16px; }
+  .ai-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+  .ai-chips span { font-size:13.5px; font-weight:600; color:#0B1220; background:rgba(255,255,255,0.7); border:1px solid rgba(11,18,32,0.08); border-radius:999px; padding:6px 13px; }
+  .ai-step { padding:26px; }
+  .ai-step-top { display:flex; align-items:center; justify-content:space-between; }
+  .ai-step-top b { font-family:'Inter Tight',sans-serif; font-size:44px; font-weight:800; line-height:1; color:#1BABE5; letter-spacing:-0.04em; }
+  .ai-step-top span { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#1BABE5; background:rgba(27,171,229,0.1); border-radius:999px; padding:5px 10px; }
+  .ai-step h3, .pp-m h3 { font-size:20px; margin:16px 0 8px; letter-spacing:-0.02em; color:#0B1220; }
+  .ai-step p { font-size:15px; line-height:1.6; color:#5A6473; margin:0; }
+  .ai-stats { display:grid; grid-template-columns:repeat(4,1fr); }
+  .ai-sh { grid-column:span 2; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#1BABE5; padding:14px 22px; border-bottom:1px solid rgba(11,18,32,0.07); }
+  .ai-sh + .ai-sh { border-left:1px solid rgba(11,18,32,0.07); }
+  .ai-stat { padding:22px; border-left:1px solid rgba(11,18,32,0.07); }
+  .ai-sh + .ai-sh + .ai-stat { border-left:0; }
+  .ai-stat strong { display:block; font-family:'Inter Tight',sans-serif; font-size:34px; font-weight:800; letter-spacing:-0.03em; line-height:1; color:#0B1220; }
+  .ai-stat strong svg { display:block; width:34px; height:34px; }
+  .ai-stat span { display:block; margin-top:10px; font-size:14px; line-height:1.45; color:#5A6473; }
+  .ai-note { font-size:15px; line-height:1.6; color:#5A6473; margin:18px 0 0; }
+  .ai-note b { color:#0B1220; }
+  .ai-mods { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start; }
+  .ai-mod { padding:24px; }
+  .ai-mhead { display:flex; gap:13px; align-items:flex-start; }
+  .ai-mhead > span { flex:none; width:34px; height:34px; border-radius:10px; background:#1BABE5; color:#fff; font-family:'Inter Tight',sans-serif; font-weight:800; font-size:16px; display:inline-flex; align-items:center; justify-content:center; }
+  .ai-mhead b { display:block; font-family:'Inter Tight',sans-serif; font-size:17px; line-height:1.2; letter-spacing:-0.02em; color:#0B1220; }
+  .ai-mhead em { display:block; font-style:normal; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:#8A93A1; margin-top:4px; }
+  .ai-mbody { font-size:14.5px; line-height:1.5; color:#5A6473; margin:14px 0 12px; }
+  .ai-mod ul { list-style:none; margin:0; padding:12px 0 0; border-top:1px solid rgba(11,18,32,0.07); display:flex; flex-direction:column; gap:7px; }
+  .ai-mod li { position:relative; padding-left:16px; font-size:14px; line-height:1.4; color:#27313F; }
+  .ai-mod li::before { content:""; position:absolute; left:2px; top:7px; width:5px; height:5px; border-radius:50%; background:#1BABE5; }
+  .ai-mod li.grp { padding-left:0; margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:#1BABE5; }
+  .ai-mod li.grp::before { display:none; }
+  .ai-end { margin-top:18px; padding:24px 26px; border-left:3px solid #1BABE5; }
+  .ai-end h3 { font-size:19px; margin:0 0 14px; letter-spacing:-0.02em; color:#0B1220; }
+  .ai-end .pp-list { display:grid; grid-template-columns:repeat(3,1fr); gap:11px 22px; }
+  .pp-price2 { display:grid; grid-template-columns:1fr auto 1fr; gap:26px; align-items:start; padding:32px; }
+  .pp-and { font-family:'Inter Tight',sans-serif; font-size:30px; font-weight:800; color:#1BABE5; align-self:center; }
+  .ai-tools { margin-top:22px; display:flex; flex-wrap:wrap; align-items:center; gap:10px; justify-content:center; }
+  .ai-tools b { font-size:13px; color:#7C8696; font-weight:600; }
+  .ai-tools span { font-size:13.5px; font-weight:600; color:#0B1220; background:rgba(255,255,255,0.7); border:1px solid rgba(11,18,32,0.08); border-radius:999px; padding:6px 13px; }
+  .ai-tools em { flex-basis:100%; text-align:center; font-size:15px; color:#5A6473; margin-top:6px; }
+  @media (max-width: 860px){
+    .ai-stats { grid-template-columns:1fr 1fr; }
+    .ai-stats > :nth-child(1) { order:1; } .ai-stats > :nth-child(3) { order:2; } .ai-stats > :nth-child(4) { order:3; }
+    .ai-stats > :nth-child(2) { order:4; border-left:0; border-top:1px solid rgba(11,18,32,0.07); }
+    .ai-stats > :nth-child(5) { order:5; border-left:0; } .ai-stats > :nth-child(6) { order:6; }
+    .ai-mods, .ai-end .pp-list { grid-template-columns:1fr; }
+    .pp-price2 { grid-template-columns:1fr; padding:24px; }
+    .pp-and { justify-self:start; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <nav data-aog-header style="position:sticky;top:0;z-index:60;background:rgba(252,251,250,0.72);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);border-bottom:1px solid rgba(11,18,32,0.06)">
+      <div class="ch-bar">
+        <a class="ch-logo" href="/" aria-label="Ad On Group">
+          <span class="ch-mark"><img src="/assets/design/adon-logo.png" alt="" width="320" height="320"></span>
+          <span class="ch-word">Ad On Group</span>
+        </a>
+        <button class="ch-toggle" type="button" aria-expanded="false" aria-controls="aog-menu" aria-label="Open menu">
+          <span class="ch-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        </button>
+        <div class="ch-panel" id="aog-menu" hidden>
+          
+            <div class="ch-group">
+              <p class="ch-label">About</p>
+              <a href="/history/">History</a>
+              <a href="/purpose/">Purpose</a>
+              <a href="/people/">People</a>
+              <a href="/culture/">Culture</a>
+              <a href="/offices/">Offices</a>
+            </div>
+            <div class="ch-group">
+              <p class="ch-label">Divisions</p>
+              <a href="/ad-on-ai-division/">Ad On AI</a>
+              <a href="/ad-on-workforce-division/">Ad On Workforce</a>
+              <a href="/ad-on-hold/">Ad On Hold</a>
+              <a href="/ad-on-digital/">Ad On Digital</a>
+              <a href="/ad-on-sa/">Ad On SA</a>
+            </div>
+          <div class="ch-actions">
+            <a class="ch-tel" href="tel:+61755861400">(07) 5586 1400</a>
+            <a class="ch-contact" href="/contact-us/">Contact</a>
+          </div>
+        </div>
+      </div>
+      <style>
+        .ch-bar{max-width:1268px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:relative}
+        .ch-logo{display:inline-flex;align-items:center;gap:11px;text-decoration:none}
+        .ch-mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:none}
+        .ch-mark img{width:100%;height:100%;object-fit:contain;display:block}
+        .ch-word{font-size:19px;font-weight:800;letter-spacing:-.02em;color:#0B1220;line-height:1;
+          font-family:'Inter Tight','Helvetica Neue',Helvetica,Arial,sans-serif}
+        .ch-toggle{width:46px;height:46px;flex:none;display:inline-flex;align-items:center;justify-content:center;
+          background:transparent;border:1px solid rgba(11,18,32,.18);border-radius:13px;cursor:pointer;padding:0;
+          transition:background .18s ease,border-color .18s ease}
+        .ch-toggle:hover{background:rgba(11,18,32,.05);border-color:rgba(11,18,32,.34)}
+        .ch-toggle:focus-visible{outline:2px solid #1BABE5;outline-offset:3px}
+        .ch-bars{display:flex;flex-direction:column;justify-content:center;gap:4px;width:19px;height:13px}
+        .ch-bars i{display:block;height:1.8px;background:#0B1220;border-radius:2px;transition:transform .22s ease,opacity .18s ease}
+        .ch-panel{position:absolute;top:calc(100% + 12px);right:24px;z-index:70;min-width:270px;
+          background:rgba(252,251,250,.97);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+          border:1px solid rgba(11,18,32,.10);border-radius:18px;padding:20px 22px;
+          box-shadow:0 28px 60px -22px rgba(11,18,32,.28);display:flex;flex-direction:column;gap:18px}
+        .ch-label{margin:0 0 2px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:#1BABE5}
+        .ch-group a{text-decoration:none;color:#0B1220;font-size:15.5px;font-weight:600;line-height:1.25}
+        .ch-group a:hover{color:#1BABE5;text-decoration:underline;text-underline-offset:3px}
+        .ch-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:16px;border-top:1px solid rgba(11,18,32,.12)}
+        .ch-tel{text-decoration:none;color:#5A6473;font-size:14.5px;font-weight:600;white-space:nowrap}
+        .ch-tel:hover{color:#0B1220}
+        .ch-contact{text-decoration:none;background:#0B1220;color:#fff;font-weight:800;font-size:14.5px;
+          padding:10px 18px;border-radius:999px;white-space:nowrap}
+        .ch-contact:hover{background:#18243a}
+        @media(max-width:520px){ .ch-panel{right:24px;left:24px;min-width:0} }
+        .ch-panel[hidden]{display:none}
+        .ch-group{display:flex;flex-direction:column;gap:9px}
+        .ch-toggle[aria-expanded="true"] .ch-bars i:nth-child(1){transform:translateY(5.8px) rotate(45deg)}
+        .ch-toggle[aria-expanded="true"] .ch-bars i:nth-child(2){opacity:0}
+        .ch-toggle[aria-expanded="true"] .ch-bars i:nth-child(3){transform:translateY(-5.8px) rotate(-45deg)}
+        @media(prefers-reduced-motion:reduce){ .ch-toggle,.ch-bars i{transition:none} }
+      </style>
+    </nav>
+
+  <!-- ===== PARTNER STRIP ===== -->
+  <div class="sec" style="padding-top:40px;padding-bottom:0">
+    <div class="glass" style="padding:20px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+      <div style="flex:none;background:#fff;border:1px solid rgba(11,18,32,0.08);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px">
+        <img src="/assets/design/logo-claude.svg" alt="Claude" style="width:22px;height:22px;object-fit:contain" loading="lazy" decoding="async" width="40" height="40">
+        <div style="line-height:1.15"><div style="font-weight:800;font-size:14px;color:#0B1220">Preferred</div><div style="font-size:11px;color:#7C8696">Claude Partner Network</div></div>
+      </div>
+      <div style="flex:1;min-width:260px">
+        <div class="eyebrow" style="margin-bottom:8px">Claude Partner Network · Preferred</div>
+        <div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.02em;color:#0B1220;margin-bottom:6px">Anthropic’s sole SME-focused AI training partner in Australia.</div>
+        <div style="font-size:14px;line-height:1.5;color:#5A6473"><span style="color:#1BABE5;font-weight:600">If Claude trusts us, so should you.</span> Hand-picked by Anthropic to deliver Claude to small &amp; medium business.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="sec" style="padding-bottom:24px">
+    <span class="eyebrow">// AI Intermediate</span>
+    <h1 class="ai-h1">Learn to use AI <span>like a pro,</span> in a fraction of <span>the time.</span></h1>
+    <p class="ai-lede">A self-paced program that takes you from your first message to Claude doing real jobs on a schedule without you. Taught on your own tasks, for people who don’t have time to spare.</p>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section class="sec" style="padding-top:24px" id="pricing">
+    <div class="glass pp-feat pp-price2">
+      <div>
+        <div class="pp-lab">Program fee</div>
+        <div class="pp-amt"><span>$500</span></div>
+        <div class="pp-per">per person · once-off · ex GST</div>
+        <ul class="pp-list">
+          <li>All 6 modules &amp; platform access</li>
+          <li>Hands-on lessons, taught on your own tasks</li>
+          <li>Learning Academy access</li>
+        </ul>
+      </div>
+      <div class="pp-and">+</div>
+      <div>
+        <div class="pp-lab">Membership</div>
+        <div class="pp-amt"><span>$100</span><small>/ mo</small></div>
+        <div class="pp-per">per person · ex GST · support &amp; community</div>
+        <ul class="pp-list">
+          <li>1 hour of one-on-one support every month</li>
+          <li>Ongoing Learning Academy access</li>
+          <li>Community: masterclasses, podcasts, a newsletter and a peer network</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ai-tools"><b>Taught in</b><span>Claude</span><span>Cowork</span><span>Claude in Chrome</span><span>Excel, Word &amp; PowerPoint</span><em>The full journey, without the long runway</em></div>
+  </section>
+
+  <!-- ===== WHAT YOU GET ===== -->
+  <section class="sec">
+    <span class="eyebrow">What you get</span>
+    <h2 class="ai-h2">Not another course you never get&nbsp;to.</h2>
+    <p class="ai-sub">You take a job you do by hand and teach AI to do it. Those jobs don’t come&nbsp;back.</p>
+    <div class="pp-4">
+      <div class="glass" style="padding:26px 26px 28px"><h3 style="font-size:19px;font-weight:800;margin:0 0 8px;letter-spacing:-0.02em;color:#0B1220">Built for people short on time</h3><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">Six short, self-paced modules. Do one when you have a spare hour.</p></div>
+      <div class="glass" style="padding:26px 26px 28px"><h3 style="font-size:19px;font-weight:800;margin:0 0 8px;letter-spacing:-0.02em;color:#0B1220">Straight to what&rsquo;s useful</h3><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">From your first message to jobs running on a schedule. You build each thing once, so you cover the ground fast.</p></div>
+      <div class="glass" style="padding:26px 26px 28px"><h3 style="font-size:19px;font-weight:800;margin:0 0 8px;letter-spacing:-0.02em;color:#0B1220">Taught on your real work</h3><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">Every lesson uses the tasks you already do, so what you build is in use the same day.</p></div>
+      <div class="glass" style="padding:26px 26px 28px"><h3 style="font-size:19px;font-weight:800;margin:0 0 8px;letter-spacing:-0.02em;color:#0B1220">Help whenever you need it</h3><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">Add a membership for the community, and one-on-one support when you get stuck.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== JOURNEY ===== -->
+  <section class="sec">
+    <span class="eyebrow">The journey</span>
+    <h2 class="ai-h2">Three steps to getting AI working for&nbsp;you.</h2>
+    <div class="pp-3" style="margin-top:30px">
+      <div class="glass" style="padding:26px"><div class="eyebrow">Step 1</div><h3 style="font-size:22px;font-weight:800;margin:12px 0 2px;letter-spacing:-0.02em;color:#0B1220">Get started</h3><div style="font-size:14px;font-weight:600;color:#1BABE5;margin-bottom:14px">Modules 1&ndash;2</div><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">Find your way around Claude and set it up so it knows you. Then learn to get good answers, and fix the ones that aren&rsquo;t.</p></div>
+      <div class="glass" style="padding:26px"><div class="eyebrow">Step 2</div><h3 style="font-size:22px;font-weight:800;margin:12px 0 2px;letter-spacing:-0.02em;color:#0B1220">Plug it in</h3><div style="font-size:14px;font-weight:600;color:#1BABE5;margin-bottom:14px">Modules 3&ndash;4</div><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">Connect Claude to the tools you already use, build a workflow that does a real job, then turn it into a skill.</p></div>
+      <div class="glass" style="padding:26px"><div class="eyebrow">Step 3</div><h3 style="font-size:22px;font-weight:800;margin:12px 0 2px;letter-spacing:-0.02em;color:#0B1220">Hand it over</h3><div style="font-size:14px;font-weight:600;color:#1BABE5;margin-bottom:14px">Modules 5&ndash;6</div><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">Make pages, designs and charts, try other AI tools, then hand Claude whole jobs and put them on a schedule.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== MEMBERSHIP ===== -->
+  <section class="sec">
+    <span class="eyebrow">Your membership</span>
+    <h2 class="ai-h2">What your $100 a month gets&nbsp;you.</h2>
+    <p class="ai-sub">Support isn’t part of the program fee. It comes with your membership, along with everything in the community.</p>
+    <div class="pp-3">
+      <div class="glass pp-m"><div class="eyebrow">Monthly</div><h3>One-on-one support</h3><p>An hour with our AI specialists each month, for your questions and the trickier workflows.</p></div>
+      <div class="glass pp-m"><div class="eyebrow">Per tool</div><h3>Tool masterclasses</h3><p>Focused sessions on each new tool worth your time, built around real business use. Recorded and kept in the academy.</p></div>
+      <div class="glass pp-m"><div class="eyebrow">Weekly</div><h3>Business podcasts</h3><p>Short, practical episodes on how real businesses are putting AI to work.</p></div>
+      <div class="glass pp-m"><div class="eyebrow">Monthly</div><h3>The newsletter</h3><p>A round-up of what changed and what&rsquo;s worth your attention, in plain English.</p></div>
+      <div class="glass pp-m"><div class="eyebrow">Always on</div><h3>A peer network</h3><p>Other people from Australian businesses who use AI heavily in their own work. Compare notes and swap what works.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== WALK AWAY WITH ===== -->
+  <section class="sec">
+    <span class="eyebrow">What you build</span>
+    <h2 class="ai-h2">What you walk away&nbsp;with.</h2>
+    <p class="ai-sub">One of everything, built around the work you’re already doing.</p>
+    <div class="pp-guar">
+      <div class="glass pp-g"><b>1&times;</b><span>Claude set up to know you</span></div>
+      <div class="glass pp-g"><b>1&times;</b><span>Workspace for your repeat work</span></div>
+      <div class="glass pp-g"><b>1&times;</b><span>Workflow on your own tools</span></div>
+      <div class="glass pp-g"><b>1&times;</b><span>A Claude skill</span></div>
+      <div class="glass pp-g"><b>1&times;</b><span>Your own Cowork task</span></div>
+      <div class="glass pp-g"><b>&#10003;</b><span>The knowledge to do all of them by yourself</span></div>
+    </div>
+    <div class="glass pp-g pp-gm" style="margin-top:12px"><b>+</b><span>Plus the pages, designs, charts and documents you make along the way, and optional AI video, voice and images.</span></div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="sec">
+    <span class="eyebrow">FAQs</span>
+    <h2 class="ai-h2">The questions we hear&nbsp;most.</h2>
+    <div class="pp-faq" style="margin-top:30px">
+      <details class="aoa-faq"><summary>How is this different from AI Enablement?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>It&rsquo;s shorter, and focused on getting Claude working for you day to day. You build each thing once. AI Enablement builds each one three times over, then goes on to AI agents.</div></details>
+      <details class="aoa-faq"><summary>What do I need to take part?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>A paid Claude plan. The other AI tools in Module 5 are optional and paid for separately.</div></details>
+      <details class="aoa-faq"><summary>Can I cancel?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>Yes, you can cancel your membership any time. That ends your one&#8209;on&#8209;one support, community and ongoing academy access.</div></details>
+      <details class="aoa-faq"><summary>How do I book my one-on-one support?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>It comes with your membership. Book through the calendar link in your platform, in sessions of at least 1 hour.</div></details>
+      <details class="aoa-faq"><summary>Do unused support hours roll over?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>No. The hour is use-it-or-lose-it each month. If you need more, extra support is $300 per hour, ex GST.</div></details>
+      <details class="aoa-faq"><summary>Is the platform secure?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>Yes, all features and content are hosted securely.</div></details>
+      <details class="aoa-faq"><summary>How long can I use the Learning Academy?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>Your program includes 4 months from your start date. With a membership, access continues for as long as you&rsquo;re a member.</div></details>
+      <details class="aoa-faq"><summary>When do my entitlements begin?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></summary><div>From the day you start your course. If you&rsquo;ve added a membership, your community access starts straight away too.</div></details>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="sec" style="padding-bottom:16px">
+    <div class="glass" style="padding:44px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:rgba(11,18,32,0.98);border:1px solid rgba(11,18,32,0.4)">
+      <div>
+        <h2 style="font-size:clamp(24px,3vw,36px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;margin:0 0 8px;color:#fff">Ready to get started? Talk to&nbsp;us.</h2>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.04em;color:#8A93A1">(07) 5586 1400 &nbsp;|&nbsp; info@adongroup.com.au</div>
+      </div>
+      <a href="/ai-enquiry/" style="text-decoration:none;font-size:16px;font-weight:700;color:#0B1220;background:#56C5E8;padding:15px 28px;border-radius:14px;white-space:nowrap">Book a discovery call &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="border-top:1px solid rgba(11,18,32,0.08);background:#FBFBFA">
+    <div style="max-width:1200px;margin:0 auto;padding:56px 28px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px">
+      <div>
+        <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#0B1220;margin-bottom:14px">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px"><img src="/assets/design/adon-logo.png" alt="Ad On Group" style="width:32px;height:32px;object-fit:contain;display:block" width="320" height="320" loading="lazy" decoding="async"></span>
+          <span style="font-weight:800;font-size:18px;letter-spacing:-0.02em">Ad On Group</span>
+        </a>
+        <p style="font-size:14px;line-height:1.55;color:#5A6473;max-width:280px;margin:0">Australian-owned since 2008 &mdash; offshore staffing, AI training, digital marketing and on-hold&nbsp;messaging.</p>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;color:#1BABE5;text-transform:uppercase;margin-bottom:14px">Divisions</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:#3A434F">
+          <a href="/ad-on-workforce/" style="text-decoration:none;color:inherit">Ad On Workforce</a>
+          <a href="/ad-on-ai-division/" style="text-decoration:none;color:inherit">Ad On AI</a>
+          <a href="/ad-on-digital/" style="text-decoration:none;color:inherit">Ad On Digital</a>
+          <a href="/ad-on-hold/" style="text-decoration:none;color:inherit">Ad On Hold</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;color:#1BABE5;text-transform:uppercase;margin-bottom:14px">Company</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:#3A434F">
+          <a href="/" style="text-decoration:none;color:inherit">Ad On Group</a>
+          <a href="/about/" style="text-decoration:none;color:inherit">About</a>
+          <a href="/contact-us/" style="text-decoration:none;color:inherit">Contact</a>
+          <a href="https://adonmobile.chargebeeportal.com/portal/v2/login?forward=portal_main" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">Customer Portal</a>
+          <a href="/careers/" style="text-decoration:none;color:inherit">Careers</a>
+          <a href="/media/" style="text-decoration:none;color:inherit">Media</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;color:#1BABE5;text-transform:uppercase;margin-bottom:14px">Get in touch</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:#3A434F">
+          <a href="mailto:info@adongroup.com.au" style="text-decoration:none;color:inherit">info@adongroup.com.au</a>
+          <span>Australia-wide delivery</span>
+          <a href="https://www.facebook.com/adongroup1/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">Facebook</a>
+          <a href="https://www.linkedin.com/company/adongroup/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">LinkedIn</a>
+          <a href="https://www.instagram.com/adongroup/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;padding:22px 28px;border-top:1px solid rgba(11,18,32,0.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <span style="font-size:13px;color:#8A93A1">&copy; 2026 Ad On Group. All rights reserved.</span>
+      <div style="display:flex;gap:22px;font-size:13px;color:#8A93A1">
+        <a href="/privacy-policy/" style="text-decoration:none;color:inherit">Privacy Policy</a>
+        <a href="/terms-and-conditions/" style="text-decoration:none;color:inherit">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+<script id="aog-header-js">
+        (function(){
+          var btn = document.querySelector('.ch-toggle');
+          if(!btn) return;
+          var panel = document.getElementById(btn.getAttribute('aria-controls'));
+          if(!panel) return;
+
+          function setOpen(open){
+            panel.hidden = !open;
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+          }
+
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            setOpen(panel.hidden);
+          });
+
+          // Anywhere outside closes it. The panel stops its own clicks so a
+          // stray click inside does not shut it before a link is followed.
+          panel.addEventListener('click', function(e){ e.stopPropagation(); });
+          document.addEventListener('click', function(){ if(!panel.hidden) setOpen(false); });
+
+          document.addEventListener('keydown', function(e){
+            if(e.key === 'Escape' && !panel.hidden){ setOpen(false); btn.focus(); }
+          });
+        })();
+        </script></body>
+</html>
