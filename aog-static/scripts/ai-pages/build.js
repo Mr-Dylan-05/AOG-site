@@ -1,13 +1,16 @@
-// build.js — the AI Intermediate web pages, adapted straight from the brochures:
-//   public/ai-intermediate/index.html          (curriculum, from scripts/intermediate-curriculum)
-//   public/ai-intermediate-pricing/index.html  (pricing, from scripts/intermediate-pricing; noindex, sales-only)
+// build.js — the AI program web pages, adapted straight from the brochures:
+//   public/ai-intermediate/index.html          AI Intermediate curriculum (scripts/intermediate-curriculum)
+//   public/ai-intermediate-pricing/index.html  AI Intermediate pricing (scripts/intermediate-pricing)
+//   public/program-pricing/index.html          AI Enablement pricing (scripts/enablement-pricing)
+// The pricing pages are noindex and unlinked from the nav: they are shared on sales calls. They are kept
+// separate on purpose, so sales can choose which offer a client sees.
 //
 // The brochures are the source of truth. Their data arrays are read from the brochure build files, so
 // after editing a brochure, re-run this to bring the pages back in line:
-//   node scripts/intermediate-web/build.js   (from aog-static/)
+//   node scripts/ai-pages/build.js   (from aog-static/)
 //
-// Head, nav, partner strip and footer come from public/program-pricing/index.html, so the pages match
-// the rest of the AI section.
+// Head, nav, partner strip and footer come from public/program-pricing/index.html (minus the styles this
+// script adds), so the pages match the rest of the AI section.
 const fs = require("fs");
 const path = require("path");
 const root = path.join(__dirname, "..", "..");
@@ -19,13 +22,17 @@ const grab = (src, name) => {
   if (!m) throw new Error(`${name} not found`);
   return eval(m[1]);
 };
+const brochure = (dir) => {
+  const src = read(`scripts/${dir}/build.js`);
+  const o = {};
+  for (const k of ["upfront", "ongoing", "community", "why", "topics", "guarantee", "faqs"]) o[k] = grab(src, k);
+  return o;
+};
 const cur = read("scripts/intermediate-curriculum/build.js");
-const pri = read("scripts/intermediate-pricing/build.js");
 const MODS = grab(cur, "MODS"), STEPS = grab(cur, "STEPS"), BUILT = grab(cur, "BUILT");
-const upfront = grab(pri, "upfront"), ongoing = grab(pri, "ongoing"), community = grab(pri, "community");
-const why = grab(pri, "why"), topics = grab(pri, "topics"), guarantee = grab(pri, "guarantee"), faqs = grab(pri, "faqs");
+const INT = brochure("intermediate-pricing"), ENA = brochure("enablement-pricing");
 
-const tpl = read("public/program-pricing/index.html");
+const tpl = read("public/program-pricing/index.html").replace(/<style id="ai-pages">[\s\S]*?<\/style>\n/, "");
 const top = tpl.slice(0, tpl.indexOf("  <!-- ===== HERO ===== -->"));
 const bottom = tpl.slice(tpl.indexOf("  <!-- ===== FOOTER ===== -->"));
 
@@ -49,7 +56,7 @@ const cta = (title) => `
 
 `;
 
-const css = `<style>
+const css = `<style id="ai-pages">
   .ai-h2 { font-size:clamp(26px,3.4vw,42px); line-height:1.06; letter-spacing:-0.035em; font-weight:800; margin:14px 0 0; color:#0B1220; }
   .ai-sub { font-size:17px; line-height:1.6; color:#5A6473; margin:16px 0 30px; max-width:660px; }
   .ai-h1 { font-size:clamp(38px,6vw,68px); line-height:1.0; letter-spacing:-0.045em; font-weight:800; margin:16px 0 0; color:#0B1220; max-width:860px; }
@@ -96,6 +103,7 @@ const css = `<style>
   .ai-tools b { font-size:13px; color:#7C8696; font-weight:600; }
   .ai-tools span { font-size:13.5px; font-weight:600; color:#0B1220; background:rgba(255,255,255,0.7); border:1px solid rgba(11,18,32,0.08); border-radius:999px; padding:6px 13px; }
   .ai-tools em { flex-basis:100%; text-align:center; font-size:15px; color:#5A6473; margin-top:6px; }
+  .ai-tools a { flex-basis:100%; text-align:center; font-size:14px; font-weight:700; text-decoration:none; margin-top:4px; }
   @media (max-width: 860px){
     .ai-stats { grid-template-columns:1fr 1fr; }
     .ai-stats > :nth-child(1) { order:1; } .ai-stats > :nth-child(3) { order:2; } .ai-stats > :nth-child(4) { order:3; }
@@ -164,11 +172,11 @@ const curBody = `  <!-- ===== HERO ===== -->
 ${cta("We’ll walk you through it on a&nbsp;call.")}`;
 
 // ---------------------------------------------------------------- pricing
-const priBody = `  <!-- ===== HERO ===== -->
+const pricingBody = (d, c) => `  <!-- ===== HERO ===== -->
   <section class="sec" style="padding-bottom:24px">
-    <span class="eyebrow">// AI Intermediate</span>
-    <h1 class="ai-h1">Learn to use AI <span>like a pro,</span> in a fraction of <span>the time.</span></h1>
-    <p class="ai-lede">A self-paced program that takes you from your first message to Claude doing real jobs on a schedule without you. Taught on your own tasks, for people who don’t have time to spare.</p>
+    <span class="eyebrow">// ${c.name}</span>
+    <h1 class="ai-h1">${c.h1}</h1>
+    <p class="ai-lede">${c.lede}</p>
   </section>
 
   <!-- ===== PRICING ===== -->
@@ -176,61 +184,80 @@ const priBody = `  <!-- ===== HERO ===== -->
     <div class="glass pp-feat pp-price2">
       <div>
         <div class="pp-lab">Program fee</div>
-        <div class="pp-amt"><span>$500</span></div>
+        <div class="pp-amt"><span>${c.fee}</span></div>
         <div class="pp-per">per person · once-off · ex GST</div>
-        <ul class="pp-list">${upfront.map((t) => `
+        <ul class="pp-list">${d.upfront.map((t) => `
           <li>${t}</li>`).join("")}
         </ul>
       </div>
       <div class="pp-and">+</div>
       <div>
         <div class="pp-lab">Membership</div>
-        <div class="pp-amt"><span>$100</span><small>/ mo</small></div>
+        <div class="pp-amt"><span>${c.mo}</span><small>/ mo</small></div>
         <div class="pp-per">per person · ex GST · support &amp; community</div>
-        <ul class="pp-list">${ongoing.map((t) => `
+        <ul class="pp-list">${d.ongoing.map((t) => `
           <li>${t}</li>`).join("")}
         </ul>
       </div>
     </div>
-    <div class="ai-tools"><b>Taught in</b><span>Claude</span><span>Cowork</span><span>Claude in Chrome</span><span>Excel, Word &amp; PowerPoint</span><em>The full journey, without the long runway</em></div>
+    <div class="ai-tools"><b>${c.toolsLabel}</b>${c.tools.map((t) => `<span>${t}</span>`).join("")}<em>${c.tag}</em><a href="${c.curriculum}">See the full curriculum &rarr;</a></div>
   </section>
 
   <!-- ===== WHAT YOU GET ===== -->
-  <section class="sec">${h2("What you get", "Not another course you never get&nbsp;to.", "You take a job you do by hand and teach AI to do it. Those jobs don’t come&nbsp;back.")}
-    <div class="pp-4">${why.map(([t, d]) => `
-      <div class="glass" style="padding:26px 26px 28px"><h3 style="font-size:19px;font-weight:800;margin:0 0 8px;letter-spacing:-0.02em;color:#0B1220">${t}</h3><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">${d}</p></div>`).join("")}
+  <section class="sec">${h2("What you get", c.whyTitle, "You take a job you do by hand and teach AI to do it. Those jobs don’t come&nbsp;back.")}
+    <div class="pp-4">${d.why.map(([t, x]) => `
+      <div class="glass" style="padding:26px 26px 28px"><h3 style="font-size:19px;font-weight:800;margin:0 0 8px;letter-spacing:-0.02em;color:#0B1220">${t}</h3><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">${x}</p></div>`).join("")}
     </div>
   </section>
 
   <!-- ===== JOURNEY ===== -->
-  <section class="sec">${h2("The journey", "Three steps to getting AI working for&nbsp;you.")}
-    <div class="pp-3" style="margin-top:30px">${topics.map(([n, r, d], i) => `
-      <div class="glass" style="padding:26px"><div class="eyebrow">Step ${i + 1}</div><h3 style="font-size:22px;font-weight:800;margin:12px 0 2px;letter-spacing:-0.02em;color:#0B1220">${n}</h3><div style="font-size:14px;font-weight:600;color:#1BABE5;margin-bottom:14px">${r}</div><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">${d}</p></div>`).join("")}
+  <section class="sec">${h2("The journey", c.journeyTitle)}
+    <div class="pp-3" style="margin-top:30px">${d.topics.map(([n, r, x], i) => `
+      <div class="glass" style="padding:26px"><div class="eyebrow">Step ${i + 1}</div><h3 style="font-size:22px;font-weight:800;margin:12px 0 2px;letter-spacing:-0.02em;color:#0B1220">${n}</h3><div style="font-size:14px;font-weight:600;color:#1BABE5;margin-bottom:14px">${r}</div><p style="font-size:15px;line-height:1.6;color:#5A6473;margin:0">${x}</p></div>`).join("")}
     </div>
   </section>
 
   <!-- ===== MEMBERSHIP ===== -->
-  <section class="sec">${h2("Your membership", "What your $100 a month gets&nbsp;you.", "Support isn’t part of the program fee. It comes with your membership, along with everything in the community.")}
-    <div class="pp-3">${community.map(([tag, t, d]) => `
-      <div class="glass pp-m"><div class="eyebrow">${tag}</div><h3>${t}</h3><p>${d}</p></div>`).join("")}
+  <section class="sec">${h2("Your membership", `What your ${c.mo} a month gets&nbsp;you.`, "Support isn’t part of the program fee. It comes with your membership, along with everything in the community.")}
+    <div class="pp-3">${d.community.map(([tag, t, x]) => `
+      <div class="glass pp-m"><div class="eyebrow">${tag}</div><h3>${t}</h3><p>${x}</p></div>`).join("")}
     </div>
   </section>
 
   <!-- ===== WALK AWAY WITH ===== -->
-  <section class="sec">${h2("What you build", "What you walk away&nbsp;with.", "One of everything, built around the work you’re already doing.")}
-    <div class="pp-guar">${guarantee.map(([n, t]) => `
+  <section class="sec">${h2("What you build", "What you walk away&nbsp;with.", c.buildSub)}
+    <div class="pp-guar">${d.guarantee.map(([n, t]) => `
       <div class="glass pp-g"><b>${n || "&#10003;"}</b><span>${t}</span></div>`).join("")}
     </div>
-    <div class="glass pp-g pp-gm" style="margin-top:12px"><b>+</b><span>Plus the pages, designs, charts and documents you make along the way, and optional AI video, voice and images.</span></div>
+    <div class="glass pp-g pp-gm" style="margin-top:12px"><b>+</b><span>${c.more}</span></div>
   </section>
 
   <!-- ===== FAQ ===== -->
   <section class="sec">${h2("FAQs", "The questions we hear&nbsp;most.")}
-    <div class="pp-faq" style="margin-top:30px">${faqs.map(([q, a]) => `
+    <div class="pp-faq" style="margin-top:30px">${d.faqs.map(([q, a]) => `
       <details class="aoa-faq"><summary>${q}${PLUS}</summary><div>${a}</div></details>`).join("")}
     </div>
   </section>
 ${cta("Ready to get started? Talk to&nbsp;us.")}`;
+
+const intBody = pricingBody(INT, {
+  name: "AI Intermediate", fee: "$500", mo: "$100", curriculum: "/ai-intermediate/",
+  h1: "Learn to use AI <span>like a pro,</span> in a fraction of <span>the time.</span>",
+  lede: "A self-paced program that takes you from your first message to Claude doing real jobs on a schedule without you. Taught on your own tasks, for people who don’t have time to spare.",
+  toolsLabel: "Taught in", tools: ["Claude", "Cowork", "Claude in Chrome", "Excel, Word &amp; PowerPoint"], tag: "The full journey, without the long runway",
+  whyTitle: "Not another course you never get&nbsp;to.", journeyTitle: "Three steps to getting AI working for&nbsp;you.",
+  buildSub: "One of everything, built around the work you’re already doing.",
+  more: "Plus the pages, designs, charts and documents you make along the way, and optional AI video, voice and images.",
+});
+const enaBody = pricingBody(ENA, {
+  name: "AI Enablement", fee: "$2,500", mo: "$200", curriculum: "/programs/",
+  h1: "The complete <span>AI program,</span> from first prompt to <span>AI agents.</span>",
+  lede: "Our most comprehensive program. It takes you from using AI now and then to building skills, automations and AI agents that do real work for you. Taught on your own tasks.",
+  toolsLabel: "Works with", tools: ["Claude", "ChatGPT", "Gemini", "Copilot", "Grok", "and more"], tag: "Everything, all the way to AI agents",
+  whyTitle: "Not another workshop you forget by&nbsp;Friday.", journeyTitle: "Three topics, from the basics to AI&nbsp;agents.",
+  buildSub: "Three of most things, each built around the work you’re already doing.",
+  more: "Plus the knowledge to keep building them yourself, and every other skill you pick up along the way.",
+});
 
 const out = (dir, html) => {
   fs.mkdirSync(path.join(root, "public", dir), { recursive: true });
@@ -246,4 +273,9 @@ out("ai-intermediate-pricing", page(
   "AI Intermediate — Pricing | Ad On Group",
   "Pricing for AI Intermediate, the six-module Ad On AI training program.",
   "noindex, nofollow",
-  priBody));
+  intBody));
+out("program-pricing", page(
+  "AI Enablement — Pricing | Ad On Group",
+  "Pricing for AI Enablement, the most comprehensive Ad On AI training program.",
+  "noindex, nofollow",
+  enaBody));
