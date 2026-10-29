@@ -14,7 +14,7 @@ const A = "../../public/assets";
 const upfront = [
   "All 24 modules &amp; platform access",
   "Hands-on lessons, taught on your own tasks",
-  "Lifetime academy access*",
+  "Learning Academy access",
   "Progress reporting for managers",
 ];
 
@@ -22,6 +22,7 @@ const upfront = [
 const ongoing = [
   "2 hours of one-on-one support every month",
   "A monthly live webinar on what&rsquo;s new in AI",
+  "Ongoing Learning Academy access",
   "Community: masterclasses, podcasts, a newsletter and a peer network",
 ];
 
@@ -62,13 +63,12 @@ const guarantee = [
 
 const faqs = [
   ["How is this different from AI Intermediate?", "It&rsquo;s our complete program. AI Intermediate builds each thing once and stops at scheduled tasks. AI Enablement builds each one three times over, then goes on to AI agents."],
-  ["Can I join the community without finishing the course?", "No, the course needs to be completed first."],
-  ["Can I cancel?", "Yes, you can cancel your membership any time. That ends your support, community and academy access, and a re&#8209;joining fee applies if you come back later."],
-  ["Can I transfer my membership?", "No. It includes lifetime access to the Ad On AI Academy*, so it can&rsquo;t be transferred."],
+  ["Can I cancel?", "Yes, you can cancel your membership any time. That ends your one&#8209;on&#8209;one support, community and ongoing academy access."],
   ["How do I book my one-on-one support?", "It comes with your membership. Book through the calendar link in your platform, in sessions of at least 1 hour."],
   ["Do unused support hours roll over?", "No. The 2 hours are use-it-or-lose-it each month. If you need more, extra support is $300 per hour, ex GST."],
   ["Is the platform secure?", "Yes, all features and content are hosted securely."],
-  ["When do my entitlements begin?", "From the day you start your course."],
+  ["How long can I use the Learning Academy?", "Your program includes 4 months from your start date. With a membership, access continues for as long as you&rsquo;re a member."],
+  ["When do my entitlements begin?", "From the day you start your course. If you&rsquo;ve added a membership, your community access starts straight away too."],
 ];
 
 const tick = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#5db4f2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg>`;
@@ -152,13 +152,12 @@ const html = `<!doctype html>
   .faq h4{font-size:13px;font-weight:700;margin:0 0 3px;letter-spacing:-.005em}
   .faq p{font-size:11.5px;line-height:1.5;color:#9aa6b8;margin:0}
 
-  .cta{margin-top:11mm;padding:9mm 14mm 7mm;display:flex;align-items:center;justify-content:space-between;gap:8mm;
+  .cta{margin-top:11mm;padding:9mm 14mm 11mm;display:flex;align-items:center;justify-content:space-between;gap:8mm;
     background:linear-gradient(90deg,#0d1a2e,#0b1628);border-top:1px solid rgba(150,190,235,.14)}
   .cta h2{font-size:22px}
   .cta .c{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#8fc6f2;margin-top:6px}
   .btn{flex:none;background:#5db4f2;color:#06101e;border-radius:12px;padding:5mm 8mm;font-size:14px;font-weight:700;text-align:center;line-height:1.3}
   .btn small{display:block;font-size:12px;font-weight:600;opacity:.8}
-  .fine{margin:0;padding:0 14mm 7mm;background:#0c1729;font-size:9.5px;color:#7d8aa0}
 </style>
 </head>
 <body>
@@ -230,7 +229,7 @@ const html = `<!doctype html>
     <div class="guar">${guarantee.map(([n, t]) => `
       <div class="card"><b>${n}</b><span>${t}</span></div>`).join("")}
     </div>
-    <div class="card more"><b>&infin;</b><span>Plus the knowledge to keep building them yourself, and every other skill you pick up along the way.</span></div>
+    <div class="card more"><b>+</b><span>Plus the knowledge to keep building them yourself, and every other skill you pick up along the way.</span></div>
 
     <div class="rule"></div>
     <p class="eb">FAQs</p>
@@ -247,7 +246,6 @@ const html = `<!doctype html>
     </div>
     <div class="btn">Book a discovery call<small>07 5586 1400</small></div>
   </div>
-  <p class="fine">* Lifetime academy access continues for as long as you keep an active membership.</p>
 </div>
 </body>
 </html>`;
