@@ -283,6 +283,17 @@ function chatMessage(form, record, sheetUrl, failed) {
     });
   }
 
+  const blocked = Boolean(record.blocklist);
+  if (blocked) {
+    widgets.push({
+      decoratedText: {
+        topLabel: "Blocklist",
+        text: "This email or phone is on LEAD_BLOCKLIST, so it was not reported to Meta as a lead.",
+        wrapText: true,
+      },
+    });
+  }
+
   const sections = [{ widgets }];
   if (sheetUrl && !failed) {
     sections.push({
@@ -306,7 +317,7 @@ function chatMessage(form, record, sheetUrl, failed) {
     // say who and which form on its own.
     text: failed
       ? `${mention}\u26a0\ufe0f ${form} lead from ${who} could NOT be saved to the sheet`
-      : `${mention}New ${form} lead${suspect ? " (possible spam)" : ""}: ${who}`,
+      : `${mention}New ${form} lead${suspect ? " (possible spam)" : ""}${blocked ? " (blocklist, not counted)" : ""}: ${who}`,
     cardsV2: [{
       cardId: "lead",
       card: {
@@ -1157,6 +1168,47 @@ async function resolveBooking(record) {
   return "keep";
 }
 
+/* People whose leads are recorded but not reported to Meta. Kept in the code
+   so adding someone is a commit. The repo is public, so entries are one-way
+   SHA-256 fingerprints, never the email or number itself: blockKey() below
+   shows how each is made ("e:" + lowercased email, or "p:" + last nine
+   digits). The LEAD_BLOCKLIST environment variable can add plain entries
+   without a commit (needs a redeploy in Vercel). */
+const BLOCKED = new Set([
+  // 15 Oct 2026, repeated enquiries, never answers follow-ups (email)
+  "92ca7a5205dfc9e67cd3634071f6a70413984a8d0859840945a39503f9237aad",
+  // 30 Oct 2026 (email)
+  "a7d91df37c88c45c5dcb0c4dcde78194d8dc3e073c0cce3284e698d18dfeafa4",
+  // 30 Oct 2026 (email)
+  "09d3e4d728f3948e09a192a55497c5baeb47cf43f08239ac82dd800b0bdf18bd",
+]);
+
+function blockKey(kind, value) {
+  return crypto.createHash("sha256").update(`${kind}:${value}`).digest("hex");
+}
+
+/* Deliberately narrow, because a false match costs a real lead its Meta
+   report: an email must match exactly (ignoring case), and a phone must have
+   at least 8 digits and agree on the last nine, so 0412 345 678 and
+   +61 412 345 678 are the same number. Returns "email", "phone" or "". */
+function onBlocklist(record) {
+  const list = String(process.env.LEAD_BLOCKLIST || "")
+    .split(/[,\n]/).map((s) => s.trim().toLowerCase()).filter(Boolean);
+  if (!list.length && !BLOCKED.size) return "";
+  const email = String(record.email || "").trim().toLowerCase();
+  if (email && (list.includes(email) || BLOCKED.has(blockKey("e", email)))) return "email";
+  const tail = (v) => String(v || "").replace(/\D/g, "").slice(-9);
+  const phone = String(record.phone || "").replace(/\D/g, "");
+  if (phone.length >= 8) {
+    const mine = tail(phone);
+    if (BLOCKED.has(blockKey("p", mine))) return "phone";
+    if (list.some((e) => !e.includes("@") && e.replace(/\D/g, "").length >= 8 && tail(e) === mine)) {
+      return "phone";
+    }
+  }
+  return "";
+}
+
 module.exports = async (req, res) => {
   /*
    * A way to exercise the confirmation without putting a fake lead through the
@@ -1260,6 +1312,23 @@ module.exports = async (req, res) => {
     return res.status(400).json({ ok: false, error: "Nothing to record" });
   }
 
+  // People who keep booking with no intention of buying. They are recorded and
+  // announced like anyone else; the only difference is the response header,
+  // which tells the page not to report them to Meta as a Lead (see
+  // contact-form.js). Exact email or phone only, never names.
+  // Runs before the save, so it must never be able to cost the lead: any
+  // error here means "not blocked" and the lead is saved and counted as usual.
+  let blockedBy = "";
+  try {
+    blockedBy = onBlocklist(record);
+  } catch (err) {
+    console.error("[lead] blocklist check failed, treating as not blocked:", err.message);
+  }
+  if (blockedBy) {
+    record.blocklist = `On LEAD_BLOCKLIST (${blockedBy}), not reported to Meta`;
+    console.log(`[lead] on blocklist by ${blockedBy}; recorded, not counted`);
+  }
+
   const sheetId = process.env.LEADS_SHEET_ID;
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   if (!sheetId || !raw) {
@@ -1310,6 +1379,9 @@ module.exports = async (req, res) => {
     // holding back their email to guard against bots cost more than it saved.
     await sendAutoReply(creds, form, record);
 
+    // Set only for a blocklisted person. Everyone else gets exactly the
+    // response they always did, and the page counts them as before.
+    if (blockedBy) res.setHeader("X-Lead-Count", "0");
     return res.status(200).json({ ok: true });
   } catch (err) {
     // Logged in full so the lead survives even when the write does not, and

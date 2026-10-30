@@ -34,6 +34,22 @@
     quiz: { method: "trackCustom", name: "QuizComplete" },
   };
 
+  /* Someone on the server's LEAD_BLOCKLIST (people who book over and over with
+     no intention of buying). /api/lead answers them with "X-Lead-Count: 0",
+     and this browser then stops reporting Leads for them, this visit and
+     later ones, so repeat bookings stop teaching Meta to find more of them.
+     Fails open: no header, no storage or any error means "count it", so a
+     good lead is reported exactly as it always was. Shared with the booking
+     block at the end of this file through the same storage key. */
+  function leadBlocked() {
+    if (window.__aogLeadBlocked) return true;
+    try { return window.localStorage.getItem("aog_lead_blocked") === "1"; } catch (_) { return false; }
+  }
+  function markLeadBlocked() {
+    window.__aogLeadBlocked = true;
+    try { window.localStorage.setItem("aog_lead_blocked", "1"); } catch (_) { /* the in-page flag still holds */ }
+  }
+
   /* The pixel is only initialised on the production hostname, so anywhere else
      is a developer looking at the site. */
   function isDev() {
@@ -278,6 +294,10 @@
       })
         .then(function (res) {
           if (!res.ok) throw new Error("Bad response");
+          // Only ever "0" for someone on the blocklist; see leadBlocked().
+          try {
+            if (res.headers && res.headers.get("X-Lead-Count") === "0") markLeadBlocked();
+          } catch (_) { /* unreadable header: counted as normal */ }
           // Read before the reset. The panel is several lines of asynchrony
           // later, and by then every field is empty.
           var greetName = greetingName(form);
@@ -316,7 +336,10 @@
           // as absent rather than picking up something off Object.prototype.
           var pixel = Object.prototype.hasOwnProperty.call(PIXEL_EVENTS, formKey)
             ? PIXEL_EVENTS[formKey] : null;
-          if (!pixelReported && pixel && typeof window.fbq === "function") {
+          // A blocklisted person still gets the thank-you panel; only the Lead
+          // is left out. Anything else (the quiz's own event) is unaffected.
+          var skipLead = pixel && pixel.name === "Lead" && leadBlocked();
+          if (!pixelReported && pixel && !skipLead && typeof window.fbq === "function") {
             pixelReported = true;
             window.fbq(pixel.method, pixel.name, { content_name: formKey });
             // Remembered for the rest of the visit, so a booking made after
@@ -478,6 +501,12 @@
   var path = window.location.pathname.replace(/index\.html$/, "").replace(/\/*$/, "/");
   if (path !== "/ai-training/") return;
 
+  // Same flag and same fail-open rule as leadBlocked() in the form block above.
+  function leadBlocked() {
+    if (window.__aogLeadBlocked) return true;
+    try { return window.localStorage.getItem("aog_lead_blocked") === "1"; } catch (_) { return false; }
+  }
+
   function leadAlreadyReported() {
     if (window.__aogLeadReported) return true;
     try {
@@ -516,6 +545,14 @@
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: body.toString(),
         keepalive: true,
+      }).then(function (r) {
+        // A blocklisted booker. This booking's Lead has already gone (it does
+        // not wait on the server, so a good booking is never held up), but
+        // their next booking or enquiry from this browser will not report one.
+        if (r && r.headers && r.headers.get("X-Lead-Count") === "0") {
+          window.__aogLeadBlocked = true;
+          try { window.localStorage.setItem("aog_lead_blocked", "1"); } catch (_) { /* in-page flag holds */ }
+        }
       }).catch(function () {});
     } catch (_) { /* never in the way of the Lead below */ }
   }
@@ -525,6 +562,7 @@
     if (!e.data || e.data.event !== "calendly.event_scheduled") return;
     recordBooking(e.data.payload);
     if (leadAlreadyReported()) return;
+    if (leadBlocked()) return;
     if (typeof window.fbq !== "function") return;
     try {
       window.__aogLeadReported = true;
