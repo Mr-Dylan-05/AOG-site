@@ -32,6 +32,13 @@
  *   Easy Rate App                    — its page carries no price at all.
  *   Products                         — an index page, replaced by this one.
  *   Review Me                        — removed on request.
+ *   Website Showcase Ecommerce       — removed (Taryn). The video and animated
+ *                                      logo stay on Website Illuminate.
+ *
+ * ADDED, NOT FROM THE OLD SITE
+ *   AI SEO — new, so it has no old page to read. Its copy is Taryn's and sits
+ *   in AI_SEO below. "AI SEO" is her service title; AEO and GEO are for sales
+ *   decks, which is why the name on the site is not AEO.
  *
  * noindex, and linked from nowhere.
  *
@@ -49,6 +56,9 @@ const ALL = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "_data", "oldPages
 
 const SKIP = new Set(["products", "online-accelerator", "easy-rate-app", "review-me"]);
 const PAGES = ALL.filter((p) => !SKIP.has(p.slug));
+
+/** Packages on a page we still sell from, that are no longer offered. */
+const REMOVED_PACKAGES = new Set(["Website Showcase Ecommerce"]);
 
 const SHELL = fs.readFileSync(path.join(PUBLIC, "contact-us", "index.html"), "utf8");
 const headHtml = SHELL.slice(0, SHELL.indexOf("</head>"));
@@ -264,8 +274,34 @@ function model(page) {
 
   m.faqs = m.faqs.filter((f) => f.a.trim());
   m.quotes = m.quotes.filter((x) => x.text.trim());
-  m.products = m.products.filter((p) => p.price);
+  m.products = m.products.filter((p) => p.price && !REMOVED_PACKAGES.has(p.name));
   return m;
+}
+
+/** A product with no old page, in the shape model() returns. */
+const AI_SEO = {
+  slug: "ai-seo", title: "AI SEO", hero: null, prose: [], faqs: [], quotes: [],
+  intro: [
+    "AI SEO, also known as Generative Engine Optimisation (GEO), helps your business get found and recommended by tools like ChatGPT, Perplexity and Google AI Overviews.",
+    "There are a lot of terms floating around for this. We keep it simple: four real, tangible things we work on for your business.",
+  ],
+  products: [{
+    name: "AI SEO", paras: [], benefits: [], img: null,
+    features: [
+      "Website Audit: We test whether AI engines can actually read your website, see your business accurately, and find your key details—or if your site is currently invisible to them.",
+      "Monthly Blogs: Articles that answer complex questions in depth. When AI searches the web for proof that you know what you're talking about, these articles provide the evidence.",
+      "FAQs: A dedicated section built to give quick, perfect answers that AI tools can quote directly when people ask for recommendations.",
+      "Review Software: AI tools won't recommend a company unless the internet agrees it's trustworthy. We automate getting steady positive 5-star customer reviews so the AI has proof you deliver great service.",
+    ],
+    price: { amount: "$400", period: "per month, excluding GST", setup: "", term: "12 month minimum term, then month by month thereafter", addons: [], notes: [] },
+  }],
+};
+
+/** Every product, in the order they appear: AI SEO sits straight after SEO. */
+function buildModels() {
+  const ms = PAGES.map(model);
+  ms.splice(ms.findIndex((m) => m.slug === "finder-seo-package") + 1, 0, AI_SEO);
+  return ms;
 }
 
 // --------------------------------------------------------------- rendering
@@ -353,10 +389,10 @@ const write = (dir, html) => {
 // The parser and the card pieces are shared with build-digital-products.js,
 // which builds the public product pages from the same copy. Required from
 // there, this file writes nothing.
-module.exports = { PAGES, model, list, priceBox, esc, BLUE, INK, GREY };
+module.exports = { buildModels, list, priceBox, esc, BLUE, INK, GREY };
 if (require.main !== module) return;
 
-const MODELS = PAGES.map(model);
+const MODELS = buildModels();
 
 // --------------------------------------------------------------- subpages
 

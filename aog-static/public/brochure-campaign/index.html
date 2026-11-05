@@ -123,6 +123,7 @@
   details.dg-faq summary::-webkit-details-marker{display:none}
   details.dg-faq summary::after{content:"+";flex:none;color:#1BABE5;font-weight:700;font-size:20px;line-height:1}
   details.dg-faq[open] summary::after{content:"\2212"}
+  @media (min-width:961px){ .dg-grid > .dg-card:last-child:nth-child(3n+1){grid-column:2} }
   @media (max-width:960px){ .dg-grid{grid-template-columns:repeat(2,1fr)} }
   @media (max-width:820px){
     .dg-hero,.dg-pkg{grid-template-columns:1fr;gap:28px}
@@ -213,6 +214,7 @@
       <a class="dg-bar-label" href="/ad-on-digital/">Ad On Digital</a>
       <a class="dg-tab" href="/websites/">Websites</a>
       <a class="dg-tab" href="/finder-seo-package/">SEO</a>
+      <a class="dg-tab" href="/ai-seo/">AI SEO</a>
       <a class="dg-tab" href="/google-ads-management/">Google Ads</a>
       <a class="dg-tab" href="/facebook-packages/">Facebook &amp; Instagram</a>
       <a class="dg-tab" href="/brochure-campaign/" aria-current="page">Digital Brochures</a>
@@ -332,7 +334,7 @@
         <div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
           <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Up to 12 pages, content written for you</span></div>
           <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Hosting, security and updates included</span></div>
-          <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Ecommerce option for up to 30 products</span></div>
+          <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Optional motion graphic video and animated logo</span></div>
         </div>
         <span class="dg-more">Learn more <span aria-hidden="true">&rarr;</span></span>
       </a>
@@ -344,6 +346,17 @@
           <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Website audit and keyword plan</span></div>
           <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">On-page, off-page and local SEO</span></div>
           <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Easy-to-read monthly ranking reports</span></div>
+        </div>
+        <span class="dg-more">Learn more <span aria-hidden="true">&rarr;</span></span>
+      </a>
+      <a class="dg-card" href="/ai-seo/" style="background:rgba(255,255,255,0.62);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 16px 40px -26px rgba(11,18,32,0.22)">
+        <div style="width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#1BABE5,#5FCDF5);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px -8px rgba(27,171,229,0.6)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg></div>
+        <div style="font-size:19px;font-weight:800;letter-spacing:-0.02em;color:#0B1220;margin:18px 0 8px">AI SEO</div>
+        <p style="font-size:15px;line-height:1.6;color:#4A5462;margin:0">Help tools like ChatGPT, Perplexity and Google AI Overviews read your website, understand your business and trust what they find.</p>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+          <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Website audit for AI search</span></div>
+          <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Monthly blogs and a dedicated FAQ section</span></div>
+          <div style="display:flex;align-items:flex-start;gap:10px"><span style="flex:none;width:18px;height:18px;border-radius:5px;background:rgba(27,171,229,0.14);display:inline-flex;align-items:center;justify-content:center;margin-top:2px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1BABE5" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span style="font-size:14px;line-height:1.5;color:#1F2733">Review software to build trust</span></div>
         </div>
         <span class="dg-more">Learn more <span aria-hidden="true">&rarr;</span></span>
       </a>

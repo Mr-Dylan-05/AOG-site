@@ -12,7 +12,7 @@
  *
  * This writes three things, all from the same copy:
  *
- *   1. Six service boxes on /ad-on-digital/ ("Everything you need to get
+ *   1. Seven service boxes on /ad-on-digital/ ("Everything you need to get
  *      found"), each with a short summary and a Learn more link.
  *   2. A product menu bar under the header, on /ad-on-digital/ and on every
  *      product page, so the products are one click away and never hidden in a
@@ -32,6 +32,9 @@
  * disagree on a price. The box summaries, highlights and headings below are new
  * and short, written from that copy.
  *
+ * /ai-seo/ is new, so like /blog-writing/ it has its own title. Its package and
+ * intro are Taryn's copy, kept in build-digital-pricing.js with the rest.
+ *
  * NOT INCLUDED (Taryn): Domains, Video Ads (Video Flexi), Workforce.
  *
  * Idempotent: the /ad-on-digital/ blocks sit between markers and are replaced
@@ -42,7 +45,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { PAGES, model, list, priceBox, esc, BLUE, INK, GREY } = require("./build-digital-pricing.js");
+const { buildModels, list, priceBox, esc, BLUE, INK, GREY } = require("./build-digital-pricing.js");
 
 const ROOT = path.join(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
@@ -51,16 +54,16 @@ const SITE = "https://adongroup.com.au";
 
 const icon = (d) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
-/** The six products, in the order they appear everywhere. */
+/** The seven products, in the order they appear everywhere. */
 const PRODUCTS = [
   {
-    slug: "websites", url: "/websites/", name: "Websites",
+    slug: "websites", url: "/websites/", name: "Websites", showPackageName: true,
     title: "Websites | Ad On Group",
     description: "All our websites are not only written, designed and produced for you but they all come with an option for a motion graphics video.",
     icon: icon('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
     h1: 'Websites that <span style="color:#1BABE5">grow with you</span>.',
     summary: "Fully managed websites, written, designed and built for you, then kept up to date as your business changes.",
-    highlights: ["Up to 12 pages, content written for you", "Hosting, security and updates included", "Ecommerce option for up to 30 products"],
+    highlights: ["Up to 12 pages, content written for you", "Hosting, security and updates included", "Optional motion graphic video and animated logo"],
     why: 'So what makes our websites <span style="color:#1BABE5">different</span>?',
   },
   {
@@ -72,6 +75,16 @@ const PRODUCTS = [
     summary: "Monthly SEO that follows Google’s best practice, with regular content and a report that shows exactly where you rank.",
     highlights: ["Website audit and keyword plan", "On-page, off-page and local SEO", "Easy-to-read monthly ranking reports"],
     why: 'SEO that follows <span style="color:#1BABE5">Google&rsquo;s best practice</span>.',
+  },
+  {
+    slug: "ai-seo", url: "/ai-seo/", name: "AI SEO",
+    title: "AI SEO & AI Search Optimisation | Ad On Group",
+    description: "AI SEO for Australian businesses: a website audit, monthly blogs, FAQs and review software, to help tools like ChatGPT, Perplexity and Google AI Overviews find and trust your business.",
+    icon: icon('<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'),
+    h1: 'Get found in <span style="color:#1BABE5">AI search</span>.',
+    summary: "Help tools like ChatGPT, Perplexity and Google AI Overviews read your website, understand your business and trust what they find.",
+    highlights: ["Website audit for AI search", "Monthly blogs and a dedicated FAQ section", "Review software to build trust"],
+    why: 'Why AI SEO <span style="color:#1BABE5">matters</span>.',
   },
   {
     slug: "google-ads-management", url: "/google-ads-management/", name: "Google Ads",
@@ -122,9 +135,9 @@ const TYPOS = [
 ];
 const tidy = (s) => TYPOS.reduce((t, [a, b]) => t.replace(a, b), s);
 
-const models = new Map(PAGES.map((p) => [p.slug, model(p)]));
+const models = new Map(buildModels().map((m) => [m.slug, m]));
 for (const p of PRODUCTS) {
-  if (!models.has(p.slug)) throw new Error(`no old copy for ${p.slug}`);
+  if (!models.has(p.slug)) throw new Error(`no copy for ${p.slug}`);
 }
 
 // --------------------------------------------------------------- shared pieces
@@ -161,6 +174,7 @@ const STYLE = `<style id="dg-style">
   details.dg-faq summary::-webkit-details-marker{display:none}
   details.dg-faq summary::after{content:"+";flex:none;color:${BLUE};font-weight:700;font-size:20px;line-height:1}
   details.dg-faq[open] summary::after{content:"\\2212"}
+  @media (min-width:961px){ .dg-grid > .dg-card:last-child:nth-child(3n+1){grid-column:2} }
   @media (max-width:960px){ .dg-grid{grid-template-columns:repeat(2,1fr)} }
   @media (max-width:820px){
     .dg-hero,.dg-pkg{grid-template-columns:1fr;gap:28px}
@@ -218,7 +232,7 @@ hub = splice(hub, MENU_START, MENU_END, `${MENU_START}\n  ${STYLE}\n  ${menuBar(
 
 // First run: the boxes replace the row of plain service labels.
 hub = splice(hub, BOX_START, BOX_END, `${BOX_START}
-    <p style="font-size:16px;line-height:1.6;color:${GREY};margin:16px auto 0;max-width:640px;text-align:center">Six fully managed services that work together, so every part of your marketing pulls in the same&nbsp;direction.</p>
+    <p style="font-size:16px;line-height:1.6;color:${GREY};margin:16px auto 0;max-width:640px;text-align:center">Seven fully managed services that work together, so every part of your marketing pulls in the same&nbsp;direction.</p>
     <div style="margin:34px 0 0">
     ${cards(PRODUCTS)}
     </div>
@@ -342,7 +356,7 @@ function productPage(p) {
       ${h2(single ? `What&rsquo;s <span style="color:${BLUE}">included</span>.` : `Choose your <span style="color:${BLUE}">package</span>.`)}
       <p style="font-size:16px;line-height:1.6;color:#5A6473;margin:16px auto 0">All prices exclude GST. Every package has a 12 month minimum term, then month by&nbsp;month.</p>
     </div>
-    ${m.products.map((pr) => packageCard(pr, single)).join("")}
+    ${m.products.map((pr) => packageCard(pr, single && !p.showPackageName)).join("")}
   </section>
 
   ${m.faqs.length ? `<section data-reveal style="max-width:900px;margin:0 auto;padding:40px 28px 32px">
@@ -367,7 +381,7 @@ function productPage(p) {
   return m;
 }
 
-console.log("  /ad-on-digital/: menu bar + 6 service boxes");
+console.log("  /ad-on-digital/: menu bar + 7 service boxes");
 for (const p of PRODUCTS) {
   const m = productPage(p);
   console.log(`  ${p.url.padEnd(26)} ${String(m.products.length).padStart(2)} packages, ${String(m.faqs.length).padStart(2)} FAQs, from ${fromPrice(m)}`);
