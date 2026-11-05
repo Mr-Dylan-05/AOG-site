@@ -167,6 +167,8 @@ const STYLE = `<style id="dg-style">
   .dg-card:hover .dg-more{gap:10px}
   .dg-more{display:inline-flex;align-items:center;gap:6px;margin-top:auto;padding-top:20px;font-size:15px;font-weight:700;color:${BLUE};transition:gap .18s ease}
   .dg-hero{display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:center}
+  .dg-proof{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .dg-proof-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
   .dg-pkg{display:grid;grid-template-columns:1.3fr 0.7fr;gap:30px;align-items:start}
   .dg-cta{text-decoration:none;font-size:16px;font-weight:700;padding:15px 28px;border-radius:14px;display:inline-flex;align-items:center;gap:9px;transition:transform .22s ease, box-shadow .22s ease}
   .dg-cta:hover{transform:translateY(-2px)}
@@ -177,7 +179,7 @@ const STYLE = `<style id="dg-style">
   @media (min-width:961px){ .dg-grid > .dg-card:last-child:nth-child(3n+1){grid-column:2} }
   @media (max-width:960px){ .dg-grid{grid-template-columns:repeat(2,1fr)} }
   @media (max-width:820px){
-    .dg-hero,.dg-pkg{grid-template-columns:1fr;gap:28px}
+    .dg-hero,.dg-pkg,.dg-proof{grid-template-columns:1fr;gap:28px}
     .dg-pkg > div:last-child{order:-1}
   }
   @media (max-width:620px){ .dg-grid{grid-template-columns:1fr} .dg-bar-in{padding:10px 16px} }
@@ -199,7 +201,8 @@ const card = (p) => `<a class="dg-card" href="${p.url}" style="${glass}">
         <div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
           ${p.highlights.map((t) => `<div style="display:flex;align-items:flex-start;gap:10px">${tickSm}<span style="font-size:14px;line-height:1.5;color:#1F2733">${esc(t)}</span></div>`).join("\n          ")}
         </div>
-        <span class="dg-more">Learn more <span aria-hidden="true">&rarr;</span></span>
+        <div style="margin-top:auto;padding-top:18px;font-size:14px;color:${GREY}">From <strong style="font-size:18px;font-weight:800;letter-spacing:-0.02em;color:${INK}">${fromPrice(models.get(p.slug))}</strong> a month</div>
+        <span class="dg-more" style="margin-top:0;padding-top:10px">Learn more <span aria-hidden="true">&rarr;</span></span>
       </a>`;
 
 const cards = (items) => `<div class="dg-grid">
@@ -232,10 +235,11 @@ hub = splice(hub, MENU_START, MENU_END, `${MENU_START}\n  ${STYLE}\n  ${menuBar(
 
 // First run: the boxes replace the row of plain service labels.
 hub = splice(hub, BOX_START, BOX_END, `${BOX_START}
-    <p style="font-size:16px;line-height:1.6;color:${GREY};margin:16px auto 0;max-width:640px;text-align:center">Seven fully managed services that work together, so every part of your marketing pulls in the same&nbsp;direction.</p>
+    <p style="font-size:16px;line-height:1.6;color:${GREY};margin:16px auto 0;max-width:640px;text-align:center">Pick one service or combine them. Each one is fully managed for&nbsp;you.</p>
     <div style="margin:34px 0 0">
     ${cards(PRODUCTS)}
     </div>
+    <p style="font-size:14px;line-height:1.6;color:${GREY};margin:22px auto 0;max-width:640px;text-align:center">Prices exclude GST. Most packages have a once-off set-up fee, and every package has a 12 month minimum term, then month by&nbsp;month.</p>
     ${BOX_END}`, (h) => {
   const m = /<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:820px;margin:30px auto 0">[\s\S]*?<\/div>/.exec(h);
   return m && [m.index, m.index + m[0].length];
@@ -311,8 +315,8 @@ function productPage(p) {
   const others = PRODUCTS.filter((o) => o !== p);
 
   const cta = ctaSection
-    .replace(/Ready to get your business&nbsp;found\?/, `Talk to us about ${esc(p.name)}`)
-    .replace(/See our digital marketing services in detail and book a&nbsp;chat\./, "Tell us about your business and we&rsquo;ll recommend the right package. No hard sell, just a&nbsp;chat.");
+    .replace(/Let&rsquo;s talk about your&nbsp;marketing\./, `Talk to us about ${esc(p.name)}`)
+    .replace(/Tell us what you&rsquo;re working on and we&rsquo;ll tell you what we&rsquo;d do\. No hard sell, just a&nbsp;chat\./, "Tell us about your business and we&rsquo;ll recommend the right package. No hard sell, just a&nbsp;chat.");
 
   const body = `
   ${menuBar(p)}
@@ -367,7 +371,7 @@ function productPage(p) {
   </section>` : ""}
 
   <section data-reveal style="max-width:1180px;margin:0 auto;padding:40px 28px 32px">
-    <div style="text-align:center;max-width:720px;margin:0 auto 34px">${eyebrow("More from Ad On Digital")}${h2(`One team for your <span style="color:${BLUE}">whole funnel</span>.`)}</div>
+    <div style="text-align:center;max-width:720px;margin:0 auto 34px">${eyebrow("More from Ad On Digital")}${h2(`One team for <span style="color:${BLUE}">all of it</span>.`)}</div>
     ${cards(others)}
   </section>
 
