@@ -390,3 +390,408 @@ for (const p of PRODUCTS) {
   const m = productPage(p);
   console.log(`  ${p.url.padEnd(26)} ${String(m.products.length).padStart(2)} packages, ${String(m.faqs.length).padStart(2)} FAQs, from ${fromPrice(m)}`);
 }
+
+// --------------------------------------------------------------- growth plans
+
+/**
+ * /website-ai-visibility-plans/ — the Website & AI Visibility Growth Plans
+ * (Starter and Premium Growth). Every sentence of copy is the bundle
+ * document's own, extracted into digital-plans.json. What this adds is
+ * layout and a few labels: the hero illustration, the checklist counter, the
+ * price toggle, the comparison table and the FAQ group names.
+ *
+ * noindex and linked from nowhere while it is reviewed. To publish it, drop
+ * the robots line in plansHead() and add it to the menu and service boxes.
+ */
+const PLANS = require("./digital-plans.json");
+const PLANS_PAGE = {
+  url: "/website-ai-visibility-plans/",
+  title: "Website & AI Visibility Growth Plans | Ad On Digital",
+  description: "A professionally managed website with SEO and AEO foundations, from $400 + GST per month. Two plans from Ad On Digital: Starter and Premium Growth.",
+};
+
+/** "PREMIUM GROWTH" -> "Premium Growth": the document sets plan names in capitals. */
+const planName = (s) => String(s).toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+const money = (s) => (String(s).match(/\$[\d,]+/) || [""])[0];
+const noStop = (s) => String(s).replace(/\.$/, "");
+const pText = (t, extra = "") => `<p style="font-size:16.5px;line-height:1.7;color:#4A5462;margin:14px 0 0;${extra}">${esc(t)}</p>`;
+const mono = (t, color = "#8A93A1") => `<div class="vp-mono" style="color:${color}">${t}</div>`;
+const svg = (d, size = 22, stroke = "#fff") => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICON = {
+  monitor: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  pencil: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  spark: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>',
+  trend: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  people: '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3 3 0 0 1 0 5.8M21 20c0-2.6-1.6-4.8-4-5.6"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14 9l2 2"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+};
+const iconTile = (d, size = 46) => `<div style="flex:none;width:${size}px;height:${size}px;border-radius:14px;background:linear-gradient(135deg,#1BABE5,#5FCDF5);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px -8px rgba(27,171,229,0.6)">${svg(d)}</div>`;
+const numBadge = (n) => `<div style="flex:none;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1BABE5,#5FCDF5);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:#fff;box-shadow:0 10px 20px -8px rgba(27,171,229,0.6)">${String(n).padStart(2, "0")}</div>`;
+const yes = `<span class="vp-yes" aria-label="Included">${svg('<path d="M5 12l5 5 9-10"/>', 16, "#1BABE5")}</span>`;
+const no = `<span class="vp-no" aria-label="Not included">&ndash;</span>`;
+
+const PLANS_STYLE = `<style id="vp-style">
+  .vp-mono{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700}
+  .vp-hero{display:grid;grid-template-columns:1.02fr 0.98fr;gap:60px;align-items:center}
+  .vp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .vp-chips span{font-size:14px;font-weight:700;color:#1483B5;background:rgba(27,171,229,0.09);border:1px solid rgba(27,171,229,0.25);padding:7px 14px;border-radius:999px;opacity:0;animation:vpIn .5s ease forwards}
+  .vp-mock{position:relative;border-radius:22px;overflow:hidden;background:rgba(255,255,255,0.72);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 40px 80px -40px rgba(11,18,32,0.45),inset 0 1px 0 rgba(255,255,255,0.8)}
+  .vp-mock-bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid rgba(11,18,32,0.07);background:rgba(255,255,255,0.6)}
+  .vp-mock-bar i{width:10px;height:10px;border-radius:50%;background:#E3E7EE}
+  .vp-mock-bar span{margin-left:10px;flex:1;font-size:12.5px;color:#6B7482;background:rgba(11,18,32,0.05);border-radius:8px;padding:6px 12px}
+  .vp-mock-body{position:relative;padding:22px 22px 26px;min-height:330px}
+  .vp-sk{background:linear-gradient(90deg,#E8EDF4,#F2F5F9);border-radius:6px}
+  .vp-mock-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+  .vp-mock-tiles div{height:62px;border-radius:12px;background:linear-gradient(150deg,rgba(27,171,229,0.16),rgba(95,205,245,0.08));border:1px solid rgba(27,171,229,0.18)}
+  .vp-scan{position:absolute;left:0;right:0;top:0;height:70px;background:linear-gradient(180deg,rgba(27,171,229,0),rgba(27,171,229,0.16) 70%,rgba(27,171,229,0.5) 100%);border-bottom:2px solid rgba(27,171,229,0.7);animation:vpScan 4.2s ease-in-out infinite;pointer-events:none}
+  .vp-tag{position:absolute;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#0B1220;background:#fff;border:1px solid rgba(27,171,229,0.35);box-shadow:0 10px 24px -12px rgba(11,18,32,0.35);padding:6px 11px 6px 8px;border-radius:999px;opacity:0;transform:translateY(6px) scale(.96);animation:vpTag .45s ease forwards}
+  .vp-tag b{width:16px;height:16px;border-radius:50%;background:#1BABE5;display:inline-flex;align-items:center;justify-content:center}
+  .vp-mock-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-top:1px solid rgba(11,18,32,0.07);background:rgba(27,171,229,0.05);font-size:13.5px;color:#4A5462}
+  .vp-mock-foot strong{color:#0B1220}
+  .vp-float{position:absolute;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:0.08em;color:#fff;background:#0B1220;border-radius:12px;padding:9px 13px;box-shadow:0 18px 30px -14px rgba(11,18,32,0.6);animation:vpFloat 6s ease-in-out infinite}
+  .vp-both{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:30px}
+  .vp-plus{align-self:center;font-size:28px;font-weight:800;color:#1BABE5}
+  .vp-qgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px}
+  .vp-q{display:flex;align-items:flex-start;gap:14px;text-align:left;font:inherit;font-size:15.5px;line-height:1.45;font-weight:500;color:#0B1220;background:rgba(255,255,255,0.66);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 14px 34px -26px rgba(11,18,32,0.2);border-radius:14px;padding:16px 18px;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+  .vp-q:hover{transform:translateY(-2px)}
+  .vp-q .vp-box{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid rgba(11,18,32,0.22);display:inline-flex;align-items:center;justify-content:center;margin-top:1px;transition:all .18s ease}
+  .vp-q .vp-box svg{opacity:0;transition:opacity .15s ease}
+  .vp-q[aria-pressed="true"]{border-color:rgba(27,171,229,0.55);background:rgba(27,171,229,0.07)}
+  .vp-q[aria-pressed="true"] .vp-box{background:#1BABE5;border-color:#1BABE5}
+  .vp-q[aria-pressed="true"] .vp-box svg{opacity:1}
+  .vp-meter{height:8px;border-radius:999px;background:rgba(11,18,32,0.07);overflow:hidden;margin-top:12px}
+  .vp-meter i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#1BABE5,#5FCDF5);transition:width .35s ease}
+  .vp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative;margin-top:36px}
+  .vp-steps:before{content:"";position:absolute;left:12%;right:12%;top:32px;border-top:2px dashed rgba(27,171,229,0.35)}
+  .vp-step{position:relative;text-align:center;padding:0 10px}
+  .vp-step .vp-ring{width:66px;height:66px;margin:0 auto;border-radius:20px;background:linear-gradient(135deg,#1BABE5,#5FCDF5);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 30px -12px rgba(27,171,229,0.7),0 0 0 8px rgba(252,251,250,0.9)}
+  .vp-bento{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+  .vp-bento > div{border-radius:18px;padding:24px;transition:transform .22s ease,box-shadow .22s ease}
+  .vp-bento > div:hover{transform:translateY(-3px);box-shadow:0 26px 48px -26px rgba(11,18,32,0.32)}
+  .vp-bento .vp-wide{grid-column:span 2;background:linear-gradient(135deg,rgba(27,171,229,0.14),rgba(95,205,245,0.06)) ,rgba(255,255,255,0.62)}
+  .vp-toggle{display:inline-flex;padding:5px;border-radius:999px;background:rgba(11,18,32,0.06);margin-top:22px}
+  .vp-toggle button{font:inherit;font-size:14.5px;font-weight:700;color:#4A5462;background:transparent;border:0;border-radius:999px;padding:10px 18px;cursor:pointer;transition:all .2s ease}
+  .vp-toggle button[aria-pressed="true"]{background:#fff;color:#0B1220;box-shadow:0 6px 16px -8px rgba(11,18,32,0.4)}
+  .vp-plans{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;margin-top:30px}
+  .vp-card{border-radius:24px;padding:32px}
+  .vp-dark{position:relative;overflow:hidden;background:radial-gradient(120% 80% at 100% 0%,rgba(27,171,229,0.35),transparent 55%),radial-gradient(90% 60% at 0% 100%,rgba(45,212,191,0.16),transparent 60%),#0B1220;color:#fff;box-shadow:0 40px 80px -40px rgba(11,18,32,0.8)}
+  .vp-dark p,.vp-dark li{color:rgba(255,255,255,0.74)!important}
+  .vp-badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#0B1220;background:linear-gradient(90deg,#5FCDF5,#B9ECFF);padding:6px 12px;border-radius:999px}
+  .vp-price{font-size:46px;font-weight:800;letter-spacing:-0.045em;line-height:1;transition:opacity .2s ease}
+  .vp-compare{width:100%;border-collapse:separate;border-spacing:0;font-size:15px}
+  .vp-compare th,.vp-compare td{padding:13px 16px;border-bottom:1px solid rgba(11,18,32,0.07);text-align:left;vertical-align:middle}
+  .vp-compare th:not(:first-child),.vp-compare td:not(:first-child){text-align:center;width:150px}
+  .vp-compare thead th{position:sticky;top:0;background:rgba(252,251,250,0.96);font-size:15px;font-weight:800;color:#0B1220}
+  .vp-compare td:last-child{background:rgba(27,171,229,0.05)}
+  .vp-compare tr.vp-sec td{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700;padding-top:22px}
+  .vp-yes{display:inline-flex;width:26px;height:26px;border-radius:8px;background:rgba(27,171,229,0.14);align-items:center;justify-content:center}
+  .vp-no{color:#B4BBC6;font-weight:700}
+  .vp-own{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:center}
+  .vp-table{width:100%;border-collapse:collapse;font-size:15.5px}
+  .vp-table th,.vp-table td{text-align:left;padding:14px 12px;border-bottom:1px solid rgba(11,18,32,0.08)}
+  .vp-table th{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700}
+  .vp-faq{display:grid;grid-template-columns:repeat(2,1fr);gap:34px 26px;align-items:start}
+  .vp-terms h3{font-size:16px;font-weight:800;color:#0B1220;margin:24px 0 6px}
+  .vp-terms p,.vp-terms li{font-size:14.5px;line-height:1.65;color:#4A5462;margin:6px 0 0}
+  .vp-terms ul{margin:6px 0 0;padding-left:20px}
+  @keyframes vpIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes vpTag{to{opacity:1;transform:none}}
+  @keyframes vpScan{0%{transform:translateY(-70px)}55%{transform:translateY(300px)}100%{transform:translateY(300px);opacity:0}}
+  @keyframes vpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @media (prefers-reduced-motion:reduce){ .vp-scan{display:none} .vp-tag,.vp-chips span{animation:none;opacity:1;transform:none} .vp-float{animation:none} }
+  @media (max-width:1000px){ .vp-bento{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:900px){ .vp-hero,.vp-plans,.vp-faq{grid-template-columns:1fr} .vp-steps{grid-template-columns:1fr;gap:30px} .vp-steps:before{display:none} .vp-own{grid-template-columns:1fr;text-align:left} }
+  @media (max-width:700px){ .vp-qgrid,.vp-bento{grid-template-columns:1fr} .vp-bento .vp-wide{grid-column:auto} .vp-both{grid-template-columns:1fr} .vp-plus{justify-self:center} .vp-card{padding:24px} .vp-compare th,.vp-compare td{padding:11px 8px;font-size:14px} .vp-compare th:not(:first-child),.vp-compare td:not(:first-child){width:84px} .vp-float{display:none} }
+</style>`;
+
+function plansHead() {
+  return pageHead(PLANS_PAGE, PLANS_PAGE.title, PLANS_PAGE.description)
+    .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">')
+    + PLANS_STYLE + "\n";
+}
+
+/** The hero illustration: a website being read, tag by tag. */
+function heroMock() {
+  const tags = [
+    // [label, top in px, left as a share of the width], each beside what it names
+    ["Business name", 2, 30], ["Location", 64, 54], ["Structured data", 112, 34],
+    ["Services", 176, 6], ["Reviews", 234, 44], ["FAQs", 290, 60],
+  ];
+  const tick = `<b>${svg('<path d="M5 12l5 5 9-10"/>', 10)}</b>`;
+  return `<div style="position:relative">
+        <div class="vp-mock" aria-hidden="true">
+          <div class="vp-mock-bar"><i></i><i></i><i></i><span>yourbusiness.com.au</span></div>
+          <div class="vp-mock-body">
+            <div style="display:flex;justify-content:space-between;align-items:center"><div class="vp-sk" style="width:92px;height:20px;border-radius:7px;background:linear-gradient(135deg,#1BABE5,#5FCDF5)"></div><div style="display:flex;gap:10px"><div class="vp-sk" style="width:40px;height:9px"></div><div class="vp-sk" style="width:40px;height:9px"></div><div class="vp-sk" style="width:40px;height:9px"></div></div></div>
+            <div class="vp-sk" style="width:78%;height:22px;margin-top:30px"></div>
+            <div class="vp-sk" style="width:52%;height:22px;margin-top:10px"></div>
+            <div class="vp-sk" style="width:88%;height:9px;margin-top:18px"></div>
+            <div class="vp-sk" style="width:70%;height:9px;margin-top:8px"></div>
+            <div class="vp-mock-tiles"><div></div><div></div><div></div></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:20px"><span style="color:#F5A623;letter-spacing:2px;font-size:15px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><div class="vp-sk" style="width:120px;height:9px"></div></div>
+            <div class="vp-sk" style="width:94%;height:30px;margin-top:16px;border-radius:10px"></div>
+            <div class="vp-sk" style="width:94%;height:30px;margin-top:8px;border-radius:10px"></div>
+            <div class="vp-scan"></div>
+            ${tags.map(([t, top, left], i) => `<span class="vp-tag" style="top:${top}px;left:${left}%;animation-delay:${0.5 + i * 0.45}s">${tick}${t}</span>`).join("")}
+          </div>
+          <div class="vp-mock-foot"><span>Read by <strong>search engines</strong> and <strong>AI platforms</strong></span><span style="display:inline-flex;gap:6px"><span class="vp-badge" style="background:rgba(27,171,229,0.14);color:#1483B5">SEO</span><span class="vp-badge" style="background:rgba(27,171,229,0.14);color:#1483B5">AEO</span></span></div>
+        </div>
+        <div class="vp-float" style="top:-18px;right:24px">ChatGPT &middot; Claude &middot; Gemini</div>
+        <div class="vp-float" style="bottom:46px;left:-22px;animation-delay:-3s;background:#fff;color:#0B1220;border:1px solid rgba(11,18,32,0.08)">Google search</div>
+      </div>`;
+}
+
+function planCard(pl, dark) {
+  const label = (t) => mono(esc(t), dark ? "rgba(255,255,255,0.55)" : "#8A93A1");
+  const title = dark ? "#fff" : INK;
+  const extras = pl.extras ? `
+        <div style="margin-top:26px">${label(pl.listLabel)}</div>
+        <div style="display:flex;flex-direction:column;gap:18px;margin-top:16px">
+          ${pl.extras.map((x, i) => `<div style="display:flex;gap:14px;align-items:flex-start">${numBadge(i + 1)}<div style="min-width:0">
+            <div style="font-size:16px;font-weight:800;letter-spacing:-0.01em;color:${title}">${esc(x.title)}</div>
+            ${x.text.map((t) => `<p style="font-size:14.5px;line-height:1.6;margin:6px 0 0">${esc(t)}</p>`).join("")}
+            ${x.list ? `<ul style="margin:6px 0 0;padding-left:20px">${x.list.map((t) => `<li style="font-size:14.5px;line-height:1.6">${esc(t)}</li>`).join("")}</ul>` : ""}
+            ${x.after ? `<p style="font-size:13px;line-height:1.55;margin:6px 0 0;opacity:.85">${esc(x.after)}</p>` : ""}
+          </div></div>`).join("\n          ")}
+        </div>
+        <div style="margin-top:26px">${label(pl.alsoLabel)}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+          ${pl.also.map((t) => `<div style="display:flex;align-items:flex-start;gap:11px">${tickSm}<span style="font-size:15px;line-height:1.55;color:rgba(255,255,255,0.9)">${esc(t)}</span></div>`).join("")}
+        </div>` : `
+        <div style="margin-top:26px">${label(pl.listLabel)}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+          ${pl.items.map((t) => `<div style="display:flex;align-items:flex-start;gap:11px">${tickSm}<span style="font-size:15px;line-height:1.55;color:#1F2733">${esc(t)}</span></div>`).join("")}
+        </div>`;
+  return `<div class="vp-card ${dark ? "vp-dark" : ""}" style="${dark ? "" : glass}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">${mono(esc(planName(pl.name)), BLUE)}${dark ? `<span class="vp-badge">Everything in Starter, plus 8 more</span>` : ""}</div>
+        <h3 style="font-size:24px;line-height:1.2;letter-spacing:-0.025em;font-weight:800;color:${title};margin:12px 0 0">${esc(pl.tagline)}</h3>
+        <div style="margin-top:22px;padding:22px;border-radius:18px;${dark ? "background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)" : "background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22)"}">
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span class="vp-price" data-std="${money(pl.price)}" data-ex="${money(pl.existing)}" style="color:${dark ? "#5FCDF5" : BLUE}">${money(pl.price)}</span><span style="font-size:15px;color:${dark ? "rgba(255,255,255,0.7)" : GREY}">+ GST per month</span></div>
+          <div class="vp-price-note" data-std="${esc(`${money(pl.existing)} + GST per month for existing Ad On Group customers`)}" data-ex="${esc("Existing Ad On Group customer price")}" style="font-size:14.5px;line-height:1.55;font-weight:600;color:${title};margin-top:12px">${esc(`${money(pl.existing)} + GST per month for existing Ad On Group customers`)}</div>
+          <div style="font-size:14px;margin-top:6px;color:${dark ? "rgba(255,255,255,0.6)" : GREY}">${esc(pl.term)}</div>
+        </div>
+        ${pText(pl.desc, `margin-top:20px;${dark ? "color:rgba(255,255,255,0.8)" : ""}`)}
+        ${extras}
+        ${pText(pl.close, `margin-top:24px;font-size:15px;${dark ? "color:rgba(255,255,255,0.8)" : ""}`)}
+        <a class="dg-cta" href="/contact-us/" style="margin-top:24px;width:100%;justify-content:center;color:#fff;background:${dark ? BLUE : INK};${dark ? "box-shadow:0 14px 26px -10px rgba(27,171,229,0.7)" : ""}">Enquire about ${esc(planName(pl.name))} <span aria-hidden="true">&rarr;</span></a>
+      </div>`;
+}
+
+/** Starter's list and Premium Growth's additions, side by side. */
+function compareTable(starter, premium) {
+  const pages = (pl) => (pl.items || pl.also).find((t) => /website pages/i.test(t)).match(/Up to \d+/)[0];
+  const shared = starter.items.filter((t) => !/website pages/i.test(t));
+  const row = (label, a, b) => `<tr><td>${label}</td><td>${a}</td><td>${b}</td></tr>`;
+  return `<table class="vp-compare">
+        <thead><tr><th style="text-align:left"><span class="vp-mono" style="color:#8A93A1">Compare</span></th><th>${esc(planName(starter.name))}</th><th>${esc(planName(premium.name))}</th></tr></thead>
+        <tbody>
+          ${row("<strong>Monthly price</strong>", `<strong class="vp-price" data-std="${money(starter.price)}" data-ex="${money(starter.existing)}" style="font-size:18px;letter-spacing:-0.02em">${money(starter.price)}</strong>`, `<strong class="vp-price" data-std="${money(premium.price)}" data-ex="${money(premium.existing)}" style="font-size:18px;letter-spacing:-0.02em;color:${BLUE}">${money(premium.price)}</strong>`)}
+          ${row("Website pages", pages(starter), pages(premium))}
+          <tr class="vp-sec"><td colspan="3">Both plans</td></tr>
+          ${shared.map((t) => row(esc(noStop(t)), yes, yes)).join("\n          ")}
+          <tr class="vp-sec"><td colspan="3">Premium Growth adds</td></tr>
+          ${premium.extras.map((x) => row(esc(x.title), no, yes)).join("\n          ")}
+          ${row("Minimum commitment", esc(noStop(starter.term.replace(/^Minimum commitment:\s*/i, ""))), esc(noStop(premium.term.replace(/^Minimum commitment:\s*/i, ""))))}
+        </tbody>
+      </table>`;
+}
+
+/** The document's sixteen questions, in its order, under four headings. */
+const FAQ_GROUPS = [
+  ["AEO and AI search", [0, 1, 2, 9]],
+  ["Plans and your website", [3, 4, 5, 6, 14, 15]],
+  ["Reviews", [7, 8]],
+  ["Contract and ownership", [10, 11, 12, 13]],
+];
+
+const PLANS_SCRIPT = `<script>
+(function () {
+  // The checklist: tick what sounds familiar, the counter keeps score.
+  var qs = [].slice.call(document.querySelectorAll(".vp-q"));
+  var count = document.querySelector("[data-vp-count]"), bar = document.querySelector(".vp-meter i");
+  function score() {
+    var n = qs.filter(function (q) { return q.getAttribute("aria-pressed") === "true"; }).length;
+    if (count) count.textContent = n + " of " + qs.length;
+    if (bar) bar.style.width = (n / qs.length * 100) + "%";
+  }
+  qs.forEach(function (q) {
+    q.addEventListener("click", function () {
+      q.setAttribute("aria-pressed", q.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      score();
+    });
+  });
+  // The price toggle: standard or existing customer.
+  var btns = [].slice.call(document.querySelectorAll(".vp-toggle button"));
+  btns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var mode = b.getAttribute("data-mode");
+      btns.forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      [].forEach.call(document.querySelectorAll("[data-std][data-ex]"), function (el) {
+        el.textContent = el.getAttribute(mode === "ex" ? "data-ex" : "data-std");
+      });
+    });
+  });
+})();
+</script>`;
+
+function plansPage() {
+  const d = PLANS;
+  const [starter, premium] = d.plans.plans;
+  const card = (inner, extra = "") => `<div style="${glass};border-radius:18px;padding:24px;${extra}">${inner}</div>`;
+  const own = d.faqs.find((f) => /purchase ownership/i.test(f.q));
+  const includedIcons = [ICON.monitor, ICON.shield, ICON.pencil, ICON.search, ICON.spark, ICON.trend, ICON.people];
+  const pillarIcons = [ICON.search, ICON.star, ICON.trend];
+  const boxTick = svg('<path d="M5 12l5 5 9-10"/>', 14);
+
+  const cta = ctaSection
+    .replace(/Let&rsquo;s talk about your&nbsp;marketing\./, esc(d.cta.h))
+    .replace(/Tell us what you&rsquo;re working on and we&rsquo;ll tell you what we&rsquo;d do\. No hard sell, just a&nbsp;chat\./,
+      `${d.cta.text.map(esc).join(" ")}<br><br><strong style="color:${INK}">${esc(d.cta.lead)}</strong> ${esc(d.cta.contact)}`);
+
+  const body = `
+  ${menuBar({})}
+
+  <header id="top" style="max-width:1220px;margin:0 auto;padding:64px 28px 48px">
+    <div class="vp-hero">
+      <div>
+        ${eyebrow(esc(d.title))}
+        <h1 style="font-size:clamp(34px,5vw,62px);line-height:1.0;letter-spacing:-0.048em;font-weight:600;margin:18px 0 0;color:${INK}">${esc(d.h1).replace("do more than just exist", `<span style="color:${BLUE}">do more than just exist</span>`)}</h1>
+        <div class="vp-chips">${d.tagline.split(/(?<=\.)\s+/).map((t, i) => `<span style="animation-delay:${0.15 + i * 0.15}s">${esc(t.replace(/\.$/, ""))}</span>`).join("")}</div>
+        <p style="font-size:17px;line-height:1.65;color:#4A5462;margin:22px 0 0;max-width:540px">${esc(d.intro[0])}</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:30px">
+          <a class="dg-cta" href="#plans" style="color:#fff;background:${BLUE};box-shadow:0 14px 26px -10px rgba(27,171,229,0.6)">See the plans <span aria-hidden="true">&darr;</span></a>
+          <a class="dg-cta" href="/contact-us/" style="color:${INK};background:rgba(255,255,255,0.7);border:1px solid rgba(11,18,32,0.14)">Get in touch</a>
+          <span style="font-size:14px;color:${GREY}">From <strong style="color:${INK}">${money(starter.price)} + GST</strong> per month</span>
+        </div>
+      </div>
+      ${heroMock()}
+    </div>
+  </header>
+
+  <section data-reveal style="max-width:980px;margin:0 auto;padding:30px 28px 40px;text-align:center">
+    <p style="font-size:clamp(19px,2.2vw,24px);line-height:1.5;color:#4A5462;margin:0 auto;max-width:760px">${esc(d.intro[1])}</p>
+    <div class="vp-both">
+      ${card(`<div style="display:flex;align-items:center;gap:14px">${iconTile(ICON.search)}<div style="text-align:left"><div style="font-size:18px;font-weight:800;color:${INK}">Search engines</div><div style="font-size:14.5px;color:${GREY};margin-top:3px">Traditional Google searches</div></div></div>`)}
+      <div class="vp-plus" aria-hidden="true">+</div>
+      ${card(`<div style="display:flex;align-items:center;gap:14px">${iconTile(ICON.spark)}<div style="text-align:left"><div style="font-size:18px;font-weight:800;color:${INK}">AI platforms</div><div style="font-size:14.5px;color:${GREY};margin-top:3px">ChatGPT, Claude and Gemini</div></div></div>`)}
+    </div>
+    <h2 style="font-size:clamp(28px,3.6vw,46px);line-height:1.08;letter-spacing:-0.035em;font-weight:800;margin:34px 0 0;color:${INK}">${esc(d.intro[2]).replace("work for both", `<span style="color:${BLUE}">work for both</span>`)}</h2>
+    ${d.intro.slice(3).map((t) => pText(t, "max-width:700px;margin-left:auto;margin-right:auto")).join("")}
+  </section>
+
+  <section data-reveal style="max-width:1100px;margin:0 auto;padding:44px 28px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px">
+      <div style="max-width:640px">${eyebrow("The problem")}${h2(esc(d.problem.h))}${pText(d.problem.lead)}<div style="margin-top:10px">${mono("Tick any that apply", BLUE)}</div></div>
+      <div style="${glass};border-radius:16px;padding:16px 20px;min-width:220px">
+        ${mono("Sounds familiar")}
+        <div data-vp-count style="font-size:28px;font-weight:800;letter-spacing:-0.03em;color:${INK};margin-top:6px">0 of ${d.problem.items.length}</div>
+        <div class="vp-meter"><i></i></div>
+      </div>
+    </div>
+    <div class="vp-qgrid">
+      ${d.problem.items.map((t) => `<button type="button" class="vp-q" aria-pressed="false"><span class="vp-box">${boxTick}</span><span>${esc(t)}</span></button>`).join("\n      ")}
+    </div>
+    <div style="${glass};border-radius:20px;padding:26px 30px;margin-top:22px;border-left:4px solid ${BLUE}">
+      ${d.problem.close.map((t, i) => `<p style="margin:${i ? "8px" : "0"} 0 0;font-size:${i === 1 ? "20px" : "16.5px"};line-height:1.5;font-weight:${i === 1 ? 800 : 400};color:${i === 1 ? INK : "#4A5462"}">${esc(t)}</p>`).join("")}
+    </div>
+  </section>
+
+  <section data-reveal style="max-width:1180px;margin:0 auto;padding:44px 28px">
+    <div style="text-align:center;max-width:760px;margin:0 auto">${eyebrow("Our approach")}${h2(esc(d.better.h))}${d.better.intro.map((t) => pText(t)).join("")}</div>
+    <div class="vp-steps">
+      ${d.better.pillars.map((x, i) => `<div class="vp-step">
+        <div class="vp-ring">${svg(pillarIcons[i], 28)}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:${BLUE};margin-top:18px">0${i + 1}</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-0.025em;color:${INK};margin:6px 0 0">${esc(x.title)}</div>
+        ${x.text.map((t, j) => `<p style="font-size:15.5px;line-height:1.6;color:${j ? "#4A5462" : INK};font-weight:${j ? 400 : 600};margin:10px auto 0;max-width:330px">${esc(t)}</p>`).join("")}
+      </div>`).join("\n      ")}
+    </div>
+  </section>
+
+  <section data-reveal style="max-width:1180px;margin:0 auto;padding:44px 28px">
+    <div style="text-align:center;max-width:760px;margin:0 auto">${eyebrow("What&rsquo;s included")}${h2(esc(d.included.h))}${d.included.intro.map((t) => pText(t)).join("")}</div>
+    <div class="vp-bento">
+      ${d.included.items.map((x, i) => `<div class="${i === 0 ? "vp-wide" : ""}" style="${glass}">
+        ${iconTile(includedIcons[i], i === 0 ? 54 : 44)}
+        <div style="font-size:${i === 0 ? 22 : 17}px;font-weight:800;letter-spacing:-0.02em;color:${INK};margin:16px 0 0">${esc(x.title)}</div>
+        <p style="font-size:${i === 0 ? 16 : 14.5}px;line-height:1.6;color:#4A5462;margin:8px 0 0">${esc(x.text)}</p>
+      </div>`).join("\n      ")}
+    </div>
+  </section>
+
+  <section id="plans" data-reveal style="max-width:1140px;margin:0 auto;padding:52px 28px 20px;scroll-margin-top:90px">
+    <div style="text-align:center;max-width:760px;margin:0 auto">
+      ${eyebrow("Plans")}${h2(esc(d.plans.h))}${pText(d.plans.intro)}
+      <div class="vp-toggle" role="group" aria-label="Show prices for"><button type="button" data-mode="std" aria-pressed="true">Standard pricing</button><button type="button" data-mode="ex" aria-pressed="false">Existing Ad On Group customer</button></div>
+    </div>
+    <div class="vp-plans">
+      ${planCard(starter, false)}
+      ${planCard(premium, true)}
+    </div>
+  </section>
+
+  <section data-reveal style="max-width:900px;margin:0 auto;padding:40px 28px 20px">
+    <div style="text-align:center;margin:0 auto 26px">${eyebrow("Side by side")}${h2(`${esc(planName(starter.name))} or <span style="color:${BLUE}">${esc(planName(premium.name))}</span>?`)}</div>
+    <div style="${glass};border-radius:20px;padding:10px 14px;overflow-x:auto">${compareTable(starter, premium)}</div>
+  </section>
+
+  <section data-reveal style="max-width:1000px;margin:0 auto;padding:40px 28px 20px">
+    <div class="vp-dark vp-card vp-own">
+      <div style="width:64px;height:64px;border-radius:18px;background:rgba(95,205,245,0.16);border:1px solid rgba(95,205,245,0.35);display:flex;align-items:center;justify-content:center">${svg(ICON.key, 28, "#5FCDF5")}</div>
+      <div><div style="font-size:21px;font-weight:800;letter-spacing:-0.02em;color:#fff">${esc(own.q)}</div>${own.a.map((t) => `<p style="font-size:15px;line-height:1.6;margin:8px 0 0">${esc(t)}</p>`).join("")}</div>
+      <div style="text-align:right;white-space:nowrap"><div style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#5FCDF5;line-height:1">${money(own.a[0])}</div><div style="font-size:13.5px;color:rgba(255,255,255,0.65);margin-top:6px">+ GST, one-off</div></div>
+    </div>
+  </section>
+
+  <section data-reveal style="max-width:900px;margin:0 auto;padding:40px 28px 24px">
+    <div style="${glass};border-radius:20px;padding:30px">
+      ${eyebrow("Existing customers")}
+      <h2 style="font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-0.03em;font-weight:800;margin:14px 0 0;color:${INK}">${esc(d.existing.h)}</h2>
+      ${pText(d.existing.text)}
+      <table class="vp-table" style="margin-top:20px">
+        <thead><tr>${d.existing.table[0].map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+        <tbody>${d.existing.table.slice(1).map((r) => `<tr>${r.map((c, i) => `<td style="${i ? "" : `font-weight:700;color:${INK}`}${i === 2 ? `;color:${BLUE};font-weight:800` : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table>
+      ${d.existing.notes.map((t) => `<p style="font-size:14px;line-height:1.6;color:${GREY};margin:12px 0 0">${esc(t)}</p>`).join("")}
+    </div>
+  </section>
+
+  <section data-reveal style="max-width:1140px;margin:0 auto;padding:44px 28px 32px">
+    <div style="text-align:center;margin:0 auto 34px">${eyebrow("FAQs")}${h2(`Frequently asked <span style="color:${BLUE}">questions</span>.`)}</div>
+    <div class="vp-faq">
+      ${FAQ_GROUPS.map(([g, ids]) => `<div>
+        ${mono(esc(g), BLUE)}
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+          ${ids.map((n) => d.faqs[n]).map((f) => `<details class="dg-faq" style="${glass};border-radius:16px;padding:18px 22px"><summary style="font-size:16.5px;font-weight:700;letter-spacing:-0.015em;color:${INK};cursor:pointer">${esc(f.q)}</summary>${f.a.map((t) => `<p style="font-size:15px;line-height:1.65;color:#4A5462;margin:12px 0 0">${esc(t)}</p>`).join("")}</details>`).join("\n          ")}
+        </div>
+      </div>`).join("\n      ")}
+    </div>
+  </section>
+
+  <section data-reveal style="max-width:900px;margin:0 auto;padding:20px 28px 40px">
+    <details class="dg-faq vp-terms" style="background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.8);border-radius:18px;padding:22px 26px">
+      <summary style="font-size:17px;font-weight:700;color:${INK};cursor:pointer">${esc(d.terms.h)}: ${esc(d.terms.subtitle)}</summary>
+      ${d.terms.intro.map((t) => `<p>${esc(t)}</p>`).join("")}
+      ${d.terms.clauses.map((c) => `<h3>${esc(c.h)}</h3>${c.body.map((b) => Array.isArray(b) ? `<ul>${b.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : `<p>${esc(b)}</p>`).join("")}`).join("\n      ")}
+    </details>
+  </section>
+
+  ${cta}
+  ${PLANS_SCRIPT}
+`;
+
+  // Every one of the document's questions must land in a group, exactly once.
+  const placed = FAQ_GROUPS.flatMap(([, ids]) => ids).sort((a, b) => a - b);
+  if (placed.join() !== d.faqs.map((_, i) => i).join()) throw new Error("FAQ_GROUPS does not cover every question exactly once");
+
+  const html = plansHead() + bodyOpen + "\n" + body + "\n\n  " + footer;
+  const out = path.join(PUBLIC, PLANS_PAGE.url);
+  fs.mkdirSync(out, { recursive: true });
+  fs.writeFileSync(path.join(out, "index.html"), html);
+  console.log(`  ${PLANS_PAGE.url} (noindex) ${d.plans.plans.length} plans, ${d.faqs.length} FAQs, ${d.terms.clauses.length} terms clauses`);
+}
+
+plansPage();

@@ -1,0 +1,596 @@
+{
+ "source": "AD ON DIGITAL - Website AEO BUNDLE.docx",
+ "division": "AD ON DIGITAL",
+ "title": "WEBSITE & AI VISIBILITY GROWTH PLANS",
+ "h1": "Your website needs to do more than just exist.",
+ "tagline": "Be found. Build trust. Generate enquiries. Get noticed by AI.",
+ "intro": [
+  "Your website is often the first impression a potential customer has of your business. But is it actually helping you win more customers?",
+  "The way people search for businesses is changing. Traditional Google searches are now sharing the stage with AI-powered platforms such as ChatGPT, Claude and Gemini.",
+  "Your website needs to work for both.",
+  "Ad On Digital combines professional website design, ongoing website care, search optimisation and AI-focused content strategies to help your business build a stronger online presence.",
+  "Whether you need a professional website or want to improve your visibility across search engines and AI platforms, we have a package to help."
+ ],
+ "problem": {
+  "h": "Is your website working hard enough for your business?",
+  "lead": "You might recognise some of these problems:",
+  "items": [
+   "Your website looks old, outdated or unprofessional.",
+   "You're not getting enough enquiries through your website.",
+   "Your competitors appear ahead of you in Google searches.",
+   "Your business isn't being mentioned or recommended by AI platforms.",
+   "You're unsure whether your website is structured for the changing world of online search.",
+   "Your website content hasn't been updated in months or years.",
+   "You're not generating enough genuine online reviews.",
+   "You know your online presence needs attention, but don't have the time or expertise to manage it."
+  ],
+  "close": [
+   "The problem isn't necessarily that you don't have a website.",
+   "It's that your website may not be working hard enough for your business.",
+   "And as the way people search continues to change, businesses that don't adapt risk being left behind."
+  ]
+ },
+ "better": {
+  "h": "A better way to manage your online presence",
+  "intro": [
+   "Ad On Digital makes it easier to build, maintain and improve your website without having to manage multiple suppliers or try to work everything out yourself.",
+   "Our Website & AI Visibility Growth Plans bring together three important elements."
+  ],
+  "pillars": [
+   {
+    "title": "Get discovered",
+    "text": [
+     "We build strong website foundations and help improve your visibility through traditional search engine optimisation (SEO) and Answer Engine Optimisation (AEO).",
+     "The goal is to make your business easier for search engines and AI platforms to understand, interpret and discover."
+    ]
+   },
+   {
+    "title": "Build credibility",
+    "text": [
+     "Your website needs to give potential customers confidence in your business.",
+     "We help strengthen your online presence with professional website content, useful information, structured data, genuine customer review requests and business listings."
+    ]
+   },
+   {
+    "title": "Keep improving",
+    "text": [
+     "A website shouldn't be something you build and then forget about.",
+     "Our monthly plans provide ongoing website care, content improvements and, in our Premium Growth package, additional AEO and AI visibility activities designed to help your business adapt as online search evolves."
+    ]
+   }
+  ]
+ },
+ "included": {
+  "h": "What's included?",
+  "intro": [
+   "Both packages are designed to give you a professionally managed website, with ongoing support and maintenance.",
+   "Depending on the package you choose, you can also access additional services to help improve your visibility in traditional search and AI-powered platforms."
+  ],
+  "items": [
+   {
+    "title": "Website design and development",
+    "text": "A professional website designed to represent your business, communicate what you offer and make it easy for potential customers to contact you."
+   },
+   {
+    "title": "Website hosting and security",
+    "text": "We look after the hosting, security and technical maintenance of your website as part of your monthly package."
+   },
+   {
+    "title": "Ongoing website changes",
+    "text": "Need to update some wording, change a photo or make a routine adjustment? Your package includes up to one hour of routine website changes each month."
+   },
+   {
+    "title": "Search engine foundations",
+    "text": "We establish basic SEO foundations to help search engines understand your website and its content."
+   },
+   {
+    "title": "AI-friendly website foundations",
+    "text": "We structure website content and information to help AI platforms better understand your business, services and expertise."
+   },
+   {
+    "title": "Ongoing content and optimisation",
+    "text": "Our Premium Growth package includes monthly content and additional optimisation activities designed to strengthen your online presence."
+   },
+   {
+    "title": "Australian-based support",
+    "text": "You'll have a team to deal with, not just a website platform or automated support system. We believe people should always be able to speak with a person when they need help."
+   }
+  ]
+ },
+ "plans": {
+  "h": "Choose your Website & AI Visibility Growth Plan",
+  "intro": "We offer two straightforward monthly packages.",
+  "plans": [
+   {
+    "name": "STARTER",
+    "tagline": "A professional website, looked after for you.",
+    "price": "Standard price: $400 + GST per month",
+    "existing": "Existing Ad On Group customer price: $200 + GST per month",
+    "term": "Minimum commitment: Six months.",
+    "desc": "Ideal for businesses that need a professional website with the essential foundations in place, without the hassle of managing it themselves.",
+    "listLabel": "What's included?",
+    "items": [
+     "Professional website design and development.",
+     "Up to 10 website pages.",
+     "Mobile-friendly website design.",
+     "Website hosting.",
+     "Website security and maintenance.",
+     "Basic SEO foundations.",
+     "AEO-friendly website foundations.",
+     "Routine monthly website changes – up to one hour per month.",
+     "Ongoing technical support and website care."
+    ],
+    "close": "The Starter package gives you a professional online presence with the essential website services taken care of."
+   },
+   {
+    "name": "PREMIUM GROWTH",
+    "tagline": "More visibility. More content. More opportunities to be discovered.",
+    "price": "Standard price: $1,000 + GST per month",
+    "existing": "Existing Ad On Group customer price: $500 + GST per month",
+    "term": "Minimum commitment: Six months.",
+    "desc": "For businesses wanting to go further than simply having a website. Premium Growth adds ongoing SEO and AEO-focused activities, content development, review generation and AI visibility monitoring.",
+    "listLabel": "Everything in Starter, plus:",
+    "extras": [
+     {
+      "title": "Advanced AEO and AI search optimisation",
+      "text": [
+       "Additional website and content optimisation to help AI-powered platforms such as ChatGPT, Claude and Gemini better understand your business, services and expertise."
+      ]
+     },
+     {
+      "title": "Schema and structured data",
+      "text": [
+       "Implementation of relevant structured data to help search engines and AI systems interpret important information about your business."
+      ]
+     },
+     {
+      "title": "One AI-optimised blog article every month",
+      "text": [
+       "One useful, professionally prepared blog article each month, designed around relevant topics and questions your potential customers may be searching for."
+      ]
+     },
+     {
+      "title": "FAQ and answer optimisation",
+      "text": [
+       "Development and optimisation of frequently asked questions and clear answers to help address customer questions and improve the way your website communicates your expertise."
+      ]
+     },
+     {
+      "title": "Ad On Review Management Software",
+      "text": [
+       "Access to our review management software to help request genuine reviews from your customers and receive notifications when new reviews come in.",
+       "Includes a monthly allowance of either:"
+      ],
+      "list": [
+       "Up to 100 SMS review requests; or",
+       "Up to 1,000 email review requests."
+      ],
+      "after": "These are alternative monthly allowances, not combined allowances."
+     },
+     {
+      "title": "Online authority and business listings",
+      "text": [
+       "Activities to help strengthen your business information and online presence across relevant directories and business listing platforms."
+      ]
+     },
+     {
+      "title": "AI visibility monitoring and reporting",
+      "text": [
+       "Monitoring and reporting to help you understand how your business is progressing across selected AI search and discovery platforms."
+      ]
+     },
+     {
+      "title": "Competitor and content opportunity review",
+      "text": [
+       "Review of relevant competitor activity and content opportunities to identify areas where your online presence may be improved."
+      ]
+     }
+    ],
+    "alsoLabel": "Also included:",
+    "also": [
+     "Up to 20 website pages.",
+     "Website hosting, security and maintenance.",
+     "Basic website changes – up to one hour per month.",
+     "All Starter package inclusions."
+    ],
+    "close": "Premium Growth is designed for businesses that want to actively improve their online presence as search behaviour evolves."
+   }
+  ]
+ },
+ "existing": {
+  "h": "Existing Ad On Group customer pricing",
+  "text": "As an existing Ad On Group customer, you can access our Website & AI Visibility Growth Plans at a discounted monthly rate.",
+  "table": [
+   [
+    "Package",
+    "Standard monthly price",
+    "Existing customer price"
+   ],
+   [
+    "Starter",
+    "$400 + GST",
+    "$200 + GST"
+   ],
+   [
+    "Premium Growth",
+    "$1,000 + GST",
+    "$500 + GST"
+   ]
+  ],
+  "notes": [
+   "Your discounted existing customer price continues beyond the initial six-month minimum term, for as long as your subscription remains active.",
+   "All prices are in Australian dollars and exclude GST."
+  ]
+ },
+ "faqs": [
+  {
+   "q": "What is AEO and how is it different from SEO?",
+   "a": [
+    "SEO stands for Search Engine Optimisation. It involves improving your website so that it can be better understood and ranked by traditional search engines such as Google.",
+    "AEO stands for Answer Engine Optimisation. It focuses on structuring and improving your website content so that AI-powered platforms and answer engines can better understand your business and the information you provide.",
+    "Both are important as the way people search for information, products and services continues to evolve."
+   ]
+  },
+  {
+   "q": "Why does my business need AEO?",
+   "a": [
+    "People are increasingly using AI platforms such as ChatGPT, Claude and Gemini to ask questions, research services and compare businesses.",
+    "AEO helps make your website content clearer, more structured and easier for these platforms to interpret.",
+    "It is not a guarantee that an AI platform will mention or recommend your business, but it helps establish a stronger foundation for AI discovery."
+   ]
+  },
+  {
+   "q": "Will my business appear in ChatGPT, Claude or Gemini?",
+   "a": [
+    "No agency can guarantee that an AI platform will mention, recommend or refer customers to your business.",
+    "These platforms use their own systems and processes to select and present information.",
+    "Our services are designed to improve your website's structure, content and online information so that your business has a stronger foundation for discovery."
+   ]
+  },
+  {
+   "q": "What is the difference between Starter and Premium Growth?",
+   "a": [
+    "Starter provides a professionally designed and maintained website, with basic SEO and AEO-friendly foundations.",
+    "Premium Growth includes everything in Starter, plus ongoing AEO and AI search optimisation, one monthly blog article, review management software, structured data, online authority activities and AI visibility monitoring."
+   ]
+  },
+  {
+   "q": "How many pages are included?",
+   "a": [
+    "Starter includes up to 10 website pages.",
+    "Premium Growth includes up to 20 website pages.",
+    "Additional pages or significant changes to the agreed website scope may incur additional charges, which will be discussed and approved before work begins."
+   ]
+  },
+  {
+   "q": "Can I make changes to my website?",
+   "a": [
+    "Yes. Both packages include up to one hour of routine website changes per month.",
+    "This may include updating text, replacing images or making minor adjustments to existing pages.",
+    "Unused monthly change time does not roll over. Larger changes, new functionality, additional pages or redesign work may be quoted separately."
+   ]
+  },
+  {
+   "q": "Does Premium Growth include new blog articles?",
+   "a": [
+    "Yes. Premium Growth includes one AI-optimised blog article per month.",
+    "The content will be developed around relevant topics and questions that may be useful to your potential customers and your online visibility.",
+    "Unused monthly blog articles do not roll over."
+   ]
+  },
+  {
+   "q": "How does Ad On Review Management Software work?",
+   "a": [
+    "The software helps you request genuine reviews from your customers and receive notifications when new reviews are submitted.",
+    "You provide Ad On Digital with the relevant customer contact details, and review requests can be sent by SMS or email within your monthly allowance.",
+    "Your allowance is either 100 SMS sends or 1,000 email sends per month. These are alternative allowances, not combined.",
+    "Additional usage can be arranged at separately quoted rates, with your approval before any additional sends are made."
+   ]
+  },
+  {
+   "q": "Does Ad On Digital respond to negative reviews or customer complaints?",
+   "a": [
+    "No. Ad On Digital provides the review management software and notifications only.",
+    "If a customer leaves a negative review or raises a complaint, you are responsible for contacting that customer, responding to their concerns and resolving the matter directly.",
+    "We do not manage customer complaints or respond to negative reviews on your behalf."
+   ]
+  },
+  {
+   "q": "Do you guarantee Google rankings or AI recommendations?",
+   "a": [
+    "No. Search engine rankings and AI-generated responses are controlled by independent third-party platforms and can change without notice.",
+    "We cannot guarantee specific rankings, website traffic, leads, sales, AI mentions or recommendations.",
+    "Our services focus on improving your website, content and online foundations to support better visibility."
+   ]
+  },
+  {
+   "q": "Is there a minimum contract period?",
+   "a": [
+    "Yes. Both packages have an initial six-month minimum commitment.",
+    "After the initial six-month period, the subscription continues on a month-to-month basis unless cancelled in accordance with the Terms & Conditions."
+   ]
+  },
+  {
+   "q": "What happens after the initial six months?",
+   "a": [
+    "After the initial six-month commitment, your subscription continues month-to-month.",
+    "You can continue with your package at the applicable monthly price or provide 30 days' written notice to cancel.",
+    "Existing Ad On Group customers retain their discounted monthly pricing for as long as their subscription remains active."
+   ]
+  },
+  {
+   "q": "Can I purchase ownership of my website?",
+   "a": [
+    "Yes. After completing your initial six-month minimum commitment, you have the option to purchase ownership of your eligible website design and original content for a one-off fee of $2,500 + GST.",
+    "This is entirely optional. If you choose to continue with your monthly subscription, your website and included services remain covered under your selected package."
+   ]
+  },
+  {
+   "q": "What happens to my monthly services if I purchase my website?",
+   "a": [
+    "Purchasing your website transfers ownership of the eligible website design and original content to you. However, your monthly subscription services will come to an end unless separately agreed.",
+    "This means ongoing AEO and SEO optimisation, monthly blogs, Ad On Review Management Software, review notifications, AI visibility monitoring, hosting, maintenance and monthly website changes will no longer be included.",
+    "You would be responsible for arranging these services independently."
+   ]
+  },
+  {
+   "q": "Do I have to pay extra for hosting or website maintenance?",
+   "a": [
+    "No. Hosting, security and routine website maintenance are included in both monthly packages while your subscription remains active."
+   ]
+  },
+  {
+   "q": "Who do I contact if I need help?",
+   "a": [
+    "You'll have access to the Ad On Digital team for support with your website and included services. We believe in providing personal service and making it easy for customers to speak with someone when they need assistance."
+   ]
+  }
+ ],
+ "cta": {
+  "h": "Ready to improve your online presence?",
+  "text": [
+   "Your website should be more than an online brochure.",
+   "It should help people find your business, understand what you offer and feel confident about contacting you.",
+   "With Ad On Digital, you can have a professional website and an ongoing plan to help your business stay visible as online search evolves."
+  ],
+  "lead": "Choose your package and let's get started.",
+  "contact": "Contact Ad On Digital to discuss which plan is right for your business."
+ },
+ "terms": {
+  "h": "Terms & Conditions",
+  "subtitle": "Ad On Digital – Website & AI Visibility Growth Plans",
+  "intro": [
+   "These Terms & Conditions apply to the provision of website design, hosting, maintenance, SEO, AEO, content and related services supplied by Ad On Digital, a division of Ad On Group (referred to as \"Ad On Digital\", \"we\", \"us\" or \"our\").",
+   "The customer accepting these Terms & Conditions is referred to as \"you\" or \"the Customer\".",
+   "By signing the customer acceptance form or otherwise accepting the proposal, you agree to the following terms."
+  ],
+  "clauses": [
+   {
+    "h": "1. Agreement and commencement",
+    "body": [
+     "1.1 These Terms & Conditions, together with the accepted package selection and any agreed written scope, form the agreement between Ad On Digital and the Customer.",
+     "1.2 The agreement commences when the Customer accepts the proposal or signs the acceptance form and Ad On Digital confirms commencement.",
+     "1.3 The Customer agrees to provide the information, content, access and approvals reasonably required for Ad On Digital to deliver the services."
+    ]
+   },
+   {
+    "h": "2. Packages and inclusions",
+    "body": [
+     "2.1 The Customer will select either the Starter or Premium Growth package.",
+     "2.2 Starter includes a website of up to 10 pages.",
+     "2.3 Premium Growth includes a website of up to 20 pages.",
+     "2.4 The services included in each package are those described in the accepted proposal or package description.",
+     "2.5 Any services, functionality, pages or work outside the agreed package inclusions may be quoted separately.",
+     "2.6 Ad On Digital will obtain the Customer's approval before undertaking separately chargeable work."
+    ]
+   },
+   {
+    "h": "3. Website design and development",
+    "body": [
+     "3.1 Ad On Digital will design and develop the website in accordance with the agreed scope and information supplied by the Customer.",
+     "3.2 The Customer is responsible for providing accurate business information, logos, images, text, branding, contact details and other required materials unless otherwise agreed.",
+     "3.3 The Customer must review and approve website content and design before publication.",
+     "3.4 Delays in supplying information, content, access or approvals may affect delivery timeframes.",
+     "3.5 Significant changes to an approved design or scope may incur additional charges."
+    ]
+   },
+   {
+    "h": "4. Monthly website changes",
+    "body": [
+     "4.1 Both packages include up to one hour of routine website changes per month.",
+     "4.2 Routine changes may include minor text updates, image replacements and small adjustments to existing pages.",
+     "4.3 The monthly allowance does not include major redesigns, new functionality, substantial development work or additional pages outside the agreed scope.",
+     "4.4 Unused monthly change time does not accumulate or roll over.",
+     "4.5 Additional work will be quoted and approved before it is undertaken."
+    ]
+   },
+   {
+    "h": "5. Hosting, security and maintenance",
+    "body": [
+     "5.1 Website hosting, security and routine technical maintenance are included while the Customer's monthly subscription remains active.",
+     "5.2 Ad On Digital will take reasonable steps to maintain the website and address routine technical issues.",
+     "5.3 No website or hosting environment can be guaranteed to be completely secure or uninterrupted.",
+     "5.4 Ad On Digital is not responsible for outages, failures or disruptions caused by third-party hosting providers, software providers, domain registrars, internet services or other external systems beyond its reasonable control."
+    ]
+   },
+   {
+    "h": "6. SEO, AEO and search visibility",
+    "body": [
+     "6.1 The services may include SEO foundations, AEO-friendly website structures, content optimisation, structured data and other activities described in the selected package.",
+     "6.2 Search engines and AI platforms operate independently of Ad On Digital.",
+     "6.3 Ad On Digital does not guarantee search engine rankings, AI mentions, citations, recommendations, website traffic, leads, conversions or sales.",
+     "6.4 Search engine algorithms, AI platform systems, indexing processes and search results may change without notice.",
+     "6.5 The Customer acknowledges that SEO and AEO are ongoing activities and that results may take time and are influenced by factors outside Ad On Digital's control."
+    ]
+   },
+   {
+    "h": "7. Monthly blog content",
+    "body": [
+     "7.1 Premium Growth includes one blog article per month.",
+     "7.2 Blog content will be prepared around relevant topics, customer questions and opportunities that may support the Customer's website content and online visibility.",
+     "7.3 The Customer is responsible for reviewing supplied content and advising Ad On Digital of any factual inaccuracies or required changes.",
+     "7.4 Unused monthly blog articles do not roll over.",
+     "7.5 Additional articles or substantial content revisions outside the agreed allowance may incur additional charges."
+    ]
+   },
+   {
+    "h": "8. Ad On Review Management Software",
+    "body": [
+     "8.1 Premium Growth includes access to Ad On Review Management Software.",
+     "8.2 The software is designed to help the Customer request genuine reviews from customers and receive notifications when new reviews are submitted.",
+     "8.3 The Customer is responsible for supplying the customer contact details to be used for review requests.",
+     "8.4 The monthly allowance is either:",
+     [
+      "Up to 100 SMS sends; or",
+      "Up to 1,000 email sends."
+     ],
+     "These allowances are alternatives and cannot be combined.",
+     "8.5 Additional usage is not included. Any additional usage must be separately quoted and approved by the Customer before additional sends are made.",
+     "8.6 The Customer warrants that it has the necessary rights, permissions and lawful basis to provide customer contact details to Ad On Digital for the purpose of sending review requests.",
+     "8.7 The Customer is responsible for ensuring that all review requests and associated communications comply with applicable privacy, spam, marketing, consumer protection and other relevant laws and requirements, including any applicable consent, identification and unsubscribe obligations.",
+     "8.8 The software is intended to facilitate genuine customer feedback. The Customer must not use the software to create fake reviews, mislead customers, offer prohibited incentives or selectively suppress negative feedback.",
+     "8.9 Ad On Digital provides the software and notifications only. Ad On Digital does not manage, investigate or respond to negative reviews or customer complaints.",
+     "8.10 The Customer is solely responsible for contacting customers who raise complaints, responding to negative feedback and resolving customer concerns offline.",
+     "8.11 Ad On Digital is not responsible for the content, accuracy or publication decisions of third-party review platforms.",
+     "8.12 The availability and functionality of the software may depend on third-party systems and providers."
+    ]
+   },
+   {
+    "h": "9. AI visibility monitoring and reporting",
+    "body": [
+     "9.1 Premium Growth includes AI visibility monitoring and reporting as described in the package.",
+     "9.2 Reports are intended to provide an indication of visibility and opportunities across selected platforms and search environments.",
+     "9.3 AI-generated responses may vary depending on the platform, user, location, query and time of search.",
+     "9.4 Reports do not constitute a guarantee of future visibility, rankings, mentions or recommendations."
+    ]
+   },
+   {
+    "h": "10. Fees, payment and GST",
+    "body": [
+     "10.1 The Customer agrees to pay the monthly fee applicable to the selected package.",
+     "10.2 Standard monthly fees are:",
+     [
+      "Starter: $400 + GST per month.",
+      "Premium Growth: $1,000 + GST per month."
+     ],
+     "10.3 Approved existing Ad On Group customer pricing is:",
+     [
+      "Starter: $200 + GST per month.",
+      "Premium Growth: $500 + GST per month."
+     ],
+     "10.4 All prices are in Australian dollars and exclude GST unless expressly stated otherwise.",
+     "10.5 GST will be added to invoices where applicable.",
+     "10.6 Monthly fees are payable in advance in accordance with the invoice or agreed payment arrangement.",
+     "10.7 The Customer must ensure payments are made by the due date.",
+     "10.8 Ad On Digital may suspend services where invoices remain unpaid, subject to applicable law and any required notice."
+    ]
+   },
+   {
+    "h": "11. Minimum term, renewal and cancellation",
+    "body": [
+     "11.1 The initial minimum subscription term is six months from the agreed service commencement date.",
+     "11.2 The Customer agrees to pay the applicable monthly fees throughout the initial six-month minimum term.",
+     "11.3 After the initial minimum term, the subscription continues on a month-to-month basis unless cancelled in accordance with this agreement.",
+     "11.4 After the initial six-month period, either party may terminate the subscription by providing at least 30 days' written notice.",
+     "11.5 Where the Customer requests cancellation during the initial six-month minimum term, the parties will discuss the applicable contractual payment obligations and any reasonable arrangements for ending the services, subject to applicable law.",
+     "11.6 Any outstanding invoices and amounts properly payable remain due following cancellation.",
+     "11.7 On termination, the Customer's access to subscription services will cease, subject to any applicable transition or handover arrangements agreed in writing."
+    ]
+   },
+   {
+    "h": "12. Existing customer promotional pricing",
+    "body": [
+     "12.1 Discounted existing Ad On Group customer pricing is available only where confirmed by Ad On Digital.",
+     "12.2 The discounted monthly price continues beyond the initial six-month minimum term for as long as the subscription remains active.",
+     "12.3 If the subscription is cancelled or terminated, the discounted price does not create any ongoing entitlement to services.",
+     "12.4 If the Customer later re-engages Ad On Digital, any applicable pricing will be confirmed at that time."
+    ]
+   },
+   {
+    "h": "13. Optional website purchase",
+    "body": [
+     "13.1 After completing the initial six-month minimum subscription term, the Customer may elect to purchase ownership of the eligible website design and original content for a one-off fee of $2,500 + GST.",
+     "13.2 This purchase option is voluntary and is not a condition of the monthly subscription.",
+     "13.3 The purchase fee must be paid in full, and all outstanding amounts owing to Ad On Digital must be settled before the transfer takes effect.",
+     "13.4 The purchase applies to eligible bespoke website design and original content created specifically for the Customer.",
+     "13.5 The purchase does not include third-party software, plugins, themes, licences, proprietary systems, subscriptions, hosting services or other third-party materials that cannot be transferred or assigned.",
+     "13.6 Following the purchase, the Customer is responsible for arranging its own website hosting, maintenance, security, updates and ongoing optimisation unless separately agreed with Ad On Digital.",
+     "13.7 The purchase of website ownership brings the monthly subscription services to an end unless the parties agree otherwise in writing. This includes ongoing SEO, AEO, monthly blog content, Ad On Review Management Software, review notifications, AI visibility monitoring, hosting, security, maintenance and monthly website changes.",
+     "13.8 Any continued services must be separately agreed and may be subject to separate fees and terms."
+    ]
+   },
+   {
+    "h": "14. Customer responsibilities",
+    "body": [
+     "14.1 The Customer must provide accurate and complete information and materials required for the services.",
+     "14.2 The Customer must ensure it has the rights and permissions to provide all supplied content, images, logos, data and other materials.",
+     "14.3 The Customer is responsible for checking the accuracy of its website content, business information, claims, prices, products and services before publication.",
+     "14.4 The Customer must promptly review and approve work submitted for approval.",
+     "14.5 The Customer must provide reasonable access to relevant website systems, domain accounts and other platforms where required.",
+     "14.6 The Customer must not use the website or services for unlawful, misleading or prohibited purposes."
+    ]
+   },
+   {
+    "h": "15. Intellectual property",
+    "body": [
+     "15.1 The Customer retains ownership of materials it supplies to Ad On Digital, including its business name, logo, branding and original content.",
+     "15.2 Unless the website purchase option in clause 13 is exercised and paid for, ownership of bespoke website design and original content created by Ad On Digital remains with Ad On Digital, subject to any separate written agreement.",
+     "15.3 Third-party software, plugins, themes, stock images, fonts and other licensed materials remain subject to their respective third-party licence terms.",
+     "15.4 Ad On Digital retains ownership of its proprietary systems, processes, templates, tools, methods and pre-existing intellectual property.",
+     "15.5 The Customer must not copy, reproduce, resell or distribute Ad On Digital's proprietary systems, templates or materials without written permission."
+    ]
+   },
+   {
+    "h": "16. Third-party platforms and services",
+    "body": [
+     "16.1 The services may rely on third-party providers, including hosting companies, website platforms, search engines, AI platforms, review platforms, plugins and software services.",
+     "16.2 Ad On Digital does not control third-party platforms and is not responsible for changes to their services, pricing, policies, algorithms or availability.",
+     "16.3 Any third-party licence or subscription fees not expressly included in the package will be advised separately.",
+     "16.4 The Customer agrees to comply with the relevant terms and conditions of third-party providers."
+    ]
+   },
+   {
+    "h": "17. Privacy and data protection",
+    "body": [
+     "17.1 Each party must comply with applicable privacy and data protection laws in relation to personal information handled under this agreement.",
+     "17.2 The Customer is responsible for ensuring it has the necessary permissions and lawful basis to provide personal information to Ad On Digital for the agreed services.",
+     "17.3 Ad On Digital will use personal information provided by the Customer only as reasonably necessary to deliver the agreed services and in accordance with applicable privacy obligations.",
+     "17.4 The Customer must not provide personal information that it is not authorised to disclose.",
+     "17.5 Where customer contact details are supplied for review requests, the Customer remains responsible for ensuring that the relevant contact details may lawfully be used for that purpose."
+    ]
+   },
+   {
+    "h": "18. Liability and Australian Consumer Law",
+    "body": [
+     "18.1 Nothing in these Terms & Conditions excludes, restricts or modifies any consumer guarantee, right or remedy that cannot lawfully be excluded, restricted or modified under the Australian Consumer Law or other applicable legislation.",
+     "18.2 To the extent permitted by law, Ad On Digital is not liable for indirect or consequential loss, loss of profits, loss of business opportunity, loss of anticipated savings or loss arising from third-party platform changes or interruptions.",
+     "18.3 To the extent permitted by law, Ad On Digital's liability for a failure to comply with a non-excludable guarantee is limited to the remedies available under applicable law.",
+     "18.4 Ad On Digital will take reasonable care in providing the services but does not warrant that the website, hosting environment, search rankings or AI platform results will be uninterrupted, error-free or achieve a particular commercial outcome."
+    ]
+   },
+   {
+    "h": "19. Changes to services and pricing",
+    "body": [
+     "19.1 Ad On Digital may make reasonable changes to the way services are delivered where required by changes in technology, third-party platforms or service providers.",
+     "19.2 Any material change to package inclusions or pricing will be communicated to the Customer with at least 30 days' notice, where reasonably practicable.",
+     "19.3 Any change to the Customer's agreed package price will be subject to applicable law and the Customer's rights under this agreement."
+    ]
+   },
+   {
+    "h": "20. Governing law",
+    "body": [
+     "20.1 This agreement is governed by the laws of Queensland, Australia.",
+     "20.2 The parties submit to the non-exclusive jurisdiction of the courts of Queensland and any courts competent to hear appeals from those courts."
+    ]
+   },
+   {
+    "h": "21. Entire agreement",
+    "body": [
+     "21.1 These Terms & Conditions, together with the accepted proposal and any agreed written variations, form the entire agreement between the parties regarding the services.",
+     "21.2 Any variation must be agreed in writing by both parties.",
+     "21.3 If any provision is found to be invalid or unenforceable, the remaining provisions will continue to apply to the extent permitted by law."
+    ]
+   }
+  ]
+ }
+}
