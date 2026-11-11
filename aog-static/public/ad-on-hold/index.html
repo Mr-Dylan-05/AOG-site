@@ -216,6 +216,74 @@
     <div style="background:rgba(255,255,255,0.6);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 24px 60px -34px rgba(11,18,32,0.24);border-radius:22px;padding:40px 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px"><div style="text-align:center;padding:10px"><div style="font-size:clamp(26px,3.2vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1"><span style="color:#1BABE5">Captive</span></div><div style="font-size:14px;color:#4A5462;margin-top:8px">audience on every call</div></div><div style="text-align:center;padding:10px"><div style="font-size:clamp(26px,3.2vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1"><span style="color:#1BABE5">Since 2008</span></div><div style="font-size:14px;color:#4A5462;margin-top:8px">trusted by thousands</div></div><div style="text-align:center;padding:10px"><div style="font-size:clamp(26px,3.2vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1"><span style="color:#1BABE5">Fully produced</span></div><div style="font-size:14px;color:#4A5462;margin-top:8px">scripting &amp; voiceover</div></div></div>
   </section>
 
+  <section id="packages" data-reveal style="max-width:1180px;margin:0 auto;padding:28px 28px 56px">
+    <style>
+      #packages .pk-grid{display:grid;grid-template-columns:1.12fr 1fr 1fr;gap:20px;align-items:stretch;margin-top:40px}
+      #packages .pk-card{position:relative;display:flex;flex-direction:column;background:rgba(255,255,255,0.62);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 16px 40px -26px rgba(11,18,32,0.22);border-radius:22px;padding:30px 28px 26px;color:#0B1220}
+      #packages .pk-dark{background:radial-gradient(120% 90% at 100% 0%,rgba(27,171,229,0.28),transparent 55%),#0B1220;border-color:rgba(255,255,255,0.08);box-shadow:0 30px 64px -30px rgba(11,18,32,0.6);color:#fff}
+      #packages .pk-tag{align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#1483B5;background:rgba(27,171,229,0.1);border:1px solid rgba(27,171,229,0.28);border-radius:999px;padding:6px 12px}
+      #packages .pk-dark .pk-tag{color:#7FD6F7;background:rgba(27,171,229,0.16);border-color:rgba(127,214,247,0.35)}
+      #packages .pk-name{font-size:26px;font-weight:800;letter-spacing:-0.025em;line-height:1.1;margin:18px 0 0}
+      #packages .pk-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;margin-top:14px}
+      #packages .pk-amt{font-size:clamp(40px,4.4vw,52px);font-weight:800;letter-spacing:-0.045em;line-height:1}
+      #packages .pk-dark .pk-amt{color:#fff}
+      #packages .pk-card:not(.pk-dark) .pk-amt{color:#1BABE5}
+      #packages .pk-per{font-size:14.5px;font-weight:600;color:#5A6473}
+      #packages .pk-dark .pk-per{color:rgba(255,255,255,0.7)}
+      #packages .pk-term{font-size:14px;font-weight:700;color:#7FD6F7;margin:10px 0 0}
+      #packages .pk-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin:24px 0 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.12)}
+      #packages .pk-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+      #packages .pk-list li{display:flex;align-items:flex-start;gap:11px;font-size:15.5px;line-height:1.4;font-weight:500}
+      #packages .pk-tick{flex:none;width:20px;height:20px;border-radius:6px;background:rgba(27,171,229,0.2);color:#7FD6F7;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+      #packages .pk-desc{font-size:15px;line-height:1.6;color:#4A5462;margin:18px 0 0}
+      #packages .pk-card:not(.pk-dark) .pk-desc{padding-top:20px;margin-top:22px;border-top:1px solid rgba(11,18,32,0.1)}
+      #packages .pk-dark .pk-desc{color:rgba(255,255,255,0.75)}
+      #packages .pk-cta{margin-top:auto;align-self:stretch;text-align:center;text-decoration:none;font-size:15.5px;font-weight:700;color:#0B1220;background:#fff;border:1px solid rgba(11,18,32,0.14);border-radius:14px;padding:14px 20px;transition:transform .22s ease,box-shadow .22s ease}
+      #packages .pk-cta:hover{transform:translateY(-2px);box-shadow:0 12px 24px -14px rgba(11,18,32,0.35)}
+      #packages .pk-cta-blue{color:#fff;background:#1BABE5;border-color:#1BABE5;box-shadow:0 14px 26px -10px rgba(27,171,229,0.6)}
+      #packages .pk-card > .pk-desc{margin-bottom:24px}
+      #packages .pk-note{font-size:12.5px;line-height:1.5;color:#7A8392;margin:14px 0 0}
+      #packages .pk-dark .pk-note{color:rgba(255,255,255,0.5)}
+      #packages .pk-telstra{display:flex;align-items:center;gap:18px;margin-top:22px;background:rgba(255,255,255,0.6);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 14px 34px -26px rgba(11,18,32,0.2);border-radius:18px;padding:20px 24px}
+      #packages .pk-telstra-icon{flex:none;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1BABE5,#5FCDF5);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px -8px rgba(27,171,229,0.6)}
+      #packages .pk-telstra p{margin:0;font-size:15.5px;line-height:1.55;color:#0B1220;font-weight:500}
+      #packages .pk-telstra a{color:#1483B5;font-weight:700;text-underline-offset:3px}
+      @media(max-width:980px){ #packages .pk-grid{grid-template-columns:1fr 1fr} #packages .pk-dark{grid-column:1/-1} }
+      @media(max-width:640px){ #packages .pk-grid{grid-template-columns:1fr} #packages .pk-telstra{flex-direction:column;align-items:flex-start} #packages .pk-card{padding:26px 22px 22px} }
+    </style>
+    <div style="text-align:center;max-width:760px;margin:0 auto"><span style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.16em;color:#1BABE5;text-transform:uppercase"><span style="width:22px;height:1.5px;background:#1BABE5"></span>Packages</span><h2 style="font-size:clamp(24px,3vw,38px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;margin:14px 0 0">Choose your <span style="color:#1BABE5">package</span>.</h2></div>
+    <div class="pk-grid">
+      <article class="pk-card pk-dark">
+        <span class="pk-tag">Monthly plan</span>
+        <h3 class="pk-name">Flexi</h3>
+        <div class="pk-price"><span class="pk-amt">$88</span><span class="pk-per">incl GST per month</span></div>
+        <p class="pk-term">12 month minimum term</p>
+        <p class="pk-label">Includes</p>
+        <ul class="pk-list"><li><span class="pk-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span>Ad On Hold message</span></li><li><span class="pk-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span>An afterhours message</span></li><li><span class="pk-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span>Up to 3 IVR prompts</span></li><li><span class="pk-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span>1 change to the on hold message per annum</span></li></ul>
+        <p class="pk-desc">Includes script writing, voiceover and production. File format to suit your phone&nbsp;system.</p>
+        <a class="pk-cta pk-cta-blue" href="/contact-us/">Get in touch</a>
+        <p class="pk-note">* Please note we do not install messages onto your phone&nbsp;system.</p>
+      </article>
+      <article class="pk-card">
+        <span class="pk-tag">Once-off</span>
+        <h3 class="pk-name">Minor Change</h3>
+        <div class="pk-price"><span class="pk-amt">$544</span><span class="pk-per">incl GST</span></div>
+        <p class="pk-desc">This is a minor change to your on hold message. The message will be rewritten with your desired changes, and the file will include voiceover and&nbsp;production.</p>
+        <a class="pk-cta" href="/contact-us/">Get in touch</a>
+        <p class="pk-note">* Please note we do not install messages onto your phone&nbsp;system.</p>
+      </article>
+      <article class="pk-card">
+        <span class="pk-tag">Once-off</span>
+        <h3 class="pk-name">Message revamp</h3>
+        <div class="pk-price"><span class="pk-amt">$1,089</span><span class="pk-per">incl GST</span></div>
+        <p class="pk-desc">This is a total overhaul to your on hold message. The message will be rewritten with your desired changes, and the file will include voiceover and&nbsp;production.</p>
+        <a class="pk-cta" href="/contact-us/">Get in touch</a>
+        <p class="pk-note">* Please note we do not install messages onto your phone&nbsp;system.</p>
+      </article>
+    </div>
+    <div class="pk-telstra"><span class="pk-telstra-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><p>Ad On Hold (a division of Ad On Group) is Telstra&rsquo;s official on-hold message provider. <a href="https://www.telstra.com.au/content/dam/tcom/personal/help/pdf/cis-business/telephony/business-critical-information-summary-ad-on-hold-on-telstra-business-systems.pdf" target="_blank" rel="noopener">See Telstra&rsquo;s reference (PDF)</a></p></div>
+  </section>
+
   <section data-reveal style="max-width:900px;margin:0 auto;padding:20px 28px 48px">
     <div style="text-align:center;margin:0 auto 34px"><span style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.16em;color:#1BABE5;text-transform:uppercase"><span style="width:22px;height:1.5px;background:#1BABE5"></span>FAQs</span><h2 style="font-size:clamp(24px,3vw,38px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;margin:14px 0 0">Questions, <span style="color:#1BABE5">answered</span>.</h2></div>
     <div style="display:flex;flex-direction:column;gap:14px"><details style="background:rgba(255,255,255,0.62);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 14px 36px -26px rgba(11,18,32,0.2);border-radius:16px;padding:20px 24px"><summary style="font-size:17px;font-weight:700;letter-spacing:-0.015em;color:#0B1220;cursor:pointer;list-style:none">What&rsquo;s included in an on-hold package?</summary><p style="font-size:15.5px;line-height:1.65;color:#4A5462;margin:14px 0 0">Professionally scripted and voiced messaging tailored to your business, with updates as your offers and information&nbsp;change.</p></details><details style="background:rgba(255,255,255,0.62);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 14px 36px -26px rgba(11,18,32,0.2);border-radius:16px;padding:20px 24px"><summary style="font-size:17px;font-weight:700;letter-spacing:-0.015em;color:#0B1220;cursor:pointer;list-style:none">Will it work with our phone system?</summary><p style="font-size:15.5px;line-height:1.65;color:#4A5462;margin:14px 0 0">Yes &mdash; our messaging is delivered in formats compatible with the major phone and VoIP&nbsp;systems.</p></details><details style="background:rgba(255,255,255,0.62);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 14px 36px -26px rgba(11,18,32,0.2);border-radius:16px;padding:20px 24px"><summary style="font-size:17px;font-weight:700;letter-spacing:-0.015em;color:#0B1220;cursor:pointer;list-style:none">How often can we update the messages?</summary><p style="font-size:15.5px;line-height:1.65;color:#4A5462;margin:14px 0 0">As often as your plan allows &mdash; we keep your content current with your promotions and seasonal&nbsp;changes.</p></details><details style="background:rgba(255,255,255,0.62);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.85);box-shadow:0 14px 36px -26px rgba(11,18,32,0.2);border-radius:16px;padding:20px 24px"><summary style="font-size:17px;font-weight:700;letter-spacing:-0.015em;color:#0B1220;cursor:pointer;list-style:none">Can you match our brand voice?</summary><p style="font-size:15.5px;line-height:1.65;color:#4A5462;margin:14px 0 0">Definitely. Scripting and voice selection are chosen to reflect your brand and the experience you want callers to&nbsp;have.</p></details></div>
