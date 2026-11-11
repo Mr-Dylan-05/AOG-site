@@ -398,7 +398,13 @@ for (const p of PRODUCTS) {
  * (Starter and Premium Growth). Every sentence of copy is the bundle
  * document's own, extracted into digital-plans.json. What this adds is
  * layout and a few labels: the hero illustration, the checklist counter, the
- * price toggle, the comparison table and the FAQ group names.
+ * price toggle, the comparison table and the team photos.
+ *
+ * The set-up fee is not in the document. It was set by email on 11 Nov 2026:
+ * Peter Bailey, "$200 ex for website only (starter) and $500 ex once off set
+ * up fee for premium growth package", replacing Paul's earlier suggestion of
+ * matching the monthly amount. One figure per plan, for every customer, so it
+ * does not change with the price toggle.
  *
  * noindex and linked from nowhere while it is reviewed. To publish it, drop
  * the robots line in plansHead() and add it to the menu and service boxes.
@@ -408,6 +414,14 @@ const PLANS_PAGE = {
   url: "/website-ai-visibility-plans/",
   title: "Website & AI Visibility Growth Plans | Ad On Digital",
   description: "A professionally managed website with SEO and AEO foundations, from $400 + GST per month. Two plans from Ad On Digital: Starter and Premium Growth.",
+};
+
+/** Once-off set-up fee per plan, excluding GST (see the note above). */
+const SETUP_FEE = { "STARTER": "$200", "PREMIUM GROWTH": "$500" };
+const setupFee = (pl) => {
+  const fee = SETUP_FEE[pl.name];
+  if (!fee) throw new Error(`no set-up fee for plan ${pl.name}`);
+  return fee;
 };
 
 /** "PREMIUM GROWTH" -> "Premium Growth": the document sets plan names in capitals. */
@@ -489,11 +503,15 @@ const PLANS_STYLE = `<style id="vp-style">
   .vp-compare tr.vp-sec td{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700;padding-top:22px}
   .vp-yes{display:inline-flex;width:26px;height:26px;border-radius:8px;background:rgba(27,171,229,0.14);align-items:center;justify-content:center}
   .vp-no{color:#B4BBC6;font-weight:700}
-  .vp-own{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:center}
   .vp-table{width:100%;border-collapse:collapse;font-size:15.5px}
   .vp-table th,.vp-table td{text-align:left;padding:14px 12px;border-bottom:1px solid rgba(11,18,32,0.08)}
   .vp-table th{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A93A1;font-weight:700}
-  .vp-faq{display:grid;grid-template-columns:repeat(2,1fr);gap:34px 26px;align-items:start}
+  .vp-faces{display:flex}
+  .vp-faces img{border-radius:50%;object-fit:cover;display:block;margin-left:-10px;background:#E8EDF4}
+  .vp-faces img:first-child{margin-left:0}
+  .vp-people{display:grid;grid-template-columns:1.1fr 0.9fr;gap:0;align-items:stretch;border-radius:26px;overflow:hidden}
+  .vp-people-img{position:relative;min-height:380px}
+  .vp-people-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .vp-terms h3{font-size:16px;font-weight:800;color:#0B1220;margin:24px 0 6px}
   .vp-terms p,.vp-terms li{font-size:14.5px;line-height:1.65;color:#4A5462;margin:6px 0 0}
   .vp-terms ul{margin:6px 0 0;padding-left:20px}
@@ -503,7 +521,7 @@ const PLANS_STYLE = `<style id="vp-style">
   @keyframes vpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   @media (prefers-reduced-motion:reduce){ .vp-scan{display:none} .vp-tag,.vp-chips span{animation:none;opacity:1;transform:none} .vp-float{animation:none} }
   @media (max-width:1000px){ .vp-bento{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width:900px){ .vp-hero,.vp-plans,.vp-faq{grid-template-columns:1fr} .vp-steps{grid-template-columns:1fr;gap:30px} .vp-steps:before{display:none} .vp-own{grid-template-columns:1fr;text-align:left} }
+  @media (max-width:900px){ .vp-hero,.vp-plans,.vp-people{grid-template-columns:1fr} .vp-people-img{min-height:240px} .vp-steps{grid-template-columns:1fr;gap:30px} .vp-steps:before{display:none} }
   @media (max-width:700px){ .vp-qgrid,.vp-bento{grid-template-columns:1fr} .vp-bento .vp-wide{grid-column:auto} .vp-both{grid-template-columns:1fr} .vp-plus{justify-self:center} .vp-card{padding:24px} .vp-compare th,.vp-compare td{padding:11px 8px;font-size:14px} .vp-compare th:not(:first-child),.vp-compare td:not(:first-child){width:84px} .vp-float{display:none} }
 </style>`;
 
@@ -563,20 +581,22 @@ function planCard(pl, dark) {
         </div>` : `
         <div style="margin-top:26px">${label(pl.listLabel)}</div>
         <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
-          ${pl.items.map((t) => `<div style="display:flex;align-items:flex-start;gap:11px">${tickSm}<span style="font-size:15px;line-height:1.55;color:#1F2733">${esc(t)}</span></div>`).join("")}
+          ${pl.items.map((t) => `<div style="display:flex;align-items:flex-start;gap:11px">${tickSm}<span style="font-size:15px;line-height:1.55;color:rgba(255,255,255,0.9)">${esc(t)}</span></div>`).join("")}
         </div>`;
   return `<div class="vp-card ${dark ? "vp-dark" : ""}" style="${dark ? "" : glass}">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">${mono(esc(planName(pl.name)), BLUE)}${dark ? `<span class="vp-badge">Everything in Starter, plus 8 more</span>` : ""}</div>
+        <div style="font-size:46px;font-weight:800;letter-spacing:-0.045em;line-height:1;color:#fff">${esc(planName(pl.name))}</div>
         <h3 style="font-size:24px;line-height:1.2;letter-spacing:-0.025em;font-weight:800;color:${title};margin:12px 0 0">${esc(pl.tagline)}</h3>
+        ${pl.extras ? `<span class="vp-badge" style="margin-top:14px">Everything in Starter, plus ${pl.extras.length} more</span>` : ""}
         <div style="margin-top:22px;padding:22px;border-radius:18px;${dark ? "background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)" : "background:rgba(27,171,229,0.06);border:1px solid rgba(27,171,229,0.22)"}">
           <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span class="vp-price" data-std="${money(pl.price)}" data-ex="${money(pl.existing)}" style="color:${dark ? "#5FCDF5" : BLUE}">${money(pl.price)}</span><span style="font-size:15px;color:${dark ? "rgba(255,255,255,0.7)" : GREY}">+ GST per month</span></div>
           <div class="vp-price-note" data-std="${esc(`${money(pl.existing)} + GST per month for existing Ad On Group customers`)}" data-ex="${esc("Existing Ad On Group customer price")}" style="font-size:14.5px;line-height:1.55;font-weight:600;color:${title};margin-top:12px">${esc(`${money(pl.existing)} + GST per month for existing Ad On Group customers`)}</div>
+          <div style="font-size:14.5px;line-height:1.55;margin-top:10px;color:${dark ? "rgba(255,255,255,0.8)" : GREY}">Plus a <strong style="color:${title}">${setupFee(pl)}</strong> + GST once-off set-up fee</div>
           <div style="font-size:14px;margin-top:6px;color:${dark ? "rgba(255,255,255,0.6)" : GREY}">${esc(pl.term)}</div>
         </div>
         ${pText(pl.desc, `margin-top:20px;${dark ? "color:rgba(255,255,255,0.8)" : ""}`)}
         ${extras}
         ${pText(pl.close, `margin-top:24px;font-size:15px;${dark ? "color:rgba(255,255,255,0.8)" : ""}`)}
-        <a class="dg-cta" href="/contact-us/" style="margin-top:24px;width:100%;justify-content:center;color:#fff;background:${dark ? BLUE : INK};${dark ? "box-shadow:0 14px 26px -10px rgba(27,171,229,0.7)" : ""}">Enquire about ${esc(planName(pl.name))} <span aria-hidden="true">&rarr;</span></a>
+        <a class="dg-cta" href="/contact-us/" style="margin-top:24px;width:100%;justify-content:center;${pl.extras ? `color:#fff;background:${BLUE};box-shadow:0 14px 26px -10px rgba(27,171,229,0.7)` : `color:${INK};background:#fff`}">Enquire about ${esc(planName(pl.name))} <span aria-hidden="true">&rarr;</span></a>
       </div>`;
 }
 
@@ -589,6 +609,7 @@ function compareTable(starter, premium) {
         <thead><tr><th style="text-align:left"><span class="vp-mono" style="color:#8A93A1">Compare</span></th><th>${esc(planName(starter.name))}</th><th>${esc(planName(premium.name))}</th></tr></thead>
         <tbody>
           ${row("<strong>Monthly price</strong>", `<strong class="vp-price" data-std="${money(starter.price)}" data-ex="${money(starter.existing)}" style="font-size:18px;letter-spacing:-0.02em">${money(starter.price)}</strong>`, `<strong class="vp-price" data-std="${money(premium.price)}" data-ex="${money(premium.existing)}" style="font-size:18px;letter-spacing:-0.02em;color:${BLUE}">${money(premium.price)}</strong>`)}
+          ${row("Once-off set-up fee", setupFee(starter), setupFee(premium))}
           ${row("Website pages", pages(starter), pages(premium))}
           <tr class="vp-sec"><td colspan="3">Both plans</td></tr>
           ${shared.map((t) => row(esc(noStop(t)), yes, yes)).join("\n          ")}
@@ -599,13 +620,15 @@ function compareTable(starter, premium) {
       </table>`;
 }
 
-/** The document's sixteen questions, in its order, under four headings. */
-const FAQ_GROUPS = [
-  ["AEO and AI search", [0, 1, 2, 9]],
-  ["Plans and your website", [3, 4, 5, 6, 14, 15]],
-  ["Reviews", [7, 8]],
-  ["Contract and ownership", [10, 11, 12, 13]],
+/** Real team members, from /people/. Shown as faces, not as a claim about who handles which account. */
+const TEAM = [
+  ["Taryn Boxer", "Chief Operating Officer", "/assets/design/team-taryn-sq.jpg"],
+  ["Leah", "General Manager", "/assets/design/team-leah-sq.jpg"],
+  ["Ben", "Business Development Manager", "/assets/design/team-ben-sq.jpg"],
+  ["James", "Business Development Manager", "/assets/media/2025/03/IMG-7775-scaled-e1733901081176-sq.jpg"],
+  ["McLean", "IT and Data Manager", "/assets/media/2025/03/Image_20241205_141835_165-scaled-e1733965774973-sq.jpg"],
 ];
+const faces = (size, ring) => `<div class="vp-faces">${TEAM.map(([n, r, src]) => `<img src="${src}" alt="${esc(`${n}, ${r} at Ad On Group`)}" width="${size}" height="${size}" loading="lazy" decoding="async" style="width:${size}px;height:${size}px;box-shadow:0 0 0 3px ${ring}">`).join("")}</div>`;
 
 const PLANS_SCRIPT = `<script>
 (function () {
@@ -641,7 +664,7 @@ function plansPage() {
   const d = PLANS;
   const [starter, premium] = d.plans.plans;
   const card = (inner, extra = "") => `<div style="${glass};border-radius:18px;padding:24px;${extra}">${inner}</div>`;
-  const own = d.faqs.find((f) => /purchase ownership/i.test(f.q));
+  const support = d.included.items.find((x) => /support/i.test(x.title));
   const includedIcons = [ICON.monitor, ICON.shield, ICON.pencil, ICON.search, ICON.spark, ICON.trend, ICON.people];
   const pillarIcons = [ICON.search, ICON.star, ICON.trend];
   const boxTick = svg('<path d="M5 12l5 5 9-10"/>', 14);
@@ -666,6 +689,7 @@ function plansPage() {
           <a class="dg-cta" href="/contact-us/" style="color:${INK};background:rgba(255,255,255,0.7);border:1px solid rgba(11,18,32,0.14)">Get in touch</a>
           <span style="font-size:14px;color:${GREY}">From <strong style="color:${INK}">${money(starter.price)} + GST</strong> per month</span>
         </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:28px">${faces(42, "#FCFBFA")}<span style="font-size:14px;line-height:1.45;color:#4A5462;max-width:300px">${esc(support.text.split(". ").pop())}</span></div>
       </div>
       ${heroMock()}
     </div>
@@ -722,13 +746,25 @@ function plansPage() {
     </div>
   </section>
 
+  <section data-reveal style="max-width:1180px;margin:0 auto;padding:30px 28px 44px">
+    <div class="vp-people vp-dark">
+      <div class="vp-people-img"><img src="/assets/design/group-team.jpg" alt="The Ad On Group team" width="1600" height="1067" loading="lazy" decoding="async"></div>
+      <div style="padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:center">
+        ${mono("Real people", "#5FCDF5")}
+        <h2 style="font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;color:#fff;margin:14px 0 0">${esc(support.title)}</h2>
+        <p style="font-size:17px;line-height:1.65;margin:16px 0 0">${esc(support.text)}</p>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:26px;flex-wrap:wrap">${faces(52, "#0B1220")}<span style="font-size:14px;color:rgba(255,255,255,0.65)">Some of the Ad On Group team</span></div>
+      </div>
+    </div>
+  </section>
+
   <section id="plans" data-reveal style="max-width:1140px;margin:0 auto;padding:52px 28px 20px;scroll-margin-top:90px">
     <div style="text-align:center;max-width:760px;margin:0 auto">
       ${eyebrow("Plans")}${h2(esc(d.plans.h))}${pText(d.plans.intro)}
       <div class="vp-toggle" role="group" aria-label="Show prices for"><button type="button" data-mode="std" aria-pressed="true">Standard pricing</button><button type="button" data-mode="ex" aria-pressed="false">Existing Ad On Group customer</button></div>
     </div>
     <div class="vp-plans">
-      ${planCard(starter, false)}
+      ${planCard(starter, true)}
       ${planCard(premium, true)}
     </div>
   </section>
@@ -738,36 +774,10 @@ function plansPage() {
     <div style="${glass};border-radius:20px;padding:10px 14px;overflow-x:auto">${compareTable(starter, premium)}</div>
   </section>
 
-  <section data-reveal style="max-width:1000px;margin:0 auto;padding:40px 28px 20px">
-    <div class="vp-dark vp-card vp-own">
-      <div style="width:64px;height:64px;border-radius:18px;background:rgba(95,205,245,0.16);border:1px solid rgba(95,205,245,0.35);display:flex;align-items:center;justify-content:center">${svg(ICON.key, 28, "#5FCDF5")}</div>
-      <div><div style="font-size:21px;font-weight:800;letter-spacing:-0.02em;color:#fff">${esc(own.q)}</div>${own.a.map((t) => `<p style="font-size:15px;line-height:1.6;margin:8px 0 0">${esc(t)}</p>`).join("")}</div>
-      <div style="text-align:right;white-space:nowrap"><div style="font-size:38px;font-weight:800;letter-spacing:-0.04em;color:#5FCDF5;line-height:1">${money(own.a[0])}</div><div style="font-size:13.5px;color:rgba(255,255,255,0.65);margin-top:6px">+ GST, one-off</div></div>
-    </div>
-  </section>
-
-  <section data-reveal style="max-width:900px;margin:0 auto;padding:40px 28px 24px">
-    <div style="${glass};border-radius:20px;padding:30px">
-      ${eyebrow("Existing customers")}
-      <h2 style="font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-0.03em;font-weight:800;margin:14px 0 0;color:${INK}">${esc(d.existing.h)}</h2>
-      ${pText(d.existing.text)}
-      <table class="vp-table" style="margin-top:20px">
-        <thead><tr>${d.existing.table[0].map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
-        <tbody>${d.existing.table.slice(1).map((r) => `<tr>${r.map((c, i) => `<td style="${i ? "" : `font-weight:700;color:${INK}`}${i === 2 ? `;color:${BLUE};font-weight:800` : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
-      </table>
-      ${d.existing.notes.map((t) => `<p style="font-size:14px;line-height:1.6;color:${GREY};margin:12px 0 0">${esc(t)}</p>`).join("")}
-    </div>
-  </section>
-
-  <section data-reveal style="max-width:1140px;margin:0 auto;padding:44px 28px 32px">
+  <section data-reveal style="max-width:900px;margin:0 auto;padding:44px 28px 32px">
     <div style="text-align:center;margin:0 auto 34px">${eyebrow("FAQs")}${h2(`Frequently asked <span style="color:${BLUE}">questions</span>.`)}</div>
-    <div class="vp-faq">
-      ${FAQ_GROUPS.map(([g, ids]) => `<div>
-        ${mono(esc(g), BLUE)}
-        <div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
-          ${ids.map((n) => d.faqs[n]).map((f) => `<details class="dg-faq" style="${glass};border-radius:16px;padding:18px 22px"><summary style="font-size:16.5px;font-weight:700;letter-spacing:-0.015em;color:${INK};cursor:pointer">${esc(f.q)}</summary>${f.a.map((t) => `<p style="font-size:15px;line-height:1.65;color:#4A5462;margin:12px 0 0">${esc(t)}</p>`).join("")}</details>`).join("\n          ")}
-        </div>
-      </div>`).join("\n      ")}
+    <div style="display:flex;flex-direction:column;gap:12px">
+      ${d.faqs.map((f) => `<details class="dg-faq" style="${glass};border-radius:16px;padding:18px 22px"><summary style="font-size:16.5px;font-weight:700;letter-spacing:-0.015em;color:${INK};cursor:pointer">${esc(f.q)}</summary>${f.a.map((t) => `<p style="font-size:15px;line-height:1.65;color:#4A5462;margin:12px 0 0">${esc(t)}</p>`).join("")}</details>`).join("\n      ")}
     </div>
   </section>
 
@@ -783,9 +793,6 @@ function plansPage() {
   ${PLANS_SCRIPT}
 `;
 
-  // Every one of the document's questions must land in a group, exactly once.
-  const placed = FAQ_GROUPS.flatMap(([, ids]) => ids).sort((a, b) => a - b);
-  if (placed.join() !== d.faqs.map((_, i) => i).join()) throw new Error("FAQ_GROUPS does not cover every question exactly once");
 
   const html = plansHead() + bodyOpen + "\n" + body + "\n\n  " + footer;
   const out = path.join(PUBLIC, PLANS_PAGE.url);
