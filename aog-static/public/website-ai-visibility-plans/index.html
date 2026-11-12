@@ -197,7 +197,7 @@
   .vp-faces img:first-child{margin-left:0}
   .vp-people{display:grid;grid-template-columns:1.1fr 0.9fr;gap:0;align-items:stretch;border-radius:26px;overflow:hidden}
   .vp-people-img{position:relative;min-height:380px}
-  .vp-people-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .vp-people-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%}
   .vp-terms h3{font-size:16px;font-weight:800;color:#0B1220;margin:24px 0 6px}
   .vp-terms p,.vp-terms li{font-size:14.5px;line-height:1.65;color:#4A5462;margin:6px 0 0}
   .vp-terms ul{margin:6px 0 0;padding-left:20px}
@@ -207,7 +207,7 @@
   @keyframes vpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   @media (prefers-reduced-motion:reduce){ .vp-scan{display:none} .vp-tag,.vp-chips span{animation:none;opacity:1;transform:none} .vp-float{animation:none} }
   @media (max-width:1000px){ .vp-bento{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width:900px){ .vp-hero,.vp-plans,.vp-people{grid-template-columns:1fr} .vp-people-img{min-height:240px} .vp-steps{grid-template-columns:1fr;gap:30px} .vp-steps:before{display:none} }
+  @media (max-width:900px){ .vp-hero,.vp-plans,.vp-people{grid-template-columns:1fr} .vp-people-img{min-height:300px} .vp-steps{grid-template-columns:1fr;gap:30px} .vp-steps:before{display:none} }
   @media (max-width:700px){ .vp-qgrid,.vp-bento{grid-template-columns:1fr} .vp-bento .vp-wide{grid-column:auto} .vp-both{grid-template-columns:1fr} .vp-plus{justify-self:center} .vp-card{padding:24px} .vp-compare th,.vp-compare td{padding:11px 8px;font-size:14px} .vp-compare th:not(:first-child),.vp-compare td:not(:first-child){width:84px} .vp-float{display:none} }
 </style>
 </head>
@@ -441,12 +441,11 @@
 
   <section data-reveal style="max-width:1180px;margin:0 auto;padding:30px 28px 44px">
     <div class="vp-people vp-dark">
-      <div class="vp-people-img"><img src="/assets/design/group-team.jpg" alt="The Ad On Group team" width="1600" height="1067" loading="lazy" decoding="async"></div>
+      <div class="vp-people-img"><img src="/assets/design/team-meeting.jpg" alt="Ad On Group team members in a meeting" width="1122" height="1402" loading="lazy" decoding="async"></div>
       <div style="padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:center">
         <div class="vp-mono" style="color:#5FCDF5">Real people</div>
         <h2 style="font-size:clamp(26px,3vw,38px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;color:#fff;margin:14px 0 0">Australian-based support</h2>
         <p style="font-size:17px;line-height:1.65;margin:16px 0 0">You'll have a team to deal with, not just a website platform or automated support system. We believe people should always be able to speak with a person when they need help.</p>
-        <div style="display:flex;align-items:center;gap:16px;margin-top:26px;flex-wrap:wrap"><div class="vp-faces"><img src="/assets/design/team-taryn-sq.jpg" alt="Taryn Boxer, Chief Operating Officer at Ad On Group" width="52" height="52" loading="lazy" decoding="async" style="width:52px;height:52px;box-shadow:0 0 0 3px #0B1220"><img src="/assets/design/team-leah-sq.jpg" alt="Leah, General Manager at Ad On Group" width="52" height="52" loading="lazy" decoding="async" style="width:52px;height:52px;box-shadow:0 0 0 3px #0B1220"><img src="/assets/design/team-ben-sq.jpg" alt="Ben, Business Development Manager at Ad On Group" width="52" height="52" loading="lazy" decoding="async" style="width:52px;height:52px;box-shadow:0 0 0 3px #0B1220"><img src="/assets/media/2025/03/IMG-7775-scaled-e1733901081176-sq.jpg" alt="James, Business Development Manager at Ad On Group" width="52" height="52" loading="lazy" decoding="async" style="width:52px;height:52px;box-shadow:0 0 0 3px #0B1220"><img src="/assets/media/2025/03/Image_20241205_141835_165-scaled-e1733965774973-sq.jpg" alt="McLean, IT and Data Manager at Ad On Group" width="52" height="52" loading="lazy" decoding="async" style="width:52px;height:52px;box-shadow:0 0 0 3px #0B1220"></div><span style="font-size:14px;color:rgba(255,255,255,0.65)">Some of the Ad On Group team</span></div>
       </div>
     </div>
   </section>
