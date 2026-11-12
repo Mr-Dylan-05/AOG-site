@@ -777,15 +777,12 @@ function plansPage() {
     <div style="text-align:center;margin:0 auto 34px">${eyebrow("FAQs")}${h2(`Frequently asked <span style="color:${BLUE}">questions</span>.`)}</div>
     <div style="display:flex;flex-direction:column;gap:12px">
       ${d.faqs.map((f) => `<details class="dg-faq" style="${glass};border-radius:16px;padding:18px 22px"><summary style="font-size:16.5px;font-weight:700;letter-spacing:-0.015em;color:${INK};cursor:pointer">${esc(f.q)}</summary>${f.a.map((t) => `<p style="font-size:15px;line-height:1.65;color:#4A5462;margin:12px 0 0">${esc(t)}</p>`).join("")}</details>`).join("\n      ")}
+      <details class="dg-faq vp-terms" id="terms" style="${glass};border-radius:16px;padding:18px 22px"><summary style="font-size:16.5px;font-weight:700;letter-spacing:-0.015em;color:${INK};cursor:pointer">Full terms and conditions</summary>
+        <p style="font-weight:700;color:${INK};margin-top:14px">${esc(d.terms.h)}: ${esc(d.terms.subtitle)}</p>
+        ${d.terms.intro.map((t) => `<p>${esc(t)}</p>`).join("")}
+        ${d.terms.clauses.map((c) => `<h3>${esc(c.h)}</h3>${c.body.map((b) => Array.isArray(b) ? `<ul>${b.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : `<p>${esc(b)}</p>`).join("")}`).join("\n        ")}
+      </details>
     </div>
-  </section>
-
-  <section data-reveal style="max-width:900px;margin:0 auto;padding:20px 28px 40px">
-    <details class="dg-faq vp-terms" style="background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.8);border-radius:18px;padding:22px 26px">
-      <summary style="font-size:17px;font-weight:700;color:${INK};cursor:pointer">${esc(d.terms.h)}: ${esc(d.terms.subtitle)}</summary>
-      ${d.terms.intro.map((t) => `<p>${esc(t)}</p>`).join("")}
-      ${d.terms.clauses.map((c) => `<h3>${esc(c.h)}</h3>${c.body.map((b) => Array.isArray(b) ? `<ul>${b.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : `<p>${esc(b)}</p>`).join("")}`).join("\n      ")}
-    </details>
   </section>
 
   ${cta}
