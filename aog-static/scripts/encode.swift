@@ -17,10 +17,12 @@ let asset = AVAsset(url: inURL)
 guard let srcVideo = asset.tracks(withMediaType: .video).first else { print("no video track"); exit(1) }
 let srcAudio = asset.tracks(withMediaType: .audio).first
 
-// Fit inside 1280x720, keeping the source aspect ratio, on even pixel bounds.
+// Fit inside 1280x720 (720x1280 for a portrait source), keeping the source
+// aspect ratio, on even pixel bounds.
 let natural = srcVideo.naturalSize.applying(srcVideo.preferredTransform)
 let sw = abs(natural.width), sh = abs(natural.height)
-let scale = min(1280.0 / sw, 720.0 / sh, 1.0)
+let (boxW, boxH): (CGFloat, CGFloat) = sh > sw ? (720, 1280) : (1280, 720)
+let scale = min(boxW / sw, boxH / sh, 1.0)
 let outW = (Int(sw * scale) / 2) * 2, outH = (Int(sh * scale) / 2) * 2
 
 try? FileManager.default.removeItem(at: outURL)
