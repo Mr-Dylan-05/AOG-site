@@ -24,14 +24,18 @@
  * "Tap for sound", tapping the frame pauses, scrolling away pauses. Starting
  * any video on the page pauses every other one, the hero included.
  *
+ * STATUS (12 Nov 2026): taken off the page with --remove until there are more
+ * industry testimonials. The files stay on R2. Run without flags to put it back.
+ *
  * Idempotent: the block between the markers is replaced on each run.
- * Usage:  node scripts/add-industry-testimonials.js [--dry]
+ * Usage:  node scripts/add-industry-testimonials.js [--dry] [--remove]
  */
 const fs = require("fs");
 const path = require("path");
 
 const PAGE = path.join(__dirname, "..", "public", "ai-training", "index.html");
 const DRY = process.argv.includes("--dry");
+const REMOVE = process.argv.includes("--remove");
 const R2 = "https://pub-f0773479a3e54dc68633fadac765b41e.r2.dev";
 
 const VIDEOS = [
@@ -156,7 +160,13 @@ let html = fs.readFileSync(PAGE, "utf8");
 const before = html;
 
 const s = html.indexOf(START);
-if (s !== -1) {
+if (REMOVE) {
+  if (s !== -1) {
+    const e = html.indexOf(END, s);
+    if (e === -1) throw new Error("start marker without end marker");
+    html = html.slice(0, s) + html.slice(e + END.length);
+  }
+} else if (s !== -1) {
   const e = html.indexOf(END, s);
   if (e === -1) throw new Error("start marker without end marker");
   html = html.slice(0, s) + BLOCK + html.slice(e + END.length);
