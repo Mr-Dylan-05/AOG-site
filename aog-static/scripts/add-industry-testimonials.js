@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 /**
- * add-industry-testimonials.js — the two industry testimonial videos on
+ * add-industry-testimonials.js — the four industry testimonial videos on
  * /ai-training/, between the Google reviews and their "Get more info" button.
  *
  * HOSTING
  * Same as the hero video: the adon-videos R2 bucket, public r2.dev URL. The
  * files are 720x1280 H.264 at ~1.1Mbps with 96kbps AAC, faststart, encoded by
- * scripts/encode.swift from the 1080x1920 originals (68MB -> 14.7MB and
- * 79MB -> 16.9MB). R2 answers range requests, so they stream.
+ * scripts/encode.swift from the 1080x1920 originals (real estate 14.7MB,
+ * trades 16.9MB, health 13.4MB, professional services 14.0MB). R2 answers
+ * range requests, so they stream.
  *
  * PERFORMANCE
  * - preload="none": no video bytes until someone taps play.
@@ -24,8 +25,8 @@
  * "Tap for sound", tapping the frame pauses, scrolling away pauses. Starting
  * any video on the page pauses every other one, the hero included.
  *
- * STATUS (12 Nov 2026): taken off the page with --remove until there are more
- * industry testimonials. The files stay on R2. Run without flags to put it back.
+ * STATUS (13 Nov 2026): back on the page with all four videos. --remove takes
+ * the section off again; the files stay on R2 either way.
  *
  * Idempotent: the block between the markers is replaced on each run.
  * Usage:  node scripts/add-industry-testimonials.js [--dry] [--remove]
@@ -41,6 +42,8 @@ const R2 = "https://pub-f0773479a3e54dc68633fadac765b41e.r2.dev";
 const VIDEOS = [
   { slug: "realestate", caption: "Real estate", label: "Real estate testimonial" },
   { slug: "tradie", caption: "Trades", label: "Trades testimonial" },
+  { slug: "health", caption: "Health", label: "Health testimonial" },
+  { slug: "profservices", caption: "Professional services", label: "Professional services testimonial" },
 ];
 
 const START = "<!-- industry-testimonials -->";
@@ -56,7 +59,7 @@ const BLOCK = `${START}<section class="industry-videos" id="industry" aria-label
 #industry{background:#fff;padding:8px 24px 56px;text-align:center}
 #industry h2{font-size:clamp(28px,3.6vw,46px)!important;line-height:1.1!important;letter-spacing:-.045em!important;margin:0 0 36px!important;color:#0B1220!important;text-align:center!important}
 #industry h2 b{color:#2867e8}
-#industry .iv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,340px));gap:28px;justify-content:center}
+#industry .iv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,260px));gap:24px;justify-content:center}
 #industry .iv-card{margin:0}
 #industry .iv-vid{position:relative;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#0B1220;box-shadow:0 18px 40px -24px rgba(11,24,48,.5)}
 #industry .iv-el{display:block;width:100%;height:100%;object-fit:cover;background:#0B1220;cursor:pointer}
@@ -64,9 +67,15 @@ const BLOCK = `${START}<section class="industry-videos" id="industry" aria-label
 #industry .iv-play[hidden]{display:none}
 #industry .iv-play:focus-visible{outline:2px solid #7fb2ff;outline-offset:2px}
 #industry figcaption{margin-top:14px;font:700 11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:#2867e8}
+@media(max-width:1180px){
+  #industry .iv-grid{grid-template-columns:repeat(2,minmax(0,300px));gap:28px}
+}
 @media(max-width:640px){
-  #industry{padding:0 24px 48px}
-  #industry .iv-grid{grid-template-columns:minmax(0,320px);gap:32px}
+  #industry{padding:0 16px 48px}
+  #industry .iv-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}
+  #industry .iv-vid{border-radius:12px}
+  #industry .iv-play{bottom:10px;padding:9px 13px;font-size:12px;gap:6px}
+  #industry figcaption{margin-top:10px;font-size:10px;letter-spacing:.12em}
 }
 </style>
 <script id="industry-testimonials-js">
