@@ -6,7 +6,7 @@
  * HOSTING
  * Same as the hero video: the adon-videos R2 bucket, public r2.dev URL. The
  * files are 720x1280 H.264 at ~1.1Mbps with 96kbps AAC, faststart, encoded by
- * scripts/encode.swift from the 1080x1920 originals (real estate 14.7MB,
+ * scripts/encode.swift from the 1080x1920 originals (real estate 15.0MB,
  * trades 16.9MB, health 13.4MB, professional services 14.0MB). R2 answers
  * range requests, so they stream.
  *
@@ -25,8 +25,10 @@
  * "Tap for sound", tapping the frame pauses, scrolling away pauses. Starting
  * any video on the page pauses every other one, the hero included.
  *
- * STATUS (13 Nov 2026): back on the page with all four videos. --remove takes
- * the section off again; the files stay on R2 either way.
+ * STATUS (16 Nov 2026): all four videos on the page. Real estate is the
+ * reshoot, under a new name (testimonial-realestate-v2.*) so no browser or
+ * cache keeps serving the old cut; the old files are still on R2, unused.
+ * --remove takes the section off again; the files stay on R2 either way.
  *
  * Idempotent: the block between the markers is replaced on each run.
  * Usage:  node scripts/add-industry-testimonials.js [--dry] [--remove]
@@ -40,7 +42,7 @@ const REMOVE = process.argv.includes("--remove");
 const R2 = "https://pub-f0773479a3e54dc68633fadac765b41e.r2.dev";
 
 const VIDEOS = [
-  { slug: "realestate", caption: "Real estate", label: "Real estate testimonial" },
+  { slug: "realestate-v2", caption: "Real estate", label: "Real estate testimonial" },
   { slug: "tradie", caption: "Trades", label: "Trades testimonial" },
   { slug: "health", caption: "Health", label: "Health testimonial" },
   { slug: "profservices", caption: "Professional services", label: "Professional services testimonial" },
