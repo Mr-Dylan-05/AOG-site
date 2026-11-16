@@ -88,13 +88,13 @@ const PRODUCTS = [
   },
   {
     slug: "ai-seo", url: "/ai-seo/", name: "AEO",
-    title: "AI SEO & AI Search Optimisation | Ad On Group",
-    description: "AI SEO for Australian businesses: a website audit, monthly blogs, FAQs and review software, to help tools like ChatGPT, Perplexity and Google AI Overviews find and trust your business.",
+    title: "AEO & AI Search Optimisation | Ad On Group",
+    description: "AEO for Australian businesses: a website audit, monthly blogs, FAQs and review software, to help tools like ChatGPT, Perplexity and Google AI Overviews find and trust your business.",
     icon: icon('<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'),
     h1: 'Get found in <span style="color:#1BABE5">AI search</span>.',
     summary: "Help tools like ChatGPT, Perplexity and Google AI Overviews read your website, understand your business and trust what they find.",
     highlights: ["Website audit for AI search", "Monthly blogs and a dedicated FAQ section", "Review software to build trust"],
-    why: 'Why AI SEO <span style="color:#1BABE5">matters</span>.',
+    why: 'Why AEO <span style="color:#1BABE5">matters</span>.',
   },
   {
     slug: "google-ads-management", url: "/google-ads-management/", name: "Google Ads",

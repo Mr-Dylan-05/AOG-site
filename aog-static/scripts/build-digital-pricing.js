@@ -36,9 +36,9 @@
  *                                      logo stay on Website Illuminate.
  *
  * ADDED, NOT FROM THE OLD SITE
- *   AI SEO — new, so it has no old page to read. Its copy is Taryn's and sits
- *   in AI_SEO below. "AI SEO" is her service title; AEO and GEO are for sales
- *   decks, which is why the name on the site is not AEO.
+ *   AEO — new, so it has no old page to read. Its copy is Taryn's and sits
+ *   in AI_SEO below. It was titled "AI SEO" until 16 Nov 2026, when it was
+ *   renamed AEO everywhere on the site.
  *
  * noindex, and linked from nowhere.
  *
@@ -280,13 +280,13 @@ function model(page) {
 
 /** A product with no old page, in the shape model() returns. */
 const AI_SEO = {
-  slug: "ai-seo", title: "AI SEO", hero: null, prose: [], faqs: [], quotes: [],
+  slug: "ai-seo", title: "AEO", hero: null, prose: [], faqs: [], quotes: [],
   intro: [
-    "AI SEO, also known as Generative Engine Optimisation (GEO), helps your business get found and recommended by tools like ChatGPT, Perplexity and Google AI Overviews.",
+    "AEO (Answer Engine Optimisation), also known as Generative Engine Optimisation (GEO), helps your business get found and recommended by tools like ChatGPT, Perplexity and Google AI Overviews.",
     "There are a lot of terms floating around for this. We keep it simple: four real, tangible things we work on for your business.",
   ],
   products: [{
-    name: "AI SEO", paras: [], benefits: [], img: null,
+    name: "AEO", paras: [], benefits: [], img: null,
     features: [
       "Website Audit: We test whether AI engines can actually read your website, see your business accurately, and find your key details—or if your site is currently invisible to them.",
       "Monthly Blogs: Articles that answer complex questions in depth. When AI searches the web for proof that you know what you're talking about, these articles provide the evidence.",
@@ -297,7 +297,7 @@ const AI_SEO = {
   }],
 };
 
-/** Every product, in the order they appear: AI SEO sits straight after SEO. */
+/** Every product, in the order they appear: AEO sits straight after SEO. */
 function buildModels() {
   const ms = PAGES.map(model);
   ms.splice(ms.findIndex((m) => m.slug === "finder-seo-package") + 1, 0, AI_SEO);
