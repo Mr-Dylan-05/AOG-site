@@ -310,6 +310,16 @@
       "permanent": true
     },
     {
+      "source": "/website-ai-visibility-plans/",
+      "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
+      "source": "/website-ai-visibility-plans",
+      "destination": "/ad-on-digital/",
+      "permanent": true
+    },
+    {
       "source": "/ad-on-ai-training/",
       "destination": "/ad-on-ai-division/",
       "permanent": true

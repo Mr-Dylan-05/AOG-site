@@ -49,8 +49,18 @@ const { buildModels, list, priceBox, esc, BLUE, INK, GREY } = require("./build-d
 
 const ROOT = path.join(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
-const HUB = path.join(PUBLIC, "ad-on-digital", "index.html");
+// The service-box hub this script was written for. Since 16 Nov 2026 it lives
+// at /ad-on-digital-backup/ (noindex, linked from nowhere) and /ad-on-digital/
+// is the growth plans page (PLANS_PAGE below). The product pages still take
+// their head, header, CTA and footer from it, so it stays the frame source.
+//
+// To bring the hub back: move public/ad-on-digital-backup/ to
+// public/ad-on-digital/, point HUB and PLANS_PAGE.url back, restore its robots
+// and canonical lines, and drop the /website-ai-visibility-plans/ redirects.
+const HUB = path.join(PUBLIC, "ad-on-digital-backup", "index.html");
 const SITE = "https://adongroup.com.au";
+// The hub is noindex now, so pages framed from its head must not inherit that.
+const ROBOTS_INDEX = '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">';
 
 const icon = (d) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
@@ -260,6 +270,7 @@ const ctaSection = (/<section id="contact"[\s\S]*?<\/section>/.exec(hub) || [""]
 function pageHead(p, title, desc) {
   const url = SITE + p.url;
   return head
+    .replace(/<meta name="robots" content="[^"]*">/, ROBOTS_INDEX)
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace(/(<meta name="description" content=")[^"]*/, `$1${esc(desc)}`)
     .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
@@ -394,7 +405,7 @@ for (const p of PRODUCTS) {
 // --------------------------------------------------------------- growth plans
 
 /**
- * /website-ai-visibility-plans/ — the Website & AI Visibility Growth Plans
+ * /ad-on-digital/ — the Website & AI Visibility Growth Plans
  * (Starter and Premium Growth). Every sentence of copy is the bundle
  * document's own, extracted into digital-plans.json. What this adds is
  * layout and a few labels: the hero illustration, the checklist counter, the
@@ -406,12 +417,12 @@ for (const p of PRODUCTS) {
  * matching the monthly amount. One figure per plan, for every customer, so it
  * does not change with the price toggle.
  *
- * noindex and linked from nowhere while it is reviewed. To publish it, drop
- * the robots line in plansHead() and add it to the menu and service boxes.
+ * Built at /website-ai-visibility-plans/ (noindex) for review, then made the
+ * /ad-on-digital/ page on 16 Nov 2026 and indexed. The old URL 301s here.
  */
 const PLANS = require("./digital-plans.json");
 const PLANS_PAGE = {
-  url: "/website-ai-visibility-plans/",
+  url: "/ad-on-digital/",
   title: "Website & AI Visibility Growth Plans | Ad On Digital",
   description: "A professionally managed website with SEO and AEO foundations, from $400 + GST per month. Two plans from Ad On Digital: Starter and Premium Growth.",
 };
@@ -527,7 +538,6 @@ const PLANS_STYLE = `<style id="vp-style">
 
 function plansHead() {
   return pageHead(PLANS_PAGE, PLANS_PAGE.title, PLANS_PAGE.description)
-    .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex">')
     + PLANS_STYLE + "\n";
 }
 
@@ -794,7 +804,7 @@ function plansPage() {
   const out = path.join(PUBLIC, PLANS_PAGE.url);
   fs.mkdirSync(out, { recursive: true });
   fs.writeFileSync(path.join(out, "index.html"), html);
-  console.log(`  ${PLANS_PAGE.url} (noindex) ${d.plans.plans.length} plans, ${d.faqs.length} FAQs, ${d.terms.clauses.length} terms clauses`);
+  console.log(`  ${PLANS_PAGE.url} (growth plans) ${d.plans.plans.length} plans, ${d.faqs.length} FAQs, ${d.terms.clauses.length} terms clauses`);
 }
 
 plansPage();

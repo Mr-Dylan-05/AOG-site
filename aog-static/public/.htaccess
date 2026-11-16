@@ -68,6 +68,7 @@
   RewriteRule ^online-accelerator/?$ /ad-on-digital/ [R=301,L]
   RewriteRule ^home-2025-copy/?$ / [R=301,L]
   RewriteRule ^website-examples/?$ /ad-on-digital/ [R=301,L]
+  RewriteRule ^website-ai-visibility-plans/?$ /ad-on-digital/ [R=301,L]
 
   # Serve /path/ from /path/index.html
   RewriteCond %{REQUEST_FILENAME} !-f

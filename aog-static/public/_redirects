@@ -94,6 +94,12 @@
 /online-accelerator/      /ad-on-digital/   301
 /home-2025-copy/          /                 301
 /website-examples/        /ad-on-digital/   301
+
+# The growth plans page was reviewed at /website-ai-visibility-plans/ and became
+# /ad-on-digital/ on 16 Nov 2026. The old service-box page is at
+# /ad-on-digital-backup/ (noindex).
+/website-ai-visibility-plans/   /ad-on-digital/   301
+/website-ai-visibility-plans    /ad-on-digital/   301
 /contact/*   /contact-us/   301
 
 # --- Hidden pages (mirrors vercel.json) --------------------------------------
