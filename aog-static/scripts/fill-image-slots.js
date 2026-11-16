@@ -207,8 +207,9 @@ const AD_ON_DIGITAL = {
 };
 
 const AD_ON_HOLD = {
-  // hold-hero is left empty: there is no photograph of a recording studio,
-  // a microphone or voice production anywhere in the library.
+  // The library has no photograph of a recording studio, a microphone or voice
+  // production, so this one was generated with ChatGPT on 16 Nov 2026.
+  "hold-hero":     [M("2026/11/ad-on-hold-studio.webp"), "A voice-over artist in headphones recording an on-hold message at a studio microphone"],
   "hold-solution": [M("2025/08/DSC_2286-1.png"), "Ad On Group staff handling calls on the office floor"],
 };
 
@@ -234,7 +235,8 @@ const OUR_COMPANY = {
 
 const PAGES = {
   "culture": CULTURE,
-  "ad-on-digital": AD_ON_DIGITAL,
+  // The service-box page these slots belong to moved here on 16 Nov 2026.
+  "ad-on-digital-backup": AD_ON_DIGITAL,
   "ad-on-sa": AD_ON_SA,
   "ad-on-hold": AD_ON_HOLD,
   "ad-on-workforce-division": AD_ON_WORKFORCE_DIVISION,
@@ -254,7 +256,7 @@ const PAGES = {
 // The hero-ish slots load eagerly; galleries below the fold do not.
 const EAGER = new Set([
   "culture-hero", "people-hero", "office-au", "history-1",
-  "about-hero", "staff-hero", "purpose-hero", "sa-hero", "digital-hero",
+  "about-hero", "staff-hero", "purpose-hero", "sa-hero", "digital-hero", "hold-hero",
 ]);
 
 // Photographs fill the frame. A document — the sample Google Ads report — is

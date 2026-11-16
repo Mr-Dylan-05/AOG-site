@@ -196,10 +196,12 @@ const STYLE = `<style id="dg-style">
 </style>`;
 
 /** The product menu bar: always visible, never a dropdown. */
-const menuBar = (current) => `<div class="dg-bar">
+// `omit`: product slugs left out of this page's bar. The /ad-on-digital/
+// growth plans page is itself the websites offer, so it leaves out Websites.
+const menuBar = (current, omit = []) => `<div class="dg-bar">
     <nav class="dg-bar-in" aria-label="Ad On Digital services">
       <a class="dg-bar-label" href="/ad-on-digital/"${current ? "" : ' aria-current="page"'}>Ad On Digital</a>
-      ${PRODUCTS.map((p) => `<a class="dg-tab" href="${p.url}"${p === current ? ' aria-current="page"' : ""}>${esc(p.name)}</a>`).join("\n      ")}
+      ${PRODUCTS.filter((p) => !omit.includes(p.slug)).map((p) => `<a class="dg-tab" href="${p.url}"${p === current ? ' aria-current="page"' : ""}>${esc(p.name)}</a>`).join("\n      ")}
     </nav>
   </div>`;
 
@@ -685,7 +687,7 @@ function plansPage() {
       `${d.cta.text.map(esc).join(" ")}<br><br><strong style="color:${INK}">${esc(d.cta.lead)}</strong> ${esc(d.cta.contact)}`);
 
   const body = `
-  ${menuBar({})}
+  ${menuBar({}, ["websites"])}
 
   <header id="top" style="max-width:1220px;margin:0 auto;padding:64px 28px 48px">
     <div class="vp-hero">
