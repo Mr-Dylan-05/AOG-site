@@ -55,7 +55,7 @@ const DESCRIPTIONS = {
   "maximising-efficiency-overseas-remote-staff-and-the-evolution-of-office-administration": "How overseas remote staff are reshaping office administration after the shift to remote work, and what that change means for Australian businesses.",
   "mobile-advertising-strategies-with-instagram": "Upgrade your mobile advertising strategy with Instagram — how a photo-sharing app became a powerful channel for reaching new customers.",
   "on-hold-message": "How an on-hold message can drive enquiries and open new conversations — because the key to a successful business isn't the cheapest price.",
-  "privacy-policy": "The Ad On Group privacy policy — how we collect, use and protect customer information across our products and ongoing services.",
+  "privacy-policy": "How Ad On Group and its divisions collect, use, share and protect personal information, including advertising on Facebook and Instagram, marketing messages and client data.",
   "program-pricing": "Pricing for the Ad On AI Enablement Program — from Anthropic's sole SME-focused AI training partner in Australia.",
   "refer-a-friend": "Know a business that could benefit from Ad On Group? Refer a friend and invite them to see what we do.",
   "regain-balance-in-your-life-the-transformative-power-of-remote-staffing": "Juggling too many responsibilities in a small business? How remote staffing gives owners back their time and restores some work-life balance.",
