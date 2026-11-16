@@ -87,7 +87,7 @@ const PRODUCTS = [
     why: 'SEO that follows <span style="color:#1BABE5">Google&rsquo;s best practice</span>.',
   },
   {
-    slug: "ai-seo", url: "/ai-seo/", name: "AI SEO",
+    slug: "ai-seo", url: "/ai-seo/", name: "AEO",
     title: "AI SEO & AI Search Optimisation | Ad On Group",
     description: "AI SEO for Australian businesses: a website audit, monthly blogs, FAQs and review software, to help tools like ChatGPT, Perplexity and Google AI Overviews find and trust your business.",
     icon: icon('<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'),
