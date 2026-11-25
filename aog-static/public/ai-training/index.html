@@ -987,6 +987,11 @@ html:root:root:root:root:root:root:root:root:root:root:root:root:root:root:root:
    tap here and let the widget open the calendar the moment it starts. Only
    while the page is still loading: the widget runs before loading ends, so if
    it is missing after that, it failed, and the link is left to work as a link. */
+/* Arriving at /ai-training/#book opens the calendar straight away (26 Nov 2026).
+   Every "Book a call" button on the other AI pages links here, and so does
+   /ai-enquiry/, so the booking always happens on this page, where it reaches
+   the sheet and Meta. Same hold as a tap: the widget opens it when it starts. */
+if(location.hash==="#book")window.__aogBookPending=true;
 document.addEventListener("click",function(e){
   if(window.aogBookCall||document.readyState!=="loading"||!e.target.closest)return;
   var b=e.target.closest("[data-calendly]");

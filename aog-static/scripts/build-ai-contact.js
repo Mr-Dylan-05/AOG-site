@@ -2,6 +2,11 @@
 /**
  * build-ai-contact.js — /ai-enquiry/, the campaign contact page.
  *
+ * RETIRED 26 Nov 2026. The site is bookings only, so /ai-enquiry/ is now a
+ * one-line page that forwards to /ai-training/#book (the booking calendar), and
+ * every "Book a call" button links there directly. Running this script brings
+ * the enquiry form back and overwrites that forwarder; only do it on purpose.
+ *
  * Where the Meta campaign sends someone who wants to talk, rather than the
  * main contact page. Two reasons it is separate:
  *

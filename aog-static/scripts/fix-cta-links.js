@@ -26,7 +26,7 @@ const fs = require("fs");
 const path = require("path");
 
 const PUBLIC = path.join(__dirname, "..", "public");
-const TARGET = "/ai-enquiry/";
+const TARGET = "/ai-training/#book"; // was /ai-enquiry/ until 26 Nov 2026 (bookings only)
 const DRY = process.argv.includes("--dry");
 
 /* A mailto with a subject line = a button. Without = an address. */
